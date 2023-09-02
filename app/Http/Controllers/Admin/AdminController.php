@@ -81,95 +81,24 @@ class AdminController extends Controller
     {
         $modules[] = [
 
-            'url' => 'admin/users',
+            'url' => 'admin/user',
             'title' => 'Users ',
 
         ];
-         $modules[]= [
-
-            'url'=>'admin/aboutus/edit/1',
-            'title'=>'About US'
-
-        ];
-        $modules[]= [
-
-            'url'=>'admin/teacher',
-            'title'=>'Teacher'
-
-        ];
-        $modules[]= [
-
-            'url'=>'admin/category',
-            'title'=>'Category'
-        ];
         $modules[] = [
 
-            'url' => 'admin/courses',
-            'title' => 'Courses',
+            'url' => 'admin/location',
+            'title' => 'Locations ',
 
         ];
-        $modules[]= [
-
-            'url'=>'admin/group',
-            'title'=>'Group'
-        ];
-        $modules[]= [
-
-            'url'=>'admin/books',
-            'title'=>'Books'
-        ];
-
 
         $modules[] = [
 
-            'url' => 'admin/question',
-            'title' => 'Question ',
+            'url' => 'admin/journey_slot',
+            'title' => ' Journey Slot ',
 
         ];
-        $modules[]= [
-
-            'url'=>'admin/quiz',
-            'title'=>'Exams'
-
-        ];
-
-        // $modules[]= [
-
-        //     'url'=>'admin/settings',
-        //     'title'=>'Settings'
-
-        // ];
-        $modules[]= [
-
-            'url'=>'admin/workshop',
-            'title'=>'Workshop'
-        ];
-        $modules[] = [
-            'url' => 'admin/contact',
-            'title' => 'Contact Us',
-
-
-        ];
-
-        $modules[]= [
-
-            'url'=>'admin/settings',
-            'title'=>'Settings'
-
-        ];
-
-        $modules[]= [
-
-            'url'=>'admin/role',
-            'title'=>'Role'
-
-        ];
-        $modules[]= [
-
-            'url'=>'admin/employee',
-            'title'=>'Employee'
-
-        ];
+         
 
         $reports[] = [
 
@@ -177,20 +106,7 @@ class AdminController extends Controller
             'title' => 'Course Register ',
 
         ];
-        // $reports[] = [
-
-        //     'url' => 'admin/reports/permissions',
-        //     'title' => 'Reports Permission ',
-
-        // ];
-        $reports[] = [
-            'url' => 'admin/reports/payments',
-            'title' => 'Payments',
-        ];
-        $reports[]= [
-            'url'=>'admin/student_plan',
-            'title'=>'Student Plan',
-        ];
+       
 
         $myvar = [];
         $myvar['modules'] = $modules;

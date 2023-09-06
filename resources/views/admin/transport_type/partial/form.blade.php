@@ -24,59 +24,47 @@ select#gender {
 @endif
 
 <div class="form-group">
-    {!! Form::label('name',' First Name') !!}
+    {!! Form::label('name','Name') !!}
     <div>
         {!! Form::text('name', null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'First Name','required',
-        'maxlength'=>"100"]) !!}
-    </div>
-</div>
-{{-- <div class="form-group">
-    {!! Form::label('location_type_id',' Location Type') !!}
-    <div>
-        {!! Form::text('location_type_id', null, ['class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'select location type','required',
-        'maxlength'=>"100"]) !!}
-    </div>
-</div> --}}
-
-<div class="form-group">
-    <label for="location_type_id">Location Type</label>
-    {!! Form::select('location_type_id', $location_type, null, [
-        'class' => 'form-control',
-        'data-parsley-required' => 'true',
-        'data-parsley-trigger' => 'change',
-        'placeholder' => 'Select Location Type',
-        'required',
-        'maxlength' => '100',
-    ]) !!}
-</div>
-
-
-<div class="form-group">
-    {!! Form::label('latitude','latitude') !!}
-    <div>
-        {!! Form::text('latitude',  null, ['class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter latitude','required',
+        'placeholder'=>'Enter Name','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
 <div class="form-group">
-    {!! Form::label('longitude','longitude') !!}
+    {!! Form::label('seats',' Seats') !!}
     <div>
-        {!! Form::text('longitude',  null, ['class' => 'form-control',
+        {!! Form::text('seats', null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter longitude','required',
+        'placeholder'=>'Enter Number Of Seats','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
+
+<div class="form-group">
+    {!! Form::label('luggage','luggage') !!}
+    <div>
+        {!! Form::text('luggage',  null, ['class' => 'form-control',
+        'data-parsley-required'=>'true',
+        'data-parsley-trigger'=>'change',
+        'placeholder'=>'Enter Number Of Luggage','required',
+        'maxlength'=>"100"]) !!}
+    </div>
+</div>
+<div class="form-group">
+    {!! Form::label('passenger','Passenger') !!}
+    <div>
+        {!! Form::text('passenger',  null, ['class' => 'form-control',
+        'data-parsley-required'=>'true',
+        'data-parsley-trigger'=>'change',
+        'placeholder'=>'Enter Number Of Passenger','required',
+        'maxlength'=>"100"]) !!}
+    </div>
+</div>
+
 
 
 

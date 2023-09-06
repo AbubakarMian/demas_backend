@@ -98,6 +98,30 @@ class AdminController extends Controller
             'title' => ' Journey Slot ',
 
         ];
+        $modules[] = [
+
+            'url' => 'admin/journey',
+            'title' => ' Journey',
+
+        ];
+        $modules[] = [
+
+            'url' => 'admin/driver_journey',
+            'title' => ' Driver Journey',
+
+        ];
+        $modules[] = [
+
+            'url' => 'admin/car',
+            'title' => 'Car',
+
+        ];
+        $modules[] = [
+
+            'url' => 'admin/transport_type',
+            'title' => 'Transport Type',
+
+        ];
          
 
         $reports[] = [

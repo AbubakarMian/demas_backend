@@ -23,62 +23,40 @@ select#gender {
 </div>
 @endif
 
-<div class="form-group">
-    {!! Form::label('name',' First Name') !!}
-    <div>
-        {!! Form::text('name', null, ['class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'First Name','required',
-        'maxlength'=>"100"]) !!}
-    </div>
-</div>
-{{-- <div class="form-group">
-    {!! Form::label('location_type_id',' Location Type') !!}
-    <div>
-        {!! Form::text('location_type_id', null, ['class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'select location type','required',
-        'maxlength'=>"100"]) !!}
-    </div>
-</div> --}}
+
 
 <div class="form-group">
-    <label for="location_type_id">Location Type</label>
-    {!! Form::select('location_type_id', $location_type, null, [
+    <label for="transport_type_id">Transport Type</label>
+    {!! Form::select('transport_type_id', $transport_type, null, [
         'class' => 'form-control',
         'data-parsley-required' => 'true',
         'data-parsley-trigger' => 'change',
-        'placeholder' => 'Select Location Type',
+        'placeholder' => 'Select Transport Type',
         'required',
         'maxlength' => '100',
     ]) !!}
 </div>
 
-
 <div class="form-group">
-    {!! Form::label('latitude','latitude') !!}
+    {!! Form::label('user_owner_id','Owner') !!}
     <div>
-        {!! Form::text('latitude',  null, ['class' => 'form-control',
+        {!! Form::text('user_owner_id',  null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter latitude','required',
+        'placeholder'=>'Enter owner','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
 <div class="form-group">
-    {!! Form::label('longitude','longitude') !!}
+    {!! Form::label('details','Details') !!}
     <div>
-        {!! Form::text('longitude',  null, ['class' => 'form-control',
+        {!! Form::text('details',  null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter longitude','required',
+        'placeholder'=>'Enter Details','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
-
-
 
 
 

@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class Locations extends Model
+
+class Car extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'locations';   
+    protected $table = 'transport';   
 
-    public function location_type()
+
+    public function transport_type()
     {
-        return $this->hasOne('App\Models\Location_Type', 'id', 'location_type_id')->withTrashed();
+        return $this->hasOne('App\Models\Transport_Type', 'id', 'transport_type_id')->withTrashed();
     }
-
-
     }

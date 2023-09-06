@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location_Type;
 use App\Models\Locations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -18,7 +19,7 @@ class LocationController extends Controller
 
     public function get_location(Request $request)
     {
-        $location = Locations::orderBy('created_at', 'DESC')->select('*')->get();
+        $location = Locations::with('location_type')->orderBy('created_at', 'DESC')->select('*')->get();
         $locationData['data'] = $location;
         echo json_encode($locationData);
     }
@@ -27,8 +28,8 @@ class LocationController extends Controller
     {
         $control = 'create';
         // $courses = Courses::pluck('full_name','id');
-        // $category = Category::pluck('name','id');
-        return view('admin.location.create', compact('control'));
+        $location_type = Location_Type::pluck('name','id');
+        return view('admin.location.create', compact('control','location_type'));
     }
 
     public function save(Request $request)
@@ -43,10 +44,11 @@ class LocationController extends Controller
         $control = 'edit';
         $location = Locations::find($id);
         // $courses = Courses::pluck('full_name','id');
-        // $category = Category::pluck('name','id');
+        $location_type = Location_Type::pluck('name','id');
         return view('admin.location.create', compact(
             'control',
             'location',
+            'location_type',
            
         ));
     }

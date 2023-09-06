@@ -14,9 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('transport', function (Blueprint $table) {
-            $table->text('features')->nullable()->default(null);
-            $table->text('booking')->nullable()->default(null);
-            $table->text('dontforget')->nullable()->default(null);        
+            $table->string('is_default')->nullable()->default(null);        
         });
     }
 

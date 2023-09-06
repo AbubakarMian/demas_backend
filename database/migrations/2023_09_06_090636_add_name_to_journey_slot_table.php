@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('transport', function (Blueprint $table) {
-            $table->text('features')->nullable()->default(null);
-            $table->text('booking')->nullable()->default(null);
-            $table->text('dontforget')->nullable()->default(null);        
+        Schema::table('journey_slot', function (Blueprint $table) {
+            $table->string('journey_name')->nullable()->default(null);        
         });
     }
 
@@ -27,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('transport', function (Blueprint $table) {
+        Schema::table('journey_slot', function (Blueprint $table) {
             //
         });
     }

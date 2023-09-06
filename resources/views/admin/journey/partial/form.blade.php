@@ -22,52 +22,27 @@ select#gender {
     </ul>
 </div>
 @endif
+
 <div class="form-group">
-    <label for="journey_id">Journey</label>
-    {!! Form::select('journey_id', $journey, null, [
-        'class' => 'form-control',
-        'data-parsley-required' => 'true',
-        'data-parsley-trigger' => 'change',
-        'placeholder' => 'Select Journey',
-        'required',
-        'maxlength' => '100',
-    ]) !!}
-</div>
-<div class="form-group">
-    {!! Form::label('from_date',' Start Date') !!}
+    {!! Form::label('pickup_location_id',' Pick Up Location') !!}
     <div>
-        {!! Form::date('from_date', null, ['class' => 'form-control',
+        {!! Form::text('pickup_location_id', null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter Start Date','required',
+        'placeholder'=>'Pick Up Location','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
-
-{{-- <div class="form-group">
-    {!! Form::label('gender','Gender') !!}
-    <div>
-
-        {!! Form::select('gender', array('Male'=>'Male','Female'=>'Female'), [
-            'class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter gender','required',
-        'maxlength'=>"100"]) !!}
-    </div>
-
-</div> --}}
 <div class="form-group">
-    {!! Form::label('to_date','End Date') !!}
+    {!! Form::label('dropoff_location_id',' DropOff Location') !!}
     <div>
-        {!! Form::date('to_date',  null, ['class' => 'form-control',
+        {!! Form::text('dropoff_location_id', null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter End Date','required',
+        'placeholder'=>'DropOff Location','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
-
 
 
 

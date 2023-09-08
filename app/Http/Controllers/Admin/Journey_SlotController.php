@@ -73,6 +73,10 @@ class Journey_SlotController extends Controller
     $to_date_timestamp = strtotime($request->to_date);
 
         // dd($request->all());
+
+
+
+        $journey_slot->name = $request->from_date .' to '.$request->to_date;
         $journey_slot->journey_id = $request->journey_id;
         $journey_slot->from_date = $from_date_timestamp;
         $journey_slot->to_date = $to_date_timestamp;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Journey;
+use App\Models\Locations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
@@ -63,7 +64,11 @@ class JourneyController extends Controller
     public function add_or_update(Request $request, $journey)
     {
         // dd($request->all());
-        $journey->name = $request->pickup_location_id.$request->dropoff_location_id;
+
+        $location_pickup = Locations::find($request->pickup_location_id);
+        $location_dropoff = Locations::find($request->dropoff_location_id);
+
+        $journey->name = $location_pickup->name.' to '.$location_dropoff->name;
         $journey->pickup_location_id = $request->pickup_location_id;
         $journey->dropoff_location_id = $request->dropoff_location_id;
 

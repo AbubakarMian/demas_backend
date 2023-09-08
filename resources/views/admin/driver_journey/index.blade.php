@@ -75,6 +75,7 @@ $(document).ready(function(){
                   var user_driver_id =  response['data'][i].user_driver_id;
                   var journey_id =  response['data'][i].journey.name;
                   var journey_slot_id =  response['data'][i].journey_slot_id;
+                  var journey_detail = response['data'][i].journey.name +' - '+response['data'][i].journey_slot.name;
                   var rate =  response['data'][i].rate;
                   
 				  var edit = `<a class="btn btn-info" href="{!!asset('admin/driver_journey/edit/` + id + `')!!}">Edit</a>`;

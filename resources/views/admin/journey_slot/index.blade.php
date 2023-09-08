@@ -56,6 +56,19 @@
 
             fetchRecords();
 
+            
+                function convertDate(date) {
+                var yyyy = date.getFullYear().toString();
+                var mm = (date.getMonth()+1).toString();
+                var dd  = date.getDate().toString();
+
+                var mmChars = mm.split('');
+                var ddChars = dd.split('');
+
+                return yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
+                }
+
+
             function fetchRecords() {
 
                 $.ajax({
@@ -85,9 +98,13 @@
                             var to_date = new Date(to_timestamp * 1000);
 
                             // Format the date-time strings as desired (e.g., "MM/DD/YYYY HH:mm:ss")
-                            var from_date_formatted = from_date
-                        .toLocaleString(); // Adjust the format as needed
-                            var to_date_formatted = to_date.toLocaleString();
+                           
+                           console.log('from_date',from_date);
+                           console.log('local string',from_date.toString());
+                           console.log('split',from_date.toString().split('GMT')[0]);
+                           
+                            var from_date_formatted = convertDate(from_date);
+                            var to_date_formatted = convertDate(to_date);
 
                             // Now, you can use from_date_formatted and to_date_formatted in your frontend code
 
@@ -112,8 +129,8 @@
 
                             var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
                                 "<td>" + journey_id + "</td>" +
-                                "<td>" + from_date + "</td>" +
-                                "<td>" + to_date + "</td>" +
+                                "<td>" + from_date_formatted + "</td>" +
+                                "<td>" + to_date_formatted + "</td>" +
                                 "<td>" + edit + "</td>" +
                                 "<td>" + delete_btn + "</td>" +
 

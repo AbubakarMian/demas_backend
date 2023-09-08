@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> Medical Panel LogIn</title>
+    <title> DEMAS Admin Panel LogIn</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -17,18 +17,23 @@
             margin:0 auto;
 
         }
+        .sddssd{
+        background-position-y: -146px;
+
+        }
+        
     </style>
 </head>
 
     <body class="bg-primary">
 
-        <div class="cover" style="background-image: url({{asset('theme/images/cover1.jpg')}})"></div>
+        <div class="cover sddssd" style="background-image: url({{asset('theme/images/cover8.jpg')}})"></div>
         {{-- <div class="cover" style="background-image: url({{asset('images/download.png')}})"></div> --}}
 <br />
 <div class="container box">
     <h3 align="center" style="color: black;
     font-size: 23px;
-    font-weight: 700;">Medical Panel LogIn</h3><br />
+    font-weight: 700;">DEMAS Admin Panel LogIn</h3><br />
 
 
     @if ($message = Session::get('error'))

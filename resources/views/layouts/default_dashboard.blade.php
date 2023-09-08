@@ -58,7 +58,8 @@ $reports = $admin_common->reports;
     </div>
 
     <!-- Modules end -->
-
+<style>
+</style>
     <!-- reports start -->
     <div class="row">
 

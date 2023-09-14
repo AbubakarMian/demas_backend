@@ -1,6 +1,6 @@
 @extends('layouts.default_module')
 @section('module_name')
-CARS
+Prices
 @stop
 
 @section('add_btn')
@@ -35,9 +35,10 @@ width="400px" style="table-layout:fixed;"
 <table class="fhgyt" id="carTableAppend" style="opacity: 0">
 <thead>
 	<tr>
+        <th> Location</th>
+        <th> Journey Slots</th>
         <th> Transport Type</th>
-        <th> Driver</th>
-        <th> Details</th>
+        <th> Price</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -58,7 +59,7 @@ $(document).ready(function(){
     function fetchRecords(){
 
        $.ajax({
-         url: '{!!asset("admin/car/get_car")!!}',
+         url: '{!!asset("admin/price/get_car_prices")!!}',
          type: 'get',
          dataType: 'json',
          success: function(response){
@@ -70,14 +71,15 @@ $(document).ready(function(){
           
               for(var i=0; i<len; i++){
                   var id =  response['data'][i].id;
-                  var transport_type_name =  response['data'][i].transport_type?.name;
+                  var transport_type_name =  response['data'][i].transport_type.name;
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);
 
 
-                  var user_owner_id =  response['data'][i].driver.user.name;
-                  var details =  response['data'][i].details;
+                  var journey =  response['data'][i].journey.name;
+                  var journey_slot =  response['data'][i].slot.slot_name;
+                  var price =  response['data'][i].Transport_Prices_id;
                   
 				  var edit = `<a class="btn btn-info" href="{!!asset('admin/car/edit/` + id + `')!!}">Edit</a>`;
                        createModal({
@@ -95,9 +97,10 @@ $(document).ready(function(){
                         var delete_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#` + 'car_' + response['data'][i].id + `">Delete</a>`;
 
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
+                    "<td>" +journey+ "</td>" +
+                    "<td>" +journey_slot+ "</td>" +
                     "<td>" +transport_type_name+ "</td>" +
-                    "<td>" +user_owner_id+ "</td>" +
-                    "<td>" +details+ "</td>" +
+                    "<td>" +price+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
        

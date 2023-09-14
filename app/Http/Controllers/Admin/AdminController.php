@@ -122,14 +122,20 @@ class AdminController extends Controller
             'title' => 'Transport Type',
 
         ];
-         
+        $modules[] = [
 
-        $reports[] = [
-
-            'url' => 'admin/course_register',
-            'title' => 'Course Register ',
+            'url' => 'admin/price',
+            'title' => 'Transport Prices',
 
         ];
+         
+        $reports=[];
+        // $reports[] = [
+
+        //     'url' => 'admin/course_register',
+        //     'title' => 'Course Register ',
+
+        // ];
        
 
         $myvar = [];

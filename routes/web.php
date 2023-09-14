@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\JourneyController;
 use App\Http\Controllers\Admin\DriverJourneyController;
 use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\TransportTypeController;
+use App\Http\Controllers\Admin\TransportPricesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,8 +101,12 @@ Route::group(['prefix'=>'admin/car'],function(){
     Route::post('update/{id}',[CarController::class, 'update'])->name('car.update');
     Route::post('delete/{id}',[CarController::class, 'destroy_undestroy'])->name('car.delete');
 });
+Route::group(['prefix'=>'admin/price'],function(){
 
+Route::get('get_car_prices',[TransportPricesController::class, 'get_car_prices'])->name('get_car_prices.index');
+Route::get('/',[TransportPricesController::class, 'index'])->name('car.index');
 
+});
 
  //  =================================  transport_type ==========================
  Route::group(['prefix'=>'admin/transport_type'],function(){

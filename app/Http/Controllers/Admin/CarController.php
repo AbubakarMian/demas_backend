@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Car;
+use App\Models\Journey;
+use App\Models\Journey_Slot;
 use App\Models\Transport_Type;
+use App\Models\TransportPrices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
@@ -18,19 +21,22 @@ class CarController extends Controller
         return view('admin.car.index');
     }
 
+
     public function get_car(Request $request)
     {
-        $car = Car::with('transport_type')->orderBy('created_at', 'DESC')->select('*')->get();
+        $car = Car::with('transport_type','driver.user')->orderBy('created_at', 'DESC')->select('*')->get();
         $carData['data'] = $car;
         echo json_encode($carData);
     }
 
+
+   
     public function create()
     {
         $control = 'create';
         // $courses = Courses::pluck('full_name','id');
-        $transport_type = Transport_Type::pluck('name','id');
-        return view('admin.car.create', compact('control','transport_type'));
+        $transport_type = Transport_Type::pluck('name', 'id');
+        return view('admin.car.create', compact('control', 'transport_type'));
     }
 
     public function save(Request $request)
@@ -45,13 +51,14 @@ class CarController extends Controller
         $control = 'edit';
         $car = car::find($id);
         // $courses = Courses::pluck('full_name','id');
-        $transport_type = Transport_Type::pluck('name','id');
+        $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.car.create', compact(
             'control',
             'car',
             'transport_type',
-           
-        ));
+
+        )
+        );
     }
 
     public function update(Request $request, $id)
@@ -109,4 +116,5 @@ class CarController extends Controller
             'new_value' => $new_value
         ]);
         return $response;
-    }}
+    }
+}

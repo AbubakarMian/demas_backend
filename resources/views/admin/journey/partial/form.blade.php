@@ -23,7 +23,7 @@ select#gender {
 </div>
 @endif
 
-<div class="form-group">
+{{-- <div class="form-group">
     {!! Form::label('pickup_location_id',' Pick Up Location') !!}
     <div>
         {!! Form::text('pickup_location_id', null, ['class' => 'form-control',
@@ -32,8 +32,30 @@ select#gender {
         'placeholder'=>'Pick Up Location','required',
         'maxlength'=>"100"]) !!}
     </div>
+</div> --}}
+<div class="form-group">
+    <label for="pickup_location_id">Pickup Location</label>
+    {!! Form::select('pickup_location_id', $location, null, [
+        'class' => 'form-control',
+        'data-parsley-required' => 'true',
+        'data-parsley-trigger' => 'change',
+        'placeholder' => 'Select Pickup Location',
+        'required',
+        'maxlength' => '100',
+    ]) !!}
 </div>
 <div class="form-group">
+    <label for="dropoff_location_id">Dropoff Location</label>
+    {!! Form::select('dropoff_location_id', $location, null, [
+        'class' => 'form-control',
+        'data-parsley-required' => 'true',
+        'data-parsley-trigger' => 'change',
+        'placeholder' => 'Select Dropoff Location',
+        'required',
+        'maxlength' => '100',
+    ]) !!}
+</div>
+{{-- <div class="form-group">
     {!! Form::label('dropoff_location_id',' DropOff Location') !!}
     <div>
         {!! Form::text('dropoff_location_id', null, ['class' => 'form-control',
@@ -42,7 +64,7 @@ select#gender {
         'placeholder'=>'DropOff Location','required',
         'maxlength'=>"100"]) !!}
     </div>
-</div>
+</div> --}}
 
 
 

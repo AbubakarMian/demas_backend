@@ -22,7 +22,7 @@ select#gender {
     </ul>
 </div>
 @endif
-<div class="form-group">
+{{-- <div class="form-group">
     <label for="journey_id">Journey</label>
     {!! Form::select('journey_id', $journey, null, [
         'class' => 'form-control',
@@ -32,7 +32,7 @@ select#gender {
         'required',
         'maxlength' => '100',
     ]) !!}
-</div>
+</div> --}}
 <div class="form-group">
     {!! Form::label('from_date',' Start Date') !!}
     <div>

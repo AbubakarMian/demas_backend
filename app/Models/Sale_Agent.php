@@ -10,5 +10,15 @@ class Sale_Agent extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'sale_agent';   
-   
+    // public function user()
+    // {
+    //     return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
+    // }
+
+    
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
+    }
+    
 }

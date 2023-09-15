@@ -4,12 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LocationController;
-use App\Http\Controllers\Admin\Journey_SlotController;
+use App\Http\Controllers\Admin\SlotController;
 use App\Http\Controllers\Admin\JourneyController;
 use App\Http\Controllers\Admin\DriverJourneyController;
 use App\Http\Controllers\Admin\CarController;
 use App\Http\Controllers\Admin\TransportTypeController;
 use App\Http\Controllers\Admin\TransportPricesController;
+use App\Http\Controllers\Admin\SaltAgentController;
+use App\Http\Controllers\Admin\TravelAgentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,15 +58,15 @@ Route::get('admin/logout',[AdminController::class, 'logout']);
     Route::post('delete/{id}',[LocationController::class, 'destroy_undestroy'])->name('location.delete');
 });
 
- //  =================================  journey_slot ==========================
- Route::group(['prefix'=>'admin/journey_slot'],function(){
-    Route::get('/',[Journey_SlotController::class, 'index'])->name('journey_slot.index');
-    Route::get('get_journey_slot',[Journey_SlotController::class, 'get_journey_slot'])->name('journey_slot.index');
-    Route::get('create',[Journey_SlotController::class, 'create'])->name('journey_slot.create'); //add
-    Route::post('save',[Journey_SlotController::class, 'save'])->name('journey_slot.save');
-    Route::get('edit/{id}',[Journey_SlotController::class, 'edit'])->name('journey_slot.edit');
-    Route::post('update/{id}',[Journey_SlotController::class, 'update'])->name('journey_slot.update');
-    Route::post('delete/{id}',[Journey_SlotController::class, 'destroy_undestroy'])->name('journey_slot.delete');
+ //  =================================  slot ==========================
+ Route::group(['prefix'=>'admin/slot'],function(){
+    Route::get('/',[SlotController::class, 'index'])->name('slot.index');
+    Route::get('get_slot',[SlotController::class, 'get_slot'])->name('slot.index');
+    Route::get('create',[SlotController::class, 'create'])->name('slot.create'); //add
+    Route::post('save',[SlotController::class, 'save'])->name('slot.save');
+    Route::get('edit/{id}',[SlotController::class, 'edit'])->name('slot.edit');
+    Route::post('update/{id}',[SlotController::class, 'update'])->name('slot.update');
+    Route::post('delete/{id}',[SlotController::class, 'destroy_undestroy'])->name('slot.delete');
 });
 
 
@@ -105,6 +107,7 @@ Route::group(['prefix'=>'admin/price'],function(){
 
 Route::get('get_car_prices',[TransportPricesController::class, 'get_car_prices'])->name('get_car_prices.index');
 Route::get('/',[TransportPricesController::class, 'index'])->name('car.index');
+Route::get('update_price/{id}',[TransportPricesController::class, 'update_price'])->name('car.update_price');
 
 });
 
@@ -117,4 +120,31 @@ Route::get('/',[TransportPricesController::class, 'index'])->name('car.index');
     Route::get('edit/{id}',[TransportTypeController::class, 'edit'])->name('transport_type.edit');
     Route::post('update/{id}',[TransportTypeController::class, 'update'])->name('transport_type.update');
     Route::post('delete/{id}',[TransportTypeController::class, 'destroy_undestroy'])->name('transport_type.delete');
+});
+
+
+
+//  =================================  sale_agent ==========================
+ Route::group(['prefix'=>'admin/sale_agent'],function(){
+    Route::get('/',[SaltAgentController::class, 'index'])->name('sale_agent.index');
+    Route::get('get_sale_agent',[SaltAgentController::class, 'get_sale_agent'])->name('sale_agent.index');
+    Route::get('create',[SaltAgentController::class, 'create'])->name('sale_agent.create'); //add
+    Route::post('save',[SaltAgentController::class, 'save'])->name('sale_agent.save');
+    Route::get('edit/{id}',[SaltAgentController::class, 'edit'])->name('sale_agent.edit');
+    Route::post('update/{id}',[SaltAgentController::class, 'update'])->name('sale_agent.update');
+    Route::post('delete/{id}',[SaltAgentController::class, 'destroy_undestroy'])->name('sale_agent.delete');
+});
+
+
+
+
+//  =================================  travel_agent ==========================
+Route::group(['prefix'=>'admin/travel_agent'],function(){
+    Route::get('/',[TravelAgentController::class, 'index'])->name('travel_agent.index');
+    Route::get('get_travel_agent',[TravelAgentController::class, 'get_travel_agent'])->name('travel_agent.index');
+    Route::get('create',[TravelAgentController::class, 'create'])->name('travel_agent.create'); //add
+    Route::post('save',[TravelAgentController::class, 'save'])->name('travel_agent.save');
+    Route::get('edit/{id}',[TravelAgentController::class, 'edit'])->name('travel_agent.edit');
+    Route::post('update/{id}',[TravelAgentController::class, 'update'])->name('travel_agent.update');
+    Route::post('delete/{id}',[TravelAgentController::class, 'destroy_undestroy'])->name('travel_agent.delete');
 });

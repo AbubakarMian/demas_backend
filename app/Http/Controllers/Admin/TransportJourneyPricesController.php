@@ -31,7 +31,9 @@ class TransportJourneyPricesController extends Controller
         $control = 'create';
         // $courses = Courses::pluck('full_name','id');
         // $transport_type = Transport_Type::pluck('name', 'id');
-        return view('admin.transport_journey_prices.create', compact('control', 'transport_type'));
+        return view('admin.transport_journey_prices.create', compact('control', 
+        // 'transport_type'
+    ));
     }
 
     public function save(Request $request)

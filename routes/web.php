@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\TransportTypeController;
 use App\Http\Controllers\Admin\TransportPricesController;
 use App\Http\Controllers\Admin\SaltAgentController;
 use App\Http\Controllers\Admin\TravelAgentController;
+use App\Http\Controllers\Admin\TransportJourneyPricesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,4 +148,17 @@ Route::group(['prefix'=>'admin/travel_agent'],function(){
     Route::get('edit/{id}',[TravelAgentController::class, 'edit'])->name('travel_agent.edit');
     Route::post('update/{id}',[TravelAgentController::class, 'update'])->name('travel_agent.update');
     Route::post('delete/{id}',[TravelAgentController::class, 'destroy_undestroy'])->name('travel_agent.delete');
+});
+
+
+
+//  =================================  transport_journey_prices ==========================
+Route::group(['prefix'=>'admin/transport_journey_prices'],function(){
+    Route::get('/',[TransportJourneyPricesController::class, 'index'])->name('transport_journey_prices.index');
+    Route::get('get_transport_journey_prices',[TransportJourneyPricesController::class, 'get_transport_journey_prices'])->name('transport_journey_prices.index');
+    Route::get('create',[TransportJourneyPricesController::class, 'create'])->name('transport_journey_prices.create'); //add
+    Route::post('save',[TransportJourneyPricesController::class, 'save'])->name('transport_journey_prices.save');
+    Route::get('edit/{id}',[TransportJourneyPricesController::class, 'edit'])->name('transport_journey_prices.edit');
+    Route::post('update/{id}',[TransportJourneyPricesController::class, 'update'])->name('transport_journey_prices.update');
+    Route::post('delete/{id}',[TransportJourneyPricesController::class, 'destroy_undestroy'])->name('transport_journey_prices.delete');
 });

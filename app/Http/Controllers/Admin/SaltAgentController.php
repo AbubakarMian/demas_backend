@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Locations;
 use App\Models\Sale_Agent;
+use App\Models\SaleAgent;
+use App\Models\Travel_Agent;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -23,14 +25,14 @@ class SaltAgentController extends Controller
     public function get_sale_agent(Request $request)
     {
         
-        // $sale_agent = Sale_Agent::with('user')->orderBy('created_at', 'DESC')->get();
-        $sale_agent = Sale_Agent::with('user')->first();
+        $sale_agent = SaleAgent::with('user_name')->orderBy('created_at', 'DESC')->get();
+        // $sale_agent = SaleAgent::with('user_name')->first();
         // $location = Locations::with('location_type')->first();
-        // $sale_agent = Sale_Agent::with('user')->get();
-        dd($location);
-        // $sale_agentData['data'] = $sale_agent;
+        // $sale_agent = SaleAgent::with('user')->get();
+        // dd($location);
+        $sale_agentData['data'] = $sale_agent;
         // dd($sale_agent);
-        // echo json_encode($sale_agentData);
+        echo json_encode($sale_agentData);
     }
 
 
@@ -38,16 +40,13 @@ class SaltAgentController extends Controller
     public function create()
     {
         $control = 'create';
-        // $courses = Courses::pluck('full_name','id');
-        // $transport_type = Transport_Type::pluck('name', 'id');
-        return view('admin.sale_agent.create', compact('control', 
-        // 'transport_type'
-    ));
+$travel_agents = Travel_Agent::with('user_name')->pluck('user_name.name', 'id');
+        return view('admin.sale_agent.create', compact('control', 'travel_agents'));
     }
 
     public function save(Request $request)
     {
-        $sale_agent = new Sale_Agent();
+        $sale_agent = new SaleAgent();
         $user = new User();
         $this->add_or_update($request,$user ,$sale_agent);
 
@@ -56,14 +55,15 @@ class SaltAgentController extends Controller
     public function edit($id)
     {
         $control = 'edit';
-        $sale_agent = Sale_Agent::find($id);
+        $sale_agent = SaleAgent::find($id);
         $user = User::find($id);
 
-        // $courses = Courses::pluck('full_name','id');
+        $travel_agents = Travel_Agent::with('user_name')->pluck('id');
         // $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.sale_agent.create', compact(
             'control',
             'sale_agent',
+            'travel_agents',
             'user',
 
         )
@@ -72,9 +72,9 @@ class SaltAgentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $sale_agent = Sale_Agent::find($id);
+        $sale_agent = SaleAgent::find($id);
         $user = $sale_agent->user;
-        // Sale_Agent::delete()
+        // SaleAgent::delete()
         $this->add_or_update($request, $user, $sale_agent);
         return Redirect('admin/sale_agent');
     }
@@ -109,12 +109,12 @@ class SaltAgentController extends Controller
 
     public function destroy_undestroy($id)
     {
-        $sale_agent = Sale_Agent::find($id);
+        $sale_agent = SaleAgent::find($id);
         if ($sale_agent) {
-            Sale_Agent::destroy($id);
+            SaleAgent::destroy($id);
             $new_value = 'Activate';
         } else {
-            Sale_Agent::withTrashed()->find($id)->restore();
+            SaleAgent::withTrashed()->find($id)->restore();
             $new_value = 'Delete';
         }
         $response = Response::json([

@@ -50,7 +50,7 @@ class TransportPricesController extends Controller
                     $transport_prices_obj->save();
                 }
                 else{
-                    dd($data, $transport_prices_obj);
+                    // dd($data, $transport_prices_obj);
                 }
                     $single_data = [
                         'transport_prices_id' => $transport_prices_obj->id,

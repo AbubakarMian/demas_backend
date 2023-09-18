@@ -140,6 +140,12 @@ class AdminController extends Controller
             'title' => 'Transport Prices',
 
         ];
+        $modules[] = [
+
+            'url' => 'admin/transport_journey_prices',
+            'title' => 'Journey Prices',
+
+        ];
          
         $reports=[];
         // $reports[] = [

@@ -87,6 +87,18 @@ class AdminController extends Controller
         ];
         $modules[] = [
 
+            'url' => 'admin/sale_agent',
+            'title' => 'Sale Agents ',
+
+        ];
+        $modules[] = [
+
+            'url' => 'admin/travel_agent',
+            'title' => 'Travel Agents ',
+
+        ];
+        $modules[] = [
+
             'url' => 'admin/location',
             'title' => 'Locations ',
 
@@ -94,8 +106,8 @@ class AdminController extends Controller
 
         $modules[] = [
 
-            'url' => 'admin/journey_slot',
-            'title' => ' Journey Slot ',
+            'url' => 'admin/slot',
+            'title' => ' Slots',
 
         ];
         $modules[] = [
@@ -126,6 +138,12 @@ class AdminController extends Controller
 
             'url' => 'admin/price',
             'title' => 'Transport Prices',
+
+        ];
+        $modules[] = [
+
+            'url' => 'admin/transport_journey_prices',
+            'title' => 'Journey Prices',
 
         ];
          

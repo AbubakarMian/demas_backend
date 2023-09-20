@@ -39,8 +39,8 @@ width="400px" style="table-layout:fixed;"
         <th> Journey Slots</th>
         <th> Transport Type</th>
         <th> Price</th>
-	    <th>Edit  </th>
-		<th>Delete  </th>
+	    {{-- <th>Edit  </th>
+		<th>Delete  </th> --}}
 	</tr>
 </thead>
 <tbody>
@@ -79,30 +79,31 @@ $(document).ready(function(){
 
                   var journey =  response['data'][i].journey.name;
                   var journey_slot =  response['data'][i].slot.slot_name;
-                  var price =  response['data'][i].Transport_Prices_id;
+                  var price =  response['data'][i].price;
+                  var transport_prices_id =  response['data'][i].transport_prices_id;
                   
-				  var edit = `<a class="btn btn-info" href="{!!asset('admin/car/edit/` + id + `')!!}">Edit</a>`;
-                       createModal({
-                            id: 'car_' + response['data'][i].id,
-                            header: '<h4>Delete</h4>',
-                            body: 'Do you want to continue ?',
-                            footer: `
-                                <button class="btn btn-danger" onclick="delete_request(` + response['data'][i].id + `)"
-                                data-dismiss="modal">
-                                    Delete
-                                </button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                `,
-                        });
-                        var delete_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#` + 'car_' + response['data'][i].id + `">Delete</a>`;
+				//   var edit = `<a class="btn btn-info" href="{!!asset('admin/car/edit/` + id + `')!!}">Edit</a>`;
+                //        createModal({
+                //             id: 'car_' + response['data'][i].id,
+                //             header: '<h4>Delete</h4>',
+                //             body: 'Do you want to continue ?',
+                //             footer: `
+                //                 <button class="btn btn-danger" onclick="delete_request(` + response['data'][i].id + `)"
+                //                 data-dismiss="modal">
+                //                     Delete
+                //                 </button>
+                //                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                //                 `,
+                //         });
+                //         var delete_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#` + 'car_' + response['data'][i].id + `">Delete</a>`;
 
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
                     "<td>" +journey+ "</td>" +
                     "<td>" +journey_slot+ "</td>" +
                     "<td>" +transport_type_name+ "</td>" +
-                    "<td>" +price+ "</td>" +
-                    "<td>" +edit+ "</td>" +
-                    "<td>" +delete_btn+ "</td>" +
+                    "<td><input onchange=update_user_price("+transport_prices_id+",this) type='text' value='" +price+ "'></td>" +
+                    // "<td>" +edit+ "</td>" +
+                    // "<td>" +delete_btn+ "</td>" +
        
 
                 "</tr>";
@@ -124,6 +125,19 @@ console.log('sadasdasdad');
 
 });
 
+function update_user_price(transport_prices_id,e){
+
+    var price = $(e).val();
+    $.ajax({
+        url:'{!!asset("admin/price/update_price")!!}/'+transport_prices_id+'?price='+price,
+         type: 'get',
+         dataType: 'json',
+         success: function(response){
+            console.log('response');
+    }
+
+});
+}
 function set_msg_modal(msg){
         $('.set_msg_modal').html(msg);
     }

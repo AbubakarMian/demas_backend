@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
- use Illuminate\Database\Eloquent\SoftDeletes;
-class Sale_Agent extends Model
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Users extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'sale_agent';   
-   
+    protected $table = 'users';   
+    
 }

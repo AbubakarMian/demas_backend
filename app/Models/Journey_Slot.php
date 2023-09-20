@@ -18,4 +18,8 @@ class Journey_Slot extends Model
     {
         return $this->hasOne('App\Models\Journey', 'id', 'journey_id')->withTrashed();
     }
+    public function slot()
+    {
+        return $this->hasOne('App\Models\Slot', 'id', 'slot_id')->withTrashed();
+    }
     }

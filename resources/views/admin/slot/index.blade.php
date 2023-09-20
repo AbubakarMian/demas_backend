@@ -1,11 +1,11 @@
 @extends('layouts.default_module')
 @section('module_name')
-    Journey Slots
+Slots
 @stop
 
 @section('add_btn')
-    {!! Form::open(['method' => 'get', 'url' => ['admin/journey_slot/create'], 'files' => true]) !!}
-    <span>{!! Form::submit('Add Journey Slot', ['class' => 'btn btn-success pull-right']) !!}</span>
+    {!! Form::open(['method' => 'get', 'url' => ['admin/slot/create'], 'files' => true]) !!}
+    <span>{!! Form::submit('Add Slot', ['class' => 'btn btn-success pull-right']) !!}</span>
     {!! Form::close() !!}
 @stop
 @section('table-properties')
@@ -34,10 +34,10 @@
 </style>
 @section('table')
 
-    <table class="fhgyt" id="journey_slotTableAppend" style="opacity: 0">
+    <table class="fhgyt" id="slotTableAppend" style="opacity: 0">
         <thead>
             <tr>
-                <th> Journey</th>
+                <th> Name</th>
                 <th> Start Date</th>
                 <th> End Date</th>
                 <th>Edit </th>
@@ -72,12 +72,12 @@
             function fetchRecords() {
 
                 $.ajax({
-                    url: '{!! asset('admin/journey_slot/get_journey_slot') !!}',
+                    url: '{!! asset('admin/slot/get_slot') !!}',
                     type: 'get',
                     dataType: 'json',
                     success: function(response) {
                         console.log('response');
-                        $("#journey_slotTableAppend").css("opacity", 1);
+                        $("#slotTableAppend").css("opacity", 1);
                         var len = response['data'].length;
                         console.log('response2');
 
@@ -86,11 +86,12 @@
                         for (var i = 0; i < len; i++) {
 
                             var id = response['data'][i].id;
-                            var journey_id = response['data'][i].journey.name;
+                            var name = response['data'][i].name;
+                            // var journey_id = response['data'][i].journey.name;
                             var from_timestamp = response['data'][i]
-                            .from_date; // Unix timestamp from your database
+                            .start_date; // Unix timestamp from your database
                             var to_timestamp = response['data'][i]
-                            .to_date; // Unix timestamp from your database
+                            .end_date; // Unix timestamp from your database
 
                             // Convert Unix timestamps to date-time strings
                             var from_date = new Date(from_timestamp *
@@ -110,9 +111,9 @@
 
 
                             var edit =
-                                `<a class="btn btn-info" href="{!! asset('admin/journey_slot/edit/` + id + `') !!}">Edit</a>`;
+                                `<a class="btn btn-info" href="{!! asset('admin/slot/edit/` + id + `') !!}">Edit</a>`;
                             createModal({
-                                id: 'journey_slot_' + response['data'][i].id,
+                                id: 'slot_' + response['data'][i].id,
                                 header: '<h4>Delete</h4>',
                                 body: 'Do you want to continue ?',
                                 footer: `
@@ -125,10 +126,10 @@
                             });
                             var delete_btn =
                                 `<a class="btn btn-info" data-toggle="modal" data-target="#` +
-                                'journey_slot_' + response['data'][i].id + `">Delete</a>`;
+                                'slot_' + response['data'][i].id + `">Delete</a>`;
 
                             var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
-                                "<td>" + journey_id + "</td>" +
+                                "<td>" + name + "</td>" +
                                 "<td>" + from_date_formatted + "</td>" +
                                 "<td>" + to_date_formatted + "</td>" +
                                 "<td>" + edit + "</td>" +
@@ -137,11 +138,11 @@
 
                                 "</tr>";
 
-                            $("#journey_slotTableAppend tbody").append(tr_str);
+                            $("#slotTableAppend tbody").append(tr_str);
                         }
                         $(document).ready(function() {
                             console.log('sadasdasdad');
-                            $('#journey_slotTableAppend').DataTable({
+                            $('#slotTableAppend').DataTable({
                                 dom: '<"top_datatable"B>lftipr',
                                 buttons: [
                                     'copy', 'csv', 'excel', 'pdf', 'print'
@@ -161,7 +162,7 @@
         function delete_request(id) {
             $.ajax({
 
-                url: "{!! asset('admin/journey_slot/delete') !!}/" + id,
+                url: "{!! asset('admin/slot/delete') !!}/" + id,
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -170,7 +171,7 @@
                 success: function(response) {
                     console.log(response.status);
                     if (response) {
-                        var myTable = $('#journey_slotTableAppend').DataTable();
+                        var myTable = $('#slotTableAppend').DataTable();
                         console.log('removeasdasdasd');
                         myTable.row('#row_' + id).remove().draw();
                     }

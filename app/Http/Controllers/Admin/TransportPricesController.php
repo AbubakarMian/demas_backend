@@ -23,6 +23,7 @@ class TransportPricesController extends Controller
         $journey_arr = Journey::get()->toArray();
         $slot_arr = Journey_Slot::get()->toArray();
 
+      
 
         foreach ($slot_arr as $slot_key => $slot) {
             # code...
@@ -41,14 +42,19 @@ class TransportPricesController extends Controller
                     ->first(); // Use 'first' to retrieve a single record
                 
                 if (!$transport_prices_obj) {
+                    // dd('hi');
                     $transport_prices_obj = new TransportPrices();
                     $transport_prices_obj->transport_type_id = $transport_type_id;
                     $transport_prices_obj->journey_slot_id = $transport_journey_slot_id;
                     $transport_prices_obj->price = 0;
                     $transport_prices_obj->save();
                 }
+                else{
+                    // dd($data, $transport_prices_obj);
+                }
                     $single_data = [
-                        'Transport_Prices_id' => $transport_prices_obj->id,
+                        'transport_prices_id' => $transport_prices_obj->id,
+                        'price' => $transport_prices_obj->price,
                         'transport_type' => $transport_type,
                         'journey' => $journey,
                         'slot' => $slot,
@@ -70,4 +76,7 @@ class TransportPricesController extends Controller
         $Transport_Prices->save();
         return $this->sendResponse(200, $Transport_Prices);
     }
+
+    
+    
 }

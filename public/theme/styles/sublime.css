@@ -2621,6 +2621,7 @@ a.list-group-item:focus {
 .panel-success {
   border-color: #15db81;
 }
+
 .panel-success > .panel-heading {
   color: #ffffff;
   background-color: #15db81;

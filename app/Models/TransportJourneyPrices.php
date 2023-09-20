@@ -11,4 +11,9 @@ class TransportJourneyPrices extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'transport_journey_prices'; 
+
+    public function journeyslot()
+    {
+        return $this->hasOne('App\Models\Journey_Slot', 'id', 'journey_slot_id')->withTrashed();
+    }
   }

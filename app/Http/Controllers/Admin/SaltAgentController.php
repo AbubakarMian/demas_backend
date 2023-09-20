@@ -40,7 +40,7 @@ class SaltAgentController extends Controller
     public function create()
     {
         $control = 'create';
-$travel_agents = Travel_Agent::with('user_name')->pluck('user_name.name', 'id');
+$travel_agents = Travel_Agent::with('user_name')->pluck( 'id');
         return view('admin.sale_agent.create', compact('control', 'travel_agents'));
     }
 
@@ -48,7 +48,7 @@ $travel_agents = Travel_Agent::with('user_name')->pluck('user_name.name', 'id');
     {
         $sale_agent = new SaleAgent();
         $user = new User();
-        $this->add_or_update($request,$user ,$sale_agent);
+        $this->add_or_update($request , $user ,$sale_agent);
 
         return redirect('admin/sale_agent');
     }

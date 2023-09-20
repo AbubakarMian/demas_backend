@@ -19,7 +19,15 @@ class TransportJourneyPricesController extends Controller
 
     public function get_transport_journey_prices(Request $request)
     {
-        $transport_journey_prices = TransportJourneyPrices::with('transport_type','driver.user')->orderBy('created_at', 'DESC')->select('*')->get();
+        $transport_journey_prices = TransportJourneyPrices::with(
+            'journeyslot.slot',
+            // 'tripprice',
+            // 'saleagent',
+            // 'saleagent_com',
+            // 'travelagent',
+            // 'travelagent_com',
+            // 'driver_com',
+            )->orderBy('created_at', 'DESC')->select('*')->get();
         $transport_journey_pricesData['data'] = $transport_journey_prices;
         echo json_encode($transport_journey_pricesData);
     }
@@ -97,4 +105,48 @@ class TransportJourneyPricesController extends Controller
             'new_value' => $new_value
         ]);
         return $response;
-    }}
+    }
+    public function update_price(Request $request, $journey_slot_id)
+    {
+        $transport_jou_prices = TransportJourneyPrices::find($journey_slot_id);
+        $transport_jou_prices->trip_price = $request->trip_price;
+        $transport_jou_prices->save();
+        return $this->sendResponse(200, $transport_jou_prices);
+    }
+    public function update_sale_agent(Request $request, $journey_slot_id)
+    {
+        $transport_sale_agent = TransportJourneyPrices::find($journey_slot_id);
+        $transport_sale_agent->sale_agent_user_id = $request->sale_agent_user_id;
+        $transport_sale_agent->save();
+        return $this->sendResponse(200, $transport_sale_agent);
+    }
+    public function update_sale_agent_com(Request $request, $journey_slot_id)
+    {
+        $transport_update_sale_agent_com = TransportJourneyPrices::find($journey_slot_id);
+        $transport_update_sale_agent_com->sale_agent_commision = $request->sale_agent_commision;
+        $transport_update_sale_agent_com->save();
+        return $this->sendResponse(200, $transport_update_sale_agent_com);
+    }
+    public function update_travel_agent(Request $request, $journey_slot_id)
+    {
+        $transport_update_travel_agent = TransportJourneyPrices::find($journey_slot_id);
+        $transport_update_travel_agent->travel_agent_user_id = $request->travel_agent_user_id;
+        $transport_update_travel_agent->save();
+        return $this->sendResponse(200, $transport_update_travel_agent);
+    }
+    public function update_tavel_agent_com(Request $request, $journey_slot_id)
+    {
+        $transport_update_tavel_agent_com = TransportJourneyPrices::find($journey_slot_id);
+        $transport_update_tavel_agent_com->travel_agent_commision = $request->travel_agent_commision;
+        $transport_update_tavel_agent_com->save();
+        return $this->sendResponse(200, $transport_update_tavel_agent_com);
+    }
+    public function update_driver_com(Request $request, $journey_slot_id)
+    {
+        $transport_update_driver_com = TransportJourneyPrices::find($journey_slot_id);
+        $transport_update_driver_com->driver_user_commision = $request->driver_user_commision;
+        $transport_update_driver_com->save();
+        return $this->sendResponse(200, $transport_update_driver_com);
+    }
+
+}

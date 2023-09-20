@@ -161,4 +161,11 @@ Route::group(['prefix'=>'admin/transport_journey_prices'],function(){
     Route::get('edit/{id}',[TransportJourneyPricesController::class, 'edit'])->name('transport_journey_prices.edit');
     Route::post('update/{id}',[TransportJourneyPricesController::class, 'update'])->name('transport_journey_prices.update');
     Route::post('delete/{id}',[TransportJourneyPricesController::class, 'destroy_undestroy'])->name('transport_journey_prices.delete');
+    Route::get('update_price/{id}',[TransportJourneyPricesController::class, 'update_price'])->name('transport_journey_prices.update_price');
+    Route::get('update_sale_agent/{id}',[TransportJourneyPricesController::class, 'update_sale_agent'])->name('transport_journey_prices.update_sale_agent');
+    Route::get('update_sale_agent_com/{id}',[TransportJourneyPricesController::class, 'update_sale_agent_com'])->name('transport_journey_prices.update_sale_agent_com');
+    Route::get('update_travel_agent/{id}',[TransportJourneyPricesController::class, 'update_travel_agent'])->name('transport_journey_prices.update_travel_agent');
+    Route::get('update_tavel_agent_com/{id}',[TransportJourneyPricesController::class, 'update_tavel_agent_com'])->name('transport_journey_prices.update_tavel_agent_com');
+    Route::get('update_driver_com/{id}',[TransportJourneyPricesController::class, 'update_driver_com'])->name('transport_journey_prices.update_driver_com');
+
 });

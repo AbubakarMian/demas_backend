@@ -8,6 +8,36 @@ $reports = $admin_common->reports;
     <!-- Dashboard Components -->
 
     <!-- Modules Start -->
+    <style>
+
+button.btn.btn-success.ccc.mod_btn_hed {
+    width: 170px;
+    height: 73px;
+    font-size: 36px;
+    font-family: fantasy;
+    background: #4f5be8;
+    border: 1px solid #4f5be8;
+    font-weight: 100;
+}
+.tile-stats.module_tile {
+    font-family: fantasy;
+    font-size: 25px;
+    font-weight: 100;
+}
+.sidebar a, .sidebar .nav-title {
+    color: white;
+    background: #455ce7;
+    width: 100%;
+    margin: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px 61px;
+    margin-bottom: 0px;
+}
+
+    </style>
     <div class="row">
 
 
@@ -24,7 +54,7 @@ $reports = $admin_common->reports;
                 </section> -->
                 <section class="abc">
                     <h1 class="mt0">
-                    <button type="button" class="btn btn-success ccc">Modules</button>
+                    <button type="button" class="btn btn-success ccc mod_btn_hed">Modules</button>
                     </h1>
                 </section>
             </div>
@@ -44,7 +74,7 @@ $reports = $admin_common->reports;
                     <section class="dash-tile bg-success modules">
                         <div class="tile-title">
                         </div>
-                        <div class="tile-stats">{!! $module['title'] !!}
+                        <div class="tile-stats module_tile">{!! $module['title'] !!}
                         </div>
                         <div class="mb20"></div>
                         <div class="tile-footer">
@@ -59,6 +89,12 @@ $reports = $admin_common->reports;
 
     <!-- Modules end -->
 <style>
+    .pael_bg{
+        background-color: transparent !important
+    }
+    .reprt_btn{
+        display: none;
+    }
 </style>
     <!-- reports start -->
     <div class="row">
@@ -70,7 +106,7 @@ $reports = $admin_common->reports;
             </section> -->
             <section class="abc">
                     <h1 class="mt0">
-                    <button type="button" class="btn btn-success ccc">Reports</button>
+                    <button type="button" class="btn btn-success ccc reprt_btn">Reports</button>
                     </h1>
                 </section>
         </div>
@@ -97,7 +133,7 @@ $reports = $admin_common->reports;
     <!-- reports end  -->
 
     <!-- Chart -->
-    <section class="panel hidden-xs obody">
+    <section class="panel hidden-xs obody pael_bg">
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-12 mb25">

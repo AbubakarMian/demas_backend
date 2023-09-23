@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\LocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
@@ -21,6 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 // Route::post('register', 'Api\UserController@register');
+
+Route::get('locations/get_all',[LocationController::class, 'get_all']);
+
 
 Route::group(['middleware' => 'auth.client_token'], function () {
 

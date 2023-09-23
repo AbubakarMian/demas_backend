@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('journey_slot', function (Blueprint $table) {
-            $table->bigInteger('slot_id')->nullable()->default(0);
-            $table->dropColumn('from_date');
-            $table->dropColumn('to_date');
+        Schema::table('transport', function (Blueprint $table) {
+            $table->json('images')->nullable()->default('[]');
         });
     }
 

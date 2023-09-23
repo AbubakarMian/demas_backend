@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Journey_Slot;
+use App\Models\SaleAgent;
 use App\Models\TransportJourneyPrices;
+use App\Models\Travel_Agent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
@@ -19,29 +22,87 @@ class TransportJourneyPricesController extends Controller
 
     public function get_transport_journey_prices(Request $request)
     {
-        $transport_journey_prices = TransportJourneyPrices::with(
+        $transport_journey_prices = TransportJourneyPrices::with([
             'journeyslot.slot',
-            // 'tripprice',
-            // 'saleagent',
-            // 'saleagent_com',
-            // 'travelagent',
-            // 'travelagent_com',
-            // 'driver_com',
-            )->orderBy('created_at', 'DESC')->select('*')->get();
-        $transport_journey_pricesData['data'] = $transport_journey_prices;
-        echo json_encode($transport_journey_pricesData);
+        ])->orderBy('created_at', 'DESC')->get();
+        // $transport_journey_pricesData['data'] = $transport_journey_prices;
+        // echo json_encode($transport_journey_pricesData);
+
+
+        $data = [];
+        $journey_slots = Journey_Slot::get()->toArray();
+        // $journeies = Journey_Slot::get()->toArray();
+        // $slots = Journey_Slot::get()->toArray();
+        $sale_agents = SaleAgent::with('travel_agents.user_obj')->get();
+        // $travel_agents = Travel_Agent::get()->toArray();
+
+        // dd(
+        //     $journeies,
+        //     $slots,
+        //     $sale_agents,
+        //     $travel_agents
+        // );
+
+
+
+        foreach ($journey_slots as $slot_key => $j_slot) {
+            # code...
+
+            // foreach ($sale_agent as $journey_key => $journey) {
+            foreach ($sale_agents as $journey_key => $s_agent) {
+                # code...
+// dd($sale_agents);
+                foreach ($s_agent->travel_agents as $travel_agent_key => $t_agent) {
+
+                    $sale_agent_id = $s_agent->user_id;
+                    $travel_agent_id = $t_agent->user_id;
+                    $journey_slot_id = $j_slot['id'];
+
+                    $transport_prices_obj = TransportJourneyPrices::
+                        where('journey_slot_id', $journey_slot_id)
+                        ->where('sale_agent_user_id', $sale_agent_id)
+                        ->where('travel_agent_user_id', $travel_agent_id)
+                        ->first(); // Use 'first' to retrieve a single recordss
+
+                    if (!$transport_prices_obj) {
+                        $transport_prices_obj = new TransportJourneyPrices();
+                        $transport_prices_obj->sale_agent_user_id = $sale_agent_id;
+                        $transport_prices_obj->travel_agent_user_id = $travel_agent_id;
+                        $transport_prices_obj->journey_slot_id = $journey_slot_id;
+                        // $transport_prices_obj->price = 0;
+                        $transport_prices_obj->save();
+                    }
+                }
+            }
+        }
+        // dd($travel_agent_arr, $journey_arr, $slot_arr, $data);
+
+        $transport_prices_arr = TransportJourneyPrices::with([
+            'journeyslot.slot','sale_agent.user_obj','travel_agent.user_obj'
+        ])
+            // ->where('journey_slot_id', $transport_journey_slot_id)
+            // ->where('sale_agent_user_id', $sale_agent_id)
+            // ->where('travel_agent_user_id', $travel_agent_id)
+            ->get(); // Use 'first' to retrieve a single recordss
+        // $data[] = $transport_prices_obj;
+
+        // $transport_journey_pricesData['data'] = $data;
+        // echo json_encode($transport_journey_pricesData);
+        return $this->sendResponse(200, $transport_prices_arr);
     }
 
 
-   
+
     public function create()
     {
         $control = 'create';
         // $courses = Courses::pluck('full_name','id');
-        // $transport_type = Transport_Type::pluck('name', 'id');
-        return view('admin.transport_journey_prices.create', compact('control', 
-        // 'transport_type'
-    ));
+        // $travel_agent = travel_agent::pluck('name', 'id');
+        return view('admin.transport_journey_prices.create', compact(
+            'control',
+            // 'travel_agent'
+        )
+        );
     }
 
     public function save(Request $request)
@@ -56,13 +117,15 @@ class TransportJourneyPricesController extends Controller
         $control = 'edit';
         $transport_journey_prices = TransportJourneyPrices::find($id);
         // $courses = Courses::pluck('full_name','id');
-        // $transport_type = Transport_Type::pluck('name', 'id');
-        return view('admin.transport_journey_prices.create', compact(
-            'control',
-            'transport_journey_prices',
-            // 'transport_type',
+        // $travel_agent = travel_agent::pluck('name', 'id');
+        return view(
+            'admin.transport_journey_prices.create',
+            compact(
+                'control',
+                'transport_journey_prices',
+                // 'travel_agent',
 
-        )
+            )
         );
     }
 
@@ -78,7 +141,7 @@ class TransportJourneyPricesController extends Controller
     public function add_or_update(Request $request, $transport_journey_prices)
     {
         // dd($request->all());
-        $transport_journey_prices->transport_type_id = $request->transport_type_id;
+        $transport_journey_prices->travel_agent_id = $request->travel_agent_id;
         $transport_journey_prices->user_owner_id = $request->user_owner_id;
         $transport_journey_prices->details = $request->details;
 

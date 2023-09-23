@@ -28,7 +28,7 @@ $admin_common = session()->get('admin_common');
     <link rel="stylesheet" href="{{ asset('cssjs/myapp.css') }}">
     <link rel="stylesheet" href="{{ asset('cssjs/jquery.timeentry.css') }}">
     <!-- mobiscroll -->
-    <link rel="stylesheet" href="{{ asset('css/mobi/mobiscroll.jquery.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/mobi/mobiscroll.jquery.min.css') }}"> --}}
     <!--  -->
     {{-- Data Tables CSS --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
@@ -51,7 +51,7 @@ $admin_common = session()->get('admin_common');
 
     <!-- css multiselect  -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!--end multiselect  -->
 </head>
@@ -69,6 +69,7 @@ $admin_common = session()->get('admin_common');
 </style>
 
 <body>
+    @include('partial_layouts.cropper.cropper_html')
 
     <div class="app">
         <!-- top header -->

@@ -16,4 +16,14 @@ class TransportJourneyPrices extends Model
     {
         return $this->hasOne('App\Models\Journey_Slot', 'id', 'journey_slot_id')->withTrashed();
     }
+    
+    public function sale_agent()
+    {
+        return $this->hasOne('App\Models\SaleAgent', 'user_id', 'sale_agent_user_id')->withTrashed();
+    }
+    
+    public function travel_agent()
+    {
+        return $this->hasOne('App\Models\Travel_Agent', 'user_id', 'travel_agent_user_id')->withTrashed();
+    }
   }

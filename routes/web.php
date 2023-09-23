@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TransportPricesController;
 use App\Http\Controllers\Admin\SaltAgentController;
 use App\Http\Controllers\Admin\TravelAgentController;
 use App\Http\Controllers\Admin\TransportJourneyPricesController;
+use App\Http\Controllers\User\CommonServicesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -169,3 +170,4 @@ Route::group(['prefix'=>'admin/transport_journey_prices'],function(){
     Route::get('update_driver_com/{id}',[TransportJourneyPricesController::class, 'update_driver_com'])->name('transport_journey_prices.update_driver_com');
 
 });
+Route::post('cropper/crop_image', [CommonServicesController::class, 'crop_image'])->name('crop.image');

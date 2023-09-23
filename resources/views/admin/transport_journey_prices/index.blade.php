@@ -76,35 +76,35 @@
                     success: function(response) {
                         console.log('response');
                         $("#transport_journey_pricesTableAppend").css("opacity", 1);
-                        var len = response['data'].length;
-                        console.log('response2');
-
+                        response = response.response;
+                        var len = response.length;
+                        console.log('response2',response);
 
                         for (var i = 0; i < len; i++) {
-                            var id = response['data'][i].id;
-                            //   var journey_slot =  response['data'][i].journeyslot.slot.name;
-                            var journey_slot = response['data'][i].journeyslot;
-                            var journey_slot_id = response['data'][i].journey_slot_id;
-                            var trip_price = response['data'][i].trip_price;
-                            var sale_agent = response['data'][i].sale_agent_user_id;
-                            var sale_agent_com = response['data'][i].sale_agent_commision;
-                            var travel_agent = response['data'][i].travel_agent_user_id;
-                            var tavel_agent_com = response['data'][i].travel_agent_commision;
-                            var driver_com = response['data'][i].driver_user_commision;
+                            var id = response[i].id;
+                            //   var journey_slot =  response[i].journeyslot.slot.name;
+                            var journey_slot = response[i].journeyslot.slot.name;
+                            var journey_slot_id = response[i].journey_slot_id;
+                            var trip_price = response[i].trip_price;
+                            var sale_agent = response[i].sale_agent.user_obj.name;
+                            var sale_agent_com = response[i].sale_agent_commision;
+                            var travel_agent = response[i].travel_agent.user_obj.name;
+                            var tavel_agent_com = response[i].travel_agent_commision;
+                            var driver_com = response[i].driver_user_commision;
 
-                            console.log('aaa', response['data'][i]);
-                            // console.log('ccaaa',response['data'][i].transport_type);
+                            console.log('aaa', response[i]);
+                            // console.log('ccaaa',response[i].transport_type);
 
 
 
                             // var edit =
                             // `<a class="btn btn-info" href="{!! asset('admin/transport_journey_prices/edit/` + id + `') !!}">Edit</a>`;
                             createModal({
-                                id: 'transport_journey_prices_' + response['data'][i].id,
+                                id: 'transport_journey_prices_' + response[i].id,
                                 header: '<h4>Delete</h4>',
                                 body: 'Do you want to continue ?',
                                 footer: `
-                                <button class="btn btn-danger" onclick="delete_request(` + response['data'][i].id + `)"
+                                <button class="btn btn-danger" onclick="delete_request(` + response[i].id + `)"
                                 data-dismiss="modal">
                                     Delete
                                 </button>
@@ -113,7 +113,7 @@
                             });
                             var delete_btn =
                                 `<a class="btn btn-info" data-toggle="modal" data-target="#` +
-                                'transport_journey_prices_' + response['data'][i].id + `">Delete</a>`;
+                                'transport_journey_prices_' + response[i].id + `">Delete</a>`;
                             var trip_price_values = '';
                             if (trip_price) {
                                 trip_price_values = trip_price;
@@ -156,25 +156,25 @@
                                 driver_com_values = 0
 
                             )
-                            var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                            var tr_str = "<tr id='row_" + response[i].id + "'>" +
                                 "<td>" + journey_slot + "</td>" +
                                 // "<td>" +trip_price+ "</td>" +
                                 "<td><input onchange=update_trip_price(" + journey_slot_id +
                                 ",this) class='inp_td' type='text' name='trip_price' value='" +
                                 trip_price_values + "'></td>" +
-                                // "<td>" +sale_agent+ "</td>" +
-                                "<td><input onchange=update_sale_agent(" + journey_slot_id +
-                                ",this) class='inp_td'  type='text' value='" + sale_agent_values +
-                                "'></td>" +
+                                "<td>" +sale_agent+ "</td>" +
+                                // "<td><input onchange=update_sale_agent(" + journey_slot_id +
+                                // ",this) class='inp_td'  type='text' value='" + sale_agent_values +
+                                // "'></td>" +
 
                                 // "<td>" +sale_agent_com+ "</td>" +
                                 "<td><input onchange=update_sale_agent_com(" + journey_slot_id +
                                 ",this) class='inp_td'  type='text' value='" + sale_agent_com_values +
                                 "'></td>" +
-                                // "<td>" +travel_agent+ "</td>" +
-                                "<td><input onchange=update_travel_agent(" + journey_slot_id +
-                                ",this) class='inp_td'  type='text' value='" + travel_agent_values +
-                                "'></td>" +
+                                "<td>" +travel_agent+ "</td>" +
+                                // "<td><input onchange=update_travel_agent(" + journey_slot_id +
+                                // ",this) class='inp_td'  type='text' value='" + travel_agent_values +
+                                // "'></td>" +
                                 // "<td>" +tavel_agent_com+ "</td>" +
                                 "<td><input onchange=update_tavel_agent_com(" + journey_slot_id +
                                 ",this) class='inp_td'  type='text' value='" + tavel_agent_com_values +

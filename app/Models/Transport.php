@@ -9,6 +9,15 @@ class Transport extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'transport';   
+    protected $table = 'transport';
+
+    protected $casts = [
+        'images' => 'array',
+        // 'properties' => 'object'
+    ];
+
+    public function transport_type(){
+        return $this->hasOne('App\Models\Transport_Type','id','transport_type_id');
+    }
     
 }

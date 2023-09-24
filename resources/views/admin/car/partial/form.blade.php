@@ -24,8 +24,6 @@
     </div>
 @endif
 
-
-
 <div class="form-group">
     <label for="transport_type_id">Transport Type</label>
     {!! Form::select('transport_type_id', $transport_type, null, [
@@ -62,13 +60,55 @@
 <div class="form-group">
     {!! Form::label('details', 'Details') !!}
     <div>
-        {!! Form::text('details', null, [
+        {!! Form::textarea('details', null, [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Enter Details',
             'required',
-            'maxlength' => '100',
+            "rows"=>3
+        ]) !!}
+    </div>
+</div>
+
+<div class="form-group">
+    {!! Form::label('features', 'Features (comma separated)') !!}
+    <div>
+        {!! Form::textarea('features', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Exterior parking camera rear,Heated door mirrors,Low tire pressure warning',
+            'required',
+            "rows"=>3
+        ]) !!}
+    </div>
+</div>
+
+<div class="form-group">
+    {!! Form::label('booking', 'Booking (comma separated)') !!}
+    <div>
+        {!! Form::textarea('booking', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Turn signal indicator mirrors, Exterior parking camera rear',
+            'required',
+            "rows"=>3
+        ]) !!}
+    </div>
+</div>
+
+<div class="form-group">
+    {!! Form::label('dontforget', 'Dont Forget') !!}
+    <div>
+        {!! Form::textarea('dontforget', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Be on time, Wear seat belt',
+            'required',
+            "rows"=>3
         ]) !!}
     </div>
 </div>

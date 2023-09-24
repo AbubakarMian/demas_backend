@@ -67,7 +67,8 @@ class TransportTypeController extends Controller
         $transport_type->name = $request->name;
         $transport_type->seats = $request->seats;
         $transport_type->luggage = $request->luggage;
-        $transport_type->passenger = $request->passenger;
+        // $transport_type->passenger = $request->passenger;
+        $transport_type->doors = $request->doors;
 
         // if($request->hasFile('upload_book')){
 

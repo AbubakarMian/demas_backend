@@ -10,7 +10,11 @@ class Car extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'transport';   
+    protected $table = 'transport';
+
+    protected $casts  = [
+        'images' => 'array',
+    ];
 
 
     public function transport_type()
@@ -21,6 +25,5 @@ class Car extends Model
     public function driver()
     {
         return $this->hasOne('App\Models\Driver', 'id', 'user_driver_id')->withTrashed();
-        
     }
-    }
+}

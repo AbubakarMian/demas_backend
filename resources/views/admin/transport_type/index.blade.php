@@ -38,7 +38,7 @@ width="400px" style="table-layout:fixed;"
 	    <th> Name</th>
         <th> Seats</th>
         <th> Luggage</th>
-        <th> Passenger</th>
+        <th> Doors</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -75,7 +75,7 @@ $(document).ready(function(){
                   var name =  response['data'][i].name;
                   var seats =  response['data'][i].seats;
                   var luggage =  response['data'][i].luggage;
-                  var passenger =  response['data'][i].passenger;
+                  var doors =  response['data'][i].doors;
                    
 				  var edit = `<a class="btn btn-info" href="{!!asset('admin/transport_type/edit/` + id + `')!!}">Edit</a>`;
                        createModal({
@@ -96,7 +96,7 @@ $(document).ready(function(){
                     "<td>" +name+ "</td>" +
                     "<td>" +seats+ "</td>" +
                     "<td>" +luggage+ "</td>" +
-                    "<td>" +passenger+ "</td>" +
+                    "<td>" +doors+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
 

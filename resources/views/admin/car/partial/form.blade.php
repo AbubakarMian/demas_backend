@@ -39,9 +39,25 @@
 </div>
 <label for="transport_type_id">Upload Images</label>
 
-<input  type="file" accept="image/*" class="form-control prof_box crop_upload_image" image_width="378" image_height="226"
-    aspect_ratio_width="16" aspect_ratio_height="9" multiple upload_input_by_name="car_image" required>
 
+<input type="file" accept="image/*" class="form-control prof_box crop_upload_image" image_width="378" image_height="226"
+    aspect_ratio_width="16" aspect_ratio_height="9" multiple upload_input_by_name="car_images[]" {!!isset($car->images)?'':"required"!!}
+    onsuccess_function="show_image">
+
+<div class="upload_images">
+
+    @if (isset($car->images))
+        @foreach ($car->images as $image_key => $image)
+            <div class="car_images">
+                <div onclick="remove_image(this)">X</div>
+
+                <img src="{!! $image !!}">
+                <input type="hidden" name="car_images_upload[]" value="{!! $image !!}">
+            </div>
+        @endforeach
+    @endif
+
+</div>
 
 <div class="form-group">
     {!! Form::label('details', 'Details') !!}
@@ -57,33 +73,9 @@
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <span id="err" class="error-product"></span>
-
-
 <div class="form-group col-md-12">
 </div>
-
-
-
-
-
 <div class="col-md-5 pull-left">
     <div class="form-group text-center">
         <div>
@@ -94,11 +86,24 @@
         </div>
     </div>
 </div>
-
-
-
 @section('app_jquery')
     <script>
+        function show_image(image) {
+            var image_key = $(".car_images_upload").length;
+            var img = `
+            <div class="car_images">
+                <div  onclick="remove_image(this)">X</div>
+                <img src="` + image + `">
+                <input type="hidden" name="car_images_upload[]" value="` + image + `">
+            </div>
+            `;
+            $('.upload_images').append(img);
+        }
+
+        function remove_image(e) {
+            $(e).parent().remove();
+        }
+
         function validateForm() {
             return true;
         }

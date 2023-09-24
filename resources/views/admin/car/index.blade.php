@@ -36,7 +36,7 @@ width="400px" style="table-layout:fixed;"
 <thead>
 	<tr>
         <th> Transport Type</th>
-        <th> Driver</th>
+        {{-- <th> Driver</th> --}}
         <th> Details</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
@@ -76,7 +76,7 @@ $(document).ready(function(){
                 // console.log('ccaaa',response['data'][i].transport_type);
 
 
-                  var user_owner_id =  response['data'][i].driver.user.name;
+                //   var user_owner_id =  response['data'][i].driver.user.name;
                   var details =  response['data'][i].details;
                   
 				  var edit = `<a class="btn btn-info" href="{!!asset('admin/car/edit/` + id + `')!!}">Edit</a>`;
@@ -96,7 +96,7 @@ $(document).ready(function(){
 
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
                     "<td>" +transport_type_name+ "</td>" +
-                    "<td>" +user_owner_id+ "</td>" +
+                    // "<td>" +user_owner_id+ "</td>" +
                     "<td>" +details+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +

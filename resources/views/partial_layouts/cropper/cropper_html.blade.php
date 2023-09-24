@@ -184,17 +184,18 @@ id="upload_image" style="display:block" /> --}}
 
             canvas.toBlob(function(blob) {
                 url = URL.createObjectURL(blob);
-                
-                var remove_previous = $(selected_image_input).attr('keep_previous') === "true" ? true:false;
-               
-                    console.log('keep pre 2',remove_previous);
-               
+
+                var remove_previous = $(selected_image_input).attr('keep_previous') === "true" ?
+                    true : false;
+
+                console.log('keep pre 2', remove_previous);
+
 
                 var upload_input_by_name = $(selected_image_input).attr('upload_input_by_name');
-                var multiple = $(selected_image_input).hasAttr('multiple');
-                var pre_image = $('input[name="'+upload_input_by_name+'"]');
+                // var multiple = $(selected_image_input).hasAttribute('multiple');
+                var pre_image = $('input[name="' + upload_input_by_name + '"]');
                 var pre_image_url = '';
-                if(pre_image.length > 0 && remove_previous){
+                if (pre_image.length > 0 && remove_previous) {
                     pre_image_url = pre_image.val();
                 }
                 var reader = new FileReader();
@@ -206,7 +207,7 @@ id="upload_image" style="display:block" /> --}}
                         method: 'POST',
                         data: {
                             image: base64data,
-                            pre_image:pre_image_url,
+                            pre_image: pre_image_url,
                             _token: '{!! csrf_token() !!}',
                         },
                         success: function(data) {
@@ -218,11 +219,17 @@ id="upload_image" style="display:block" /> --}}
                                     upload_input_by_name + '" value="' + data
                                     .image + '">';
                                 console.log('m2', cropped_file_input);
-                                if(!multiple){
-                                    $(selected_image_input).parent().find('input[name="'+upload_input_by_name+'"]').remove();
+
+                                if ($(selected_image_input).attr('multiple') === undefined) {
+                                    $(selected_image_input).parent().find(
+                                        'input[name="' +
+                                        upload_input_by_name + '"]')
+                                    .remove();
                                 }
-                                $(selected_image_input).parent().append(
-                                    cropped_file_input);
+                                $(selected_image_input).parent().append(cropped_file_input);
+                                if ($(selected_image_input).attr('onsuccess_function') !== undefined) {
+                                    window[$(selected_image_input).attr('onsuccess_function')](data.image);
+                                }
                             } else {
                                 alert('Invalid upload');
                             }

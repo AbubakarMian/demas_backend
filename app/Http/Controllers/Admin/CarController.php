@@ -49,8 +49,8 @@ class CarController extends Controller
     public function edit($id)
     {
         $control = 'edit';
-        $car = car::find($id);
-        // $courses = Courses::pluck('full_name','id');
+        $car = Car::find($id);
+        // dd($car->images);
         $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.car.create', compact(
             'control',
@@ -72,31 +72,12 @@ class CarController extends Controller
 
     public function add_or_update(Request $request, $car)
     {
-        // dd($request->all());
+        // dd(json_encode($request->car_images_upload));
         $car->transport_type_id = $request->transport_type_id;
         $car->user_owner_id = $request->user_owner_id;
         $car->details = $request->details;
-
-
-        // if($request->hasFile('upload_book')){
-
-        //     $file =$request->upload_book;
-        //     $filename = $file->getClientOriginalName();
-
-        //     $path = public_path().'/uploads/';
-        //     $u  =  $file->move($path, $filename);
-
-        //     $db_path_save_book = asset('/uploads/'.$filename);
-        //     $car->upload_book =  $db_path_save_book;
-        // }
-        // if ($request->hasFile('avatar')) {
-        //     $avatar = $request->avatar;
-        //     $root = $request->root();
-        //     $car->avatar = $this->move_img_get_path($avatar, $root, 'image');
-        // }
+        $car->images = $request->car_images_upload;
         $car->save();
-
-
         return redirect()->back();
     }
 

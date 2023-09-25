@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('role_id')->nullable()->default(0);
             $table->bigInteger('transport_type_id')->nullable()->default(0);
             $table->bigInteger('user_owner_id')->nullable()->default(0);
-            $table->string('details')->nullable()->default(null);
+            $table->text('details')->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();
         });

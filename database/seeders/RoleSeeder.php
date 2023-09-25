@@ -39,5 +39,11 @@ class RoleSeeder extends Seeder
                 'name'=>'travel_agent'    
             ],
         );    
+        Role::firstOrCreate(
+            [
+                'id'=>5,
+                'name'=>'driver'    
+            ],
+        );    
 }
 }

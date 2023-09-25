@@ -22,7 +22,7 @@ class TravelAgentController extends Controller
     public function get_travel_agent(Request $request)
     {
         
-        $travel_agent = Travel_Agent::with('user_name')->orderBy('created_at', 'DESC')->get();
+        $travel_agent = Travel_Agent::with('user_obj')->orderBy('created_at', 'DESC')->get();
         // $travel_agent = Travel_Agent::with('user_name')->first();
         // $location = Locations::with('location_type')->first();
         // $travel_agent = Travel_Agent::with('user')->get();
@@ -88,10 +88,8 @@ class TravelAgentController extends Controller
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
-        $user->city = $request->city;
-        $user->state = $request->state;
+        $user->adderss = $request->adderss;
         $user->phone_no = $request->phone_no;
-        $user->city = $request->city;
         $user->role_id = 4;
         $user->password =  Hash::make($request->password);
         // dd($user);

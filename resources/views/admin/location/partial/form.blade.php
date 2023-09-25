@@ -24,12 +24,12 @@ select#gender {
 @endif
 
 <div class="form-group">
-    {!! Form::label('name',' First Name') !!}
+    {!! Form::label('name',' Location') !!}
     <div>
         {!! Form::text('name', null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'First Name','required',
+        'placeholder'=>'Enter Location','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
@@ -56,7 +56,7 @@ select#gender {
     ]) !!}
 </div>
 
-
+{{-- 
 <div class="form-group">
     {!! Form::label('latitude','latitude') !!}
     <div>
@@ -77,7 +77,7 @@ select#gender {
         'maxlength'=>"100"]) !!}
     </div>
 </div>
-
+ --}}
 
 
 

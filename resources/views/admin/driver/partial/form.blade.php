@@ -24,8 +24,8 @@
     @endif
     <?php
     $name = '';
-    if(isset($sale_agent)){
-        $name = $sale_agent->user_name->name;
+    if(isset($driver)){
+        $name = $driver->user_name->name;
     }
 ?>
     <div class="form-group">
@@ -40,8 +40,8 @@
     </div>
     <?php
     $last_name = '';
-    if(isset($sale_agent)){
-        $last_name = $sale_agent->user_name->last_name;
+    if(isset($driver)){
+        $last_name = $driver->user_name->last_name;
     }
 ?>
     <div class="form-group">
@@ -57,14 +57,14 @@
     
     <?php
     $email = '';
-    if(isset($sale_agent)){
-        $email = $sale_agent->user_name->email;
+    if(isset($driver)){
+        $email = $driver->user_name->email;
     }
 ?>
     <div class="form-group">
         {!! Form::label('email','Email') !!}
         <div>
-            {!! Form::email('email',  $email, ['class' => 'form-control',
+            {!! Form::text('email',  $email, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter email','required',
@@ -73,22 +73,21 @@
     </div>
     <?php
     $city = '';
-    if(isset($sale_agent)){
-        $city = $sale_agent->user_name->adderss;
+    if(isset($driver)){
+        $city = $driver->user_name->city;
     }
 ?>
     <div class="form-group">
         {!! Form::label('address','Address') !!}
         <div>
-            {!! Form::text('adderss',  $city, ['class' => 'form-control',
+            {!! Form::text('address',  $city, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter Address','required',
             'maxlength'=>"100"]) !!}
         </div>
     </div>
-
-  
+   
     <?php
         $number = '';
         if(isset($user)){
@@ -98,7 +97,7 @@
     <div class="form-group">
         {!! Form::label('phone_no','Phone Number') !!}
         <div>
-            {!! Form::number('phone_no',  $number, ['class' => 'form-control',
+            {!! Form::text('phone_no',  $number, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter Phone Number','required',
@@ -116,21 +115,6 @@
             'maxlength'=>"100"]) !!}
         </div>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     

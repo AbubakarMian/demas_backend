@@ -23,15 +23,17 @@ select#gender {
 </div>
 @endif
 
+
 <div class="form-group">
-    {!! Form::label('user_driver_id',' Driver Name') !!}
-    <div>
-        {!! Form::text('user_driver_id', null, ['class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter driver Name','required',
-        'maxlength'=>"100"]) !!}
-    </div>
+    <label for="user_driver_id">Select Driver</label>
+    {!! Form::select('user_driver_id', $driver, null, [
+        'class' => 'form-control',
+        'data-parsley-required' => 'true',
+        'data-parsley-trigger' => 'change',
+        'placeholder'=>'Select Driver Name',
+        'required',
+        'maxlength' => '100',
+    ]) !!}
 </div>
 
 <div class="form-group">

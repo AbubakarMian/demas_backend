@@ -1,4 +1,4 @@
-{{-- {!!dd($teacher)!!} --}}
+{{-- {!!dd($travel_agent->user_obj)!!} --}}
 
 <style>
     select#gender {
@@ -24,8 +24,8 @@
     @endif
     <?php
     $name = '';
-    if(isset($sale_agent)){
-        $name = $sale_agent->user_name->name;
+    if(isset($travel_agent)){
+        $name = $travel_agent->user_obj->name;
     }
 ?>
     <div class="form-group">
@@ -40,8 +40,8 @@
     </div>
     <?php
     $last_name = '';
-    if(isset($sale_agent)){
-        $last_name = $sale_agent->user_name->last_name;
+    if(isset($travel_agent)){
+        $last_name = $travel_agent->user_obj->last_name;
     }
 ?>
     <div class="form-group">
@@ -57,14 +57,14 @@
     
     <?php
     $email = '';
-    if(isset($sale_agent)){
-        $email = $sale_agent->user_name->email;
+    if(isset($travel_agent)){
+        $email = $travel_agent->user_obj->email;
     }
 ?>
     <div class="form-group">
         {!! Form::label('email','Email') !!}
         <div>
-            {!! Form::text('email',  $email, ['class' => 'form-control',
+            {!! Form::email('email',  $email, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter email','required',
@@ -72,37 +72,22 @@
         </div>
     </div>
     <?php
-    $city = '';
-    if(isset($sale_agent)){
-        $city = $sale_agent->user_name->city;
+    $adderss = '';
+    if(isset($travel_agent)){
+        $adderss = $travel_agent->user_obj->adderss;
     }
 ?>
     <div class="form-group">
-        {!! Form::label('city','City') !!}
+        {!! Form::label('address','Address') !!}
         <div>
-            {!! Form::text('city',  $city, ['class' => 'form-control',
+            {!! Form::text('adderss',  $adderss, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter city','required',
+            'placeholder'=>'Enter Address','required',
             'maxlength'=>"100"]) !!}
         </div>
     </div>
-    <?php
-    $state = '';
-    if(isset($sale_agent)){
-        $state = $sale_agent->user_name->state;
-    }
-?>
-    <div class="form-group">
-        {!! Form::label('state','State') !!}
-        <div>
-            {!! Form::text('state',  $state, ['class' => 'form-control',
-            'data-parsley-required'=>'true',
-            'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter State','required',
-            'maxlength'=>"100"]) !!}
-        </div>
-    </div>
+
   
     <?php
         $number = '';
@@ -113,7 +98,7 @@
     <div class="form-group">
         {!! Form::label('phone_no','Phone Number') !!}
         <div>
-            {!! Form::text('phone_no',  $number, ['class' => 'form-control',
+            {!! Form::number('phone_no',  $number, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter Phone Number','required',

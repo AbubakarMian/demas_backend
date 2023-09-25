@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('transport', function (Blueprint $table) {
-            $table->dropColumn('details')->nullable()->default(0);
+            $table->dropColumn('details');
         });
         Schema::table('transport', function (Blueprint $table) {
             $table->text('details')->nullable()->default(null);

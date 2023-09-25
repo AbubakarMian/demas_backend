@@ -5,7 +5,7 @@ JOURNEY
 
 @section('add_btn')
 {!! Form::open(['method' => 'get', 'url' => ['admin/journey/create'], 'files' => true]) !!}
-<span>{!! Form::submit('Add journey', ['class' => 'btn btn-success pull-right']) !!}</span>
+<span>{!! Form::submit('Add Journey', ['class' => 'btn btn-success pull-right']) !!}</span>
 {!! Form::close() !!}
 @stop
 @section('table-properties')

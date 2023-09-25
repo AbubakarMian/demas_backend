@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Driver;
 use App\Models\DriverJourney;
 use App\Models\Journey;
 use App\Models\Journey_Slot;
@@ -20,7 +21,7 @@ class DriverJourneyController extends Controller
 
     public function get_driver_journey(Request $request)
     {
-        $driver_journey = DriverJourney::with('journey','journey_slot')->orderBy('created_at', 'DESC')->select('*')->get();
+        $driver_journey = DriverJourney::with('journey','journey_slot')->orderBy('created_at', 'DESC')->get();
         $driver_journeyData['data'] = $driver_journey;
         echo json_encode($driver_journeyData);
     }
@@ -29,10 +30,12 @@ class DriverJourneyController extends Controller
     {
         $control = 'create';
         $journey = Journey::pluck('name','id');
+        $driver = Driver::pluck('id');
         $journey_slot = Journey_Slot::pluck('id');
         return view('admin.driver_journey.create', compact(
             'control',
             'journey',
+            'driver',
             'journey_slot',
         ));
     }
@@ -49,11 +52,13 @@ class DriverJourneyController extends Controller
         $control = 'edit';
         $driver_journey = DriverJourney::find($id);
         $journey = Journey::pluck('name','id');
+        $driver = Driver::pluck('id');
         $journey_slot = Journey_Slot::pluck('id');
         return view('admin.driver_journey.create', compact(
             'control',
             'driver_journey',
             'journey',
+            'driver',
             'journey_slot',
            
         ));

@@ -1,11 +1,11 @@
 @extends('layouts.default_module')
 @section('module_name')
-CARS
+Transports
 @stop
 
 @section('add_btn')
 {!! Form::open(['method' => 'get', 'url' => ['admin/car/create'], 'files' => true]) !!}
-<span>{!! Form::submit('Add car', ['class' => 'btn btn-success pull-right']) !!}</span>
+<span>{!! Form::submit('Add Transport', ['class' => 'btn btn-success pull-right']) !!}</span>
 {!! Form::close() !!}
 @stop
 @section('table-properties')

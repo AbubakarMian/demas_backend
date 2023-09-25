@@ -68,7 +68,7 @@ $(document).ready(function(){
           
               for(var i=0; i<len; i++){
                   var id =  response['data'][i].id;
-                  var sale_agent_name =  response['data'][i].user_name.name;
+                  var sale_agent_name =  response['data'][i].user_obj.name;
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);

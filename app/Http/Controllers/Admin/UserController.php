@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -28,9 +29,11 @@ class UserController extends Controller
     public function create()
     {
         $control = 'create';
-        // $courses = Courses::pluck('full_name','id');
+        $role = Role::pluck('name','id');
         // $category = Category::pluck('name','id');
-        return view('admin.user.create', compact('control'));
+        return view('admin.user.create', compact('control',
+    'role'
+    ));
     }
 
     public function save(Request $request)
@@ -44,11 +47,12 @@ class UserController extends Controller
     {
         $control = 'edit';
         $user = User::find($id);
-        // $courses = Courses::pluck('full_name','id');
+        $role = Role::pluck('name','id');
         // $category = Category::pluck('name','id');
         return view('admin.user.create', compact(
             'control',
             'user',
+            'role',
            
         ));
     }
@@ -68,10 +72,8 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
-        $user->city = $request->city;
-        $user->state = $request->state;
+        $user->adderss = $request->adderss;
         $user->phone_no = $request->phone_no;
-        $user->city = $request->city;
         $user->role_id = $request->role_id;
         $user->password =  Hash::make($request->password);
 

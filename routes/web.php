@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TransportPricesController;
 use App\Http\Controllers\Admin\SaltAgentController;
 use App\Http\Controllers\Admin\TravelAgentController;
 use App\Http\Controllers\Admin\TransportJourneyPricesController;
+use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\User\CommonServicesController;
 
 /*
@@ -171,3 +172,16 @@ Route::group(['prefix'=>'admin/transport_journey_prices'],function(){
 
 });
 Route::post('cropper/crop_image', [CommonServicesController::class, 'crop_image'])->name('crop.image');
+
+
+
+//  =================================  driver ==========================
+Route::group(['prefix'=>'admin/driver'],function(){
+    Route::get('/',[DriverController::class, 'index'])->name('driver.index');
+    Route::get('get_driver',[DriverController::class, 'get_driver'])->name('driver.index');
+    Route::get('create',[DriverController::class, 'create'])->name('driver.create'); //add
+    Route::post('save',[DriverController::class, 'save'])->name('driver.save');
+    Route::get('edit/{id}',[DriverController::class, 'edit'])->name('driver.edit');
+    Route::post('update/{id}',[DriverController::class, 'update'])->name('driver.update');
+    Route::post('delete/{id}',[DriverController::class, 'destroy_undestroy'])->name('driver.delete');
+});

@@ -125,7 +125,7 @@ class AdminController extends Controller
         $modules[] = [
 
             'url' => 'admin/car',
-            'title' => 'Car',
+            'title' => 'Transports',
 
         ];
         $modules[] = [
@@ -144,6 +144,12 @@ class AdminController extends Controller
 
             'url' => 'admin/transport_journey_prices',
             'title' => 'Journey Prices',
+
+        ];
+        $modules[] = [
+
+            'url' => 'admin/driver',
+            'title' => 'Driver',
 
         ];
          

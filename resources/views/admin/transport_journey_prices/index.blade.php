@@ -52,7 +52,7 @@
                 <th> T/A Commisssion</th>
                 <th> Driver Commisssion</th>
                 {{-- <th>Edit </th> --}}
-                <th>Delete </th>
+                {{-- <th>Delete </th> --}}
             </tr>
         </thead>
         <tbody>
@@ -111,9 +111,9 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                 `,
                             });
-                            var delete_btn =
-                                `<a class="btn btn-info" data-toggle="modal" data-target="#` +
-                                'transport_journey_prices_' + response[i].id + `">Delete</a>`;
+                            // var delete_btn =
+                            //     `<a class="btn btn-info" data-toggle="modal" data-target="#` +
+                            //     'transport_journey_prices_' + response[i].id + `">Delete</a>`;
                             var trip_price_values = '';
                             if (trip_price) {
                                 trip_price_values = trip_price;
@@ -184,7 +184,7 @@
                                 ",this) class='inp_td'  type='text' value='" + driver_com_values +
                                 "'></td>" +
                                 // "<td>" + edit + "</td>" +
-                                "<td>" + delete_btn + "</td>" +
+                                // "<td>" + delete_btn + "</td>" +
 
 
                                 "</tr>";

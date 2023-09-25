@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->nullable()->default(0);
             $table->string('payment_id',300)->nullable()->default(0);
-            $table->text('payment_response')->nullable()->default(0);
+            $table->text('payment_response')->nullable()->default(null);
             $table->string('status',255)->nullable()->default(0);
             $table->softDeletes();
             $table->timestamps();

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->dropColumn('details')->nullable()->default(0);
         });
         Schema::table('transport', function (Blueprint $table) {
-            $table->text('details')->nullable()->default("");
+            $table->text('details')->nullable()->default(null);
         });
     }
 

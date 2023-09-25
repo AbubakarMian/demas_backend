@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('transport', function (Blueprint $table) {
-            $table->json('images')->nullable()->default('[]');
+            $table->json('images')->nullable()->default(null);
         });
     }
 

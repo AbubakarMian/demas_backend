@@ -66,6 +66,9 @@ $admin_common = session()->get('admin_common');
     .medsaveclick {
     padding-top: 15px !important;
 }
+img.header-avatar.img-circle {
+    background-color: white;
+}
 </style>
 
 <body>
@@ -104,7 +107,7 @@ $admin_common = session()->get('admin_common');
 
                 <li class="off-right hidden-xs">
                     <a href="javascript:;" data-toggle="dropdown" class="no-hover">
-                        <img src="{{ asset('theme/images/avatar.jpg') }} " class="header-avatar img-circle"
+                        <img src="{{ asset('/images/nabawi-mosque.png') }} " class="header-avatar img-circle"
                             alt="user" title="user">
                         {{--                    <span class="hidden-xs ml10">Welcome {!! $admin_common->name !!}</span> --}}
                         {{--                    <span class="hidden-xs ml10">Welcome {!! $admin_common->name !!}</span> --}}

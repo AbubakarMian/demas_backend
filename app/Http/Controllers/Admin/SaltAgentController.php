@@ -19,12 +19,12 @@ class SaltAgentController extends Controller
     public function index(Request $request)
     {
         // dd('hi');
-     return view('admin.sale_agent.index');
+        return view('admin.sale_agent.index');
     }
 
     public function get_sale_agent(Request $request)
     {
-        
+
         $sale_agent = SaleAgent::with('user_obj')->orderBy('created_at', 'DESC')->get();
         // $sale_agent = SaleAgent::with('user_name')->first();
         // $location = Locations::with('location_type')->first();
@@ -36,19 +36,19 @@ class SaltAgentController extends Controller
     }
 
 
-   
+
     public function create()
     {
         $control = 'create';
-$travel_agents = Travel_Agent::with('user_obj')->pluck( 'id');
-        return view('admin.sale_agent.create', compact('control', 'travel_agents'));
+        $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
+        return view('admin.sale_agent.create', compact('control', 'travel_agent'));
     }
 
     public function save(Request $request)
     {
         $sale_agent = new SaleAgent();
         $user = new User();
-        $this->add_or_update($request , $user ,$sale_agent);
+        $this->add_or_update($request, $user, $sale_agent);
 
         return redirect('admin/sale_agent');
     }
@@ -58,15 +58,17 @@ $travel_agents = Travel_Agent::with('user_obj')->pluck( 'id');
         $sale_agent = SaleAgent::find($id);
         $user = User::find($id);
 
-        $travel_agents = Travel_Agent::with('user_obj')->pluck('id');
+        $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
         // $transport_type = Transport_Type::pluck('name', 'id');
-        return view('admin.sale_agent.create', compact(
-            'control',
-            'sale_agent',
-            'travel_agents',
-            'user',
+        return view(
+            'admin.sale_agent.create',
+            compact(
+                'control',
+                'sale_agent',
+                'travel_agent',
+                'user',
 
-        )
+            )
         );
     }
 
@@ -84,15 +86,15 @@ $travel_agents = Travel_Agent::with('user_obj')->pluck( 'id');
     {
         // dd($request->all());
         // dd($user);
-        
-        
+
+
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->adderss = $request->adderss;
         $user->phone_no = $request->phone_no;
         $user->role_id = 3;
-        $user->password =  Hash::make($request->password);
+        $user->password = Hash::make($request->password);
         // dd($user);
         $user->save();
 
@@ -100,7 +102,7 @@ $travel_agents = Travel_Agent::with('user_obj')->pluck( 'id');
         $sale_agent->id = $request->id;
         $sale_agent->user_id = $user->id;
         $sale_agent->save();
-        
+
 
         return redirect()->back();
     }
@@ -121,4 +123,5 @@ $travel_agents = Travel_Agent::with('user_obj')->pluck( 'id');
             'new_value' => $new_value
         ]);
         return $response;
-    }}
+    }
+}

@@ -17,7 +17,7 @@ $admin_common = session()->get('admin_common');
 
     <!-- page level plugin styles -->
     <!-- /page level plugin styles -->
-
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <!-- build:css({.tmp,app}) styles/app.min.css -->
     <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
     <link rel="stylesheet" href="{{ asset('theme/vendor/bootstrap/dist/css/bootstrap.min.css') }}">

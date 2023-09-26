@@ -8,7 +8,7 @@
     }
 
     .medsaveclick {
-        padding-top: 10px !important;
+        /* padding-top: 10px !important; */
         color: white;
     }
 </style>

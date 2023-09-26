@@ -5,7 +5,7 @@
 
 @section('add_btn')
     {!! Form::open(['method' => 'get', 'url' => ['admin/transport_journey_prices/create'], 'files' => true]) !!}
-    <span>{!! Form::submit('Add Journey Prices', ['class' => 'btn btn-success pull-right']) !!}</span>
+    {{-- <span>{!! Form::submit('Add Journey Prices', ['class' => 'btn btn-success pull-right']) !!}</span> --}}
     {!! Form::close() !!}
 @stop
 @section('table-properties')

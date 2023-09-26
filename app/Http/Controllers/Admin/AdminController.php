@@ -80,27 +80,29 @@ class AdminController extends Controller
     public function admin_dashboard()
     {
         $modules[] = [
-
             'url' => 'admin/user',
-            'title' => 'Users ',
-
+            'title' => 'Users',
+            'image' => "{{ asset('/images/car-2.png') }} ", // Add the image path for Module 1
         ];
         $modules[] = [
 
             'url' => 'admin/sale_agent',
             'title' => 'Sale Agents ',
+             'image' => "{{ asset('/images/car-2.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/travel_agent',
             'title' => 'Travel Agents ',
+             'image' => "{{ asset('/images/car-3.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/location',
             'title' => 'Locations ',
+             'image' => "{{ asset('/images/car-4.png') }} ", // Add the image path for Module 1
 
         ];
 
@@ -108,48 +110,57 @@ class AdminController extends Controller
 
             'url' => 'admin/slot',
             'title' => ' Slots',
+             'image' => "{{ asset('/images/car-5.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/journey',
             'title' => ' Journey',
+             'image' => "{{ asset('/images/car-6.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/driver_journey',
             'title' => ' Driver Journey',
+             'image' => "{{ asset('/images/car-7.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/car',
             'title' => 'Transports',
+             'image' => "{{ asset('/images/car-8.png') }} ", // Add the image path for Module 1
+
 
         ];
         $modules[] = [
 
             'url' => 'admin/transport_type',
             'title' => 'Transport Type',
+             'image' => "{{ asset('/images/car-1.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/price',
             'title' => 'Transport Prices',
+             'image' => "{{ asset('/images/car-1.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/transport_journey_prices',
             'title' => 'Journey Prices',
+             'image' => "{{ asset('/images/car-1.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/driver',
             'title' => 'Driver',
+            'image' => '/', // Add the image path for Module 1
 
         ];
          

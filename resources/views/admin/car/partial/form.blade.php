@@ -12,24 +12,30 @@
         color: white;
     }
     .remove_btn {
-    background: #d7d7d7;
+    position: absolute;
+    top: -11px;
+    right: -10px;
+    background: red;
     text-align: right;
     padding-right: 5px;
     font-size: 15px;
-    color: #a36666;
-    font-weight: bold;
+    color: white;
+    /* font-weight: bold; */
+    cursor: pointer;
+    border-radius: 50px;
+    width: 20px;
+    height: 20px;
 }
-.car_images.col-md-2 {
-    margin: 13px 0px;
-    border: solid 1px;
-    border-radius: 10px;
-    padding: 5px;
-}
+
 .car_images.col-md-2 {
     margin: 13px 3px;
     border: solid 1px #996418;
     border-radius: 10px;
     padding: 5px;
+}
+.car_images {
+    position: relative;
+    display: inline-block;
 }
 </style>
 
@@ -66,8 +72,8 @@
 
         @if (isset($car->images))
             @foreach ($car->images as $image_key => $image)
-                <div class="car_images">
-                    <div onclick="remove_image(this)">X</div>
+                <div class="car_images col-md-2">
+                    <div class="remove_btn" onclick="remove_image(this)">X</div>
 
                     <img src="{!! $image !!}">
                     <input type="hidden" name="car_images_upload[]" value="{!! $image !!}">

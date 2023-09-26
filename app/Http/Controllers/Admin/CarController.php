@@ -74,8 +74,12 @@ class CarController extends Controller
     {
         // dd(json_encode($request->car_images_upload));
         $car->transport_type_id = $request->transport_type_id;
-        $car->user_owner_id = $request->user_owner_id;
+        // $car->user_owner_id = $request->user_owner_id;
         $car->details = $request->details;
+        $car->images = $request->car_images_upload;
+        $car->features = $request->features;
+        $car->booking = $request->booking;
+        $car->dontforget = $request->dontforget;
         $car->images = $request->car_images_upload;
         $car->save();
         return redirect()->back();

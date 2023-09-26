@@ -5,7 +5,7 @@ Prices
 
 @section('add_btn')
 {!! Form::open(['method' => 'get', 'url' => ['admin/car/create'], 'files' => true]) !!}
-<span>{!! Form::submit('Add car', ['class' => 'btn btn-success pull-right']) !!}</span>
+{{-- <span>{!! Form::submit('Add Transport prices', ['class' => 'btn btn-success pull-right']) !!}</span> --}}
 {!! Form::close() !!}
 @stop
 @section('table-properties')

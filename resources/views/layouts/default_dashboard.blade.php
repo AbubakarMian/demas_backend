@@ -15,9 +15,10 @@ button.btn.btn-success.ccc.mod_btn_hed {
     height: 73px;
     font-size: 36px;
     font-family: fantasy;
-    background: #4f5be8;
-    border: 1px solid #4f5be8;
+    background: white;
+    border: 3px solid #996418;
     font-weight: 100;
+    color: #996418;
 }
 .tile-stats.module_tile {
     font-family: fantasy;
@@ -26,7 +27,7 @@ button.btn.btn-success.ccc.mod_btn_hed {
 }
 .sidebar a, .sidebar .nav-title {
     color: white;
-    background: #455ce7;
+    background: #996418;
     width: 100%;
     margin: 10px;
     border-bottom-left-radius: 10px;
@@ -65,26 +66,23 @@ button.btn.btn-success.ccc.mod_btn_hed {
         </div>
     @endif
         </div>
-
-
-        @foreach($modules as $key => $module)
-
-            <a href="{!! asset($module['url']) !!}">
-                <div class="col-md-3 col-sm-6 col-xs-12">
-                    <section class="dash-tile bg-success modules">
-                        <div class="tile-title">
-                        </div>
-                        <div class="tile-stats module_tile">{!! $module['title'] !!}
-                        </div>
-                        <div class="mb20"></div>
-                        <div class="tile-footer">
-
-                        </div>
-                    </section>
-                </div>
-            </a>
-
-        @endforeach
+        
+        @foreach($modules as $module)
+        <a href="{!! asset($module['url']) !!}">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <section class="dash-tile bg-success modules" style="background-image: url('{{ $module['image'] }}');">
+                    <div class="tile-title">
+                    </div>
+                    <div class="tile-stats module_tile">{!! $module['title'] !!}
+                    </div>
+                    <div class="mb20"></div>
+                    <div class="tile-footer">
+                    </div>
+                </section>
+            </div>
+        </a>
+    @endforeach
+    
     </div>
 
     <!-- Modules end -->

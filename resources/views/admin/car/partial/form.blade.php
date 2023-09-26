@@ -8,9 +8,29 @@
     }
 
     .medsaveclick {
-        padding-top: 10px !important;
+        /* padding-top: 10px !important; */
         color: white;
     }
+    .remove_btn {
+    background: #d7d7d7;
+    text-align: right;
+    padding-right: 5px;
+    font-size: 15px;
+    color: #a36666;
+    font-weight: bold;
+}
+.car_images.col-md-2 {
+    margin: 13px 0px;
+    border: solid 1px;
+    border-radius: 10px;
+    padding: 5px;
+}
+.car_images.col-md-2 {
+    margin: 13px 3px;
+    border: solid 1px #996418;
+    border-radius: 10px;
+    padding: 5px;
+}
 </style>
 
 @if ($message = Session::get('error'))
@@ -39,24 +59,24 @@
 
 
 <input type="file" accept="image/*" class="form-control prof_box crop_upload_image" image_width="378" image_height="226"
-    aspect_ratio_width="16" aspect_ratio_height="9" multiple upload_input_by_name="car_images[]" {!!isset($car->images)?'':"required"!!}
+    aspect_ratio_width="16" aspect_ratio_height="9" multiple upload_input_by_name="car_images[]" {!! isset($car->images) ? '' : 'required' !!}
     onsuccess_function="show_image">
+<div class="row">
+    <div class="upload_images">
 
-<div class="upload_images">
+        @if (isset($car->images))
+            @foreach ($car->images as $image_key => $image)
+                <div class="car_images">
+                    <div onclick="remove_image(this)">X</div>
 
-    @if (isset($car->images))
-        @foreach ($car->images as $image_key => $image)
-            <div class="car_images">
-                <div onclick="remove_image(this)">X</div>
+                    <img src="{!! $image !!}">
+                    <input type="hidden" name="car_images_upload[]" value="{!! $image !!}">
+                </div>
+            @endforeach
+        @endif
 
-                <img src="{!! $image !!}">
-                <input type="hidden" name="car_images_upload[]" value="{!! $image !!}">
-            </div>
-        @endforeach
-    @endif
-
+    </div>
 </div>
-
 <div class="form-group">
     {!! Form::label('details', 'Details') !!}
     <div>
@@ -66,7 +86,7 @@
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Enter Details',
             'required',
-            "rows"=>3
+            'rows' => 3,
         ]) !!}
     </div>
 </div>
@@ -80,7 +100,7 @@
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Exterior parking camera rear,Heated door mirrors,Low tire pressure warning',
             'required',
-            "rows"=>3
+            'rows' => 3,
         ]) !!}
     </div>
 </div>
@@ -94,7 +114,7 @@
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Turn signal indicator mirrors, Exterior parking camera rear',
             'required',
-            "rows"=>3
+            'rows' => 3,
         ]) !!}
     </div>
 </div>
@@ -108,7 +128,7 @@
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Be on time, Wear seat belt',
             'required',
-            "rows"=>3
+            'rows' => 3,
         ]) !!}
     </div>
 </div>
@@ -131,8 +151,8 @@
         function show_image(image) {
             var image_key = $(".car_images_upload").length;
             var img = `
-            <div class="car_images">
-                <div  onclick="remove_image(this)">X</div>
+            <div class="car_images col-md-2">
+                <div class="remove_btn" onclick="remove_image(this)">X</div>
                 <img src="` + image + `">
                 <input type="hidden" name="car_images_upload[]" value="` + image + `">
             </div>

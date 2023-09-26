@@ -7,7 +7,7 @@ select#gender {
         border: 1px solid #e3e6f3;
 }
 .medsaveclick {
-    padding-top: 10px !important;
+    /* padding-top: 10px !important; */
     color: white;
 }
     </style>
@@ -45,7 +45,7 @@ select#gender {
 </div>
 
 <div class="form-group">
-    {!! Form::label('luggage','luggage') !!}
+    {!! Form::label('luggage','Luggage') !!}
     <div>
         {!! Form::number('luggage',  null, ['class' => 'form-control',
         'data-parsley-required'=>'true',

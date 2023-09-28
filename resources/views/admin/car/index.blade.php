@@ -35,6 +35,7 @@ width="400px" style="table-layout:fixed;"
 <table class="fhgyt" id="carTableAppend" style="opacity: 0">
 <thead>
 	<tr>
+        <th> Name</th>
         <th> Transport Type</th>
         {{-- <th> Driver</th> --}}
         <th> Details</th>
@@ -70,6 +71,7 @@ $(document).ready(function(){
           
               for(var i=0; i<len; i++){
                   var id =  response['data'][i].id;
+                  var name =  response['data'][i].name;
                   var transport_type_name =  response['data'][i].transport_type?.name;
 
                 console.log('aaa',response['data'][i]);
@@ -95,6 +97,7 @@ $(document).ready(function(){
                         var delete_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#` + 'car_' + response['data'][i].id + `">Delete</a>`;
 
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
+                    "<td>" +name+ "</td>" +
                     "<td>" +transport_type_name+ "</td>" +
                     // "<td>" +user_owner_id+ "</td>" +
                     "<td>" +details+ "</td>" +

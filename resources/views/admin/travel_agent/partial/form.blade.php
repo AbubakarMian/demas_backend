@@ -107,12 +107,11 @@
     </div>
     <div class="form-group">
         <label for="sale_agent">Sale Agents</label>
-        {!! Form::select('sale_agent', $sale_agent, null, [
+        {!! Form::select('sale_agent', $user_sale_agents, null, [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
             'placeholder'=>'Select Travel Agents',
-            'required',
             'maxlength' => '100',
         ]) !!}
     </div>

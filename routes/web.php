@@ -38,7 +38,7 @@ Route::get('admin/dashboard',[AdminController::class, 'dashboard'])->name('dashb
 Route::get('admin/logout',[AdminController::class, 'logout']);
 
 
-Route::group(['middleware' => 'role_auth','prefix'=>'admin'], function () {
+// Route::group(['middleware' => 'admin_auth'], function () {
     
  //  =================================  user ==========================
  Route::group(['prefix'=>'admin/user'],function(){
@@ -189,7 +189,7 @@ Route::group(['prefix'=>'admin/driver'],function(){
 });
 
 
-});
+// });
 
 
  

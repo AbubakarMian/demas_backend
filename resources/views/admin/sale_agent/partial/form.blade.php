@@ -109,7 +109,7 @@
   
    
     
-    <div class="form-group">
+    {{-- <div class="form-group">
         <label for="travel_agent">Travel Agents</label>
         {!! Form::select('travel_agent', $travel_agent, null, [
             'class' => 'form-control',
@@ -119,7 +119,7 @@
             'required',
             'maxlength' => '100',
         ]) !!}
-    </div>
+    </div> --}}
     
     <div class="form-group">
         {!! Form::label('password','Password') !!}

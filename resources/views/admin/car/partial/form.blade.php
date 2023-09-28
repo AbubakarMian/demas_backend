@@ -51,6 +51,18 @@
 @endif
 
 <div class="form-group">
+    {!! Form::label('name', 'Name') !!}
+    <div>
+        {!! Form::text('name', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Enter Name',
+            'required',
+        ]) !!}
+    </div>
+</div>
+<div class="form-group">
     <label for="transport_type_id">Transport Type</label>
     {!! Form::select('transport_type_id', $transport_type, null, [
         'class' => 'form-control',

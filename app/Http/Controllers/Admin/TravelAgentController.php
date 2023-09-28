@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SaleAgent;
 use App\Models\Travel_Agent;
 use App\Models\User;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -37,10 +39,11 @@ class TravelAgentController extends Controller
     public function create()
     {
         $control = 'create';
-        // $courses = Courses::pluck('full_name','id');
+        // $sale_agent = SaleAgent::pluck('id');
+        $user_sale_agents = Users::where('role_id',3)->pluck('name','id');
         // $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.travel_agent.create', compact('control', 
-        // 'transport_type'
+        'user_sale_agents'
     ));
     }
 
@@ -58,12 +61,13 @@ class TravelAgentController extends Controller
         $travel_agent = Travel_Agent::find($id);
         $user = User::find($id);
 
-        // $courses = Courses::pluck('full_name','id');
+        $sale_agent = SaleAgent::pluck('id');
         // $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.travel_agent.create', compact(
             'control',
             'travel_agent',
             'user',
+            'sale_agent',
 
         )
         );

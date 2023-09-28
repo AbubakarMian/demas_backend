@@ -11,5 +11,15 @@ class Users extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'users';   
+
+    public function sale_agent(){
+        return $this->hasOne('App\Models\SaleAgent','user_id','id');
+    }
+    public function travel_agent(){
+        return $this->hasOne('App\Models\Travel_Agent','user_id','id');
+    }
+    public function driver(){
+        return $this->hasOne('App\Models\Driver','user_id','id');
+    }
     
 }

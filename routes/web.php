@@ -38,7 +38,8 @@ Route::get('admin/dashboard',[AdminController::class, 'dashboard'])->name('dashb
 Route::get('admin/logout',[AdminController::class, 'logout']);
 
 
-
+Route::group(['middleware' => 'role_auth','prefix'=>'admin'], function () {
+    
  //  =================================  user ==========================
  Route::group(['prefix'=>'admin/user'],function(){
     Route::get('/',[UserController::class, 'index'])->name('user.index');
@@ -61,7 +62,7 @@ Route::get('admin/logout',[AdminController::class, 'logout']);
     Route::post('delete/{id}',[LocationController::class, 'destroy_undestroy'])->name('location.delete');
 });
 
- //  =================================  slot ==========================
+//  =================================  slot ==========================
  Route::group(['prefix'=>'admin/slot'],function(){
     Route::get('/',[SlotController::class, 'index'])->name('slot.index');
     Route::get('get_slot',[SlotController::class, 'get_slot'])->name('slot.index');
@@ -94,6 +95,7 @@ Route::get('admin/logout',[AdminController::class, 'logout']);
     Route::post('update/{id}',[DriverJourneyController::class, 'update'])->name('driver_journey.update');
     Route::post('delete/{id}',[DriverJourneyController::class, 'destroy_undestroy'])->name('driver_journey.delete');
 });
+
 
 
 //  =================================  car ==========================
@@ -185,3 +187,10 @@ Route::group(['prefix'=>'admin/driver'],function(){
     Route::post('update/{id}',[DriverController::class, 'update'])->name('driver.update');
     Route::post('delete/{id}',[DriverController::class, 'destroy_undestroy'])->name('driver.delete');
 });
+
+
+});
+
+
+ 
+

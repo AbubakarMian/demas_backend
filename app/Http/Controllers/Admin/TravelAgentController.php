@@ -60,14 +60,17 @@ class TravelAgentController extends Controller
         $control = 'edit';
         $travel_agent = Travel_Agent::find($id);
         $user = User::find($id);
+        $user_sale_agents = Users::where('role_id',3)->pluck('name','id');
 
         $sale_agent = SaleAgent::pluck('id');
+        
         // $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.travel_agent.create', compact(
             'control',
             'travel_agent',
             'user',
             'sale_agent',
+            'user_sale_agents',
 
         )
         );

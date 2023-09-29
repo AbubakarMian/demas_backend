@@ -169,8 +169,8 @@ id="upload_image" style="display:block" /> --}}
                 aspectRatio: aspect_ratio_width / aspect_ratio_height,
                 viewMode: 3,
                 preview: '.preview',
-                // width: image_width,
-                // height: image_height
+                width: image_width,
+                height: image_height
             });
         }).on('hidden.bs.modal', function() {
             cropper.destroy();
@@ -179,10 +179,6 @@ id="upload_image" style="display:block" /> --}}
 
 
         $('#crop').click(function() {
-            //  cropper.setCanvasData({
-            //     width: image_width,
-            //     height: image_height
-            // });
             canvas = cropper.getCroppedCanvas({
                 width: image_width,
                 height: image_height

@@ -11,7 +11,7 @@ use App\Models\TransportPrices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
-
+use Illuminate\Support\Facades\Validator;
 
 class CarController extends Controller
 {
@@ -42,7 +42,7 @@ class CarController extends Controller
     public function save(Request $request)
     {
         $car = new Car();
-        $this->add_or_update($request, $car);
+        return $this->add_or_update($request, $car);
 
         return redirect('admin/car');
     }
@@ -65,7 +65,7 @@ class CarController extends Controller
     {
         $car = car::find($id);
         // car::delete()
-        $this->add_or_update($request, $car);
+        return $this->add_or_update($request, $car);
         return Redirect('admin/car');
     }
 
@@ -73,16 +73,32 @@ class CarController extends Controller
     public function add_or_update(Request $request, $car)
     {
         // dd(json_encode($request->car_images_upload));
+        $validator = Validator::make($request->all(),[
+            'car_images_upload'=>'required'
+        ],
+        [
+            'car_images_upload'=>[
+                'required'=>'Images Required'
+            ]
+        ]
+    );
+        if($validator->fails()){
+            // dd($validator->messages()->all());
+            return back()->with('error',$validator->messages());
+        }
         $car->transport_type_id = $request->transport_type_id;
         $car->name = $request->name;
         $car->details = $request->details;
         $car->images = $request->car_images_upload;
         $car->features = $request->features;
+        $car->seats = $request->seats;
+        $car->luggage = $request->luggage;
+        $car->doors = $request->doors;
         $car->booking = $request->booking;
         $car->dontforget = $request->dontforget;
         $car->images = $request->car_images_upload;
         $car->save();
-        return redirect()->back();
+        return Redirect('admin/car');
     }
 
     public function destroy_undestroy($id)

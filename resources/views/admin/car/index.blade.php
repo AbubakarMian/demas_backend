@@ -37,8 +37,10 @@ width="400px" style="table-layout:fixed;"
 	<tr>
         <th> Name</th>
         <th> Transport Type</th>
-        {{-- <th> Driver</th> --}}
-        <th> Details</th>
+        <th> Seats</th>
+        <th> Luggage</th>
+        <th> Doors</th>
+        {{-- <th> Details</th> --}}
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -95,12 +97,15 @@ $(document).ready(function(){
                                 `,
                         });
                         var delete_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#` + 'car_' + response['data'][i].id + `">Delete</a>`;
-
+                        // var img = `<img width="42" src="`+image+`">`;
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
                     "<td>" +name+ "</td>" +
                     "<td>" +transport_type_name+ "</td>" +
+                    "<td>" +response['data'][i].seats+ "</td>" +
+                    "<td>" +response['data'][i].luggage+ "</td>" +
+                    "<td>" +response['data'][i].doors+ "</td>" +
                     // "<td>" +user_owner_id+ "</td>" +
-                    "<td>" +details+ "</td>" +
+                    // "<td>" +details+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
        

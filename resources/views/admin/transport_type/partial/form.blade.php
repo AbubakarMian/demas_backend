@@ -65,34 +65,11 @@ select#gender {
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <span id="err" class="error-product"></span>
 
 
 <div class="form-group col-md-12">
 </div>
-
-
-
 
 
 <div class="col-md-5 pull-left">

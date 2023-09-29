@@ -19,7 +19,7 @@
     .preview {
         overflow: hidden;
         width: 250px;
-        height: 160px;
+        height: 200px;
         margin: 10px;
         border: 1px solid red;
     }
@@ -167,10 +167,13 @@ id="upload_image" style="display:block" /> --}}
         modal.on('shown.bs.modal', function() {
             cropper = new Cropper(image, {
                 aspectRatio: aspect_ratio_width / aspect_ratio_height,
-                viewMode: 3,
+                viewMode: 0, // 0-3
                 preview: '.preview',
                 width: image_width,
-                height: image_height
+                height: image_height,
+                minCropBoxWidth: 200, // Set the minimum width for the crop box in pixels
+    minCropBoxHeight: 100, // Set the minimum height for the crop box in pixels
+    
             });
         }).on('hidden.bs.modal', function() {
             cropper.destroy();

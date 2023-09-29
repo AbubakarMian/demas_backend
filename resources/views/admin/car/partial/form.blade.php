@@ -76,8 +76,9 @@
 <label for="transport_type_id">Upload Images</label>
 
 
-<input type="file" accept="image/*" class="form-control prof_box crop_upload_image" image_width="378" image_height="226"
-    aspect_ratio_width="16" aspect_ratio_height="9" multiple upload_input_by_name="car_images[]" {!! isset($car->images) ? '' : 'required' !!}
+<input type="file" accept="image/*" class="form-control prof_box crop_upload_image" 
+    image_width="600" image_height="200"
+    aspect_ratio_width="0" aspect_ratio_height="0" multiple upload_input_by_name="car_images[]" {!! isset($car->images) ? '' : 'required' !!}
     onsuccess_function="show_image">
 <div class="row">
     <div class="upload_images">

@@ -18,7 +18,7 @@
 
     .preview {
         overflow: hidden;
-        width: 160px;
+        width: 250px;
         height: 160px;
         margin: 10px;
         border: 1px solid red;

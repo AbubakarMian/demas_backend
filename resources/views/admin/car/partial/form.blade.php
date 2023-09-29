@@ -78,7 +78,7 @@
 
 <input type="file" accept="image/*" class="form-control prof_box crop_upload_image" 
     image_width="600" image_height="200"
-    aspect_ratio_width="0" aspect_ratio_height="0" multiple upload_input_by_name="car_images[]" {!! isset($car->images) ? '' : 'required' !!}
+    aspect_ratio_width="3" aspect_ratio_height="1" multiple upload_input_by_name="car_images[]" {!! isset($car->images) ? '' : 'required' !!}
     onsuccess_function="show_image">
 <div class="row">
     <div class="upload_images">

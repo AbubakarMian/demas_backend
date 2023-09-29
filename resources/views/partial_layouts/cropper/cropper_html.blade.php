@@ -139,7 +139,7 @@ id="upload_image" style="display:block" /> --}}
         $('.crop_upload_image').change(function(event) {
             var image_num = '';
             selected_image_input = event.target;
-            image_width = $($(event)).attr('image_width');
+            image_width = $(this).attr('image_width');
             image_height = $(this).attr('image_height');
             aspect_ratio_width = $(this).attr('aspect_ratio_width');
             aspect_ratio_height = $(this).attr('aspect_ratio_height');
@@ -168,7 +168,9 @@ id="upload_image" style="display:block" /> --}}
             cropper = new Cropper(image, {
                 aspectRatio: aspect_ratio_width / aspect_ratio_height,
                 viewMode: 3,
-                preview: '.preview'
+                preview: '.preview',
+                // width: image_width,
+                // height: image_height
             });
         }).on('hidden.bs.modal', function() {
             cropper.destroy();
@@ -177,6 +179,10 @@ id="upload_image" style="display:block" /> --}}
 
 
         $('#crop').click(function() {
+            //  cropper.setCanvasData({
+            //     width: image_width,
+            //     height: image_height
+            // });
             canvas = cropper.getCroppedCanvas({
                 width: image_width,
                 height: image_height

@@ -77,7 +77,7 @@
 
 
 <input type="file" accept="image/*" class="form-control prof_box crop_upload_image" 
-    image_width="600" image_height="250"
+    image_width="500" image_height="225"
     aspect_ratio_width="0" aspect_ratio_height="0" multiple upload_input_by_name="car_images[]"
     onsuccess_function="show_image">
 <div class="row">

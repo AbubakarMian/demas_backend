@@ -19,7 +19,11 @@
     .preview {
         overflow: hidden;
         width: 250px;
-        height: 200px;
+        height: 125px;
+        max-width: 250px;
+        max-height: 125px;
+        min-width: 250px;
+        min-height: 125px;
         margin: 10px;
         border: 1px solid red;
     }
@@ -169,11 +173,37 @@ id="upload_image" style="display:block" /> --}}
                 aspectRatio: aspect_ratio_width / aspect_ratio_height,
                 viewMode: 0, // 0-3
                 preview: '.preview',
-                width: image_width,
-                height: image_height,
+                // cropBoxResizable: false, // Disable crop box resizing
+                // cropBoxResizeTo: [image_height, image_width] // Set the fixed height and width in pixels
+                // width: image_width,
+                // height: image_height,
                 minCropBoxWidth: 200, // Set the minimum width for the crop box in pixels
-    minCropBoxHeight: 100, // Set the minimum height for the crop box in pixels
-    
+                minCropBoxHeight: 100, // Set the minimum height for the crop box in pixels
+                // maxCropBoxWidth: 200, // Set the minimum width for the crop box in pixels
+                // maxCropBoxHeight: 100, // Set the minimum height for the crop box in pixels
+
+                responsive: true, // Enables the responsive preview size
+                crop: function(event) {
+                    // The crop event handler can be used to adjust the preview size dynamically if needed
+                    var previewContainer = cropper.getContainerData();
+                    var cropBox = event.detail;
+
+                    // Set the fixed preview size (e.g., 100x100 pixels)
+                    var previewWidth = image_width;
+                    var previewHeight = image_height;
+
+                    // Calculate the scale factor for the preview
+                    var scale = Math.min(previewWidth / cropBox.width, previewHeight /
+                        cropBox.height);
+
+                    // Apply the scale to the preview container
+                    previewContainer.width = previewWidth / scale;
+                    previewContainer.height = previewHeight / scale;
+                    // previewContainer.width = previewWidth ;
+                    // previewContainer.height = previewHeight ;
+                }
+
+
             });
         }).on('hidden.bs.modal', function() {
             cropper.destroy();
@@ -186,8 +216,19 @@ id="upload_image" style="display:block" /> --}}
                 width: image_width,
                 height: image_height
             });
+            var newWidth = image_width;
+            var newHeight = image_height    ;
+            var newCanvas = document.createElement('canvas');
+            newCanvas.width = newWidth;
+            newCanvas.height = newHeight;
+            var ctx = newCanvas.getContext('2d');
 
-            canvas.toBlob(function(blob) {
+            // Draw the original canvas onto the new canvas with resizing
+            ctx.drawImage(canvas, 0, 0, newWidth, newHeight);
+            // canvas = cropper.getCroppedCanvas();
+
+            // canvas.toBlob(function(blob) {
+                newCanvas.toBlob(function(blob) {
                 url = URL.createObjectURL(blob);
 
                 var remove_previous = $(selected_image_input).attr('keep_previous') === "true" ?
@@ -225,15 +266,19 @@ id="upload_image" style="display:block" /> --}}
                                     .image + '">';
                                 console.log('m2', cropped_file_input);
 
-                                if ($(selected_image_input).attr('multiple') === undefined) {
+                                if ($(selected_image_input).attr('multiple') ===
+                                    undefined) {
                                     $(selected_image_input).parent().find(
-                                        'input[name="' +
-                                        upload_input_by_name + '"]')
-                                    .remove();
+                                            'input[name="' +
+                                            upload_input_by_name + '"]')
+                                        .remove();
                                 }
-                                $(selected_image_input).parent().append(cropped_file_input);
-                                if ($(selected_image_input).attr('onsuccess_function') !== undefined) {
-                                    window[$(selected_image_input).attr('onsuccess_function')](data.image);
+                                $(selected_image_input).parent().append(
+                                    cropped_file_input);
+                                if ($(selected_image_input).attr(
+                                        'onsuccess_function') !== undefined) {
+                                    window[$(selected_image_input).attr(
+                                        'onsuccess_function')](data.image);
                                 }
                             } else {
                                 alert('Invalid upload');

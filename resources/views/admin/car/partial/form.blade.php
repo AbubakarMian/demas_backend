@@ -76,8 +76,9 @@
 <label for="transport_type_id">Upload Images</label>
 
 
-<input type="file" accept="image/*" class="form-control prof_box crop_upload_image" image_width="378" image_height="226"
-    aspect_ratio_width="16" aspect_ratio_height="9" multiple upload_input_by_name="car_images[]" {!! isset($car->images) ? '' : 'required' !!}
+<input type="file" accept="image/*" class="form-control prof_box crop_upload_image" 
+    image_width="500" image_height="225"
+    aspect_ratio_width="0" aspect_ratio_height="0" multiple upload_input_by_name="car_images[]"
     onsuccess_function="show_image">
 <div class="row">
     <div class="upload_images">
@@ -93,6 +94,45 @@
             @endforeach
         @endif
 
+    </div>
+</div>
+<div class="form-group">
+    {!! Form::label('seats', 'Seats') !!}
+    <div>
+        {!! Form::number('seats', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Number of Seats',
+            'min'=>0,
+            'required',
+        ]) !!}
+    </div>
+</div>
+<div class="form-group">
+    {!! Form::label('luggage', 'Luggage') !!}
+    <div>
+        {!! Form::number('luggage', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Number of Luggage',
+            'min'=>0,
+            'required',
+        ]) !!}
+    </div>
+</div>
+<div class="form-group">
+    {!! Form::label('doors', 'Doors') !!}
+    <div>
+        {!! Form::number('doors', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Number of Doors',
+            'min'=>0,
+            'required',
+        ]) !!}
     </div>
 </div>
 <div class="form-group">
@@ -184,6 +224,13 @@
 
         function validateForm() {
             return true;
+            var total_images = $(".car_images_upload").length;
+            if(total_images){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
     </script>
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\LocationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ContactUsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('locations/get_all',[LocationController::class, 'get_all']);
 Route::get('cars/get_all',[CarController::class, 'get_all']);
 Route::get('car/details/{car_id}',[CarController::class, 'car_details']);
+
+
+Route::post('contactus',[ContactUsController::class, 'contactus']);
 
 
 Route::group(['middleware' => 'auth.client_token'], function () {

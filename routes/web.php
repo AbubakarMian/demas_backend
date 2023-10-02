@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SaltAgentController;
 use App\Http\Controllers\Admin\TravelAgentController;
 use App\Http\Controllers\Admin\TransportJourneyPricesController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\User\CommonServicesController;
 
 /*
@@ -163,3 +164,21 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::post('delete/{id}', [DriverController::class, 'destroy_undestroy'])->name('driver.delete');
     });
 });
+
+
+// });
+
+
+ 
+
+//  =================================  contact_us ==========================
+Route::group(['prefix'=>'admin/contactus'],function(){
+    Route::get('/',[ContactUsController::class, 'index'])->name('contact_us.index');
+    Route::get('get_contactus',[ContactUsController::class, 'get_contactus'])->name('contact_us.index');
+    Route::get('create',[ContactUsController::class, 'create'])->name('contact_us.create'); //add
+    Route::post('save',[ContactUsController::class, 'save'])->name('contact_us.save');
+    Route::get('edit/{id}',[ContactUsController::class, 'edit'])->name('contact_us.edit');
+    Route::post('update/{id}',[ContactUsController::class, 'update'])->name('contact_us.update');
+    Route::post('delete/{id}',[ContactUsController::class, 'destroy_undestroy'])->name('contact_us.delete');
+});
+

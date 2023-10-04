@@ -19,7 +19,7 @@ class TravelAgentCommissionController extends Controller
         $journey_list = Journey::pluck('name','id');
         $slot_list = Slot::pluck('name','id');
         $transport_type_list = Transport_Type::pluck('name','id');
-        $travel_agent_list = Travel_Agent::with('user_obj')->get()->pluck('user_obj.name','id');
+        $travel_agent_list = Travel_Agent::with('user_obj')->get()->pluck('user_obj.name','user_obj.id');
         return view('admin.travel_agent.commsion.index',compact(
             'journey_list',
             'slot_list',
@@ -34,6 +34,7 @@ class TravelAgentCommissionController extends Controller
         $journies = Journey::get();
         $slots = Slot::get();
         $travel_agents = Travel_Agent::get();
+        // 
         // $slot_arr = Journey_Slot::get();
         foreach ($slots as $slot_key => $slot) {
             foreach ($travel_agents as $travel_agent_key => $travel_agent) {
@@ -43,6 +44,7 @@ class TravelAgentCommissionController extends Controller
                         $transport_prices_obj = TravelAgentCommission::where('transport_type_id', $transport_type_id)
                             ->where('slot_id', $slot->id)
                             ->where('journey_id', $journey->id)
+                            ->where('user_travel_agent_id', $travel_agent->user_id)
                             ->first(); // Use 'first' to retrieve a single record
 
                         if (!$transport_prices_obj) {
@@ -74,8 +76,8 @@ class TravelAgentCommissionController extends Controller
         if($request->transport_type_id){
             $travel_agent_commission = $travel_agent_commission->where('transport_type_id',$request->transport_type_id);
         }
-        if($request->agent_id){
-            $travel_agent_commission = $travel_agent_commission->where('user_travel_agent_id',$request->agent_id);
+        if($request->user_travel_agent_id){
+            $travel_agent_commission = $travel_agent_commission->where('user_travel_agent_id',$request->user_travel_agent_id);
         }
 
         $priceData['data'] = $travel_agent_commission->get();

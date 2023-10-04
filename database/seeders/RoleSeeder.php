@@ -18,7 +18,6 @@ class RoleSeeder extends Seeder
         Role::firstOrCreate(
             [
                 'id'=>1,
-
             ],
             [
                 'id'=>1,
@@ -28,7 +27,6 @@ class RoleSeeder extends Seeder
         Role::firstOrCreate(
             [
                 'id'=>2,
-
             ],
             [
                 'id'=>2,
@@ -38,7 +36,6 @@ class RoleSeeder extends Seeder
         Role::firstOrCreate(
             [
                 'id'=>3,
-
             ],
             [
                 'id'=>3,
@@ -48,7 +45,6 @@ class RoleSeeder extends Seeder
         Role::firstOrCreate(
             [
                 'id'=>4,
-
             ],
             [
                 'id'=>4,
@@ -58,7 +54,6 @@ class RoleSeeder extends Seeder
         Role::firstOrCreate(
             [
                 'id'=>5,
-
             ],
             [
                 'id'=>5,

@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SaltAgentController;
 use App\Http\Controllers\Admin\TravelAgentController;
 use App\Http\Controllers\Admin\TransportJourneyPricesController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\TravelAgentCommissionController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\User\CommonServicesController;
 
@@ -107,6 +108,11 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::get('/', [TransportPricesController::class, 'index'])->name('car.index');
         Route::get('update_price/{id}', [TransportPricesController::class, 'update_price'])->name('car.update_price');
     });
+    Route::group(['prefix' => 'travel_agent_commission'], function () {
+        Route::get('get_travel_agent_commission', [TravelAgentCommissionController::class, 'get_commision_prices'])->name('get_travel_agent_commission.index');
+        Route::get('/', [TravelAgentCommissionController::class, 'index'])->name('travel_agent_commission.index');
+        Route::get('update_price/{id}', [TravelAgentCommissionController::class, 'update_price'])->name('travel_agent_commission.update_price');
+    });
     //  =================================  transport_type ==========================
     Route::group(['prefix' => 'transport_type'], function () {
         Route::get('/', [TransportTypeController::class, 'index'])->name('transport_type.index');
@@ -152,6 +158,7 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::get('update_travel_agent/{id}', [TransportJourneyPricesController::class, 'update_travel_agent'])->name('transport_journey_prices.update_travel_agent');
         Route::get('update_tavel_agent_com/{id}', [TransportJourneyPricesController::class, 'update_tavel_agent_com'])->name('transport_journey_prices.update_tavel_agent_com');
         Route::get('update_driver_com/{id}', [TransportJourneyPricesController::class, 'update_driver_com'])->name('transport_journey_prices.update_driver_com');
+        Route::get('update_agent_com/{transport_journey_price_id}', [TransportJourneyPricesController::class, 'update_driver_com'])->name('transport_journey_prices.update_driver_com');
     });
     //  =================================  driver ==========================
     Route::group(['prefix' => 'driver'], function () {

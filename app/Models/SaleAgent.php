@@ -26,6 +26,6 @@ class SaleAgent extends Model
 
     public function travel_agents()
     {
-        return $this->hasMany('App\Models\Travel_Agent', 'sale_agent_user_id', 'user_id')->withTrashed();
+        return $this->hasMany('App\Models\Travel_Agent', 'user_sale_agent_id', 'user_id')->withTrashed();
     }
 }

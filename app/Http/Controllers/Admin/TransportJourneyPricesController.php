@@ -33,8 +33,8 @@ class TransportJourneyPricesController extends Controller
         $journey_slots = Journey_Slot::get()->toArray();
         // $journeies = Journey_Slot::get()->toArray();
         // $slots = Journey_Slot::get()->toArray();
-        $sale_agents = SaleAgent::with('travel_agents.user_obj')->get();
-        // $travel_agents = Travel_Agent::get()->toArray();
+        // $sale_agents = SaleAgent::with('travel_agents.user_obj')->get();
+        $travel_agents = Travel_Agent::with('sale_agent')->get();
 
         // dd(
         //     $journeies,
@@ -49,36 +49,35 @@ class TransportJourneyPricesController extends Controller
             # code...
 
             // foreach ($sale_agent as $journey_key => $journey) {
-            foreach ($sale_agents as $journey_key => $s_agent) {
+            foreach ($travel_agents as $journey_key => $t_agent) {
                 # code...
-// dd($sale_agents);
-                foreach ($s_agent->travel_agents as $travel_agent_key => $t_agent) {
+                // foreach ($s_agent->travel_agents as $travel_agent_key => $t_agent) {
 
-                    $sale_agent_id = $s_agent->user_id;
-                    $travel_agent_id = $t_agent->user_id;
+                    $sale_agent_id = isset($t_agent->sale_agent)?$t_agent->sale_agent->user_id:0;
+                    $travel_agent_user_id = $t_agent->user_id;
                     $journey_slot_id = $j_slot['id'];
 
                     $transport_prices_obj = TransportJourneyPrices::
                         where('journey_slot_id', $journey_slot_id)
                         ->where('sale_agent_user_id', $sale_agent_id)
-                        ->where('travel_agent_user_id', $travel_agent_id)
+                        ->where('travel_agent_user_id', $travel_agent_user_id)
                         ->first(); // Use 'first' to retrieve a single recordss
 
                     if (!$transport_prices_obj) {
                         $transport_prices_obj = new TransportJourneyPrices();
                         $transport_prices_obj->sale_agent_user_id = $sale_agent_id;
-                        $transport_prices_obj->travel_agent_user_id = $travel_agent_id;
+                        $transport_prices_obj->travel_agent_user_id = $travel_agent_user_id;
                         $transport_prices_obj->journey_slot_id = $journey_slot_id;
                         // $transport_prices_obj->price = 0;
                         $transport_prices_obj->save();
                     }
-                }
+                // }
             }
         }
         // dd($travel_agent_arr, $journey_arr, $slot_arr, $data);
 
         $transport_prices_arr = TransportJourneyPrices::with([
-            'journeyslot.slot','sale_agent.user_obj','travel_agent.user_obj'
+            'journeyslot'=>['slot','journey'],'travel_agent'=>['user_obj','sale_agent.user_obj']
         ])
             // ->where('journey_slot_id', $transport_journey_slot_id)
             // ->where('sale_agent_user_id', $sale_agent_id)
@@ -208,6 +207,22 @@ class TransportJourneyPricesController extends Controller
     {
         $transport_update_driver_com = TransportJourneyPrices::find($journey_slot_id);
         $transport_update_driver_com->driver_user_commision = $request->driver_user_commision;
+        $transport_update_driver_com->save();
+        return $this->sendResponse(200, $transport_update_driver_com);
+    }
+    public function update_agent_com(Request $request, $transport_journey_price_id)
+    {
+        $transport_update_driver_com = TransportJourneyPrices::find($transport_journey_price_id);
+        $type = $request->type;
+        if($type == 'sale'){
+            $transport_update_driver_com->sale_agent_commision = $request->commision;
+        }
+        else if($type == 'travel'){
+        $transport_update_driver_com->travel_agent_commision = $request->commision;
+        }
+        else{// driver
+            $transport_update_driver_com->driver_user_commision = $request->commision;
+        }
         $transport_update_driver_com->save();
         return $this->sendResponse(200, $transport_update_driver_com);
     }

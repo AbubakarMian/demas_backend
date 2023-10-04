@@ -25,12 +25,7 @@ class TravelAgentController extends Controller
     {
         
         $travel_agent = Travel_Agent::with('user_obj')->orderBy('created_at', 'DESC')->get();
-        // $travel_agent = Travel_Agent::with('user_name')->first();
-        // $location = Locations::with('location_type')->first();
-        // $travel_agent = Travel_Agent::with('user')->get();
-        // dd($location);
         $travel_agentData['data'] = $travel_agent;
-        // dd($travel_agent);
         echo json_encode($travel_agentData);
     }
 
@@ -39,9 +34,7 @@ class TravelAgentController extends Controller
     public function create()
     {
         $control = 'create';
-        // $sale_agent = SaleAgent::pluck('id');
         $user_sale_agents = Users::where('role_id',3)->pluck('name','id');
-        // $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.travel_agent.create', compact('control', 
         'user_sale_agents'
     ));
@@ -61,10 +54,7 @@ class TravelAgentController extends Controller
         $travel_agent = Travel_Agent::find($id);
         $user = User::find($id);
         $user_sale_agents = Users::where('role_id',3)->pluck('name','id');
-
         $sale_agent = SaleAgent::pluck('id');
-        
-        // $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.travel_agent.create', compact(
             'control',
             'travel_agent',
@@ -80,7 +70,6 @@ class TravelAgentController extends Controller
     {
         $travel_agent = Travel_Agent::find($id);
         $user = $travel_agent->user;
-        // Travel_Agent::delete()
         $this->add_or_update($request, $user, $travel_agent);
         return Redirect('admin/travel_agent');
     }
@@ -88,10 +77,6 @@ class TravelAgentController extends Controller
 
     public function add_or_update(Request $request, $user, $travel_agent)
     {
-        // dd($request->all());
-        // dd($user);
-        
-        
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
@@ -99,15 +84,10 @@ class TravelAgentController extends Controller
         $user->phone_no = $request->phone_no;
         $user->role_id = 4;
         $user->password =  Hash::make($request->password);
-        // dd($user);
         $user->save();
-
-
         $travel_agent->id = $request->id;
         $travel_agent->user_id = $user->id;
         $travel_agent->save();
-        
-
         return redirect()->back();
     }
 

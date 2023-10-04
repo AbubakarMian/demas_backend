@@ -186,12 +186,12 @@ class AdminController extends Controller
         ];
          
         $reports=[];
-        // $reports[] = [
+        $reports[] = [
 
-        //     'url' => 'admin/course_register',
-        //     'title' => 'Course Register ',
+            'url' => 'admin/order',
+            'title' => 'Order ',
 
-        // ];
+        ];
        
 
         $myvar = [];

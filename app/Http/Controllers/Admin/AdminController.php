@@ -170,6 +170,13 @@ class AdminController extends Controller
             'image' => '/', // Add the image path for Module 1
 
         ];
+        $modules[] = [
+
+            'url' => 'admin/contactus',
+            'title' => 'Contact Us',
+            'image' => '/', // Add the image path for Module 1
+
+        ];
          
         $reports=[];
         // $reports[] = [

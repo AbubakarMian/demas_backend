@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\TravelAgentCommissionController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\DriverCommissionController;
+use App\Http\Controllers\Report\OrderController;
 use App\Http\Controllers\User\CommonServicesController;
 
 /*
@@ -181,9 +182,6 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
 
 // });
 
-
- 
-
 //  =================================  contact_us ==========================
 Route::group(['prefix'=>'admin/contactus'],function(){
     Route::get('/',[ContactUsController::class, 'index'])->name('contact_us.index');
@@ -195,3 +193,13 @@ Route::group(['prefix'=>'admin/contactus'],function(){
     Route::post('delete/{id}',[ContactUsController::class, 'destroy_undestroy'])->name('contact_us.delete');
 });
 
+   //  =================================  order ==========================
+   Route::group(['prefix' => 'admin/order'], function () {
+    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+    Route::get('get_order', [OrderController::class, 'get_order'])->name('order.index');
+    Route::get('create', [OrderController::class, 'create'])->name('order.create'); //add
+    Route::post('save', [OrderController::class, 'save'])->name('order.save');
+    Route::get('edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
+    Route::post('update/{id}', [OrderController::class, 'update'])->name('order.update');
+    Route::post('delete/{id}', [OrderController::class, 'destroy_undestroy'])->name('order.delete');
+});

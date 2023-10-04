@@ -13,7 +13,7 @@ $reports = $admin_common->reports;
 button.btn.btn-success.ccc.mod_btn_hed {
     width: 170px;
     height: 73px;
-    font-size: 36px;
+    font-size: 30px;
     font-family: fantasy;
     background: white;
     border: 3px solid #996418;
@@ -90,9 +90,9 @@ button.btn.btn-success.ccc.mod_btn_hed {
     .pael_bg{
         background-color: transparent !important
     }
-    .reprt_btn{
+    /* .reprt_btn{
         display: none;
-    }
+    } */
 </style>
     <!-- reports start -->
     <div class="row">
@@ -104,7 +104,7 @@ button.btn.btn-success.ccc.mod_btn_hed {
             </section> -->
             <section class="abc">
                     <h1 class="mt0">
-                    <button type="button" class="btn btn-success ccc reprt_btn">Reports</button>
+                    <button type="button" class="btn btn-success ccc mod_btn_hed reprt_btn">Reports</button>
                     </h1>
                 </section>
         </div>
@@ -113,7 +113,7 @@ button.btn.btn-success.ccc.mod_btn_hed {
         <a href="{!! asset($report['url']) !!}">
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <section class="dash-tile bg-warning modules">
-                        <div class="tile-stats">{!!$report['title']!!}
+                        <div class="tile-stats module_tile">{!!$report['title']!!}
                         </div>
                         <br><br>
                     </section>

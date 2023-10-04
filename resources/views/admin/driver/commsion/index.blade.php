@@ -86,7 +86,6 @@
         });
 
         function fetchRecords() {
-            // $("#carTableAppend").css('display','none');
             $("#carTableAppend tbody").html('');
             $('#carTableAppend').DataTable().destroy();
             var search_param = '';

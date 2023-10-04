@@ -15,7 +15,7 @@ class Driver extends Model
     
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
+        return $this->hasOne('App\Models\Users', 'id', 'user_id')->withTrashed();
     }
     public function user_obj()
     {

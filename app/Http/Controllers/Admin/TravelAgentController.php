@@ -17,34 +17,33 @@ class TravelAgentController extends Controller
 
     public function index(Request $request)
     {
-        // dd('hi');
-     return view('admin.travel_agent.index');
+        return view('admin.travel_agent.index');
     }
 
     public function get_travel_agent(Request $request)
     {
-        
         $travel_agent = Travel_Agent::with('user_obj')->orderBy('created_at', 'DESC')->get();
         $travel_agentData['data'] = $travel_agent;
         echo json_encode($travel_agentData);
     }
 
 
-   
+
     public function create()
     {
         $control = 'create';
-        $user_sale_agents = Users::where('role_id',3)->pluck('name','id');
-        return view('admin.travel_agent.create', compact('control', 
-        'user_sale_agents'
-    ));
+        $user_sale_agents = Users::where('role_id', 3)->pluck('name', 'id');
+        return view('admin.travel_agent.create', compact(
+            'control',
+            'user_sale_agents'
+        ));
     }
 
     public function save(Request $request)
     {
         $travel_agent = new Travel_Agent();
         $user = new User();
-        $this->add_or_update($request,$user ,$travel_agent);
+        $this->add_or_update($request, $user, $travel_agent);
 
         return redirect('admin/travel_agent');
     }
@@ -53,16 +52,18 @@ class TravelAgentController extends Controller
         $control = 'edit';
         $travel_agent = Travel_Agent::find($id);
         $user = User::find($id);
-        $user_sale_agents = Users::where('role_id',3)->pluck('name','id');
+        $user_sale_agents = Users::where('role_id', 3)->pluck('name', 'id');
         $sale_agent = SaleAgent::pluck('id');
-        return view('admin.travel_agent.create', compact(
-            'control',
-            'travel_agent',
-            'user',
-            'sale_agent',
-            'user_sale_agents',
+        return view(
+            'admin.travel_agent.create',
+            compact(
+                'control',
+                'travel_agent',
+                'user',
+                'sale_agent',
+                'user_sale_agents',
 
-        )
+            )
         );
     }
 
@@ -107,4 +108,5 @@ class TravelAgentController extends Controller
             'new_value' => $new_value
         ]);
         return $response;
-    }}
+    }
+}

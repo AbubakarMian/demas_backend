@@ -69,6 +69,10 @@ $admin_common = session()->get('admin_common');
 img.header-avatar.img-circle {
     background-color: white;
 }
+img.logo_back {
+    background: white;
+    border-radius: 44px;
+}
 </style>
 
 <body>
@@ -85,7 +89,7 @@ img.header-avatar.img-circle {
 
                 <!-- logo -->
                 <a href="{{ asset('index.php/admin/dashboard') }}" class="navbar-brand">
-                    <img src="{{ asset('images/logo.png') }}" alt="">
+                    <img class="logo_back" src="{{ asset('images/logo.png') }}" alt="">
                     <span class="heading-font"></span>
                 </a>
                 <!-- /logo -->

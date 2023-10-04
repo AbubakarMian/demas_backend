@@ -4,31 +4,43 @@
 @stop
 
 @section('add_btn')
-    <div class="search">
-        {!! Form::select('journey_id', $journey_list, null, [
-            'class' => 'form-control',
-            'data-parsley-required' => 'true',
-            'data-parsley-trigger' => 'change',
-            'placeholder' => 'Select Journey',
-        ]) !!}
-        {!! Form::select('slot_id', $slot_list, null, [
+    {{-- <div class="container"> --}}
+    <div class="row">
+        <div class="col-md-3">
+            {!! Form::select('journey_id', $journey_list, null, [
+                'class' => 'form-control',
+                'data-parsley-required' => 'true',
+                'data-parsley-trigger' => 'change',
+                'placeholder' => 'Select Journey',
+            ]) !!}
+        </div>
+        <div class="col-md-3"> {!! Form::select('slot_id', $slot_list, null, [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Select Slot',
-        ]) !!}
-        {!! Form::select('transport_type_id', $transport_type_list, null, [
+        ]) !!}</div>
+        <div class="col-md-3">{!! Form::select('transport_type_id', $transport_type_list, null, [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Select Transport Type',
-        ]) !!}
-        {!! Form::select('user_travel_agent_id', $travel_agent_list, null, [
-            'class' => 'form-control',
-            'data-parsley-required' => 'true',
-            'data-parsley-trigger' => 'change',
-            'placeholder' => 'Select Agent',
-        ]) !!}
+        ]) !!}</div>
+        <div class="col-md-3">
+
+
+            {!! Form::select('user_travel_agent_id', $travel_agent_list, null, [
+                'class' => 'form-control',
+                'data-parsley-required' => 'true',
+                'data-parsley-trigger' => 'change',
+                'placeholder' => 'Select Agent',
+            ]) !!}
+        </div>
+    </div>
+    {{-- </div> --}}
+    <div class="search">
+
+
         {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
 
     </div>
@@ -56,6 +68,10 @@
     .fhgyt td {
         border: 1px solid #e3e6f3 !important;
         background: #f9f9f9
+    }
+
+    .search {
+        margin: 10px;
     }
 </style>
 @section('table')
@@ -122,7 +138,7 @@
                         var commission = response['data'][i].commission;
                         var transport_prices_id = response['data'][i].id;
 
-                         tr_str += "<tr id='row_" + response['data'][i].id + "'>" +
+                        tr_str += "<tr id='row_" + response['data'][i].id + "'>" +
                             "<td>" + journey + "</td>" +
                             "<td>" + slot + "</td>" +
                             "<td>" + agent + "</td>" +
@@ -132,7 +148,7 @@
 
                             "</tr>";
 
-                        
+
                     }
                     $("#carTableAppend tbody").html(tr_str);
                     // $("#carTableAppend").css('display','block');

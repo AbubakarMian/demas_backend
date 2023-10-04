@@ -22,7 +22,7 @@ button.btn.btn-success.ccc.mod_btn_hed {
 }
 .tile-stats.module_tile {
     font-family: fantasy;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 100;
 }
 .sidebar a, .sidebar .nav-title {

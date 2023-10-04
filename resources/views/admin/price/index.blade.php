@@ -4,25 +4,35 @@
 @stop
 
 @section('add_btn')
-<div class="search">
-    {!! Form::select('journey_id', $journey_list, null, [
+
+<div class="row">
+    <div class="col-md-4">
+        {!! Form::select('journey_id', $journey_list, null, [
         'class' => 'form-control',
         'data-parsley-required' => 'true',
         'data-parsley-trigger' => 'change',
         'placeholder' => 'Select Journey',
     ]) !!}
-    {!! Form::select('slot_id', $slot_list, null, [
-        'class' => 'form-control',
-        'data-parsley-required' => 'true',
-        'data-parsley-trigger' => 'change',
-        'placeholder' => 'Select Slot',
-    ]) !!}
-    {!! Form::select('transport_type_id', $transport_type_list, null, [
+    </div>
+    <div class="col-md-4">
+        {!! Form::select('slot_id', $slot_list, null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Select Slot',
+        ]) !!}
+    </div>
+    <div class="col-md-4">  {!! Form::select('transport_type_id', $transport_type_list, null, [
         'class' => 'form-control',
         'data-parsley-required' => 'true',
         'data-parsley-trigger' => 'change',
         'placeholder' => 'Select Transport Type',
-    ]) !!}
+    ]) !!}</div>
+</div>
+<div class="search">
+    
+   
+  
     {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
 
 </div>
@@ -49,6 +59,9 @@
     .fhgyt td {
         border: 1px solid #e3e6f3 !important;
         background: #f9f9f9
+    }
+    .search {
+        margin: 10px;
     }
 </style>
 @section('table')

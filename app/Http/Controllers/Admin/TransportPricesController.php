@@ -14,7 +14,14 @@ class TransportPricesController extends Controller
 {
     public function index()
     {
-        return view('admin.price.index');
+        $journey_list = Journey::pluck('name','id');
+        $slot_list = Slot::pluck('name','id');
+        $transport_type_list = Transport_Type::pluck('name','id');
+        return view('admin.price.index',compact(
+            'journey_list',
+            'slot_list',
+            'transport_type_list'
+        ));
     }
     public function get_car_prices(Request $request)
     {

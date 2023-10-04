@@ -4,9 +4,28 @@
 @stop
 
 @section('add_btn')
-    {!! Form::open(['method' => 'get', 'url' => ['admin/car/create'], 'files' => true]) !!}
-    {{-- <span>{!! Form::submit('Add Transport prices', ['class' => 'btn btn-success pull-right']) !!}</span> --}}
-    {!! Form::close() !!}
+<div class="search">
+    {!! Form::select('journey_id', $journey_list, null, [
+        'class' => 'form-control',
+        'data-parsley-required' => 'true',
+        'data-parsley-trigger' => 'change',
+        'placeholder' => 'Select Journey',
+    ]) !!}
+    {!! Form::select('slot_id', $slot_list, null, [
+        'class' => 'form-control',
+        'data-parsley-required' => 'true',
+        'data-parsley-trigger' => 'change',
+        'placeholder' => 'Select Slot',
+    ]) !!}
+    {!! Form::select('transport_type_id', $transport_type_list, null, [
+        'class' => 'form-control',
+        'data-parsley-required' => 'true',
+        'data-parsley-trigger' => 'change',
+        'placeholder' => 'Select Transport Type',
+    ]) !!}
+    {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
+
+</div>
 @stop
 @section('table-properties')
     width="400px" style="table-layout:fixed;"
@@ -55,12 +74,26 @@
 
             fetchRecords();
 
-            function fetchRecords() {
+        });
+
+        function fetchRecords() {
                 $("#carTableAppend tbody").html('');
                 $('#carTableAppend').DataTable().destroy();
+            var search_param = '';
+            var search_concat = '?';
+            $('.search select').each(function(item, index) {
+                console.log('name', $(this).attr('name'));
+                console.log('value', $(this).val());
+                if ($(this).val() != '') {
+                    search_param += search_concat + $(this).attr('name') + "=" + $(this).val();
+                    search_concat = '&';
+                }
+            });
+            search_url = '{!! asset('admin/price/get_car_prices') !!}' + search_param;
+            console.log('search_url', search_url);
 
                 $.ajax({
-                    url: '{!! asset('admin/price/get_car_prices') !!}',
+                    url: search_url,
                     type: 'get',
                     dataType: 'json',
                     success: function(response) {
@@ -103,8 +136,6 @@
                     }
                 });
             }
-
-        });
 
         function update_delay_user_price(transport_prices_id, e) {
 

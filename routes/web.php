@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\TransportJourneyPricesController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\TravelAgentCommissionController;
 use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\DriverCommissionController;
 use App\Http\Controllers\User\CommonServicesController;
 
 /*
@@ -112,6 +113,11 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::get('get_travel_agent_commission', [TravelAgentCommissionController::class, 'get_commision_prices'])->name('get_travel_agent_commission.index');
         Route::get('/', [TravelAgentCommissionController::class, 'index'])->name('travel_agent_commission.index');
         Route::get('update_price/{id}', [TravelAgentCommissionController::class, 'update_price'])->name('travel_agent_commission.update_price');
+    });
+    Route::group(['prefix' => 'driver_commission'], function () {
+        Route::get('get_driver_commission', [DriverCommissionController::class, 'get_commision_prices'])->name('driver_commission.index');
+        Route::get('/', [DriverCommissionController::class, 'index'])->name('driver_commission.index');
+        Route::get('update_price/{id}', [DriverCommissionController::class, 'update_price'])->name('driver_commission.update_price');
     });
     //  =================================  transport_type ==========================
     Route::group(['prefix' => 'transport_type'], function () {

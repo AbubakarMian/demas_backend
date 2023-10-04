@@ -16,14 +16,14 @@ class LocationTypeSeeder extends Seeder
     public function run()
     {
         Location_Type::firstOrCreate(
+            ['name'=>'Airport'],
             [
-                'id'=>1,
-                'name'=>'Airport'    
+                'name'=>'Airport'
             ],
         );    
         Location_Type::firstOrCreate(
+            ['name'=>'Hotel'],
             [
-                'id'=>2,
                 'name'=>'Hotel'    
             ],
         );    

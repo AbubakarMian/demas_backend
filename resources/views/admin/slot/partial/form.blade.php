@@ -29,21 +29,36 @@ $end_date = ''; // Initialize to an empty string
 
 if (isset($slot)) {
     // Assuming $slot->start_date and $slot->end_date are the correct properties
-    $start_date = $slot->start_date;
-    $end_date = $slot->end_date;
+    $start_date = Carbon::createFromTimestamp($slot->start_date);
+    $start_date = $start_date->format('Y-m-d');
+    $end_date = Carbon::createFromTimestamp($slot->end_date);
+    $end_date = $end_date->format('Y-m-d');
+}
+else{
+    $start_date = Carbon::now()->format('Y-m-d');
+    $end_date = Carbon::now()->format('Y-m-d');
 }
 
-// Convert the start date to Carbon format
-$carbonStartDate = \Carbon\Carbon::parse($start_date);
 
-// Convert the end date to Carbon format
-$carbonEndDate = \Carbon\Carbon::parse($end_date);
 ?>
+
+<div class="form-group">
+    {!! Form::label('name', 'Name') !!}
+    <div>
+        {!! Form::date('name', , [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Rabiulawal 2023-10-02 / 2023-12-30',
+            'maxlength' => '225',
+        ]) !!}
+    </div>
+</div>
 
 <div class="form-group">
     {!! Form::label('from_date', 'Start Date') !!}
     <div>
-        {!! Form::date('from_date', $carbonStartDate->format('Y-m-d'), [
+        {!! Form::date('from_date', , [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
@@ -57,7 +72,7 @@ $carbonEndDate = \Carbon\Carbon::parse($end_date);
 <div class="form-group">
     {!! Form::label('to_date', 'End Date') !!}
     <div>
-        {!! Form::date('to_date', $carbonEndDate->format('Y-m-d'), [
+        {!! Form::date('to_date', , [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',

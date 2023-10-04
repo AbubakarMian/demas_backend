@@ -83,7 +83,6 @@ class CarController extends Controller
         ]
     );
         if($validator->fails()){
-            // dd($validator->messages()->all());
             return back()->with('error',$validator->messages());
         }
         $car->transport_type_id = $request->transport_type_id;

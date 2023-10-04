@@ -21,7 +21,7 @@ class Travel_Agent extends Model
         return $this->hasOne('App\Models\Users', 'id', 'user_id')->withTrashed();
     }
     public function sale_agent(){
-        return $this->hasOne('App\Models\SaleAgent','user_id','sale_agent_user_id');
+        return $this->hasOne('App\Models\SaleAgent','user_id','user_sale_agent_id');
     }
     // public function user()
     // {

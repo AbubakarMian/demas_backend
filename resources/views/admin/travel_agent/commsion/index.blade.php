@@ -110,6 +110,7 @@
                     $("#carTableAppend").css("opacity", 1);
                     var len = response['data'].length;
                     console.log('response2');
+                    var tr_str = '';
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
                         var transport_type_name = response['data'][i].transport_type.name;
@@ -121,7 +122,7 @@
                         var commission = response['data'][i].commission;
                         var transport_prices_id = response['data'][i].id;
 
-                        var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                         tr_str += "<tr id='row_" + response['data'][i].id + "'>" +
                             "<td>" + journey + "</td>" +
                             "<td>" + slot + "</td>" +
                             "<td>" + agent + "</td>" +
@@ -131,8 +132,9 @@
 
                             "</tr>";
 
-                        $("#carTableAppend tbody").append(tr_str);
+                        
                     }
+                    $("#carTableAppend tbody").html(tr_str);
                     // $("#carTableAppend").css('display','block');
 
                     $(document).ready(function() {

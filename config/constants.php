@@ -7,17 +7,27 @@ return [
 	],
 
 	'app-type' => [
-		'android' => "khatmenabowat-app-mobile",
+		'android' => "demas-app-mobile",
 	],
-    'request_status'=>[
+    'driver'=>[
+        'commission_types'=>[
+            'monthly'=>'Monthly',
+            'per_trip'=>'Per Trip',
+        ]
+    ],
+    'sales_agent'=>[
+        'commission_types'=>[
+            'fix_amount'=>'Fix Amount',
+            'profit_percent'=>'Profit Percent',
+            'sales_percent'=>'Sales Percent',
+        ]
+    ],
+    'order_status'=>[
         'pending'=>'pending',
-        'partial'=>'partial',
+        'paid'=>'paid',
+        'in_progress'=>'in_progress',
         'completed'=>'completed',
         'cancelled'=>'cancelled',
-    ],
-    'promotion_type'=>[
-        'extra_product'=>'extra_product',
-        'discount_percent'=>'discount_percent',
     ],
 	'social_login' => [
 		'facebook'=>'facebook',
@@ -27,20 +37,6 @@ return [
     'sender' =>[
         'user'=>'user',
         'sholar'=>'scholar'
-    ],
-
-    'settings'=>[
-        'shipping_terms_en_id'=>1,
-        'shipping_terms_en'=>'shipping_terms',
-
-        'shipping_terms_ar_id'=>2,
-        'shipping_terms_ar'=>'shipping_terms_ar',
-
-        'terms_and_conditions_en_id'=>3,
-        'terms_and_conditions_en'=>'terms_and_conditions',
-
-        'terms_and_conditions_ar_id'=>4,
-        'terms_and_conditions_ar'=>'terms_and_conditions_ar',
     ],
 
     'payment_status'=>[

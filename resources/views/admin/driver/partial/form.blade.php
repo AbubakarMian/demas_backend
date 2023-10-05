@@ -13,25 +13,27 @@
         </style>
     
     @if ($message = Session::get('error'))
-    
+    {{-- {!!dd($message->all())!!} --}}
     <div class="alert alert-danger">
         <ul>
             @foreach($message->all() as $error)
+            
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
     </div>
     @endif
     <?php
-    $name = '';
+    // $name = '';
+    $user = new \StdClass();
     if(isset($driver)){
-        $name = $driver->user_name->name;
+        $user = $driver->user_obj;
     }
 ?>
     <div class="form-group">
         {!! Form::label('name',' First Name') !!}
         <div>
-            {!! Form::text('name', $name, ['class' => 'form-control',
+            {!! Form::text('name', $user->name, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'First Name','required',
@@ -39,15 +41,15 @@
         </div>
     </div>
     <?php
-    $last_name = '';
-    if(isset($driver)){
-        $last_name = $driver->user_name->last_name;
-    }
+    // $last_name = '';
+    // if(isset($driver)){
+    //     $last_name = $driver->user_name->last_name;
+    // }
 ?>
     <div class="form-group">
         {!! Form::label('last_name',' Last Name') !!}
         <div>
-            {!! Form::text('last_name', $last_name, ['class' => 'form-control',
+            {!! Form::text('last_name', $user->last_name, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Last Name','required',
@@ -56,15 +58,15 @@
     </div>
     
     <?php
-    $email = '';
-    if(isset($driver)){
-        $email = $driver->user_name->email;
-    }
+    // $email = '';
+    // if(isset($driver)){
+    //     $email = $driver->user_name->email;
+    // }
 ?>
     <div class="form-group">
         {!! Form::label('email','Email') !!}
         <div>
-            {!! Form::text('email',  $email, ['class' => 'form-control',
+            {!! Form::text('email',  $user->email, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter email','required',
@@ -72,32 +74,31 @@
         </div>
     </div>
     <?php
-    $city = '';
-    if(isset($driver)){
-        $city = $driver->user_name->city;
-    }
+    // $city = '';
+    // if(isset($driver)){
+    //     $city = $driver->user_name->city;
+    // }
 ?>
     <div class="form-group">
         {!! Form::label('address','Address') !!}
         <div>
-            {!! Form::text('address',  $city, ['class' => 'form-control',
+            {!! Form::text('adderss',  $user->adderss, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter Address','required',
-            'maxlength'=>"100"]) !!}
+            'placeholder'=>'Enter Address','required',]) !!}
         </div>
     </div>
    
     <?php
-        $number = '';
-        if(isset($user)){
-            $number = $user->phone_no;
-        }
+        // $number = '';
+        // if(isset($user)){
+        //     $number = $user->phone_no;
+        // }
     ?>
     <div class="form-group">
         {!! Form::label('phone_no','Phone Number') !!}
         <div>
-            {!! Form::text('phone_no',  $number, ['class' => 'form-control',
+            {!! Form::text('phone_no',  $user->phone_no, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter Phone Number','required',
@@ -117,19 +118,11 @@
     </div>
     
     
-    
-    
-    
-    
     <span id="err" class="error-product"></span>
     
     
     <div class="form-group col-md-12">
     </div>
-    
-    
-    
-    
     
     <div class="col-md-5 pull-left">
         <div class="form-group text-center">

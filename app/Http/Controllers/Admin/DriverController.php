@@ -9,26 +9,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class DriverController extends Controller
 {
 
     public function index(Request $request)
     {
-        // dd('hi');
      return view('admin.driver.index');
     }
 
     public function get_driver(Request $request)
     {
-        
         $driver = Driver::with('user_obj')->orderBy('created_at', 'DESC')->get();
-        // $driver = Driver::with('user_name')->first();
-        // $location = Locations::with('location_type')->first();
-        // $driver = Driver::with('user')->get();
-        // dd($location);
         $driverData['data'] = $driver;
-        // dd($driver);
         echo json_encode($driverData);
     }
 
@@ -37,9 +31,9 @@ class DriverController extends Controller
     public function create()
     {
         $control = 'create';
-// $travel_agents = Travel_Agent::with('user_name')->pluck( 'id');
-        return view('admin.driver.create', compact('control',
-        //  'travel_agents'
+        $commission_types = Config::get('constants.driver.commission_types');
+        
+        return view('admin.driver.create', compact('control','commission_types'
         ));
     }
 
@@ -47,24 +41,17 @@ class DriverController extends Controller
     {
         $driver = new Driver();
         $user = new User();
-        $this->add_or_update($request , $user ,$driver);
+        return $this->add_or_update($request , $user ,$driver);
 
-        return redirect('admin/driver');
+        // return redirect('admin/driver');
     }
     public function edit($id)
     {
         $control = 'edit';
         $driver = Driver::find($id);
-        $user = User::find($id);
-
-        // $travel_agents = Travel_Agent::with('user_name')->pluck('id');
-        // $transport_type = Transport_Type::pluck('name', 'id');
         return view('admin.driver.create', compact(
             'control',
             'driver',
-            // 'travel_agents',
-            'user',
-
         )
         );
     }
@@ -73,17 +60,25 @@ class DriverController extends Controller
     {
         $driver = Driver::find($id);
         $user = $driver->user;
-        // Driver::delete()
-        $this->add_or_update($request, $user, $driver);
-        return Redirect('admin/driver');
+        return $this->add_or_update($request, $user, $driver);
+        // return Redirect('admin/driver');
     }
 
 
     public function add_or_update(Request $request, $user, $driver)
     {
-        // dd($request->all());
-        // dd($user);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'phone_no' => ['required', 'unique:users,phone_no,' . $user->id],
+                'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            ]
+        );
         
+
+        if($validator->fails()){
+            return redirect()->back()->with('error',$validator->messages());
+        }
         
         $user->name = $request->name;
         $user->last_name = $request->last_name;
@@ -92,18 +87,17 @@ class DriverController extends Controller
         $user->state = $request->state;
         $user->phone_no = $request->phone_no;
         $user->city = $request->city;
+        $user->adderss = $request->adderss;
         $user->role_id = 3;
-        $user->password =  Hash::make($request->password);
-        // dd($user);
+        if($request->password){
+            $user->password =  Hash::make($request->password);
+        }
         $user->save();
-
-
         $driver->id = $request->id;
         $driver->user_id = $user->id;
         $driver->save();
-        
+        return Redirect('admin/driver');
 
-        return redirect()->back();
     }
 
     public function destroy_undestroy($id)

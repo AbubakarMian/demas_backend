@@ -112,8 +112,7 @@
                             var total_price = response['data'][i].total_price;
                             var status = response['data'][i].status;
                             var payment_collected_type = response['data'][i].payment_collected_type;
-                            var payment_collected_user_id = response['data'][i]
-                                .payment_collected_user_id;
+                            var payment_collected_user_id = response['data'][i].payment_collected_user_id;
                             var payment_collected_price = response['data'][i].payment_collected_price;
                             var order_type = response['data'][i].order_type;
                             var payment_type = response['data'][i].payment_type;

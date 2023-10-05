@@ -35,6 +35,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('error/500',function(){
+    return view('error.error_500');
+
+});
+
 
 Route::get('admin/login', [AdminController::class, 'index']);
 Route::post('admin/checklogin', [AdminController::class, 'checklogin']);

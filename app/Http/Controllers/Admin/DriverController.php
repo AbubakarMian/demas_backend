@@ -31,8 +31,9 @@ class DriverController extends Controller
     public function create()
     {
         $control = 'create';
+        $commission_types = Config::get('constants.driver.commission_types');
         
-        return view('admin.driver.create', compact('control',
+        return view('admin.driver.create', compact('control','commission_types'
         ));
     }
 

@@ -16,7 +16,7 @@ class DriverController extends Controller
 
     public function index(Request $request)
     {
-     return view('admin.driver.index');
+        return view('admin.driver.index');
     }
 
     public function get_driver(Request $request)
@@ -27,13 +27,15 @@ class DriverController extends Controller
     }
 
 
-   
+
     public function create()
     {
         $control = 'create';
         $commission_types = Config::get('constants.driver.commission_types');
-        
-        return view('admin.driver.create', compact('control','commission_types'
+
+        return view('admin.driver.create', compact(
+            'control',
+            'commission_types'
         ));
     }
 
@@ -41,7 +43,7 @@ class DriverController extends Controller
     {
         $driver = new Driver();
         $user = new User();
-        return $this->add_or_update($request , $user ,$driver);
+        return $this->add_or_update($request, $user, $driver);
 
         // return redirect('admin/driver');
     }
@@ -49,10 +51,15 @@ class DriverController extends Controller
     {
         $control = 'edit';
         $driver = Driver::find($id);
-        return view('admin.driver.create', compact(
-            'control',
-            'driver',
-        )
+        $commission_types = Config::get('constants.driver.commission_types');
+
+        return view(
+            'admin.driver.create',
+            compact(
+                'control',
+                'driver',
+                'commission_types'
+            )
         );
     }
 
@@ -74,12 +81,12 @@ class DriverController extends Controller
                 'email' => ['required', 'email', 'unique:users,email,' . $user->id],
             ]
         );
-        
 
-        if($validator->fails()){
-            return redirect()->back()->with('error',$validator->messages());
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->messages());
         }
-        
+
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
@@ -89,7 +96,7 @@ class DriverController extends Controller
         $user->city = $request->city;
         $user->adderss = $request->adderss;
         $user->role_id = 3;
-        if($request->password){
+        if ($request->password) {
             $user->password =  Hash::make($request->password);
         }
         $user->save();
@@ -97,7 +104,6 @@ class DriverController extends Controller
         $driver->user_id = $user->id;
         $driver->save();
         return Redirect('admin/driver');
-
     }
 
     public function destroy_undestroy($id)
@@ -116,4 +122,5 @@ class DriverController extends Controller
             'new_value' => $new_value
         ]);
         return $response;
-    }}
+    }
+}

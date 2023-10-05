@@ -24,8 +24,8 @@
     </div>
     @endif
     <?php
-    // $name = '';
-    $user = new \StdClass();
+    // $user = new \StdClass();
+    $user = new App\Models\User;
     if(isset($driver)){
         $user = $driver->user_obj;
     }
@@ -56,13 +56,6 @@
             'maxlength'=>"100"]) !!}
         </div>
     </div>
-    
-    <?php
-    // $email = '';
-    // if(isset($driver)){
-    //     $email = $driver->user_name->email;
-    // }
-?>
     <div class="form-group">
         {!! Form::label('email','Email') !!}
         <div>
@@ -73,12 +66,14 @@
             'maxlength'=>"100"]) !!}
         </div>
     </div>
-    <?php
-    // $city = '';
-    // if(isset($driver)){
-    //     $city = $driver->user_name->city;
-    // }
-?>
+    <div class="form-group">
+        {!! Form::label('commision_type','Commision Type') !!}
+        <div>
+            {!! Form::select('commision_type',  $commission_types,null, ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change','required']) !!}
+        </div>
+    </div>
     <div class="form-group">
         {!! Form::label('address','Address') !!}
         <div>
@@ -89,12 +84,6 @@
         </div>
     </div>
    
-    <?php
-        // $number = '';
-        // if(isset($user)){
-        //     $number = $user->phone_no;
-        // }
-    ?>
     <div class="form-group">
         {!! Form::label('phone_no','Phone Number') !!}
         <div>

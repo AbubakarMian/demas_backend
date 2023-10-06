@@ -51,11 +51,4 @@ return [
         'error'=>'error',
         'success'=>'success',
     ],
-    'order_status'=>[
-        'all'=>'all',
-        'pending'=>'pending',
-        'inprogress'=>'inprogress',
-        'completed'=>'completed',
-        'rejected'=>'rejected',
-    ],
 ];

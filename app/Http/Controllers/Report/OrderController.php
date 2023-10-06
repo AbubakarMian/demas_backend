@@ -18,9 +18,30 @@ class OrderController extends Controller
 
     public function get_order(Request $request)
     {
-        $order = Order::with('user_obj','sale_agent.user_obj','travel_agent.user_obj','driver.user_obj')->orderBy('created_at', 'DESC')->select('*')->get();
+        $order = Order::with('user_obj','sale_agent.user_obj','travel_agent.user_obj')->orderBy('created_at', 'DESC')->select('*')->get();
         $orderData['data'] = $order;
         echo json_encode($orderData);
+    }
+
+    public function get_order_details_list(Request $request,$order_id){
+
+        $order_details = Order_Detail::where('order_id',$order_id)
+        ->with([
+            'pickup_location',
+            'dropoff_location',
+            'driver.user_obj',
+            'journey',// its necessary
+            'journey_slot.slot',// its not necessary
+        ])->get();
+        return $this->sendResponse(200,$order_details);
+    }
+
+    public function update_order_status(Request $request,$order_id){
+
+        $order = Order::find($order_id);
+        $order->status = $request->status;
+        $order->save();
+        return $this->sendResponse(200,$order);
     }
 
 

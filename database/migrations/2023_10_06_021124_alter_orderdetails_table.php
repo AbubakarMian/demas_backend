@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('sale_agent', function (Blueprint $table) {
-            $table->string('commision_type',75)->nullable()->default(null);
+        Schema::table('order_detail', function (Blueprint $table) {
+            $table->bigInteger('slot_id')->default(0);
         });
     }
 
@@ -25,8 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('sale_agent', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

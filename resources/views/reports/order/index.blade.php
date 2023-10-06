@@ -94,7 +94,7 @@
                         // var payment_id = response['data'][i].payment_id;
                         var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
                         var user_travel_agent_name = response['data'][i].travel_agent.user_obj.name;
-                        // var user_driver_id = response['data'][i].driver.user_obj.name;
+                        var user_driver_id = response['data'][i].driver.user_obj.name;
                         var cash_collected_by = response['data'][i].cash_collected_by;
                         var cash_collected_by_user_id = response['data'][i].cash_collected_by_user_id;
                         var price = response['data'][i].price;

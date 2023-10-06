@@ -26,6 +26,10 @@ class Order extends Model
     {
         return $this->hasOne('App\Models\Travel_Agent', 'user_id', 'user_travel_agent_id')->withTrashed();
     }
+    public function driver()
+    {
+        return $this->hasOne('App\Models\Driver', 'user_id', 'user_driver_id')->withTrashed();
+    }
 
 
 }

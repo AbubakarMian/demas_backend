@@ -37,7 +37,8 @@ width="400px" style="table-layout:fixed;"
 	<tr>
         <th>Name</th>
         <th>Email</th>
-        <th>phone no</th>
+        <th>Phone no</th>
+        <th>Commision Type</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -73,6 +74,7 @@ $(document).ready(function(){
                   var driver_name =  response['data'][i].user_obj.name;
                   var email =  response['data'][i].user_obj.email;
                   var phone_no =  response['data'][i].user_obj.phone_no;
+                  var commision_type =  response['data'][i].commision_type;
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);
@@ -98,6 +100,7 @@ $(document).ready(function(){
                     "<td>" +driver_name+ "</td>" +
                     "<td>" +email+ "</td>" +
                     "<td>" +phone_no+ "</td>" +
+                    "<td>" +commision_type+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
        

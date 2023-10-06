@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('payment_collected_price')->nullable()->default(null);
             // $table->bigInteger('payment_id')->nullable()->default(0);
             $table->string('order_type')->nullable()->default(null) ->comment('single /package');
-            $table->string('payment_type')->nullable()->default(null) ->comment('pending/cleared');
+            $table->string('payment_type')->nullable()->default(null) ->comment('online/cash');
             
         });   
     }

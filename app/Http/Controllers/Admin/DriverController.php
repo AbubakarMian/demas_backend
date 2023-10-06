@@ -102,6 +102,7 @@ class DriverController extends Controller
         $user->save();
         $driver->id = $request->id;
         $driver->user_id = $user->id;
+        $driver->commision_type = $request->commision_type;
         $driver->save();
         return Redirect('admin/driver');
     }

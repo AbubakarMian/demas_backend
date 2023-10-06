@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class SaltAgentController extends Controller
 {
@@ -41,7 +42,12 @@ class SaltAgentController extends Controller
     {
         $control = 'create';
         $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
-        return view('admin.sale_agent.create', compact('control', 'travel_agent'));
+        $commission_types = Config::get('constants.driver.commission_types');
+
+        return view('admin.sale_agent.create', compact('control',
+         'travel_agent',
+         'commission_types',
+        ));
     }
 
     public function save(Request $request)
@@ -57,7 +63,7 @@ class SaltAgentController extends Controller
         $control = 'edit';
         $sale_agent = SaleAgent::find($id);
         $user = User::find($id);
-
+        $commission_types = Config::get('constants.driver.commission_types');
         $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
         // $transport_type = Transport_Type::pluck('name', 'id');
         return view(
@@ -67,6 +73,7 @@ class SaltAgentController extends Controller
                 'sale_agent',
                 'travel_agent',
                 'user',
+                'commission_types',
 
             )
         );
@@ -78,7 +85,7 @@ class SaltAgentController extends Controller
         $user = $sale_agent->user;
         // SaleAgent::delete()
         $this->add_or_update($request, $user, $sale_agent);
-        return Redirect('admin/sale_agent');
+        // return Redirect('admin/sale_agent');
     }
 
 
@@ -87,20 +94,33 @@ class SaltAgentController extends Controller
         // dd($request->all());
         // dd($user);
 
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'phone_no' => ['required', 'unique:users,phone_no,' . $user->id],
+                'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            ]
+        );
 
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->messages());
+        }
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->adderss = $request->adderss;
         $user->phone_no = $request->phone_no;
         $user->role_id = 3;
-        $user->password = Hash::make($request->password);
-        // dd($user);
+        if ($request->password) {
+            $user->password =  Hash::make($request->password);
+        }        // dd($user);
         $user->save();
 
 
         $sale_agent->id = $request->id;
         $sale_agent->user_id = $user->id;
+        $sale_agent->commision_type = $request->commision_type;
         $sale_agent->save();
 
 

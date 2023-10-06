@@ -182,6 +182,19 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::post('update/{id}', [DriverController::class, 'update'])->name('driver.update');
         Route::post('delete/{id}', [DriverController::class, 'destroy_undestroy'])->name('driver.delete');
     });
+
+       //  =================================  order ==========================
+   Route::group(['prefix' => 'order'], function () {
+    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+    Route::get('get_order', [OrderController::class, 'get_order'])->name('order.index');
+    Route::get('details_list/{order_id}', [OrderController::class, 'get_order_details_list'])->name('order.get_order_details_list');
+    Route::get('update_order_status/{order_id}', [OrderController::class, 'update_order_status'])->name('order.update_order_status');
+    Route::get('create', [OrderController::class, 'create'])->name('order.create'); //add
+    Route::post('save', [OrderController::class, 'save'])->name('order.save');
+    Route::get('edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
+    Route::post('update/{id}', [OrderController::class, 'update'])->name('order.update');
+    Route::post('delete/{id}', [OrderController::class, 'destroy_undestroy'])->name('order.delete');
+});
 });
 
 
@@ -198,13 +211,3 @@ Route::group(['prefix'=>'admin/contactus'],function(){
     Route::post('delete/{id}',[ContactUsController::class, 'destroy_undestroy'])->name('contact_us.delete');
 });
 
-   //  =================================  order ==========================
-   Route::group(['prefix' => 'admin/order'], function () {
-    Route::get('/', [OrderController::class, 'index'])->name('order.index');
-    Route::get('get_order', [OrderController::class, 'get_order'])->name('order.index');
-    Route::get('create', [OrderController::class, 'create'])->name('order.create'); //add
-    Route::post('save', [OrderController::class, 'save'])->name('order.save');
-    Route::get('edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
-    Route::post('update/{id}', [OrderController::class, 'update'])->name('order.update');
-    Route::post('delete/{id}', [OrderController::class, 'destroy_undestroy'])->name('order.delete');
-});

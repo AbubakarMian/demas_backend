@@ -312,6 +312,10 @@ $('#hiddden_name').val(id);
     });
 }
 
+function capitalize_first_letter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function set_lat_long(lat , long , location){
 console.log("asdasdasd");
             $('#lat').val('24.8607');

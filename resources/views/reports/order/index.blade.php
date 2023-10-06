@@ -245,7 +245,7 @@
             console.log('get_details order_id', order_id);
             $.ajax({
                 url: "{!! asset('admin/order/update_order_status') !!}/" + order_id,
-                type: 'GET',
+                type: 'post',
                 dataType: 'json',
                 data: {
                     _token: '{!! @csrf_token() !!}',

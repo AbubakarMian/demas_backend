@@ -50,8 +50,8 @@ class TravelAgentController extends Controller
     public function edit($id)
     {
         $control = 'edit';
-        $travel_agent = Travel_Agent::find($id);
-        $user = User::find($id);
+        $travel_agent = Travel_Agent::with('user_obj')->find($id);
+        $user = $travel_agent->user_obj;
         $user_sale_agents = Users::where('role_id', 3)->pluck('name', 'id');
         $sale_agent = SaleAgent::pluck('id');
         return view(
@@ -69,8 +69,8 @@ class TravelAgentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $travel_agent = Travel_Agent::find($id);
-        $user = $travel_agent->user;
+        $travel_agent = Travel_Agent::with('user_obj')->find($id);
+        $user = $travel_agent->user_obj;
         $this->add_or_update($request, $user, $travel_agent);
         return Redirect('admin/travel_agent');
     }

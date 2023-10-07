@@ -36,6 +36,7 @@ width="400px" style="table-layout:fixed;"
 <thead>
 	<tr>
         <th>Name</th>
+        <th>Commision Type</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -69,6 +70,7 @@ $(document).ready(function(){
               for(var i=0; i<len; i++){
                   var id =  response['data'][i].id;
                   var sale_agent_name =  response['data'][i].user_obj.name;
+                  var commision_type =  response['data'][i].commision_type;
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);
@@ -92,6 +94,7 @@ $(document).ready(function(){
 
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
                     "<td>" +sale_agent_name+ "</td>" +
+                    "<td>" +commision_type+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
        

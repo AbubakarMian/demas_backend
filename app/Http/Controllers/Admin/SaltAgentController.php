@@ -84,15 +84,11 @@ class SaltAgentController extends Controller
 
     public function add_or_update(Request $request, $user, $sale_agent)
     {
-        // dd($request->all());
-        // dd($user);
-
         $validator = Validator::make(
             $request->all(),
             [
                 'phone_no' => ['required', 'unique:users,phone_no,' . $user->id],
                 'email' => ['required', 'email', 'unique:users,email,' . $user->id],
-                // 'commision' => 'required_if:commision_type,profit_percent,sales_percent|numeric|max:99',
             ]
         );
         if ($validator->fails()) {

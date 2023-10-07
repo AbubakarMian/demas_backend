@@ -40,6 +40,7 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
+        return parent::render($request, $exception);
 
         if(str_contains($request->url(),'localhost/')){
             return parent::render($request, $exception);

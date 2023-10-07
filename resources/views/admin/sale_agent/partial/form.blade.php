@@ -16,7 +16,7 @@
     
     <div class="alert alert-danger">
         <ul>
-            @foreach($message->all() as $error)
+            @foreach($message as $error)
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
@@ -98,28 +98,13 @@
     <div class="form-group">
         {!! Form::label('phone_no','Phone Number') !!}
         <div>
-            {!! Form::number('phone_no',  $number, ['class' => 'form-control',
+            {!! Form::text('phone_no',  $number, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter Phone Number','required',
             'maxlength'=>"100"]) !!}
         </div>
     </div>
-    
-  
-   
-    
-    {{-- <div class="form-group">
-        <label for="travel_agent">Travel Agents</label>
-        {!! Form::select('travel_agent', $travel_agent, null, [
-            'class' => 'form-control',
-            'data-parsley-required' => 'true',
-            'data-parsley-trigger' => 'change',
-            'placeholder'=>'Select Travel Agents',
-            'required',
-            'maxlength' => '100',
-        ]) !!}
-    </div> --}}
     
     <div class="form-group">
         {!! Form::label('password','Password') !!}
@@ -137,37 +122,27 @@
         <div>
             {!! Form::select('commision_type',  $commission_types,null, ['class' => 'form-control',
             'data-parsley-required'=>'true',
-            'data-parsley-trigger'=>'change','required']) !!}
+            'data-parsley-trigger'=>'change']) !!}
         </div>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
+    <div class="form-group">
+        {!! Form::label('commision','Commision') !!}
+        <div>
+            {!! Form::number('commision',null, ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Commission','required',
+            'min'=>"0"]) !!}
+        </div>
+    </div>
     
     <span id="err" class="error-product"></span>
     
     
     <div class="form-group col-md-12">
     </div>
-    
-    
-    
-    
+
     
     <div class="col-md-5 pull-left">
         <div class="form-group text-center">

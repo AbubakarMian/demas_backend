@@ -152,14 +152,14 @@ class AdminController extends Controller
         $modules[] = [
 
             'url' => 'admin/travel_agent_commission',
-            'title' => 'Travel Agent Commissions',
+            'title' => 'Travel Agent Commission',
              'image' => "{{ asset('/images/car-1.png') }} ", // Add the image path for Module 1
 
         ];
         $modules[] = [
 
             'url' => 'admin/driver_commission',
-            'title' => 'Drivers Commissions',
+            'title' => 'Driver Commission',
              'image' => "{{ asset('/images/car-1.png') }} ", // Add the image path for Module 1
 
         ];

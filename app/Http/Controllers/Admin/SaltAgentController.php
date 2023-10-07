@@ -19,20 +19,13 @@ class SaltAgentController extends Controller
 
     public function index(Request $request)
     {
-        // dd('hi');
         return view('admin.sale_agent.index');
     }
 
     public function get_sale_agent(Request $request)
     {
-
         $sale_agent = SaleAgent::with('user_obj')->orderBy('created_at', 'DESC')->get();
-        // $sale_agent = SaleAgent::with('user_name')->first();
-        // $location = Locations::with('location_type')->first();
-        // $sale_agent = SaleAgent::with('user')->get();
-        // dd($location);
         $sale_agentData['data'] = $sale_agent;
-        // dd($sale_agent);
         echo json_encode($sale_agentData);
     }
 
@@ -42,7 +35,7 @@ class SaltAgentController extends Controller
     {
         $control = 'create';
         $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
-        $commission_types = Config::get('constants.driver.commission_types');
+        $commission_types = Config::get('constants.sales_agent.commission_types');
 
         return view('admin.sale_agent.create', compact('control',
          'travel_agent',
@@ -62,8 +55,8 @@ class SaltAgentController extends Controller
     {
         $control = 'edit';
         $sale_agent = SaleAgent::find($id);
-        $user = User::find($id);
-        $commission_types = Config::get('constants.driver.commission_types');
+        $user = $sale_agent->user_obj;
+        $commission_types = Config::get('constants.sales_agent.commission_types');
         $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
         // $transport_type = Transport_Type::pluck('name', 'id');
         return view(
@@ -82,9 +75,9 @@ class SaltAgentController extends Controller
     public function update(Request $request, $id)
     {
         $sale_agent = SaleAgent::find($id);
-        $user = $sale_agent->user;
+        $user = $sale_agent->user_obj;
         // SaleAgent::delete()
-        $this->add_or_update($request, $user, $sale_agent);
+        return $this->add_or_update($request, $user, $sale_agent);
         // return Redirect('admin/sale_agent');
     }
 
@@ -99,12 +92,14 @@ class SaltAgentController extends Controller
             [
                 'phone_no' => ['required', 'unique:users,phone_no,' . $user->id],
                 'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+                // 'commision' => 'required_if:commision_type,profit_percent,sales_percent|numeric|max:99',
             ]
         );
-
-
         if ($validator->fails()) {
-            return redirect()->back()->with('error', $validator->messages());
+            return redirect()->back()->with('error', $validator->messages()->all());
+        }
+        if($request->commision > 99 && in_array($request->commision_type,['profit_percent','sales_percent'])){
+            return redirect()->back()->with('error', ['Commission can not be greater that 99%']);
         }
         $user->name = $request->name;
         $user->last_name = $request->last_name;
@@ -114,17 +109,16 @@ class SaltAgentController extends Controller
         $user->role_id = 3;
         if ($request->password) {
             $user->password =  Hash::make($request->password);
-        }        // dd($user);
+        }
         $user->save();
-
-
         $sale_agent->id = $request->id;
         $sale_agent->user_id = $user->id;
         $sale_agent->commision_type = $request->commision_type;
+        $sale_agent->commision = $request->commision;
         $sale_agent->save();
 
 
-        return redirect()->back();
+        return Redirect('admin/sale_agent');
     }
 
     public function destroy_undestroy($id)

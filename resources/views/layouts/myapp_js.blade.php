@@ -312,8 +312,16 @@ $('#hiddden_name').val(id);
     });
 }
 
+function format_value_for_display(string){
+    return capitalize_first_letter(remove_underscores(string));
+}
+
 function capitalize_first_letter(string) {
+    console.log('ccc',string);
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+function remove_underscores(string) {
+    return string.replace(/_/g, ' ');
 }
 
 function set_lat_long(lat , long , location){

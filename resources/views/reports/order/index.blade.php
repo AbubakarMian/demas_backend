@@ -92,8 +92,10 @@
                         var id = response['data'][i].id;
                         var name = response['data'][i].user_obj.name;
                         // var payment_id = response['data'][i].payment_id;
-                        var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
-                        var user_travel_agent_name = response['data'][i].travel_agent.user_obj.name;
+                        // var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
+                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
+                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
+                        // var user_travel_agent_name = response['data'][i].travel_agent.user_obj.name;
                         // var user_driver_id = response['data'][i].driver.user_obj.name;
                         var cash_collected_by = response['data'][i].cash_collected_by;
                         var cash_collected_by_user_id = response['data'][i].cash_collected_by_user_id;
@@ -182,7 +184,7 @@
                             "<td>" + user_sale_agent_name + "</td>" +
                             "<td>" + user_travel_agent_name + "</td>" +
                             "<td>" + total_price + "</td>" +
-                            "<td>" + trip_type + "</td>" +
+                            "<td>" + capitalize_first_letter(trip_type) + "</td>" +
                             "<td>" + ispaid + "</td>" +
                             "<td>" + order_detail + "</td>" +
                             `<td id='td_status_` + response['data'][i].id + `'>` +

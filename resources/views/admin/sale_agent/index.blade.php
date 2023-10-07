@@ -72,7 +72,7 @@
                         for (var i = 0; i < len; i++) {
                             var id = response['data'][i].id;
                             var sale_agent_name = response['data'][i].user_obj.name;
-                            var commision_type = response['data'][i].commision_type;
+                            var commision_type = format_value_for_display(response['data'][i].commision_type);
                             var commision = response['data'][i].commision;
 
                             console.log('aaa', response['data'][i]);

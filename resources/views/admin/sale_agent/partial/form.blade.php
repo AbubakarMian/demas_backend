@@ -16,7 +16,7 @@
     
     <div class="alert alert-danger">
         <ul>
-            @foreach($message->all() as $error)
+            @foreach($message as $error)
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
@@ -122,22 +122,17 @@
         <div>
             {!! Form::select('commision_type',  $commission_types,null, ['class' => 'form-control',
             'data-parsley-required'=>'true',
-            'data-parsley-trigger'=>'change','onchange'=>'commission_type_changed(this)']) !!}
+            'data-parsley-trigger'=>'change']) !!}
         </div>
     </div>
-    <?php 
-        $show_commision_value = 'display:none';
-    if(!isset($sale_agent) || $sale_agent->commision_type == 'fix_amount'){
-        $show_commision_value = 'display:block';
-    }
-    ?>
-    <div class="form-group commision_value"  style="{!!$show_commision_value!!}">
+   
+    <div class="form-group">
         {!! Form::label('commision','Commision') !!}
         <div>
             {!! Form::number('commision',null, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
-            'placeholder'=>'Commission',
+            'placeholder'=>'Commission','required',
             'min'=>"0"]) !!}
         </div>
     </div>
@@ -163,16 +158,6 @@
     <script>
         function validateForm() {
             return true;
-        }
-        function commission_type_changed(e){
-            console.log($(e).val());
-            if($(e).val() == 'fix_amount'){
-                // alert('fix_amount');
-                $('.commision_value').css('display','block');
-            }
-            else{
-                $('.commision_value').css('display','none');
-            }
         }
     
     </script>

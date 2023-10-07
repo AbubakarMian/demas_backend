@@ -98,28 +98,13 @@
     <div class="form-group">
         {!! Form::label('phone_no','Phone Number') !!}
         <div>
-            {!! Form::number('phone_no',  $number, ['class' => 'form-control',
+            {!! Form::text('phone_no',  $number, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
             'placeholder'=>'Enter Phone Number','required',
             'maxlength'=>"100"]) !!}
         </div>
     </div>
-    
-  
-   
-    
-    {{-- <div class="form-group">
-        <label for="travel_agent">Travel Agents</label>
-        {!! Form::select('travel_agent', $travel_agent, null, [
-            'class' => 'form-control',
-            'data-parsley-required' => 'true',
-            'data-parsley-trigger' => 'change',
-            'placeholder'=>'Select Travel Agents',
-            'required',
-            'maxlength' => '100',
-        ]) !!}
-    </div> --}}
     
     <div class="form-group">
         {!! Form::label('password','Password') !!}
@@ -137,37 +122,32 @@
         <div>
             {!! Form::select('commision_type',  $commission_types,null, ['class' => 'form-control',
             'data-parsley-required'=>'true',
-            'data-parsley-trigger'=>'change','required']) !!}
+            'data-parsley-trigger'=>'change','onchange'=>'commission_type_changed(this)']) !!}
         </div>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    <?php 
+        $show_commision_value = 'display:none';
+    if(!isset($sale_agent) || $sale_agent->commision_type == 'fix_amount'){
+        $show_commision_value = 'display:block';
+    }
+    ?>
+    <div class="form-group commision_value"  style="{!!$show_commision_value!!}">
+        {!! Form::label('commision','Commision') !!}
+        <div>
+            {!! Form::number('commision',null, ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Commission',
+            'min'=>"0"]) !!}
+        </div>
+    </div>
     
     <span id="err" class="error-product"></span>
     
     
     <div class="form-group col-md-12">
     </div>
-    
-    
-    
-    
+
     
     <div class="col-md-5 pull-left">
         <div class="form-group text-center">
@@ -183,6 +163,16 @@
     <script>
         function validateForm() {
             return true;
+        }
+        function commission_type_changed(e){
+            console.log($(e).val());
+            if($(e).val() == 'fix_amount'){
+                // alert('fix_amount');
+                $('.commision_value').css('display','block');
+            }
+            else{
+                $('.commision_value').css('display','none');
+            }
         }
     
     </script>

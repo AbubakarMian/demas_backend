@@ -12,6 +12,16 @@ class SaleAgent extends Model
     use SoftDeletes;
     protected $table = 'sale_agent';
 
+    // protected function CommisionType(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn (string $value) => ucwords(str_replace($value),'_',' '),
+    //     );
+    // }
+    public function getCommisionTypeAttribute($value)
+    {
+        return ucwords(str_replace('_',' ',$value));
+    }
 
 
     public function user_name()

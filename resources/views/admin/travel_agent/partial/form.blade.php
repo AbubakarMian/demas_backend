@@ -16,7 +16,7 @@
     
     <div class="alert alert-danger">
         <ul>
-            @foreach($message->all() as $error)
+            @foreach($message as $error)
                 <li>{{ $error }}</li>
             @endforeach
         </ul>

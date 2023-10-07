@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class TravelAgentController extends Controller
 {
@@ -43,9 +44,9 @@ class TravelAgentController extends Controller
     {
         $travel_agent = new Travel_Agent();
         $user = new User();
-        $this->add_or_update($request, $user, $travel_agent);
+        return $this->add_or_update($request, $user, $travel_agent);
 
-        return redirect('admin/travel_agent');
+        // return redirect('admin/travel_agent');
     }
     public function edit($id)
     {
@@ -71,13 +72,24 @@ class TravelAgentController extends Controller
     {
         $travel_agent = Travel_Agent::with('user_obj')->find($id);
         $user = $travel_agent->user_obj;
-        $this->add_or_update($request, $user, $travel_agent);
-        return Redirect('admin/travel_agent');
+        return $this->add_or_update($request, $user, $travel_agent);
+        // return Redirect('admin/travel_agent');
     }
 
 
     public function add_or_update(Request $request, $user, $travel_agent)
     {
+        
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'phone_no' => ['required', 'unique:users,phone_no,' . $user->id],
+                'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->messages()->all());
+        }
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
@@ -89,7 +101,7 @@ class TravelAgentController extends Controller
         $travel_agent->id = $request->id;
         $travel_agent->user_id = $user->id;
         $travel_agent->save();
-        return redirect()->back();
+        return Redirect('admin/travel_agent');
     }
 
     public function destroy_undestroy($id)

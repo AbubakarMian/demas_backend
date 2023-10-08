@@ -317,11 +317,10 @@ function format_value_for_display(string){
 }
 
 function capitalize_first_letter(string) {
-    console.log('ccc',string);
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    return string ? string.charAt(0).toUpperCase() + string.slice(1):'';
 }
 function remove_underscores(string) {
-    return string.replace(/_/g, ' ');
+    return string ? string.replace(/_/g, ' '):'';
 }
 
 function set_lat_long(lat , long , location){

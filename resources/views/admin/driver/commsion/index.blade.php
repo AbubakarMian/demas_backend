@@ -172,11 +172,11 @@
             }, 500);
         }
 
-        function update_user_price(transport_prices_id, e) {
+        function update_user_price(price_id, e) {
 
             var commission = $(e).val();
             $.ajax({
-                url: '{!! asset('admin/travel_agent_commission/update_price') !!}/' + transport_prices_id + '?commission=' + commission,
+                url: '{!! asset('admin/driver_commission/update_price') !!}/' + price_id + '?commission=' + commission,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {

@@ -111,7 +111,7 @@
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
-            'placeholder'=>'Select Travel Agents',
+            'placeholder'=>'Select Sale Agent',
             'maxlength' => '100',
         ]) !!}
     </div>

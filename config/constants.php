@@ -13,6 +13,10 @@ return [
         'commission_types'=>[
             'monthly'=>'Monthly',
             'per_trip'=>'Per Trip',
+        ],
+        'commission_types_keys'=>[
+            'monthly'=>'monthly',
+            'per_trip'=>'per_trip',
         ]
     ],
     'sales_agent'=>[

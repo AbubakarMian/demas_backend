@@ -21,8 +21,7 @@ class SlotController extends Controller
 
     public function get_slot(Request $request)
     {
-        // $slot = Slot::with('journey')->orderBy('created_at', 'DESC')->select('*')->get();
-        $slot = Slot::orderBy('created_at', 'DESC')->select('*')->get();
+        $slot = Slot::where('is_default',0)->orderBy('created_at', 'DESC')->select('*')->get();
         $slotData['data'] = $slot;
         echo json_encode($slotData);
     }

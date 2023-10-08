@@ -100,7 +100,7 @@ $(document).ready(function(){
                     "<td>" +driver_name+ "</td>" +
                     "<td>" +email+ "</td>" +
                     "<td>" +phone_no+ "</td>" +
-                    "<td>" +commision_type+ "</td>" +
+                    "<td>" + format_value_for_display(commision_type)+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
        

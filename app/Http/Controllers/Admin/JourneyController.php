@@ -46,7 +46,6 @@ class JourneyController extends Controller
         $control = 'edit';
         $journey = Journey::find($id);
         $location = Locations::pluck('name','id');
-        // $category = Category::pluck('name','id');
         return view('admin.journey.create', compact(
             'control',
             'journey',
@@ -58,7 +57,6 @@ class JourneyController extends Controller
     public function update(Request $request, $id)
     {
         $journey = Journey::find($id);
-        // Journey::delete()
         $this->add_or_update($request, $journey,false);
         return Redirect('admin/journey');
     }
@@ -66,13 +64,10 @@ class JourneyController extends Controller
 
     public function add_or_update(Request $request, $journey,$add_journey_slot=true)
     {
-        // dd($request->all());
-
         $location_pickup = Locations::find($request->pickup_location_id);
         $location_dropoff = Locations::find($request->dropoff_location_id);
-        // dd($location_pickup ,'pickup', $location_dropoff,'drop');
-
-        $journey->name = $location_pickup->name.' to '.$location_dropoff->name;
+        // $journey->name = $location_pickup->name.' to '.$location_dropoff->name;
+        $journey->name = $request->name;
         $journey->pickup_location_id = $request->pickup_location_id;
         $journey->dropoff_location_id = $request->dropoff_location_id;
 

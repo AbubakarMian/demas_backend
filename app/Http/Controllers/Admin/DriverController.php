@@ -66,7 +66,7 @@ class DriverController extends Controller
     public function update(Request $request, $id)
     {
         $driver = Driver::find($id);
-        $user = $driver->user;
+        $user = $driver->user_obj;
         return $this->add_or_update($request, $user, $driver);
         // return Redirect('admin/driver');
     }
@@ -103,6 +103,7 @@ class DriverController extends Controller
         $driver->id = $request->id;
         $driver->user_id = $user->id;
         $driver->commision_type = $request->commision_type;
+        $driver->commision = $request->commision;
         $driver->save();
         return Redirect('admin/driver');
     }

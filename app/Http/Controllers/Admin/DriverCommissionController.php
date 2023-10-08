@@ -6,13 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Driver;
 use App\Models\DriverCommission;
 use App\Models\Journey;
-use App\Models\Journey_Slot;
 use App\Models\Slot;
 use App\Models\Transport_Type;
-use App\Models\Travel_Agent;
-use App\Models\TravelAgentCommission;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Config;
 
 class DriverCommissionController extends Controller
 {
@@ -31,11 +28,11 @@ class DriverCommissionController extends Controller
     }
     public function get_commision_prices(Request $request)
     {
-        $data = [];
         $transport_types = Transport_Type::get();
         $journies = Journey::get();
         $slots = Slot::get();
-        $drivers = Driver::get();
+        $drivers = Driver::where('commision_type',
+                    Config::get('constants.driver.commission_types.per_trip'))->get();
         // 
         // $slot_arr = Journey_Slot::get();
         foreach ($slots as $slot_key => $slot) {
@@ -67,7 +64,12 @@ class DriverCommissionController extends Controller
         }
         $driver_commission = DriverCommission::with([
             'journey', 'slot', 'transport_type','user_obj'
-        ]);
+        ])
+        ->whereHas('driver',function($query){
+            $query->where('commision_type',
+            Config::get('constants.driver.commission_types_keys.per_trip'));
+        })
+        ;
 
         if($request->journey_id){
             $driver_commission = $driver_commission->where('journey_id',$request->journey_id);

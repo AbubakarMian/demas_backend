@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-class AdminAuthCheck
+class SubAdminAuthCheck
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,8 @@ class AdminAuthCheck
     {
         $user =Auth::user();
         if(Auth::Check()){
-            if($user->role_id == 1 ){
-            // if( in_array($user->role_id,[1,3,4,5])  ){
+            // if($user->role_id == 1 ){
+            if( in_array($user->role_id,[1,3,4,5])  ){
                 $response = $next($request);
 
                 $response->headers->set('Cache-Control','nocache, no-store, max-age=0, must-revalidate');

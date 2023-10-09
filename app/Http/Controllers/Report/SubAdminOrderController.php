@@ -8,7 +8,7 @@ use App\Models\Order_Detail;
 use App\Models\Transport_Type;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class SubAdminOrderController extends Controller
 {
 
     public function index(Request $request)

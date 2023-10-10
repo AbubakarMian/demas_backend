@@ -21,8 +21,10 @@ class DriverController extends Controller
 
     public function get_driver(Request $request)
     {
-        $driver = Driver::with('user_obj')->orderBy('created_at', 'DESC')->get();
-        $driverData['data'] = $driver;
+        $drivers = Driver::with('user_obj')->whereHas('user_obj',function($q){
+            $q->where('role_id',5);
+        })->orderBy('created_at', 'DESC')->get();
+        $driverData['data'] = $drivers;
         echo json_encode($driverData);
     }
 
@@ -95,7 +97,7 @@ class DriverController extends Controller
         $user->phone_no = $request->phone_no;
         $user->city = $request->city;
         $user->adderss = $request->adderss;
-        $user->role_id = 3;
+        $user->role_id = 5;
         if ($request->password) {
             $user->password =  Hash::make($request->password);
         }

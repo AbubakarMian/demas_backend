@@ -11,9 +11,6 @@
 @section('table-properties')
     width="400px" style="table-layout:fixed;"
 @endsection
-
-
-
 <style>
     td {
         white-space: nowrap;
@@ -49,19 +46,29 @@
     }
 </style>
 @section('table')
-
     <table class="fhgyt" id="orderTableAppend" style="opacity: 0">
         <thead>
-            <tr>
-                <th>User</th>
-                <th>Sale Agent</th>
-                <th>Travel Agent</th>
-                <th>Price</th>
-                <th>Trip Type</th>
-                <th>Paid</th>
-                <th>Order Details</th>
-                <th>Status </th>
-            </tr>
+            @if ($user->role_id == 5)
+                <tr>
+                    <th>User</th>
+                    <th>Journey</th>
+                    <th>Driver</th>
+                    <th>Pickup Time</th>
+                    <th>Commission</th>
+                    <th>Status </th>
+                </tr>
+            @else
+                <tr>
+                    <th>User</th>
+                    <th>Sale Agent</th>
+                    <th>Travel Agent</th>
+                    <th>Commission</th>
+                    <th>Trip Type</th>
+                    <th>Paid</th>
+                    <th>Order Details</th>
+                    <th>Status </th>
+                </tr>
+            @endif
         </thead>
         <tbody>
         </tbody>
@@ -72,31 +79,68 @@
 
     <script>
         $(document).ready(function() {
-            fetchRecords();
+            if ("{!!$user['role_id']!!}" == 5) {
+                fetchDriverRecords();
+            } else {
+                fetchRecords();
+            }
         });
+
+        function fetchDriverRecords() {
+            // alert('fe');
+            $.ajax({
+                url: '{!! asset('admin/sub_admin/order/get_driver_order') !!}',
+                type: 'get',
+                dataType: 'json',
+                success: function(response) {
+                    console.log('response', response);
+                    $("#orderTableAppend").css("opacity", 1);
+                    var len = response['data'].length;
+                    for (var i = 0; i < len; i++) {
+                        var row_data = response['data'][i];
+                        var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                            "<td>" + row_data.order.user_obj.name + "</td>" +
+                            "<td>" + row_data.journey.name + "</td>" +
+                            "<td>" + row_data.driver.user_obj.name + "</td>" +
+                            "<td>" + format_date_time_from_timestamp(row_data.pick_up_date_time)['date_time'] +
+                            "</td>" +
+                            "<td>" + row_data.driver_commission + "</td>" +
+                            "<td>" + capitalize_first_letter(row_data.status) + "</td>" +
+                            "</tr>";
+                        $("#orderTableAppend tbody").append(tr_str);
+
+
+                    }
+                    $(document).ready(function() {
+                        console.log('sadasdasdad');
+                        $('#orderTableAppend').DataTable({
+                            dom: '<"top_datatable"B>lftipr',
+                            buttons: [
+                                'copy', 'csv', 'excel', 'pdf', 'print'
+                            ],
+                        });
+                    });
+                }
+            });
+        }
 
         function fetchRecords() {
 
             $.ajax({
-                url: '{!! asset('admin/order/get_order') !!}',
+                url: '{!! asset('admin/sub_admin/order/get_order') !!}',
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
-                    console.log('response');
+                    console.log('response', response);
                     $("#orderTableAppend").css("opacity", 1);
                     var len = response['data'].length;
-                    console.log('response2');
-
-
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
                         var name = response['data'][i].user_obj.name;
-                        // var payment_id = response['data'][i].payment_id;
-                        // var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
-                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
-                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
-                        // var user_travel_agent_name = response['data'][i].travel_agent.user_obj.name;
-                        // var user_driver_id = response['data'][i].driver.user_obj.name;
+                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name ??
+                            '';
+                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name ??
+                            '';
                         var cash_collected_by = response['data'][i].cash_collected_by;
                         var cash_collected_by_user_id = response['data'][i].cash_collected_by_user_id;
                         var price = response['data'][i].price;
@@ -110,9 +154,6 @@
                         var payment_collected_price = response['data'][i].payment_collected_price;
                         var order_type = response['data'][i].order_type;
                         var payment_type = response['data'][i].payment_type;
-
-                        console.log('aaa', response['data'][i]);
-
                         var order_detail =
                             `<a class="btn btn-info" data-toggle="modal" data-target="#orderdetails"
                                 onclick="get_details(` + id + `)">View</a>`;
@@ -127,7 +168,7 @@
                                         <tr>
                                             <th>Journey</th>
                                             <th>PickUp Date/Time</th>
-                                            <th>Price</th>
+                                            <th>Commission</th>
                                             <th>Driver</th>
                                         </tr>
                                     </thead>
@@ -176,11 +217,19 @@
                         } else {
                             var status = capitalize_first_letter(response['data'][i].status);
                         }
+
+                        if (response['role_id'] == 3) { // sale agent
+                            var status = capitalize_first_letter(response['data'][i].status);
+                            var commission = response['data'][i].sale_agent_commission_total;
+                        } else { //travel_agent
+                            var commission = response['data'][i].travel_agent_commission_total;
+                        }
+
                         var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
                             "<td>" + name + "</td>" +
                             "<td>" + user_sale_agent_name + "</td>" +
                             "<td>" + user_travel_agent_name + "</td>" +
-                            "<td>" + total_price + "</td>" +
+                            "<td>" + commission + "</td>" +
                             "<td>" + capitalize_first_letter(trip_type) + "</td>" +
                             "<td>" + ispaid + "</td>" +
                             "<td>" + order_detail + "</td>" +
@@ -218,19 +267,19 @@
                         $.each(response.response['order_details'], function(index, item) {
                             console.log('response item', item);
                             console.log('response index', index);
-                            var drivers = `<select onchange="change_driver('`+item.id+`',this)">`;
-                                $.each(response.response['drivers'],function(driver_index,driver_item){
-                                    var user_driver = driver_item.user_obj;
-                                    var selected = user_driver.id == item.driver_user_id ? 'selected':'';
-                                    drivers += `<option value="`+user_driver.id+`" `+selected+`>`+
-                                        user_driver.name+`</option>`;
-                                })
-                                drivers +='</select>';
+                            if (response['role_id'] == 3) { // sale agent
+                                var status = capitalize_first_letter(item.status);
+                                var commission = item.sale_agent_commission;
+                            } else { //travel_agent
+                                var commission = item.travel_agent_commission;
+                            }
                             details_list += `<tr>
                                 <td>` + item.journey.name + `</td>
-                                <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
-                                <td>` + item.price + `</td>
-                                <td>` + drivers + `</td>
+                                <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] +
+                                `</td>
+                                <td>` + commission + `</td>
+                                <td>` + item.driver.user_obj.name + `</td>
+                                
                                 </tr>`;
                         })
                         // <td>` + item.driver.user_obj.name + `</td>
@@ -246,32 +295,6 @@
 
         }
 
-        function change_driver(order_detail_id, e) {
-            console.log('get_details order_detail_id', order_detail_id);
-            var driver_user_id = $(e).find(':selected').val();
-            $.ajax({
-                url: "{!! asset('admin/order/update_order_detail_driver') !!}/" + order_detail_id,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    _token: '{!! @csrf_token() !!}',
-                    driver_user_id: driver_user_id
-                },
-                success: function(response) {
-                    console.log(response.status);
-                    console.log('response', response.status);
-                    if (response.status) {
-                        console.log('updated row ',order_detail_id);
-                    } else {
-                        alert('Someting went wrong');
-                    }
-                },
-                error: function(err) {
-                    console.log('ajax error');
-                }
-            });
-
-        }
 
         function change_status(order_id, status) {
             console.log('get_details order_id', order_id);
@@ -289,7 +312,7 @@
                     $('.orderdetails_list').html('');
                     if (response.status) {
                         var myTable = $('#orderTableAppend').DataTable();
-                        console.log('removeasdasdasd row ','#row_' + order_id);
+                        console.log('removeasdasdasd row ', '#row_' + order_id);
                         let rowIndex = myTable.row('#row_' + order_id).index();
                         myTable.cell(rowIndex, 7).data(capitalize_first_letter(status));
                         myTable.draw();

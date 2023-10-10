@@ -67,7 +67,6 @@ class SaltAgentController extends Controller
                 'travel_agent',
                 'user',
                 'commission_types',
-
             )
         );
     }

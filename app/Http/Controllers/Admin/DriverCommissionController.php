@@ -32,8 +32,8 @@ class DriverCommissionController extends Controller
         $journies = Journey::get();
         $slots = Slot::get();
         $drivers = Driver::where('commision_type',
-                    Config::get('constants.driver.commission_types.per_trip'))->get();
-        // 
+                    Config::get('constants.driver.commission_types_keys.per_trip'))->get();
+        // dd(Config::get('constants.driver.commission_types_keys.per_trip'));
         // $slot_arr = Journey_Slot::get();
         foreach ($slots as $slot_key => $slot) {
             foreach ($drivers as $driver_key => $driver) {

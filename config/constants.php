@@ -29,6 +29,10 @@ return [
     'travel_agent'=>[
         'commission_types'=>[
             'per_trip'=>'per_trip',
+        ],
+        'commission_types_keys'=>[
+            'monthly'=>'monthly',
+            'per_trip'=>'per_trip',
         ]
     ],
     'order_status'=>[

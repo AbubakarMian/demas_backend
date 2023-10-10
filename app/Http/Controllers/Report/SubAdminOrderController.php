@@ -6,27 +6,58 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Order_Detail;
 use App\Models\Transport_Type;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubAdminOrderController extends Controller
 {
 
     public function index(Request $request)
     {
-        return view('reports.order.index');
+        $user = Auth::user();
+        $user = User::find(10);;
+        // dd($user);
+        return view('reports.sub_admin.order.index', compact('user'));
     }
+    public function get_drivers_order(Request $request)
+    {
+        $user = Auth::user();
+        $user = User::find(10);;
 
-
+        $order_details = Order_Detail::with(
+            ['order' => ['user_obj', 'sale_agent.user_obj', 'travel_agent.user_obj'],
+            'pickup_location',
+            'dropoff_location',
+            'journey',
+            'driver.user_obj',
+            'journey_slot',
+            ])
+        ->where('driver_user_id', $user->id);
+// dd($order_details->get());
+        $order_details = $order_details->orderBy('created_at', 'DESC')->select('*')->get();
+        $orderData['data'] = $order_details;
+        $orderData['role_id'] = $user->role_id;
+        echo json_encode($orderData);
+    }
     public function get_order(Request $request)
     {
-        $order = Order::with('user_obj', 'sale_agent.user_obj', 'travel_agent.user_obj')->orderBy('created_at', 'DESC')->select('*')->get();
+        $user = Auth::user();
+        $order = Order::with('user_obj', 'sale_agent.user_obj', 'travel_agent.user_obj');
+        if ($user->role_id == 3) { // 3 = sale_agent 
+            $order = $order->where('user_sale_agent_id', $user->id);
+        } elseif ($user->role_id == 4) { // 4 = travel_agent 
+            $order = $order->where('user_travel_agent_id', $user->id);
+        } 
+        $order = $order->orderBy('created_at', 'DESC')->select('*')->get();
         $orderData['data'] = $order;
+        $orderData['role_id'] = $user->role_id;
         echo json_encode($orderData);
     }
 
     public function get_order_details_list(Request $request, $order_id)
     {
-
+        $user = Auth::user();
         $order_details = Order_Detail::where('order_id', $order_id)
             ->with([
                 'pickup_location',
@@ -35,15 +66,26 @@ class SubAdminOrderController extends Controller
                 'journey', // its necessary
                 'journey_slot.slot', // its not necessary
             ])->get();
-        return $this->sendResponse(200, $order_details);
+        $orderData['role_id'] = $user->role_id;
+        $orderData['order_details'] = $order_details;
+
+        return $this->sendResponse(200, $orderData);
     }
 
     public function update_order_status(Request $request, $order_id)
     {
-
+        $user = Auth::user();
         $order = Order::find($order_id);
         $order->status = $request->status;
+        $order->status_updated_by_user_id = $user->id;
         $order->save();
+        $order_details = Order_Detail::where('order_id', $order_id)->get();
+
+        foreach ($order_details as $key => $order_detail) {
+            $order_detail->status = $request->status;
+            $order_detail->status_updated_by_user_id = $user->id;
+            $order_detail->save();
+        }
         return $this->sendResponse(200, $order);
     }
 

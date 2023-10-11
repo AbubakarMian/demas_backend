@@ -107,7 +107,7 @@
     </div>
     <div class="form-group">
         <label for="sale_agent">Sale Agents</label>
-        {!! Form::select('sale_agent', $user_sale_agents, null, [
+        {!! Form::select('user_sale_agent_id', $user_sale_agents, null, [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',

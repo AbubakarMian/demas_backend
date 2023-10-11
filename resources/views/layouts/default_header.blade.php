@@ -149,6 +149,7 @@ img.logo_back {
 
 
                         <!-- Modules -->
+                        @if(count($admin_common->modules))
                         <li>
                             <a href="javascript:;">
                                 <i class="toggle-accordion"></i>
@@ -167,10 +168,12 @@ img.logo_back {
                                 @endforeach
                             </ul>
                         </li>
+                        @endif
                         <!-- /Modules -->
 
 
                         <!-- Reports -->
+                        @if(count($admin_common->reports))
                         <li>
                             <a href="javascript:;">
                                 <i class="toggle-accordion"></i>
@@ -191,6 +194,7 @@ img.logo_back {
                                 @endforeach
                             </ul>
                         </li>
+                        @endif
                         <!-- /Reports -->
                     </ul>
                 </nav>

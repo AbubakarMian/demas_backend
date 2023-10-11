@@ -28,12 +28,10 @@ class TravelAgentController extends Controller
         echo json_encode($travel_agentData);
     }
 
-
-
     public function create()
     {
         $control = 'create';
-        $user_sale_agents = Users::where('role_id', 3)->pluck('name', 'id');
+        $user_sale_agents = SaleAgent::with('user_obj')->get()->pluck('user_obj.name', 'user_obj.id');
         return view('admin.travel_agent.create', compact(
             'control',
             'user_sale_agents'
@@ -45,25 +43,20 @@ class TravelAgentController extends Controller
         $travel_agent = new Travel_Agent();
         $user = new User();
         return $this->add_or_update($request, $user, $travel_agent);
-
-        // return redirect('admin/travel_agent');
     }
     public function edit($id)
     {
         $control = 'edit';
         $travel_agent = Travel_Agent::with('user_obj')->find($id);
         $user = $travel_agent->user_obj;
-        $user_sale_agents = Users::where('role_id', 3)->pluck('name', 'id');
-        $sale_agent = SaleAgent::pluck('id');
+        $user_sale_agents = SaleAgent::with('user_obj')->get()->pluck('user_obj.name', 'user_obj.id');
         return view(
             'admin.travel_agent.create',
             compact(
                 'control',
                 'travel_agent',
                 'user',
-                'sale_agent',
                 'user_sale_agents',
-
             )
         );
     }
@@ -96,10 +89,13 @@ class TravelAgentController extends Controller
         $user->adderss = $request->adderss;
         $user->phone_no = $request->phone_no;
         $user->role_id = 4;
-        $user->password =  Hash::make($request->password);
+        if($request->password){
+            $user->password =  Hash::make($request->password);
+        }
         $user->save();
         $travel_agent->id = $request->id;
         $travel_agent->user_id = $user->id;
+        $travel_agent->user_sale_agent_id = $request->user_sale_agent_id;
         $travel_agent->save();
         return Redirect('admin/travel_agent');
     }
@@ -109,9 +105,11 @@ class TravelAgentController extends Controller
         $travel_agent = Travel_Agent::find($id);
         if ($travel_agent) {
             Travel_Agent::destroy($id);
+            Users::destroy($travel_agent->user_id);
             $new_value = 'Activate';
         } else {
             Travel_Agent::withTrashed()->find($id)->restore();
+            Users::withTrashed()->find($travel_agent->user_id)->restore();
             $new_value = 'Delete';
         }
         $response = Response::json([

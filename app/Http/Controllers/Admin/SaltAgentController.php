@@ -8,6 +8,7 @@ use App\Models\Sale_Agent;
 use App\Models\SaleAgent;
 use App\Models\Travel_Agent;
 use App\Models\User;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -28,8 +29,6 @@ class SaltAgentController extends Controller
         $sale_agentData['data'] = $sale_agent;
         echo json_encode($sale_agentData);
     }
-
-
 
     public function create()
     {
@@ -121,9 +120,11 @@ class SaltAgentController extends Controller
         $sale_agent = SaleAgent::find($id);
         if ($sale_agent) {
             SaleAgent::destroy($id);
+            Users::destroy($sale_agent->user_id);
             $new_value = 'Activate';
         } else {
             SaleAgent::withTrashed()->find($id)->restore();
+            Users::withTrashed()->find($sale_agent->user_id)->restore();
             $new_value = 'Delete';
         }
         $response = Response::json([

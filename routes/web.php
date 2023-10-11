@@ -197,27 +197,26 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::post('delete/{id}', [OrderController::class, 'destroy_undestroy'])->name('order.delete');
     });
 //admin/sub_admin
-    Route::group([ 'prefix' => 'sub_admin','middleware' => 'sub_admin_auth'], function () {
-
-        //  =================================  order ==========================
-        Route::group(['prefix' => 'order'], function () {
-            Route::get('/', [SubAdminOrderController::class, 'index'])->name('sub_admin.order.index');
-            Route::get('get_order', [SubAdminOrderController::class, 'get_order'])->name('sub_admin.order.index');
-            Route::get('get_driver_order', [SubAdminOrderController::class, 'get_drivers_order'])->name('sub_admin.get_drivers_order.index');
-            Route::get('details_list/{order_id}', [SubAdminOrderController::class, 'get_order_details_list'])->name('sub_admin.order.get_order_details_list');
-            // Route::post('update_order_status/{order_id}', [SubAdminOrderController::class, 'update_order_status'])->name('sub_admin.order.update_order_status');
-            // Route::get('create', [SubAdminOrderController::class, 'create'])->name('sub_admin.order.create'); //add
-            // Route::post('save', [SubAdminOrderController::class, 'save'])->name('sub_admin.order.save');
-            // Route::get('edit/{id}', [SubAdminOrderController::class, 'edit'])->name('sub_admin.order.edit');
-            // Route::post('update/{id}', [SubAdminOrderController::class, 'update'])->name('sub_admin.order.update');
-            // Route::post('delete/{id}', [SubAdminOrderController::class, 'destroy_undestroy'])->name('sub_admin.order.delete');
-        });
-    });
+ 
 });
 
 
-// });
+Route::group([ 'prefix' => 'admin/sub_admin','middleware' => 'sub_admin_auth'], function () {
 
+    //  =================================  order ==========================
+    Route::group(['prefix' => 'order'], function () {
+        Route::get('/', [SubAdminOrderController::class, 'index'])->name('sub_admin.order.index');
+        Route::get('get_order', [SubAdminOrderController::class, 'get_order'])->name('sub_admin.order.index');
+        Route::get('get_driver_order', [SubAdminOrderController::class, 'get_drivers_order'])->name('sub_admin.get_drivers_order.index');
+        Route::get('details_list/{order_id}', [SubAdminOrderController::class, 'get_order_details_list'])->name('sub_admin.order.get_order_details_list');
+        // Route::post('update_order_status/{order_id}', [SubAdminOrderController::class, 'update_order_status'])->name('sub_admin.order.update_order_status');
+        // Route::get('create', [SubAdminOrderController::class, 'create'])->name('sub_admin.order.create'); //add
+        // Route::post('save', [SubAdminOrderController::class, 'save'])->name('sub_admin.order.save');
+        // Route::get('edit/{id}', [SubAdminOrderController::class, 'edit'])->name('sub_admin.order.edit');
+        // Route::post('update/{id}', [SubAdminOrderController::class, 'update'])->name('sub_admin.order.update');
+        // Route::post('delete/{id}', [SubAdminOrderController::class, 'destroy_undestroy'])->name('sub_admin.order.delete');
+    });
+});
 //  =================================  contact_us ==========================
 Route::group(['prefix' => 'admin/contactus'], function () {
     Route::get('/', [ContactUsController::class, 'index'])->name('contact_us.index');

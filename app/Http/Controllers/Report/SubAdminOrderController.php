@@ -16,14 +16,11 @@ class SubAdminOrderController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $user = User::find(10);;
-        // dd($user);
         return view('reports.sub_admin.order.index', compact('user'));
     }
     public function get_drivers_order(Request $request)
     {
         $user = Auth::user();
-        $user = User::find(10);;
 
         $order_details = Order_Detail::with(
             ['order' => ['user_obj', 'sale_agent.user_obj', 'travel_agent.user_obj'],
@@ -34,7 +31,7 @@ class SubAdminOrderController extends Controller
             'journey_slot',
             ])
         ->where('driver_user_id', $user->id);
-// dd($order_details->get());
+        
         $order_details = $order_details->orderBy('created_at', 'DESC')->select('*')->get();
         $orderData['data'] = $order_details;
         $orderData['role_id'] = $user->role_id;

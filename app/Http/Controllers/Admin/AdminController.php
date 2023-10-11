@@ -96,17 +96,13 @@ class AdminController extends Controller
 
     public function sub_admin_dashboard()
     {
-        $modules[] = [
-            'url' => 'admin/user',
-            'title' => 'Users',
-            'image' => "{{ asset('/images/car-2.png') }} ", // Add the image path for Module 1
-        ];
+        $modules = [];
 
         $reports = [];
         $reports[] = [
 
             'url' => 'admin/sub_admin/order',
-            'title' => 'Order ',
+            'title' => 'Orders ',
 
         ];
 
@@ -236,12 +232,12 @@ class AdminController extends Controller
             'title' => 'Order ',
 
         ];        
-        $reports[] = [
+        // $reports[] = [
 
-            'url' => 'admin/sub_admin/order',
-            'title' => 'Order ',
+        //     'url' => 'admin/sub_admin/order',
+        //     'title' => 'Order ',
 
-        ];
+        // ];
 
 
         $myvar = [];

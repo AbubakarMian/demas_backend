@@ -14,40 +14,50 @@ use stdClass;
 
 class UserController extends Controller
 {
-
-    
-    public function register(Request $request)
+    public function register_or_login(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), User::$rules_register);
+            $validator = Validator::make($request->all(), [
+                'phone_no'=>'required',
+            ]);
 
             if ($validator->fails()) {
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
 
                 $user = new User();
-                $user->name = $request->fullname;
-                // $user->father_name = 'fathername';
-                // $user->age = 'age';
-                // $user->gender = 'gender';
-                $user->email = $request->email;
                 $user->phone_no = $request->phone_no;
-                $user->password = Hash::make($request->password);
+                // $user->password = Hash::make($request->password);
                 $user->access_token = uniqid();
-
-                // $user->required_tutor_class_id = $required_tutor_class_id;
-                // $user->latitude = lat;
-                // $user->longitude = long;
-                // $user->image = image;
-                // $user->location = location;
-                // $user->self_rating = rating;
-                // $user->nic_image = $nic_image;
-                // $user->age = age;
-                // $user->role_id = 3;
-                // $user->qualification_id = $qualification_id;
-                // $user->institute_id = $institute_id;
+                $user->otp = rand(10000,99999);
                 $user->save();
 
+                return $this->sendResponse(200, $user);
+            }
+        }
+         catch (\Exception $e) {
+            return $this->sendResponse(
+                500,
+                null,
+                [$e->getMessage()]
+            );
+        }
+    }
+    public function validate_otp(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'otp'=>'required',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendResponse(500, null, $validator->messages()->all());
+            } else {
+
+                $user = User::where('otp',$request->otp)->first();
+                if (!$user) {
+                    return $this->sendResponse(500, null, ['Invalid OTP']);
+                }
                 return $this->sendResponse(200, $user);
             }
         }

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Handler;
 use App\Libraries\Common;
 use App\Mail\SendGeneralEmail;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 // use App\Models\Journey;
@@ -26,6 +27,7 @@ class EmailHandler
 
     public function sendEmail($email_detail){
         if(Config::get('app.env') == 'production'){
+            Log::debug('--------email details----------',[$email_detail]);
             $send_email  = new SendGeneralEmail($email_detail);
             // Mail::to($request->user())->send(new OrderShipped($order));
             // Mail::assertSent($send_email);

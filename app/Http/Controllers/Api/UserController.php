@@ -53,6 +53,7 @@ class UserController extends Controller
                         'email' => $request->email,
                         'name' => $name,
                     ];
+                    $email_details['subject'] = 'Demas OTP';
                     $email_details['data'] = $user;
                     $email_details['view'] = 'email_template.otp';
                     $email_handler->sendEmail($email_details);

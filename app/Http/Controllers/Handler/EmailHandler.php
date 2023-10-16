@@ -27,47 +27,47 @@ class EmailHandler
 
     public function sendEmail($email_detail)
     {
-        // if(Config::get('app.env') == 'production'){
-        Log::debug('--------email details----------', [$email_detail]);
-        Mail::send($email_detail['view'], ['data'=>$email_detail['data']], function ($message) use ($email_detail) {
-            if (!isset($email_detail['from_email'])) {
-                $email_detail['from_email'] = 'admin@demas.com';
-            }
+        if (Config::get('app.env') == 'production') {
+            $email_details['bcc'][] = [
+                'from_email' => 'abubakarhere90@gmailcom',
+                'from_name' => 'Abubakar here bcc',
+            ];
+            $email_details['bcc'][] = [
+                'from_email' => 'abubakrmianmamoon@gmail.com',
+                'from_name' => 'Abubakar bcc',
+            ];
+            Log::debug('--------email details----------', [$email_detail]);
+            Mail::send($email_detail['view'], ['data' => $email_detail['data']], function ($message) use ($email_detail) {
+                if (!isset($email_detail['from_email'])) {
+                    $email_detail['from_email'] = 'admin@demas.com';
+                }
 
-            if (!isset($email_detail['from_name'])) {
-                $email_detail['from_name'] = 'Demas';
-            }
-            if(isset($email_detail['subject'])){
-                $message->subject($email_detail['subject']);
-            }
-            if(isset($email_detail['cc'])){
-                foreach ($email_detail['cc'] as $key => $cc) {
-                    
-                    $message->cc($cc['from_email'],$cc['from_name']);
+                if (!isset($email_detail['from_name'])) {
+                    $email_detail['from_name'] = 'Demas';
                 }
-            }
-            if(isset($email_detail['bcc'])){
-                foreach ($email_detail['bcc'] as $key => $bcc) {
-                    $message->bcc($bcc['from_email'],$bcc['from_name']);
+                if (isset($email_detail['subject'])) {
+                    $message->subject($email_detail['subject']);
                 }
-            }
-            if(isset($email_detail['attachments'])){
-                foreach ($email_detail['attachments'] as $key => $attachment) {
-                    $message->attach($attachment);
-                }
-            }
-            
-            $message->from($email_detail['from_email'], $email_detail['from_name']);
-            $message->to($email_detail['to_email'], $email_detail['to_name']);
-        });
-        return;
-        $send_email  = new SendGeneralEmail($email_detail);
-        // dd($email_detail['recipient_emails']);
-        // Log::debug('recipient_emails',[$email_detail['recipient_emails'][0]['email']]);
-        // Mail::to($request->user())->send(new OrderShipped($order));
-        // Mail::assertSent($send_email);
-        Mail::send($send_email);
-        // }
+                if (isset($email_detail['cc'])) {
+                    foreach ($email_detail['cc'] as $key => $cc) {
 
+                        $message->cc($cc['from_email'], $cc['from_name']);
+                    }
+                }
+                if (isset($email_detail['bcc'])) {
+                    foreach ($email_detail['bcc'] as $key => $bcc) {
+                        $message->bcc($bcc['from_email'], $bcc['from_name']);
+                    }
+                }
+                if (isset($email_detail['attachments'])) {
+                    foreach ($email_detail['attachments'] as $key => $attachment) {
+                        $message->attach($attachment);
+                    }
+                }
+
+                $message->from($email_detail['from_email'], $email_detail['from_name']);
+                $message->to($email_detail['to_email'], $email_detail['to_name']);
+            });
+        }
     }
 }

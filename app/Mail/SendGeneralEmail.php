@@ -47,20 +47,17 @@ class SendGeneralEmail extends Mailable
 
         $to = [];
 
-        $to[] =            [
-            $this->details['to_email'] ?? 'abubakrmianmamoon@gmail.com',
-            $this->details['to_name'] ?? 'Abubakar'
-        ];;
+        $to[] = [
+            new Address('abubakrmianmamoon@gmail.com','Abubakar')
+        ];
 
-        $to[] =            [
-            $this->details['to_email'] ?? 'abubakarhere90@gmail.com',
-            $this->details['to_name'] ?? 'AbubakarHere'
-        ];;
+        $to[] = [
+            new Address('abubakarhere90@gmail.com','AbubakarHere')
+        ];
         foreach ($this->details['recipient_emails'] as $to_email) {
             $to[] = [
-                    $this->details['to_email'] ?? $to_email['email'],
-                    $this->details['to_name'] ?? $to_email['name']
-                ];
+                new Address( $to_email['email'],$to_email['name'])
+            ];
         }
         return new Envelope(
             from: new Address(
@@ -105,8 +102,8 @@ class SendGeneralEmail extends Mailable
         $attachments = $this->details['attachments'] ?? [];
         foreach ($attachments as $key => $attachment) {
             $attachements_email[] = Attachment::fromPath($attachment['path'])
-            ->as($attachment['name'])
-            ->withMime($attachment['mime']);
+                ->as($attachment['name'])
+                ->withMime($attachment['mime']);
         }
         return $attachements_email;
         // return [
@@ -115,7 +112,7 @@ class SendGeneralEmail extends Mailable
         //             ->withMime('application/pdf'),
         // ];
 
-       
+
         // return [];
     }
 }

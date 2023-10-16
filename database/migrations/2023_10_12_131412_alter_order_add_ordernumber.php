@@ -13,7 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('order', function (Blueprint $table) {
+            $table->string('order_id',150)->nullable()->default(null);
+            $table->string('receipt_url',300)->nullable()->default(null);
+        });
     }
 
     /**

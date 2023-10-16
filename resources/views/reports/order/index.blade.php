@@ -53,6 +53,7 @@
     <table class="fhgyt" id="orderTableAppend" style="opacity: 0">
         <thead>
             <tr>
+                <th>OrderId</th>
                 <th>User</th>
                 <th>Sale Agent</th>
                 <th>Travel Agent</th>
@@ -177,6 +178,7 @@
                             var status = capitalize_first_letter(response['data'][i].status);
                         }
                         var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                            "<td>" + response['data'][i].order_id + "</td>" +
                             "<td>" + name + "</td>" +
                             "<td>" + user_sale_agent_name + "</td>" +
                             "<td>" + user_travel_agent_name + "</td>" +

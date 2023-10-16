@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\EmailHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -19,18 +20,33 @@ class UserController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'phone_no'=>'required',
+                'email'=>'email',
             ]);
 
             if ($validator->fails()) {
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
 
+                $name = 'user';
+                if($request->email){
+                    $name = explode('@',$request->email)[0];
+                }
+                $user = User::where('phone_no',$request->phone_no)->first();
                 $user = new User();
                 $user->phone_no = $request->phone_no;
                 // $user->password = Hash::make($request->password);
                 $user->access_token = uniqid();
                 $user->otp = rand(10000,99999);
                 $user->save();
+
+                $email_handler = new EmailHandler();
+                $email_details['recipient_emails'] = [
+                    'email'=>$request->email,
+                    'name'=>$name,
+                ];
+                $email_details['data'] = $user;
+                $email_details['view'] = 'email_template.otp';
+                $email_handler->sendEmail($email_details);
 
                 return $this->sendResponse(200, $user);
             }

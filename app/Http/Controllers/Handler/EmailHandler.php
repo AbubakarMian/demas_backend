@@ -28,7 +28,8 @@ class EmailHandler
         if(Config::get('app.env') == 'production'){
             $send_email  = new SendGeneralEmail($email_detail);
             // Mail::to($request->user())->send(new OrderShipped($order));
-            Mail::assertSent($send_email);
+            // Mail::assertSent($send_email);
+            Mail::send($send_email);
         }
        
     }

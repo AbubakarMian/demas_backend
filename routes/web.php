@@ -30,6 +30,26 @@ use App\Http\Controllers\User\CommonServicesController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+
+
+       $pdf = PDF::loadView('pdf.sample', [
+            'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
+            'description' => 'This is an example Laravel pdf tutorial.',
+            'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a>'
+        ]);
+
+        return $pdf->download('sample.pdf');
+
+                   $twilio = new Client(env('TWILIO_ACCOUNT_SID'), env('TWILIO_AUTH_TOKEN'));
+            $twilio->messages->create(
+                "whatsapp:".$user->phone_number, [
+                    "from" => "whatsapp:".env('TWILIO_SANDBOX_NUMBER'),
+                    "body" => "Here's your invoice!",
+"mediaUrl" => [env("NGROK_URL")."/invoices/".$invoiceFile]
+                ]
+            );
+
+            https://www.twilio.com/blog/generate-send-pdf-invoices-whatsapp-laravel-php-stripe-twilio-api
 */
 
 Route::get('/', function () {
@@ -188,20 +208,22 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::get('get_order', [OrderController::class, 'get_order'])->name('order.index');
         Route::get('details_list/{order_id}', [OrderController::class, 'get_order_details_list'])->name('order.get_order_details_list');
         Route::post('update_order_status/{order_id}', [OrderController::class, 'update_order_status'])->name('order.update_order_status');
-        Route::post('update_order_detail_driver/{order_detail_id}', 
-                        [OrderController::class, 'update_order_detail_driver']);
+        Route::post(
+            'update_order_detail_driver/{order_detail_id}',
+            [OrderController::class, 'update_order_detail_driver']
+        );
         Route::get('create', [OrderController::class, 'create'])->name('order.create'); //add
         Route::post('save', [OrderController::class, 'save'])->name('order.save');
         Route::get('edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
         Route::post('update/{id}', [OrderController::class, 'update'])->name('order.update');
         Route::post('delete/{id}', [OrderController::class, 'destroy_undestroy'])->name('order.delete');
     });
-//admin/sub_admin
- 
+    //admin/sub_admin
+
 });
 
 
-Route::group([ 'prefix' => 'admin/sub_admin','middleware' => 'sub_admin_auth'], function () {
+Route::group(['prefix' => 'admin/sub_admin', 'middleware' => 'sub_admin_auth'], function () {
 
     //  =================================  order ==========================
     Route::group(['prefix' => 'order'], function () {

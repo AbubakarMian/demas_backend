@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'admin_auth' => \App\Http\Middleware\AdminAuthCheck::class,
         'sub_admin_auth' => \App\Http\Middleware\SubAdminAuthCheck::class,
         'auth.client_token' => \App\Http\Middleware\ClientOrAutherizationToken::class,
+        'auth.user_loggedin' => \App\Http\Middleware\ValidateToken::class,
     ];
 }

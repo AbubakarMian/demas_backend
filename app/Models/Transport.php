@@ -19,5 +19,8 @@ class Transport extends Model
     public function transport_type(){
         return $this->hasOne('App\Models\Transport_Type','id','transport_type_id');
     }
+    public function transport_price(){
+        return $this->hasMany('App\Models\TransportPrices','transport_type_id','transport_type_id');
+    }
     
 }

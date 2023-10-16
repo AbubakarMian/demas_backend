@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\EmailHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -14,40 +15,65 @@ use stdClass;
 
 class UserController extends Controller
 {
-
-    
-    public function register(Request $request)
+    public function register_or_login(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), User::$rules_register);
+            $validator = Validator::make($request->all(), [
+                'phone_no'=>'required',
+                'email'=>'email',
+            ]);
 
             if ($validator->fails()) {
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
 
+                $name = 'user';
+                if($request->email){
+                    $name = explode('@',$request->email)[0];
+                }
+                $user = User::where('phone_no',$request->phone_no)->first();
                 $user = new User();
-                $user->name = $request->fullname;
-                // $user->father_name = 'fathername';
-                // $user->age = 'age';
-                // $user->gender = 'gender';
-                $user->email = $request->email;
                 $user->phone_no = $request->phone_no;
-                $user->password = Hash::make($request->password);
+                // $user->password = Hash::make($request->password);
                 $user->access_token = uniqid();
-
-                // $user->required_tutor_class_id = $required_tutor_class_id;
-                // $user->latitude = lat;
-                // $user->longitude = long;
-                // $user->image = image;
-                // $user->location = location;
-                // $user->self_rating = rating;
-                // $user->nic_image = $nic_image;
-                // $user->age = age;
-                // $user->role_id = 3;
-                // $user->qualification_id = $qualification_id;
-                // $user->institute_id = $institute_id;
+                $user->otp = rand(10000,99999);
                 $user->save();
 
+                $email_handler = new EmailHandler();
+                $email_details['recipient_emails'] = [
+                    'email'=>$request->email,
+                    'name'=>$name,
+                ];
+                $email_details['data'] = $user;
+                $email_details['view'] = 'email_template.otp';
+                $email_handler->sendEmail($email_details);
+
+                return $this->sendResponse(200, $user);
+            }
+        }
+         catch (\Exception $e) {
+            return $this->sendResponse(
+                500,
+                null,
+                [$e->getMessage()]
+            );
+        }
+    }
+    public function validate_otp(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'otp'=>'required',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendResponse(500, null, $validator->messages()->all());
+            } else {
+
+                $user = User::where('otp',$request->otp)->first();
+                if (!$user) {
+                    return $this->sendResponse(500, null, ['Invalid OTP']);
+                }
                 return $this->sendResponse(200, $user);
             }
         }

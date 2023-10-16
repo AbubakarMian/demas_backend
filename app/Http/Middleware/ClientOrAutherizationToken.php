@@ -36,10 +36,10 @@ class ClientOrAutherizationToken
         }
 
         $client = $this->sendResponse(
-            Config::get('error.code.INTERNAL_SERVER_ERROR'),
+            Config::get('error.code.UNAUTHORIZED_REQUEST'),
             [],
             ['Authorization token invalid'],
-            Config::get('error.code.INTERNAL_SERVER_ERROR')
+            Config::get('error.code.UNAUTHORIZED_REQUEST')
         );
 
         return response($client);
@@ -91,7 +91,9 @@ class ClientOrAutherizationToken
             ->where('client_secret', $client_secret)
             ->first();
         if ($client) {
-            $user['id'] = 0;
+            $user = new User();
+            $user->id = 0;
+            $user->name = 'Guest';
             $request->attributes->add(["user" => $user]);
             return $request;
         }

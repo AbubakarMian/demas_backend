@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>OTP</h1>
-    your otp is {!!$user->otp!!}
+    your otp is {!!$data->otp!!}
    
     <p>Thank you</p>
 </body>

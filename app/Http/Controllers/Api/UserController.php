@@ -19,8 +19,8 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'phone_no'=>'required',
-                'email'=>'email',
+                'phone_no' => 'required',
+                'email' => 'email',
             ]);
 
             if ($validator->fails()) {
@@ -28,30 +28,37 @@ class UserController extends Controller
             } else {
 
                 $name = 'user';
-                if($request->email){
-                    $name = explode('@',$request->email)[0];
+                if ($request->email) {
+                    $name = explode('@', $request->email)[0];
                 }
-                $user = User::where('phone_no',$request->phone_no)->first();
-                $user = new User();
+                $user = User::where('phone_no', $request->phone_no)->first();
+                if (!$user) {
+                    $user = new User();
+                }
+                if ($request->email) {
+                    $user->email = $request->email;
+                }
                 $user->phone_no = $request->phone_no;
                 // $user->password = Hash::make($request->password);
                 $user->access_token = uniqid();
-                $user->otp = rand(10000,99999);
+                $user->otp = rand(10000, 99999);
                 $user->save();
 
-                $email_handler = new EmailHandler();
-                $email_details['recipient_emails'] = [
-                    'email'=>$request->email,
-                    'name'=>$name,
-                ];
-                $email_details['data'] = $user;
-                $email_details['view'] = 'email_template.otp';
-                $email_handler->sendEmail($email_details);
+                if ($request->email) {
+
+                    $email_handler = new EmailHandler();
+                    $email_details['recipient_emails'] = [
+                        'email' => $request->email,
+                        'name' => $name,
+                    ];
+                    $email_details['data'] = $user;
+                    $email_details['view'] = 'email_template.otp';
+                    $email_handler->sendEmail($email_details);
+                }
 
                 return $this->sendResponse(200, $user);
             }
-        }
-         catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendResponse(
                 500,
                 null,
@@ -63,21 +70,20 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'otp'=>'required',
+                'otp' => 'required',
             ]);
 
             if ($validator->fails()) {
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
 
-                $user = User::where('otp',$request->otp)->first();
+                $user = User::where('otp', $request->otp)->first();
                 if (!$user) {
                     return $this->sendResponse(500, null, ['Invalid OTP']);
                 }
                 return $this->sendResponse(200, $user);
             }
-        }
-         catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->sendResponse(
                 500,
                 null,
@@ -160,4 +166,5 @@ class UserController extends Controller
                 'custom_error_code' => $e->errorInfo[0]
             ];
         }
-    }}
+    }
+}

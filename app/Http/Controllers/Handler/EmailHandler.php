@@ -26,13 +26,15 @@ class EmailHandler
     }
 
     public function sendEmail($email_detail){
-        if(Config::get('app.env') == 'production'){
+        // if(Config::get('app.env') == 'production'){
             Log::debug('--------email details----------',[$email_detail]);
             $send_email  = new SendGeneralEmail($email_detail);
+// dd($email_detail['recipient_emails']);
+            // Log::debug('recipient_emails',[$email_detail['recipient_emails'][0]['email']]);
             // Mail::to($request->user())->send(new OrderShipped($order));
             // Mail::assertSent($send_email);
             Mail::send($send_email);
-        }
+        // }
        
     }
 }

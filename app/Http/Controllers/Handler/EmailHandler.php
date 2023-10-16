@@ -40,12 +40,15 @@ class EmailHandler
             if(isset($email_detail['subject'])){
                 $message->subject($email_detail['subject']);
             }
-            
-
             if(isset($email_detail['cc'])){
                 foreach ($email_detail['cc'] as $key => $cc) {
                     
                     $message->cc($cc['from_email'],$cc['from_name']);
+                }
+            }
+            if(isset($email_detail['bcc'])){
+                foreach ($email_detail['bcc'] as $key => $bcc) {
+                    $message->bcc($bcc['from_email'],$bcc['from_name']);
                 }
             }
             if(isset($email_detail['attachments'])){

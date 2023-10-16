@@ -37,7 +37,8 @@ use App\Http\Controllers\User\CommonServicesController;
             'description' => 'This is an example Laravel pdf tutorial.',
             'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a>'
         ]);
-
+        otp/invoice
+// public/invoice/
         return $pdf->download('sample.pdf');
 
                    $twilio = new Client(env('TWILIO_ACCOUNT_SID'), env('TWILIO_AUTH_TOKEN'));

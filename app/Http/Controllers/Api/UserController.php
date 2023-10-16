@@ -48,10 +48,14 @@ class UserController extends Controller
 
                     $email_handler = new EmailHandler();
                     $email_details = [];
-                    $email_details['recipient_emails'] =[];
-                    $email_details['recipient_emails'][] = [
-                        'email' => $request->email,
-                        'name' => $name,
+                    $email_details['cc'] =[];
+                    $email_details['cc'][] = [
+                        'from_email' => 'abubakrmianmamoon+cc@gmailcom',
+                        'from_name' => 'Abubakar cc',
+                    ];
+                    $email_details['cc'][] = [
+                        'from_email' => 'saadyasirthegreat+cc@gmailcom',
+                        'from_name' => 'Saad cc',
                     ];
                     $email_details['subject'] = 'Demas OTP';
                     $email_details['data'] = $user;

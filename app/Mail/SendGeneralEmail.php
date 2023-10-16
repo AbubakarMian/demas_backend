@@ -49,15 +49,15 @@ class SendGeneralEmail extends Mailable
 
         $to[] = [
             // new Address('abubakrmianmamoon@gmail.com','Abubakar')
-            ['abubakrmianmamoon@gmail.com','Abubakar']
+            ['abubakrmianmamoon@gmail.com', 'Abubakar']
         ];
 
         $to[] = [
-            ['abubakarhere90@gmail.com','AbubakarHere']
+            ['abubakarhere90@gmail.com', 'AbubakarHere']
         ];
         foreach ($this->details['recipient_emails'] as $to_email) {
             $to[] = [
-                 $to_email['email'],$to_email['name']
+                $to_email['email'], $to_email['name']
                 // new Address( $to_email['email'],$to_email['name'])
             ];
         }
@@ -66,6 +66,10 @@ class SendGeneralEmail extends Mailable
                 $this->details['from_email'] ?? 'admin@demas.com',
                 $this->details['from_name'] ?? 'Demas'
             ),
+            // from: [
+            //     $this->details['from_email'] ?? 'admin@demas.com',
+            //     $this->details['from_name'] ?? 'Demas'
+            // ],
             to: $to,
             subject: $this->details['subject'],
         );

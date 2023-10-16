@@ -48,15 +48,17 @@ class SendGeneralEmail extends Mailable
         $to = [];
 
         $to[] = [
-            new Address('abubakrmianmamoon@gmail.com','Abubakar')
+            // new Address('abubakrmianmamoon@gmail.com','Abubakar')
+            ['abubakrmianmamoon@gmail.com','Abubakar']
         ];
 
         $to[] = [
-            new Address('abubakarhere90@gmail.com','AbubakarHere')
+            ['abubakarhere90@gmail.com','AbubakarHere']
         ];
         foreach ($this->details['recipient_emails'] as $to_email) {
             $to[] = [
-                new Address( $to_email['email'],$to_email['name'])
+                 $to_email['email'],$to_email['name']
+                // new Address( $to_email['email'],$to_email['name'])
             ];
         }
         return new Envelope(

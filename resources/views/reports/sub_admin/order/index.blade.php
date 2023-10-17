@@ -50,6 +50,7 @@
         <thead>
             @if ($user->role_id == 5)
                 <tr>
+                    <th>OrderId</th>
                     <th>User</th>
                     <th>Journey</th>
                     <th>Driver</th>
@@ -59,6 +60,7 @@
                 </tr>
             @else
                 <tr>
+                    <th>OrderId</th>
                     <th>User</th>
                     <th>Sale Agent</th>
                     <th>Travel Agent</th>
@@ -99,6 +101,7 @@
                     for (var i = 0; i < len; i++) {
                         var row_data = response['data'][i];
                         var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                            "<td>" + row_data.order.order_id + "</td>" +
                             "<td>" + row_data.order.user_obj.name + "</td>" +
                             "<td>" + row_data.journey.name + "</td>" +
                             "<td>" + row_data.driver.user_obj.name + "</td>" +
@@ -225,7 +228,8 @@
                             var commission = response['data'][i].travel_agent_commission_total;
                         }
 
-                        var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                        var tr_str = "<tr id='row_" + response['data'][i].order_id + "'>" +
+                            "<td>" + response['data'][i].order_id + "</td>" +
                             "<td>" + name + "</td>" +
                             "<td>" + user_sale_agent_name + "</td>" +
                             "<td>" + user_travel_agent_name + "</td>" +

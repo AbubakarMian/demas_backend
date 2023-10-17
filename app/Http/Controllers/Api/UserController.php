@@ -34,6 +34,9 @@ class UserController extends Controller
                 $user = User::where('phone_no', $request->phone_no)->first();
                 if (!$user) {
                     $user = new User();
+                    $user->role_id = 2;
+                    $user->name = $name;
+                    $user->last_name = '';
                 }
                 if ($request->email) {
                     $user->email = $request->email;
@@ -48,12 +51,12 @@ class UserController extends Controller
 
                     $email_handler = new EmailHandler();
                     $email_details = [];
-                    $email_details['cc'] =[];
+                    $email_details['cc'] = [];
                     $email_details['cc'][] = [
                         'from_email' => 'saadyasirthegreat@gmailcom',
                         'from_name' => 'Saad cc',
                     ];
-                    
+
                     $email_details['bcc'][] = [
                         'from_email' => 'abubakarhere90@gmailcom',
                         'from_name' => 'Abubakar here bcc',
@@ -87,7 +90,8 @@ class UserController extends Controller
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
 
-                $user = User::where('otp', $request->otp)->first();
+                $user = User::where('otp', $request->otp)
+                ->where('access_token', $request->access_token)->first();
                 if (!$user) {
                     return $this->sendResponse(500, null, ['Invalid OTP']);
                 }

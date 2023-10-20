@@ -17,7 +17,7 @@ class OrderController extends Controller
     public function create(Request $request)
     {
         $user = $request->attributes->get('user');
-        // dd($user);
+        
         $request_params = $request->all();
         $booking = $request_params['booking_details'];
         $commission_details = new CommissionHandler();
@@ -44,15 +44,8 @@ class OrderController extends Controller
                 $user->id,
                 $detail['pickupdate_time']
             );
+            // dd($trip_price_details->journey_price);
             $order_details = new Order_Detail();
-            // $user_sale_agent_id = 0;
-            // $user_travel_agent_id = 0;
-            // if ($user->role_id == 3) { //sale agent
-            //     $user_sale_agent_id = $user->id;
-            // }
-            // else if($user->role_id == 4){ //travel agent
-            //     $user_sale_agent_id = $user->id;
-            // }
             $order_details->order_id = $order->id;
             $order_details->pickup_location_id = $detail['pickup_id'];
             $order_details->drop_off_location_id = $detail['dropoff_id'];
@@ -79,6 +72,6 @@ class OrderController extends Controller
             $order_details->save();
         }
         $order->save();
-        return $this->sendResponse(200);
+        return $this->sendResponse(200,$order);
     }
 }

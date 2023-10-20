@@ -99,12 +99,14 @@ class CommissionHandler
                 ->where('transport_type_id', $transport_type_id)
                 ->first();
             // $res->travel_agent_commission = $travel_agent_commission->commission;
+            // dd($travel_agent_commission);
             $res->travel_agent_commission_id = $travel_agent_commission->id;
             $res->travel_agent_commission_details = $travel_agent_commission;
-            $res->travel_agent_user_id = $travel_agent_commission->user_id;
+            $res->travel_agent_user_id = $travel_agent_commission->user_travel_agent_id;
             $res->travel_agent_commission = $travel_agent_commission->commission;
-            if ($travel_agent_commission->sale_agent) {
-                $sale_agent_user_id = $travel_agent_commission->sale_agent->user_id;
+            
+            if ($travel_agent_commission->travel_agent->sale_agent) {
+                $sale_agent_user_id = $travel_agent_commission->travel_agent->sale_agent->user_id;
             }
         }
         if ($sale_agent_user_id) {

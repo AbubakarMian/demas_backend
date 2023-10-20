@@ -20,11 +20,11 @@ class Order extends Model
     }
     public function sale_agent()
     {
-        return $this->hasOne('App\Models\SaleAgent', 'user_id', 'user_sale_agent_id')->withTrashed();
+        return $this->hasOne('App\Models\SaleAgent', 'user_id', 'sale_agent_user_id')->withTrashed();
     }
     public function travel_agent()
     {
-        return $this->hasOne('App\Models\Travel_Agent', 'user_id', 'user_travel_agent_id')->withTrashed();
+        return $this->hasOne('App\Models\Travel_Agent', 'user_id', 'travel_agent_user_id')->withTrashed();
     }
     public function order_details()
     {

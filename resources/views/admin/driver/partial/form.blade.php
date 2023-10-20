@@ -71,7 +71,22 @@
         <div>
             {!! Form::select('commision_type',  $commission_types,null, ['class' => 'form-control',
             'data-parsley-required'=>'true',
-            'data-parsley-trigger'=>'change','required']) !!}
+            'data-parsley-trigger'=>'change','required','onclick'=>'show_commission_box(this)']) !!}
+        </div>
+    </div>
+<?php 
+    $show_commission = '';
+    if(isset($driver) && $driver->commision_type == 'per_trip'){
+        $show_commission = 'display:none';
+    }
+?>
+    <div class="form-group commission_salary" style="{!!$show_commission!!}">
+        {!! Form::label('commission','Commission') !!}
+        <div>
+            {!! Form::number('commision',  null, ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change','min'=>'0',
+            'placeholder'=>'Monthly Salary']) !!}
         </div>
     </div>
     <div class="form-group">
@@ -80,10 +95,9 @@
             {!! Form::text('adderss',  $user->adderss, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter Address','required',]) !!}
+            'placeholder'=>'Enter Address']) !!}
         </div>
     </div>
-   
     <div class="form-group">
         {!! Form::label('phone_no','Phone Number') !!}
         <div>
@@ -125,6 +139,14 @@
     
     @section('app_jquery')
     <script>
+        function show_commission_box(e){
+            if($(e).val()=='monthly'){
+                $('.commission_salary').css('display','block');
+            }
+            else{
+                $('.commission_salary').css('display','none');
+            }
+        }
         function validateForm() {
             return true;
         }

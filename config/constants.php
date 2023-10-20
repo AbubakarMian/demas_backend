@@ -13,6 +13,10 @@ return [
         'commission_types'=>[
             'monthly'=>'Monthly',
             'per_trip'=>'Per Trip',
+        ],
+        'commission_types_keys'=>[
+            'monthly'=>'monthly',
+            'per_trip'=>'per_trip',
         ]
     ],
     'sales_agent'=>[
@@ -20,6 +24,15 @@ return [
             'fix_amount'=>'Fix Amount',
             'profit_percent'=>'Profit Percent',
             'sales_percent'=>'Sales Percent',
+        ]
+    ],
+    'travel_agent'=>[
+        'commission_types'=>[
+            'per_trip'=>'per_trip',
+        ],
+        'commission_types_keys'=>[
+            'monthly'=>'monthly',
+            'per_trip'=>'per_trip',
         ]
     ],
     'order_status'=>[

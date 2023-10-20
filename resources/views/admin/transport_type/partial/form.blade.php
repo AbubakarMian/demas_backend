@@ -33,7 +33,7 @@ select#gender {
         'maxlength'=>"100"]) !!}
     </div>
 </div>
-<div class="form-group">
+{{-- <div class="form-group">
     {!! Form::label('seats',' Seats') !!}
     <div>
         {!! Form::number('seats', null, ['class' => 'form-control',
@@ -63,7 +63,7 @@ select#gender {
         'placeholder'=>'Enter Number Of Doors','required',
         'maxlength'=>"100"]) !!}
     </div>
-</div>
+</div> --}}
 
 <span id="err" class="error-product"></span>
 

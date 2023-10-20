@@ -30,6 +30,10 @@ class Order extends Model
     {
         return $this->hasOne('App\Models\Driver', 'user_id', 'user_driver_id')->withTrashed();
     }
+    public function order_details()
+    {
+        return $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')->withTrashed();
+    }
 
 
 }

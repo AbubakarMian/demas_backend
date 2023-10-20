@@ -22,21 +22,10 @@ select#gender {
     </ul>
 </div>
 @endif
-
-{{-- <div class="form-group">
-    {!! Form::label('pickup_location_id',' Pick Up Location') !!}
-    <div>
-        {!! Form::text('pickup_location_id', null, ['class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'Pick Up Location','required',
-        'maxlength'=>"100"]) !!}
-    </div>
-</div> --}}
 <div class="form-group">
     <label for="pickup_location_id">Pickup Location</label>
     {!! Form::select('pickup_location_id', $location, null, [
-        'class' => 'form-control',
+        'class' => 'form-control pickup_location',
         'data-parsley-required' => 'true',
         'data-parsley-trigger' => 'change',
         'placeholder' => 'Select Pickup Location',
@@ -47,52 +36,27 @@ select#gender {
 <div class="form-group">
     <label for="dropoff_location_id">Dropoff Location</label>
     {!! Form::select('dropoff_location_id', $location, null, [
-        'class' => 'form-control',
+        'class' => 'form-control dropoff_location',
         'data-parsley-required' => 'true',
         'data-parsley-trigger' => 'change',
         'placeholder' => 'Select Dropoff Location',
+        'onchange'=>'setJourneName()',
         'required',
-        'maxlength' => '100',
     ]) !!}
 </div>
-{{-- <div class="form-group">
-    {!! Form::label('dropoff_location_id',' DropOff Location') !!}
+
+<div class="form-group">
+    {!! Form::label('name',' Name') !!}
     <div>
-        {!! Form::text('dropoff_location_id', null, ['class' => 'form-control',
+        {!! Form::text('name', null, ['class' => 'form-control location_name',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'DropOff Location','required',
-        'maxlength'=>"100"]) !!}
+        'placeholder'=>'Pickup Location to Dropoff Location','required']) !!}
     </div>
-</div> --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div>
 <span id="err" class="error-product"></span>
-
-
 <div class="form-group col-md-12">
 </div>
-
-
-
-
-
 <div class="col-md-5 pull-left">
     <div class="form-group text-center">
         <div>
@@ -100,11 +64,16 @@ select#gender {
         </div>
     </div>
 </div>
-
-
-
 @section('app_jquery')
 <script>
+
+    function setJourneName(){
+        // console.log('check',$('.pickup_location').find(':selected').text());
+        // console.log('check',$('.dropoff_location').find(':selected').text());
+        var pickup = $('.pickup_location').find(':selected').text();
+        var dropoff = $('.dropoff_location').find(':selected').text();
+        $('.location_name').attr('placeholder',pickup+' to '+dropoff);
+    }
     function validateForm() {
         return true;
     }

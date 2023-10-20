@@ -17,7 +17,7 @@ class Order_Detail extends Model
     }
     public function pickup_location()
     {
-        return $this->hasOne('App\Models\Driver', 'id', 'pickup_location_id')->withTrashed();
+        return $this->hasOne('App\Models\Locations', 'id', 'pickup_location_id')->withTrashed();
     }
     public function dropoff_location()
     {
@@ -25,11 +25,11 @@ class Order_Detail extends Model
     }
     public function driver()
     {
-        return $this->hasOne('App\Models\Driver', 'user_id', 'user_driver_id')->withTrashed();
+        return $this->hasOne('App\Models\Driver', 'user_id', 'driver_user_id')->withTrashed();
     }
     public function journey()
     {
-        return $this->hasOne('App\Models\Journey', 'user_id', 'journey_id')->withTrashed();
+        return $this->hasOne('App\Models\Journey', 'id', 'journey_id')->withTrashed();
     }
     public function journey_slot()
     {

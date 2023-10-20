@@ -15,14 +15,10 @@ class AdminAuthCheck
      */
     public function handle($request, Closure $next)
     {
-        // dd(Auth::Check());
-        // $response = $next($request);
-        // return $response;
         $user =Auth::user();
-    //    dd('admin auth');
         if(Auth::Check()){
-            // dd($user->role_id == 1 );
             if($user->role_id == 1 ){
+            // if( in_array($user->role_id,[1,3,4,5])  ){
                 $response = $next($request);
 
                 $response->headers->set('Cache-Control','nocache, no-store, max-age=0, must-revalidate');

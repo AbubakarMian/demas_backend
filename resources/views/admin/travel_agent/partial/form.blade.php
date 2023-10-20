@@ -16,7 +16,7 @@
     
     <div class="alert alert-danger">
         <ul>
-            @foreach($message->all() as $error)
+            @foreach($message as $error)
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
@@ -107,11 +107,11 @@
     </div>
     <div class="form-group">
         <label for="sale_agent">Sale Agents</label>
-        {!! Form::select('sale_agent', $user_sale_agents, null, [
+        {!! Form::select('user_sale_agent_id', $user_sale_agents, null, [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
-            'placeholder'=>'Select Travel Agents',
+            'placeholder'=>'Select Sale Agent',
             'maxlength' => '100',
         ]) !!}
     </div>

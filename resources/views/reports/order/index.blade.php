@@ -53,6 +53,7 @@
     <table class="fhgyt" id="orderTableAppend" style="opacity: 0">
         <thead>
             <tr>
+                <th>OrderId</th>
                 <th>User</th>
                 <th>Sale Agent</th>
                 <th>Travel Agent</th>
@@ -92,9 +93,11 @@
                         var id = response['data'][i].id;
                         var name = response['data'][i].user_obj.name;
                         // var payment_id = response['data'][i].payment_id;
-                        var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
-                        var user_travel_agent_name = response['data'][i].travel_agent.user_obj.name;
-                        var user_driver_id = response['data'][i].driver.user_obj.name;
+                        // var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
+                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
+                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
+                        // var user_travel_agent_name = response['data'][i].travel_agent.user_obj.name;
+                        // var user_driver_id = response['data'][i].driver.user_obj.name;
                         var cash_collected_by = response['data'][i].cash_collected_by;
                         var cash_collected_by_user_id = response['data'][i].cash_collected_by_user_id;
                         var price = response['data'][i].price;
@@ -123,25 +126,13 @@
                                 <table class="modal_table fhgyt";>
                                     <thead>
                                         <tr>
-                                            <th>Pickup Location</th>
-                                            <th>DropOff Location</th>
+                                            <th>Journey</th>
                                             <th>PickUp Date/Time</th>
                                             <th>Price</th>
                                             <th>Driver</th>
-                                            <th>Journey</th>
-                                            <th>Journey Slot</th>
                                         </tr>
                                     </thead>
                                     <tbody class="orderdetails_list">
-                                        <tr>
-                                            <td>Makkah Hotel</td>
-                                            <td>Jaddah Airport</td>
-                                            <td>05:00PM 06-jul-2023</td>
-                                            <td>125 SAR</td>
-                                            <td>Billal</td>
-                                            <td>makkah hotel to Jaddah Airport</td>
-                                            <td>06-jul-2023 - 07-jul-2023</td>
-                                        </tr>
                                     </tbody>
                                 </table>`,
                             footer: `
@@ -150,39 +141,53 @@
                         });
                         createModal({
                             id: 'order_' + response['data'][i].id,
-                            header: '<h4>Delete</h4>',
+                            header: '<h4>Confirm</h4>',
                             body: 'Do you want to continue ?',
                             footer: `
-                                <button class="btn btn-danger" onclick="delete_request(` + response['data'][i].id + `)"
+                                <button class="btn btn-success" 
+                                onclick="change_status(` + response['data'][i].id + `,'confirm')"
                                 data-dismiss="modal">
-                                    Delete
+                                    Confirm
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                `,
+                        });
+                        createModal({
+                            id: 'reject_order_' + response['data'][i].id,
+                            header: '<h4>Reject</h4>',
+                            body: 'Do you want to continue ?',
+                            footer: `
+                                <button class="btn btn-danger" 
+                                onclick="change_status(` + response['data'][i].id + `,'reject')"
+                                data-dismiss="modal">
+                                    Reject
                                 </button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                 `,
                         });
                         var status = response['data'][i].status;
-                        if(status == 'pending'){
-                        var confirm_btn =
-                            `<a class="btn btn-info" data-toggle="modal" data-target="#` +
-                            'order_' + response['data'][i].id + `">Confirm</a>`;
-                        var reject_btn =
-                            `<a class="btn btn-danger" data-toggle="modal" data-target="#` +
-                            'order_' + response['data'][i].id + `">Reject</a>`;
+                        if (status == 'pending') {
+                            var confirm_btn =
+                                `<a class="btn btn-info" data-toggle="modal" data-target="#` +
+                                'order_' + response['data'][i].id + `">Confirm</a>`;
+                            var reject_btn =
+                                `<a class="btn btn-danger" data-toggle="modal" data-target="#` +
+                                'reject_order_' + response['data'][i].id + `">Reject</a>`;
                             status = confirm_btn + reject_btn;
-                        }
-                        else{
+                        } else {
                             var status = capitalize_first_letter(response['data'][i].status);
                         }
                         var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                            "<td>" + response['data'][i].order_id + "</td>" +
                             "<td>" + name + "</td>" +
                             "<td>" + user_sale_agent_name + "</td>" +
                             "<td>" + user_travel_agent_name + "</td>" +
                             "<td>" + total_price + "</td>" +
-                            "<td>" + trip_type + "</td>" +
+                            "<td>" + capitalize_first_letter(trip_type) + "</td>" +
                             "<td>" + ispaid + "</td>" +
                             "<td>" + order_detail + "</td>" +
                             `<td id='td_status_` + response['data'][i].id + `'>` +
-                                status + `</td>` +
+                            status + `</td>` +
                             "</tr>";
                         $("#orderTableAppend tbody").append(tr_str);
                     }
@@ -209,60 +214,92 @@
                     _token: '{!! @csrf_token() !!}'
                 },
                 success: function(response) {
-                    console.log(response.status);
-                    console.log('response details_list',response.status);
                     $('.orderdetails_list').html('');
                     if (response.status) {
                         var details_list = '';
-                        $.each(response.response,function(item,index){
-                            details_list += `<tr>`+
-                                `<td>`+item.pickup_location+`</td`
-                                `<td>`+item.dropoff_location+`</td`
-                                `<td>`+item.pick_up_date_time+`</td`
-                                `<td>`+item.price+`</td`
-                                `<td>`+item.driver.user_obj.name+`</td`
-                                `<td>`+item.journey.name+`</td`
-                                `<td>`+item.journey_slot.slot.name+`</td`
-                                `</tr>`;
+                        $.each(response.response['order_details'], function(index, item) {
+                            console.log('response item', item);
+                            console.log('response index', index);
+                            var drivers = `<select onchange="change_driver('`+item.id+`',this)">`;
+                                $.each(response.response['drivers'],function(driver_index,driver_item){
+                                    var user_driver = driver_item.user_obj;
+                                    var selected = user_driver.id == item.driver_user_id ? 'selected':'';
+                                    drivers += `<option value="`+user_driver.id+`" `+selected+`>`+
+                                        user_driver.name+`</option>`;
+                                })
+                                drivers +='</select>';
+                            details_list += `<tr>
+                                <td>` + item.journey.name + `</td>
+                                <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
+                                <td>` + item.price + `</td>
+                                <td>` + drivers + `</td>
+                                </tr>`;
                         })
+                        // <td>` + item.driver.user_obj.name + `</td>
                         $('.orderdetails_list').html(details_list);
-                    }
-                    else{
+                    } else {
                         alert('Someting went wrong');
                     }
                 },
-                error:function(err){
+                error: function(err) {
                     console.log('ajax error');
                 }
             });
 
         }
-        
-        function change_status(order_id,status) {
-            console.log('get_details order_id', order_id);
+
+        function change_driver(order_detail_id, e) {
+            console.log('get_details order_detail_id', order_detail_id);
+            var driver_user_id = $(e).find(':selected').val();
             $.ajax({
-                url: "{!! asset('admin/order/update_order_status') !!}/" + order_id,
-                type: 'GET',
+                url: "{!! asset('admin/order/update_order_detail_driver') !!}/" + order_detail_id,
+                type: 'post',
                 dataType: 'json',
                 data: {
                     _token: '{!! @csrf_token() !!}',
-                    status:status
+                    driver_user_id: driver_user_id
                 },
                 success: function(response) {
                     console.log(response.status);
-                    console.log('response',response.status);
-                    $('.orderdetails_list').html('');
+                    console.log('response', response.status);
                     if (response.status) {
-                        var myTable = $('#orderTableAppend').DataTable();
-                        console.log('removeasdasdasd');
-                        let row = myTable.row('#row_' + id);
-                        row.data()[7] = capitalize_first_letter(status);
-                    }
-                    else{
+                        console.log('updated row ',order_detail_id);
+                    } else {
                         alert('Someting went wrong');
                     }
                 },
-                error:function(err){
+                error: function(err) {
+                    console.log('ajax error');
+                }
+            });
+
+        }
+
+        function change_status(order_id, status) {
+            console.log('get_details order_id', order_id);
+            $.ajax({
+                url: "{!! asset('admin/order/update_order_status') !!}/" + order_id,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    _token: '{!! @csrf_token() !!}',
+                    status: status
+                },
+                success: function(response) {
+                    console.log(response.status);
+                    console.log('response', response.status);
+                    $('.orderdetails_list').html('');
+                    if (response.status) {
+                        var myTable = $('#orderTableAppend').DataTable();
+                        console.log('removeasdasdasd row ','#row_' + order_id);
+                        let rowIndex = myTable.row('#row_' + order_id).index();
+                        myTable.cell(rowIndex, 7).data(capitalize_first_letter(status));
+                        myTable.draw();
+                    } else {
+                        alert('Someting went wrong');
+                    }
+                },
+                error: function(err) {
                     console.log('ajax error');
                 }
             });

@@ -48,18 +48,15 @@ $reports = $admin_common->reports;
         </div>
         <div class="col-md-12 col-sm-12 col-xs-12">
 
+            @if(count($modules))
             <div>
-                <!-- <section class="dash-tile abc">
-                        <h1 class="mt0">
-                            Modules
-                        </h1>
-                    </section> -->
                 <section class="abc">
                     <h1 class="mt0">
                         <button type="button" class="btn btn-success ccc mod_btn_hed">Modules</button>
                     </h1>
                 </section>
             </div>
+            @endif
             @if ($message = Session::get('error'))
                 <div class="alert alert-danger alert-block">
                     <button type="button" class="close" data-dismiss="alert">×</button>
@@ -101,14 +98,13 @@ $reports = $admin_common->reports;
 
 
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <!-- <section class="dash-tile vvv">
-                    <h1 class="mt0">Reports</h1>
-                </section> -->
+            @if(count($reports))
             <section class="abc">
                 <h1 class="mt0">
                     <button type="button" class="btn btn-success ccc mod_btn_hed reprt_btn">Reports</button>
                 </h1>
             </section>
+            @endif
         </div>
         @foreach ($reports as $key => $report)
             {{-- {{dd($report[$key]['url'])}} --}}

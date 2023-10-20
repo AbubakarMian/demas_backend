@@ -26,8 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::post('register', 'Api\UserController@register');
 
 Route::get('locations/get_all',[LocationController::class, 'get_all']);
-Route::get('cars/get_all',[CarController::class, 'get_all']);
-Route::get('car/details/{car_id}',[CarController::class, 'car_details']);
 
 
 Route::post('contactus',[ContactUsController::class, 'contactus']);
@@ -35,6 +33,16 @@ Route::post('contactus',[ContactUsController::class, 'contactus']);
 
 Route::group(['middleware' => 'auth.client_token'], function () {
 
-    Route::post('register',[UserController::class, 'register']);
+    Route::post('register_or_login',[UserController::class, 'register_or_login']);
+    Route::post('validate_otp',[UserController::class, 'validate_otp']);
+    // Route::post('register',[UserController::class, 'register']);
     Route::post('login',[UserController::class, 'login']);
+    Route::get('cars/get_all',[CarController::class, 'get_all']);
+    Route::get('car/details/{car_id}',[CarController::class, 'car_details']);
+});
+
+Route::group(['middleware' => 'auth.user_loggedin'], function () {
+
+    // Route::post('register',[UserController::class, 'register']);
+    // Route::post('login',[UserController::class, 'login']);
 });

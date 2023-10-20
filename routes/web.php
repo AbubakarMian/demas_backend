@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\TravelAgentCommissionController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\DriverCommissionController;
 use App\Http\Controllers\Report\OrderController;
+use App\Http\Controllers\Report\SubAdminOrderController;
 use App\Http\Controllers\User\CommonServicesController;
 
 /*
@@ -29,15 +30,35 @@ use App\Http\Controllers\User\CommonServicesController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+
+
+       $pdf = PDF::loadView('pdf.sample', [
+            'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
+            'description' => 'This is an example Laravel pdf tutorial.',
+            'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a>'
+        ]);
+        otp/invoice
+// public/invoice/
+        return $pdf->download('sample.pdf');
+
+                   $twilio = new Client(env('TWILIO_ACCOUNT_SID'), env('TWILIO_AUTH_TOKEN'));
+            $twilio->messages->create(
+                "whatsapp:".$user->phone_number, [
+                    "from" => "whatsapp:".env('TWILIO_SANDBOX_NUMBER'),
+                    "body" => "Here's your invoice!",
+"mediaUrl" => [env("NGROK_URL")."/invoices/".$invoiceFile]
+                ]
+            );
+
+            https://www.twilio.com/blog/generate-send-pdf-invoices-whatsapp-laravel-php-stripe-twilio-api
 */
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('error/500',function(){
+Route::get('error/500', function () {
     return view('error.error_500');
-
 });
 
 
@@ -183,31 +204,49 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::post('delete/{id}', [DriverController::class, 'destroy_undestroy'])->name('driver.delete');
     });
 
-       //  =================================  order ==========================
-   Route::group(['prefix' => 'order'], function () {
-    Route::get('/', [OrderController::class, 'index'])->name('order.index');
-    Route::get('get_order', [OrderController::class, 'get_order'])->name('order.index');
-    Route::get('details_list/{order_id}', [OrderController::class, 'get_order_details_list'])->name('order.get_order_details_list');
-    Route::get('update_order_status/{order_id}', [OrderController::class, 'update_order_status'])->name('order.update_order_status');
-    Route::get('create', [OrderController::class, 'create'])->name('order.create'); //add
-    Route::post('save', [OrderController::class, 'save'])->name('order.save');
-    Route::get('edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
-    Route::post('update/{id}', [OrderController::class, 'update'])->name('order.update');
-    Route::post('delete/{id}', [OrderController::class, 'destroy_undestroy'])->name('order.delete');
+    Route::group(['prefix' => 'order'], function () {
+        Route::get('/', [OrderController::class, 'index'])->name('order.index');
+        Route::get('get_order', [OrderController::class, 'get_order'])->name('order.index');
+        Route::get('details_list/{order_id}', [OrderController::class, 'get_order_details_list'])->name('order.get_order_details_list');
+        Route::post('update_order_status/{order_id}', [OrderController::class, 'update_order_status'])->name('order.update_order_status');
+        Route::post(
+            'update_order_detail_driver/{order_detail_id}',
+            [OrderController::class, 'update_order_detail_driver']
+        );
+        Route::get('create', [OrderController::class, 'create'])->name('order.create'); //add
+        Route::post('save', [OrderController::class, 'save'])->name('order.save');
+        Route::get('edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
+        Route::post('update/{id}', [OrderController::class, 'update'])->name('order.update');
+        Route::post('delete/{id}', [OrderController::class, 'destroy_undestroy'])->name('order.delete');
+    });
+    //admin/sub_admin
+
 });
+
+
+Route::group(['prefix' => 'admin/sub_admin', 'middleware' => 'sub_admin_auth'], function () {
+
+    //  =================================  order ==========================
+    Route::group(['prefix' => 'order'], function () {
+        Route::get('/', [SubAdminOrderController::class, 'index'])->name('sub_admin.order.index');
+        Route::get('get_order', [SubAdminOrderController::class, 'get_order'])->name('sub_admin.order.index');
+        Route::get('get_driver_order', [SubAdminOrderController::class, 'get_drivers_order'])->name('sub_admin.get_drivers_order.index');
+        Route::get('details_list/{order_id}', [SubAdminOrderController::class, 'get_order_details_list'])->name('sub_admin.order.get_order_details_list');
+        // Route::post('update_order_status/{order_id}', [SubAdminOrderController::class, 'update_order_status'])->name('sub_admin.order.update_order_status');
+        // Route::get('create', [SubAdminOrderController::class, 'create'])->name('sub_admin.order.create'); //add
+        // Route::post('save', [SubAdminOrderController::class, 'save'])->name('sub_admin.order.save');
+        // Route::get('edit/{id}', [SubAdminOrderController::class, 'edit'])->name('sub_admin.order.edit');
+        // Route::post('update/{id}', [SubAdminOrderController::class, 'update'])->name('sub_admin.order.update');
+        // Route::post('delete/{id}', [SubAdminOrderController::class, 'destroy_undestroy'])->name('sub_admin.order.delete');
+    });
 });
-
-
-// });
-
 //  =================================  contact_us ==========================
-Route::group(['prefix'=>'admin/contactus'],function(){
-    Route::get('/',[ContactUsController::class, 'index'])->name('contact_us.index');
-    Route::get('get_contactus',[ContactUsController::class, 'get_contactus'])->name('contact_us.index');
-    Route::get('create',[ContactUsController::class, 'create'])->name('contact_us.create'); //add
-    Route::post('save',[ContactUsController::class, 'save'])->name('contact_us.save');
-    Route::get('edit/{id}',[ContactUsController::class, 'edit'])->name('contact_us.edit');
-    Route::post('update/{id}',[ContactUsController::class, 'update'])->name('contact_us.update');
-    Route::post('delete/{id}',[ContactUsController::class, 'destroy_undestroy'])->name('contact_us.delete');
+Route::group(['prefix' => 'admin/contactus'], function () {
+    Route::get('/', [ContactUsController::class, 'index'])->name('contact_us.index');
+    Route::get('get_contactus', [ContactUsController::class, 'get_contactus'])->name('contact_us.index');
+    Route::get('create', [ContactUsController::class, 'create'])->name('contact_us.create'); //add
+    Route::post('save', [ContactUsController::class, 'save'])->name('contact_us.save');
+    Route::get('edit/{id}', [ContactUsController::class, 'edit'])->name('contact_us.edit');
+    Route::post('update/{id}', [ContactUsController::class, 'update'])->name('contact_us.update');
+    Route::post('delete/{id}', [ContactUsController::class, 'destroy_undestroy'])->name('contact_us.delete');
 });
-

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\EmailHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -14,44 +15,89 @@ use stdClass;
 
 class UserController extends Controller
 {
-
-    
-    public function register(Request $request)
+    public function register_or_login(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), User::$rules_register);
+            $validator = Validator::make($request->all(), [
+                'phone_no' => 'required',
+                'email' => 'email',
+            ]);
 
             if ($validator->fails()) {
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
 
-                $user = new User();
-                $user->name = $request->fullname;
-                // $user->father_name = 'fathername';
-                // $user->age = 'age';
-                // $user->gender = 'gender';
-                $user->email = $request->email;
+                $name = 'user';
+                if ($request->email) {
+                    $name = explode('@', $request->email)[0];
+                }
+                $user = User::where('phone_no', $request->phone_no)->first();
+                if (!$user) {
+                    $user = new User();
+                    $user->role_id = 2;
+                    $user->name = $name;
+                    $user->last_name = '';
+                }
+                if ($request->email) {
+                    $user->email = $request->email;
+                }
                 $user->phone_no = $request->phone_no;
-                $user->password = Hash::make($request->password);
+                // $user->password = Hash::make($request->password);
                 $user->access_token = uniqid();
-
-                // $user->required_tutor_class_id = $required_tutor_class_id;
-                // $user->latitude = lat;
-                // $user->longitude = long;
-                // $user->image = image;
-                // $user->location = location;
-                // $user->self_rating = rating;
-                // $user->nic_image = $nic_image;
-                // $user->age = age;
-                // $user->role_id = 3;
-                // $user->qualification_id = $qualification_id;
-                // $user->institute_id = $institute_id;
+                $user->otp = rand(10000, 99999);
                 $user->save();
+
+                if ($request->email) {
+
+                    $email_handler = new EmailHandler();
+                    $email_details = [];
+                    $email_details['cc'] = [];
+                    $email_details['cc'][] = [
+                        'from_email' => 'saadyasirthegreat@gmailcom',
+                        'from_name' => 'Saad cc',
+                    ];
+
+                    $email_details['bcc'][] = [
+                        'from_email' => 'abubakarhere90@gmailcom',
+                        'from_name' => 'Abubakar here bcc',
+                    ];
+                    $email_details['subject'] = 'Demas OTP';
+                    $email_details['to_email'] = 'abubakrmianmamoon@gmail.com';
+                    $email_details['to_name'] = 'Abubakar';
+                    $email_details['data'] = $user;
+                    $email_details['view'] = 'email_template.otp';
+                    $email_handler->sendEmail($email_details);
+                }
 
                 return $this->sendResponse(200, $user);
             }
+        } catch (\Exception $e) {
+            return $this->sendResponse(
+                500,
+                null,
+                [$e->getMessage()]
+            );
         }
-         catch (\Exception $e) {
+    }
+    public function validate_otp(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'otp' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendResponse(500, null, $validator->messages()->all());
+            } else {
+
+                $user = User::where('otp', $request->otp)
+                ->where('access_token', $request->access_token)->first();
+                if (!$user) {
+                    return $this->sendResponse(500, null, ['Invalid OTP']);
+                }
+                return $this->sendResponse(200, $user);
+            }
+        } catch (\Exception $e) {
             return $this->sendResponse(
                 500,
                 null,
@@ -134,4 +180,5 @@ class UserController extends Controller
                 'custom_error_code' => $e->errorInfo[0]
             ];
         }
-    }}
+    }
+}

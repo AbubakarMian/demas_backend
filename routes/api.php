@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ContactUsController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,7 @@ Route::group(['middleware' => 'auth.client_token'], function () {
 
 Route::group(['middleware' => 'auth.user_loggedin'], function () {
 
-    // Route::post('register',[UserController::class, 'register']);
+    Route::post('order/create',[OrderController::class, 'create']);
+    Route::post('order',[OrderController::class, 'index']);
     // Route::post('login',[UserController::class, 'login']);
 });

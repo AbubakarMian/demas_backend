@@ -168,7 +168,7 @@ class TransportHandler
         $cars = $cars->orderByDesc('created_at')->paginate(500);
 
         $user = $request->attributes->get('user');
-        // dd($user);
+        
         $travel_agent = Travel_Agent::where('user_id',$user->id)->first();
 
         $cars->transform(function($item)use($travel_agent,$journey,$slot){

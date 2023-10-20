@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use App\Exceptions\UnAuthorizedRequestException;
 use App\Libraries\APIResponse;
 use Illuminate\Support\Facades\Request;
-use App\Models\User;
+use App\Models\Users;
 use Closure;
 use Illuminate\Support\Facades\Config;
 
@@ -39,10 +39,16 @@ class ValidateToken
         $access_token = str_replace("Bearer ", "", $authorization_header);
 
         if ($access_token) {
-            $user = User::where('access_token', $access_token)->first();
+            $user = Users::
+            with([
+                'role',
+                'sale_agent.user_obj',
+                'travel_agent.user_obj',
+                'driver.user_obj',
+            ])
+            ->where('access_token', $access_token)->first();
             if ($user) {
                 $request->attributes->add(["user" => $user]);
-                // return $request;
                 return $next($request);
             }
 

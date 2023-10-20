@@ -67,7 +67,13 @@ class ClientOrAutherizationToken
         $access_token = str_replace("Bearer ", "", $authorization_header);
 
         if ($access_token) {
-            $user = User::where('access_token', $access_token)->first();
+            $user = User::with([
+                'role',
+                'sale_agent.user_obj',
+                'travel_agent.user_obj',
+                'driver.user_obj',
+            ])
+            ->where('access_token', $access_token)->first();
             if ($user) {
                 $request->attributes->add(["user" => $user]);
                 return $request;

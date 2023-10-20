@@ -10,7 +10,11 @@ class Users extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'users';   
+    protected $table = 'users';
+    
+    public function role(){
+        return $this->hasOne('App\Models\Role','id','role_id');
+    }
 
     public function sale_agent(){
         return $this->hasOne('App\Models\SaleAgent','user_id','id');

@@ -40,8 +40,8 @@ class TransportHandler
     }
     public function get_journey(Request $request){
         // $request = $this->request;
-        $pickup_id = $request->pickup ?? 0;
-        $dropoff_id = $request->dropoff ?? 0;
+        $pickup_id = $request->pickup_id ?? 0;
+        $dropoff_id = $request->dropoff_id ?? 0;
         
         $journey = Journey::where('pickup_location_id',$pickup_id)
                             ->where('dropoff_location_id',$dropoff_id)->first();
@@ -76,10 +76,11 @@ class TransportHandler
         
         $cars = Transport::with(['transport_type',
                                 'transport_price'=>function($query)use($journey,$slot){
-                                    $query->where('journey_id',$journey->id)
-                                    ->where('slot_id',$slot->id)
-                                    ->latest()
-                                    ;
+                                    if($journey){
+                                        $query = $query->where('journey_id',$journey->id);
+                                    }
+                                    $query->where('slot_id',$slot->id)
+                                    ->latest();
                                 }]);
         if($car_id){
             $cars = $cars->where('id',$car_id);
@@ -131,8 +132,8 @@ class TransportHandler
 
     public function get_all(Request $request){
 
-        $pickup_id = $request->pickup ?? 0;
-        $dropoff_id = $request->dropoff ?? 0;
+        $pickup_id = $request->pickup_id ?? 0;
+        $dropoff_id = $request->dropoff_id ?? 0;
         
         $journey = Journey::where('pickup_location_id',$pickup_id)
                             ->where('dropoff_location_id',$dropoff_id)->first();

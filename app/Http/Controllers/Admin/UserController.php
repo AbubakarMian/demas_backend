@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
-
+use PDF;
+use Twilio\Rest\Client;
+use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
@@ -117,4 +119,29 @@ class UserController extends Controller
         ]);
         return $response;
     }
+    public function invoice(){
+        return view('admin.invoice');
+    }
+    public function pdf_maker()
+    {
+        $pdf = PDF::loadView('admin.invoice', [
+            'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
+            'description' => 'This is an example Laravel pdf tutorial.',
+            'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a'
+        ]);
+    
+        // Set the paper size to A4 and the orientation to portrait
+        $pdf->setPaper('a4', 'portrait');
+    
+        $pdfPath = public_path('invoice/admin_invoice.pdf');
+    
+        // Save the PDF to the public/invoice directory
+        $pdf->save($pdfPath);
+    
+        // Return a response with a link to the saved PDF
+        return $pdf->stream('admin_invoice.pdf');
+    }
+    
+    
+
 }

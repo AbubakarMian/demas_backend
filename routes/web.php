@@ -250,3 +250,7 @@ Route::group(['prefix' => 'admin/contactus'], function () {
     Route::post('update/{id}', [ContactUsController::class, 'update'])->name('contact_us.update');
     Route::post('delete/{id}', [ContactUsController::class, 'destroy_undestroy'])->name('contact_us.delete');
 });
+
+
+Route::get('invoice1', [UserController::class, 'invoice'])->name('invoice.invoice');
+Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.pdf_maker');

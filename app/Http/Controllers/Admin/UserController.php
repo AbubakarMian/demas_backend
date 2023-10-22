@@ -124,17 +124,14 @@ class UserController extends Controller
     }
     public function pdf_maker()
     {
-       
         $pdf = PDF::loadView('admin.invoice', [
             'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
             'description' => 'This is an example Laravel pdf tutorial.',
             'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a>'
         ]);
-        // otp/invoice
-// public/invoice/
-        return $pdf;
-        return $pdf->download('admin.invoice');
-        // return response()->json(['message' => 'PDF invoice sent via WhatsApp']);
+    
+        return $pdf->stream('admin_invoice.pdf');
     }
+    
 
 }

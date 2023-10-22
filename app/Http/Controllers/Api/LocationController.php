@@ -8,9 +8,18 @@ use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
-    public function get_all(){
-        $locations = Locations::paginate(500);
-        $locations = $locations->items();
-        return $this->sendResponse(200,$locations);
+    public function get_all()
+    {
+        try {
+            $locations = Locations::paginate(500);
+            $locations = $locations->items();
+            return $this->sendResponse(200, $locations);
+        } catch (\Exception $e) {
+            return $this->sendResponse(
+                500,
+                null,
+                [$e->getMessage()]
+            );
+        }
     }
 }

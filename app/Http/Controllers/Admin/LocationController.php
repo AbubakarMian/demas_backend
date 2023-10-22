@@ -27,7 +27,6 @@ class LocationController extends Controller
     public function create()
     {
         $control = 'create';
-        // $courses = Courses::pluck('full_name','id');
         $location_type = Location_Type::pluck('name','id');
         return view('admin.location.create', compact('control','location_type'));
     }
@@ -43,7 +42,6 @@ class LocationController extends Controller
     {
         $control = 'edit';
         $location = Locations::find($id);
-        // $courses = Courses::pluck('full_name','id');
         $location_type = Location_Type::pluck('name','id');
         return view('admin.location.create', compact(
             'control',
@@ -56,7 +54,6 @@ class LocationController extends Controller
     public function update(Request $request, $id)
     {
         $location = Locations::find($id);
-        // Locations::delete()
         $this->add_or_update($request, $location);
         return Redirect('admin/location');
     }
@@ -64,33 +61,11 @@ class LocationController extends Controller
 
     public function add_or_update(Request $request, $location)
     {
-        // dd($request->all());
         $location->location_type_id = $request->location_type_id;
         $location->name = $request->name;
         $location->latitude = $request->latitude;
         $location->longitude = $request->longitude;
-        
-
-
-        // if($request->hasFile('upload_book')){
-
-        //     $file =$request->upload_book;
-        //     $filename = $file->getClientOriginalName();
-
-        //     $path = public_path().'/uploads/';
-        //     $u  =  $file->move($path, $filename);
-
-        //     $db_path_save_book = asset('/uploads/'.$filename);
-        //     $location->upload_book =  $db_path_save_book;
-        // }
-        // if ($request->hasFile('avatar')) {
-        //     $avatar = $request->avatar;
-        //     $root = $request->root();
-        //     $location->avatar = $this->move_img_get_path($avatar, $root, 'image');
-        // }
         $location->save();
-
-
         return redirect()->back();
     }
 

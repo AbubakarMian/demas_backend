@@ -12,12 +12,37 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
+        $user = $request->attributes->get('user');
+        $orders = Order:: //get();
+            with([
+                'user_obj', 'sale_agent', 'travel_agent',
+                'order_details' => [
+                    'driver',
+                    'transport_type', 'journey'
+                ]
+            ]);
+
+        if ($user->role_id == 2) { // user
+            $orders = $orders->where('user_id', $user->id);
+        } else {
+            $orders = $orders->whereHas('order_details', function ($q) use ($user) {
+                if ($user->role_id == 3) { //sale_agent
+                    $q->where('sale_agent_user_id', $user->id);
+                } elseif ($user->role_id == 4) { //sale_agent
+                    $q->where('travel_agent_user_id', $user->id);
+                } elseif ($user->role_id == 5) { //driver
+                    $q->where('user_driver_id', $user->id);
+                }
+            });
+        }
+        $orders = $orders->latest()->get();
+        return $this->sendResponse(200, $orders);
     }
 
     public function create(Request $request)
     {
         $user = $request->attributes->get('user');
-        
+
         $request_params = $request->all();
         $booking = $request_params['booking_details'];
         $commission_details = new CommissionHandler();
@@ -34,6 +59,7 @@ class OrderController extends Controller
         $order->total_price = 0;
         $order->trip_type = $booking['type'];
         $order->cash_collected_by = null;
+        $order->status = 'pending';
 
         $order->save();
         foreach ($booking['details'] as $detail_key => $detail) {
@@ -65,13 +91,30 @@ class OrderController extends Controller
             $order->sale_agent_user_id = $order_details->sale_agent_user_id;
             $order->sale_agent_commission_total += $order_details->sale_agent_commission;
             $order->sale_agent_commission_type = $order_details->sale_agent_commission_type;
-            
+
             $order->travel_agent_user_id = $order_details->travel_agent_user_id;
             $order->travel_agent_commission_total += $order_details->travel_agent_commission;
 
             $order_details->save();
         }
         $order->save();
-        return $this->sendResponse(200,$order);
+        return $this->sendResponse(200, $order);
+    }
+
+    public function detail(Request $request, $order_id)
+    {
+
+        $user = $request->attributes->get('user');
+        $order = Order:: //get();
+            with([
+                'user_obj', 'sale_agent', 'travel_agent',
+                'order_details' => [
+                    'driver',
+                    'transport_type', 'journey'
+                ]
+            ])
+            ->where('id', $order_id)->first();
+            return $this->sendResponse(200, $order);
+
     }
 }

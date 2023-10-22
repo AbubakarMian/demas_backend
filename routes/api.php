@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth.client_token'], function () {
 Route::group(['middleware' => 'auth.user_loggedin'], function () {
 
     Route::post('order/create',[OrderController::class, 'create']);
-    Route::post('order',[OrderController::class, 'index']);
+    Route::get('order',[OrderController::class, 'index']);
+    Route::get('order/{order_id}',[OrderController::class, 'detail']);
     // Route::post('login',[UserController::class, 'login']);
 });

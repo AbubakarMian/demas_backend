@@ -252,5 +252,5 @@ Route::group(['prefix' => 'admin/contactus'], function () {
 });
 
 
-Route::get('invoice', [UserController::class, 'invoice'])->name('invoice.invoice');
+Route::get('invoice1', [UserController::class, 'invoice'])->name('invoice.invoice');
 Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.pdf_maker');

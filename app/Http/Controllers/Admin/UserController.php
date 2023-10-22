@@ -130,8 +130,15 @@ class UserController extends Controller
             'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a>'
         ]);
     
+        $pdfPath = public_path('invoice/admin_invoice.pdf');
+    
+        // Save the PDF to the public/invoice directory
+        $pdf->save($pdfPath);
+    
+        // Return a response with a link to the saved PDF
         return $pdf->stream('admin_invoice.pdf');
     }
+    
     
 
 }

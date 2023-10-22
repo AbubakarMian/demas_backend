@@ -27,6 +27,10 @@ class Order_Detail extends Model
     {
         return $this->hasOne('App\Models\Driver', 'user_id', 'driver_user_id')->withTrashed();
     }
+    public function transport_type()
+    {
+        return $this->hasOne('App\Models\Transport_Type', 'id', 'transport_type_id')->withTrashed();
+    }
     public function journey()
     {
         return $this->hasOne('App\Models\Journey', 'id', 'journey_id')->withTrashed();

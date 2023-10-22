@@ -45,7 +45,7 @@ else{
 <div class="form-group">
     {!! Form::label('name', 'Name') !!}
     <div>
-        {!! Form::date('name', , [
+        {!! Form::date('name', [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
@@ -58,7 +58,7 @@ else{
 <div class="form-group">
     {!! Form::label('from_date', 'Start Date') !!}
     <div>
-        {!! Form::date('from_date', , [
+        {!! Form::date('from_date', [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
@@ -72,7 +72,7 @@ else{
 <div class="form-group">
     {!! Form::label('to_date', 'End Date') !!}
     <div>
-        {!! Form::date('to_date', , [
+        {!! Form::date('to_date', [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',

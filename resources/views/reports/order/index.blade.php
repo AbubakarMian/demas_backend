@@ -3,11 +3,48 @@
     Orders
 @stop
 
-{{-- @section('add_btn')
-{!! Form::open(['method' => 'get', 'url' => ['admin/order/create'], 'files' => true]) !!}
-<span>{!! Form::submit('Add Transport', ['class' => 'btn btn-success pull-right']) !!}</span>
-{!! Form::close() !!}
-@stop --}}
+@section('add_btn')
+ {{-- <div class="row">
+        <div class="col-md-3">
+            {!! Form::select('journey_id', $journey_list, null, [
+                'class' => 'form-control',
+                'data-parsley-required' => 'true',
+                'data-parsley-trigger' => 'change',
+                'placeholder' => 'Select Journey',
+            ]) !!}
+        </div>
+        <div class="col-md-3"> {!! Form::select('slot_id', $slot_list, null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Select Slot',
+        ]) !!}</div>
+        <div class="col-md-3">{!! Form::select('transport_type_id', $transport_type_list, null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Select Transport Type',
+        ]) !!}</div>
+        <div class="col-md-3">
+
+
+            {!! Form::select('user_travel_agent_id', $travel_agent_list, null, [
+                'class' => 'form-control',
+                'data-parsley-required' => 'true',
+                'data-parsley-trigger' => 'change',
+                'placeholder' => 'Select Agent',
+            ]) !!}
+        </div>
+    </div>
+    {{-- </div> --}}
+    <div class="search">
+
+
+        {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
+
+    </div> --}}
+
+@stop
 @section('table-properties')
     width="400px" style="table-layout:fixed;"
 @endsection

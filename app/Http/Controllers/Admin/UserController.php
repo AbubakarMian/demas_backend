@@ -127,8 +127,11 @@ class UserController extends Controller
         $pdf = PDF::loadView('admin.invoice', [
             'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
             'description' => 'This is an example Laravel pdf tutorial.',
-            'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a>'
+            'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a'
         ]);
+    
+        // Set the paper size to A4 and the orientation to portrait
+        $pdf->setPaper('a4', 'portrait');
     
         $pdfPath = public_path('invoice/admin_invoice.pdf');
     

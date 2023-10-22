@@ -2,12 +2,6 @@
 <html>
 <head>
     <title>Invoice</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,6 +14,9 @@
         }
         .invoice-header {
             text-align: center;
+        }
+        .invoice-header img {
+            max-width: 200px; /* Set the maximum width for the logo */
         }
         .invoice-header h1 {
             margin: 0;
@@ -52,40 +49,80 @@
 <body>
     <div class="invoice">
         <div class="invoice-header">
-            <h1>Invoice</h1>
+            {{-- <img src="{{ asset('images/logo.png') }}" alt="Logo"> --}}
+            <h1>Deemas Booking Invoice</h1>
         </div>
         <div class="invoice-info">
-            <p><strong>Invoice Number:</strong> INV-2023-001</p>
+            <p><strong>Booking ID:</strong>2023-001</p>
             <p><strong>Invoice Date:</strong> October 21, 2023</p>
             <p><strong>Due Date:</strong> November 21, 2023</p>
         </div>
         <table class="invoice-table">
             <thead>
                 <tr>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Total</th>
+                    <th>Guest Name</th>
+                    <th>Guest Whatsapp</th>
+                    <th>Guest Contact</th>
+                    <th>Booking Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Product A</td>
-                    <td>2</td>
-                    <td>$50.00</td>
-                    <td>$100.00</td>
+                    <td>Abu bakar</td>
+                    <td>123-456-7890 </td>
+                    <td>123-456-7890</td>
+                    <td>Confirmed</td>
                 </tr>
-                <tr>
-                    <td>Product B</td>
-                    <td>3</td>
-                    <td>$30.00</td>
-                    <td>$90.00</td>
-                </tr>
+              
             </tbody>
         </table>
-        <div class="invoice-total">
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Pickup</th>
+                    <th>Dropoff</th>
+                    <th>Vehicle</th>
+                    <th>Driver Name</th>
+                    <th>Driver Whatsapp Number</th>
+                    <th>Pickup Date</th>
+                    <th>Pickup Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Madinah Airport
+                        (30APR PK 743
+                        KHI MED2200 0
+                        030)</td>
+                    <td>Madina Hotel
+                        (Emmar Royal
+                        Madinah) </td>
+                    <td>Sedan</td>
+                    <td>Ali</td>
+                    <td>123-456-7890</td>
+                    <td>16-06-2023</td>
+                    <td>08:30 AM</td>
+                </tr>
+                <tr>
+                    <td>Madinah Airport
+                        (30APR PK 743
+                        KHI MED2200 0
+                        030)</td>
+                    <td>Madina Hotel
+                        (Emmar Royal
+                        Madinah) </td>
+                    <td>Sedan</td>
+                    <td>Ali</td>
+                    <td>123-456-7890</td>
+                    <td>16-06-2023</td>
+                    <td>08:30 AM</td>
+                </tr>
+              
+            </tbody>
+        </table>
+        {{-- <div class="invoice-total">
             <p><strong>Total:</strong> $190.00</p>
-        </div>
+        </div> --}}
     </div>
 </body>
 </html>

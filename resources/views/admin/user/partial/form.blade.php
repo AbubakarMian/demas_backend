@@ -119,6 +119,22 @@ $filteredRole = array_filter($filteredRole, function ($key) {
         'maxlength'=>"100"]) !!}
     </div>
 </div>
+<?php
+    $whatsapp_number = '';
+    if(isset($user)){
+        $whatsapp_number = $user->whatsapp_number;
+    }
+?>
+<div class="form-group">
+    {!! Form::label('whatsapp_number','WhatsappNumber') !!}
+    <div>
+        {!! Form::number('phone_no',  $whatsapp_number, ['class' => 'form-control',
+        'data-parsley-required'=>'true',
+        'data-parsley-trigger'=>'change',
+        'placeholder'=>'Enter Whatsapp Number','required',
+        'maxlength'=>"100"]) !!}
+    </div>
+</div>
 <div class="form-group">
     {!! Form::label('password','Password') !!}
     <div>

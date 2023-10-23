@@ -100,6 +100,7 @@ class SaltAgentController extends Controller
         $user->email = $request->email;
         $user->adderss = $request->adderss;
         $user->phone_no = $request->phone_no;
+        $user->whatsapp_number = $request->whatsapp_number;
         $user->role_id = 3;
         if ($request->password) {
             $user->password =  Hash::make($request->password);

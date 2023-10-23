@@ -1,3 +1,4 @@
+{!!dd($order);!!}
 <!DOCTYPE html>
 <html>
 <head>

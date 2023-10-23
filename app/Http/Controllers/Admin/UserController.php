@@ -77,6 +77,7 @@ class UserController extends Controller
         $user->adderss = $request->adderss;
         $user->phone_no = $request->phone_no;
         $user->role_id = $request->role_id;
+        $user->whatsapp_number = $request->whatsapp_number;
         $user->password =  Hash::make($request->password);
 
 
@@ -120,7 +121,7 @@ class UserController extends Controller
         return $response;
     }
     public function invoice(){
-        return view('admin.invoice');
+        return view('pdf.invoice');
     }
     public function pdf_maker()
     {

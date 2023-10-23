@@ -110,6 +110,7 @@ class OrderController extends Controller
             $email_details['data'] = $user;
             $email_details['view'] = 'pdf.invoice';
             $email_handler->sendEmail($email_details);
+            return redirect()->back()->with('success','Invoice sent');
      }
     
 }

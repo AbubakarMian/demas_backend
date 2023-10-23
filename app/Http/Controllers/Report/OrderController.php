@@ -12,6 +12,8 @@ use App\Models\Transport_Type;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PDF;
+
 
 class OrderController extends Controller
 {

@@ -13,7 +13,9 @@ use App\Models\TransportPrices;
 use App\Models\Travel_Agent;
 use App\Models\TravelAgentCommission;
 use App\Models\Users;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+// use PDF;
 
 class OrderHandler
 {
@@ -21,7 +23,7 @@ class OrderHandler
 
     public function gernerate_pdf_order($order,$order_details){
         
-        $pdf = PDF::loadView('pdf.invoice', [
+        $pdf = Pdf::loadView('pdf.invoice', [
             'order' => $order,
             'order_details' =>  $order_details,
         ]);

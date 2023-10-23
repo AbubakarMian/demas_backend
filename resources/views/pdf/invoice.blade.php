@@ -50,7 +50,7 @@
     <div class="invoice">
         <div class="invoice-header">
             {{-- <img src="{{ asset('images/logo.png') }}" alt="Logo"> --}}
-            <h1>Deemas Invoice</h1>
+            <h1>Demas Invoice</h1>
         </div>
         <div class="invoice-info">
             <p><strong>Booking ID:</strong>2023-001</p>

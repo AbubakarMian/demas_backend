@@ -78,126 +78,36 @@ class OrderController extends Controller
         $order->save();
         return $this->sendResponse(200, $order);
     }
- public function send_invoice($order_id){
-    $order = Order::with('order_details','user_obj')->find($order_id);
-    $order_handler = new OrderHandler();
-    $pdf = $order_handler->gernerate_pdf_order($order,$order->order_details);
-
-    // create pdf of order invoice save in invoice url
-    $receipt_url = $pdf['path'];
+    public function send_invoice($order_id){
+        $order = Order::with('order_details','user_obj')->find($order_id);
+        $order_handler = new OrderHandler();
+        $pdf = $order_handler->gernerate_pdf_order($order,$order->order_details);
     
-
-        $email_handler = new EmailHandler();
-        $email_details = [];
-        // $email_details['cc'] = [];
-        // $email_details['cc'][] = [
-        //     'from_email' => 'saadyasirthegreat@gmailcom',
-        //     'from_name' => 'Saad cc',
-        // ];
-
-        $user = $order->user_obj;
-        $email_details['bcc'][] = [
-            'from_email' => 'abubakarhere90@gmailcom',
-            'from_name' => 'Abubakar here bcc',
-        ];
-        $email_details['subject'] = 'Demas Invoice';
-        $email_details['attachments'][] = $receipt_url;
-        // $email_details['to_email'] = 'abubakrmianmamoon@gmail.com';
-        $email_details['to_email'] = $user->email;
-        $email_details['to_name'] = 'Abubakar';
-        $email_details['data'] = $user;
-        $email_details['view'] = 'pdf.invoice';
-        $email_handler->sendEmail($email_details);
- }
-
-
-    // public function create()
-    // {
-    //     $control = 'create';
-    //     $transport_type = Transport_Type::pluck('name', 'id');
-    //     return view('admin.order.create', compact('control', 'transport_type'));
-    // }
-
-    // public function save(Request $request)
-    // {
-    //     $order = new order();
-    //     return $this->add_or_update($request, $order);
-
-    //     return redirect('admin/order');
-    // }
-    // public function edit($id)
-    // {
-    //     $control = 'edit';
-    //     $order = Order_Detail::find($id);
-    //     // dd($order->images);
-    //     $transport_type = Transport_Type::pluck('name', 'id');
-    //     return view(
-    //         'admin.order.create',
-    //         compact(
-    //             'control',
-    //             'order',
-    //             'transport_type',
-
-    //         )
-    //     );
-    // }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $order = Order_Detail::find($id);
-    //     // Order_Detail::delete()
-    //     return $this->add_or_update($request, $order);
-    //     return Redirect('admin/order');
-    // }
-
-
-    // public function add_or_update(Request $request, $order)
-    // {
-    //     // dd(json_encode($request->order_images_upload));
-    //     $validator = Validator::make(
-    //         $request->all(),
-    //         [
-    //             'order_images_upload' => 'required'
-    //         ],
-    //         [
-    //             'order_images_upload' => [
-    //                 'required' => 'Images Required'
-    //             ]
-    //         ]
-    //     );
-    //     if ($validator->fails()) {
-    //         return back()->with('error', $validator->messages());
-    //     }
-    //     $order->transport_type_id = $request->transport_type_id;
-    //     $order->name = $request->name;
-    //     $order->details = $request->details;
-    //     $order->images = $request->order_images_upload;
-    //     $order->features = $request->features;
-    //     $order->seats = $request->seats;
-    //     $order->luggage = $request->luggage;
-    //     $order->doors = $request->doors;
-    //     $order->booking = $request->booking;
-    //     $order->dontforget = $request->dontforget;
-    //     $order->images = $request->order_images_upload;
-    //     $order->save();
-    //     return Redirect('admin/order');
-    // }
-
-    // public function destroy_undestroy($id)
-    // {
-    //     $order = Order_Detail::find($id);
-    //     if ($order) {
-    //         Order_Detail::destroy($id);
-    //         $new_value = 'Activate';
-    //     } else {
-    //         Order_Detail::withTrashed()->find($id)->restore();
-    //         $new_value = 'Delete';
-    //     }
-    //     $response = Response::json([
-    //         "status" => true,
-    //         'action' => Config::get('constants.ajax_action.delete'),
-    //         'new_value' => $new_value
-    //     ]);
-    //     return $response;
-    // }
+        // create pdf of order invoice save in invoice url
+        $receipt_url = $pdf['path'];
+        
+    
+            $email_handler = new EmailHandler();
+            $email_details = [];
+            // $email_details['cc'] = [];
+            // $email_details['cc'][] = [
+            //     'from_email' => 'saadyasirthegreat@gmailcom',
+            //     'from_name' => 'Saad cc',
+            // ];
+    
+            $user = $order->user_obj;
+            $email_details['bcc'][] = [
+                'from_email' => 'abubakarhere90@gmailcom',
+                'from_name' => 'Abubakar here bcc',
+            ];
+            $email_details['subject'] = 'Demas Invoice';
+            $email_details['attachments'][] = $receipt_url;
+            // $email_details['to_email'] = 'abubakrmianmamoon@gmail.com';
+            $email_details['to_email'] = $user->email;
+            $email_details['to_name'] = 'Abubakar';
+            $email_details['data'] = $user;
+            $email_details['view'] = 'pdf.invoice';
+            $email_handler->sendEmail($email_details);
+     }
+    
 }

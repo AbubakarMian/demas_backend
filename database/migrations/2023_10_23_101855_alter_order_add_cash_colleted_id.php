@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('order_detail', function (Blueprint $table) {
-            $table->bigInteger('transport_id')->nullable()->default(0);
-            $table->bigInteger('transport_type_id')->nullable()->default(0);
-            $table->string('pick_extrainfo', 300)->nullable()->default("");
-            $table->string('dropoff_extrainfo', 300)->nullable()->default("");
+        Schema::table('order', function (Blueprint $table) {
+            $table->bigInteger('cash_collected_by_user_id')->default(0);
+            
         });
     }
 

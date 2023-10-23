@@ -18,7 +18,7 @@ class OrderController extends Controller
                 'user_obj', 'sale_agent', 'travel_agent',
                 'order_details' => [
                     'driver',
-                    'transport_type', 'journey'
+                    'transport_type', 'journey' => ['pickup', 'dropoff']
                 ]
             ]);
 
@@ -114,7 +114,16 @@ class OrderController extends Controller
                 ]
             ])
             ->where('id', $order_id)->first();
-            return $this->sendResponse(200, $order);
+        return $this->sendResponse(200, $order);
+    }
 
+    public function order_pay(Request $request, $order_id)
+    {
+        $user = $request->attributes->get('user');
+        $order = Order:: find($order_id);
+        $order->is_paid = true;
+        $order->cash_collected_by = 'driver';
+        $order->cash_collected_by_user_id = $user->id;
+        return $this->sendResponse(200, $order);
     }
 }

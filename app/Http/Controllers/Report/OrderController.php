@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\EmailHandler;
+use App\Http\Controllers\Handler\OrderHandler;
 use App\Models\Driver;
 use App\Models\Order;
 use App\Models\Order_Detail;
@@ -76,4 +78,36 @@ class OrderController extends Controller
         $order->save();
         return $this->sendResponse(200, $order);
     }
+    public function send_invoice($order_id){
+        $order = Order::with('order_details','user_obj')->find($order_id);
+        $order_handler = new OrderHandler();
+        $pdf = $order_handler->gernerate_pdf_order($order,$order->order_details);
+    
+        // create pdf of order invoice save in invoice url
+        $receipt_url = $pdf['path'];
+        
+    
+            $email_handler = new EmailHandler();
+            $email_details = [];
+            // $email_details['cc'] = [];
+            // $email_details['cc'][] = [
+            //     'from_email' => 'saadyasirthegreat@gmailcom',
+            //     'from_name' => 'Saad cc',
+            // ];
+    
+            $user = $order->user_obj;
+            $email_details['bcc'][] = [
+                'from_email' => 'abubakarhere90@gmailcom',
+                'from_name' => 'Abubakar here bcc',
+            ];
+            $email_details['subject'] = 'Demas Invoice';
+            $email_details['attachments'][] = $receipt_url;
+            // $email_details['to_email'] = 'abubakrmianmamoon@gmail.com';
+            $email_details['to_email'] = $user->email;
+            $email_details['to_name'] = 'Abubakar';
+            $email_details['data'] = $user;
+            $email_details['view'] = 'pdf.invoice';
+            $email_handler->sendEmail($email_details);
+     }
+    
 }

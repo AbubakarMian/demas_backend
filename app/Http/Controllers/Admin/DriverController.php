@@ -97,6 +97,7 @@ class DriverController extends Controller
         $user->phone_no = $request->phone_no;
         $user->city = $request->city;
         $user->adderss = $request->adderss;
+        $user->whatsapp_number = $request->whatsapp_number;
         $user->role_id = 5;
         if ($request->password) {
             $user->password =  Hash::make($request->password);

@@ -104,8 +104,8 @@ class OrderController extends Controller
             ];
             $email_details['subject'] = 'Demas Invoice';
             $email_details['attachments'][] = $receipt_url;
-            // $email_details['to_email'] = 'abubakrmianmamoon@gmail.com';
-            $email_details['to_email'] = $user->email;
+            $email_details['to_email'] = 'ameer.maavia@gmail.com';
+            // $email_details['to_email'] = $user->email;
             $email_details['to_name'] = 'Abubakar';
             $email_details['data'] = $user;
             $email_details['view'] = 'pdf.invoice';

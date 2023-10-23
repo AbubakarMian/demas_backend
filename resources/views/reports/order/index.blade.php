@@ -155,9 +155,9 @@
                         var order_detail =
                             `<a class="btn btn-info" data-toggle="modal" data-target="#orderdetails"
                                 onclick="get_details(` + id + `)">View</a>`;
-                        var send_invoice =
-                            `<a class="btn btn-info"
-                                href="{!! asset('reports/order/send_invoice') !!}"/`+response['data'][i].id+` >Send Invoice</a>`;
+                                var send_invoice =
+    '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' +id + '">Send Invoice</a>';
+
                         // 'orderdetail_' + response['data'][i].id + `">View</a>`;
                         createModal({
                             // id: 'orderdetail_' + response['data'][i].id,

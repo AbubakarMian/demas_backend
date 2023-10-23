@@ -265,6 +265,6 @@ Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.p
     Route::post('update/{id}', [StaffPaymentsController::class, 'update'])->name('staff_payments.update');
     Route::post('delete/{id}', [StaffPaymentsController::class, 'destroy_undestroy'])->name('staff_payments.delete');
    
-    Route::get('order/send_invoice/{order_id}', [OrderController::class, 'send_invoice'])->name('staff_payments.send_invoice'); //add
 
 });
+Route::get('reports/order/send_invoice/{order_id}', [OrderController::class, 'send_invoice'])->name('staff_payments.send_invoice'); //add

@@ -13,7 +13,7 @@ use App\Models\TransportPrices;
 use App\Models\Travel_Agent;
 use App\Models\TravelAgentCommission;
 use App\Models\Users;
-use Barryvdh\DomPDF\Facade\Pdf;
+// use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use PDF;
 

@@ -50,5 +50,6 @@ Route::group(['middleware' => 'auth.user_loggedin'], function () {
     Route::post('order/create',[OrderController::class, 'create']);
     Route::get('order',[OrderController::class, 'index']);
     Route::get('order/{order_id}',[OrderController::class, 'detail']);
+    Route::post('order/pay/{order_id}',[OrderController::class, 'order_pay']);
     // Route::post('login',[UserController::class, 'login']);
 });

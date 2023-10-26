@@ -262,7 +262,8 @@
                         $.each(response.response['order_details'], function(index, item) {
                             console.log('response item', item);
                             console.log('response index', index);
-                            var drivers = `<select onchange="change_driver('`+item.id+`',this)">`;
+                            var drivers = `<select onchange="change_driver('`+item.id+`',this)">
+                                <option value="0">Select Driver</option>`;
                                 $.each(response.response['drivers'],function(driver_index,driver_item){
                                     var user_driver = driver_item.user_obj;
                                     var selected = user_driver.id == item.driver_user_id ? 'selected':'';

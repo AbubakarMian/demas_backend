@@ -18,7 +18,7 @@ class OrderController extends Controller
             with([
                 'user_obj', 'sale_agent', 'travel_agent',
                 'order_details' => [
-                    'driver',
+                    'driver.user_obj',
                     'transport_type', 'journey' => ['pickup', 'dropoff']
                 ]
             ]);
@@ -32,7 +32,7 @@ class OrderController extends Controller
                 } elseif ($user->role_id == 4) { //sale_agent
                     $q->where('travel_agent_user_id', $user->id);
                 } elseif ($user->role_id == 5) { //driver
-                    $q->where('user_driver_id', $user->id);
+                    $q->where('driver_user_id', $user->id);
                 }
             });
         }
@@ -124,7 +124,7 @@ class OrderController extends Controller
             with([
                 'user_obj', 'sale_agent', 'travel_agent',
                 'order_details' => [
-                    'driver',
+                    'driver.user_obj',
                     'transport_type', 'journey'
                 ]
             ])

@@ -38,6 +38,8 @@ width="400px" style="table-layout:fixed;"
         <th>Name</th>
         <th>Email</th>
         <th>Phone no</th>
+        <th>whatsapp no</th>
+        <th>Iqama no</th>
         <th>Commision Type</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
@@ -74,6 +76,7 @@ $(document).ready(function(){
                   var driver_name =  response['data'][i].user_obj.name;
                   var email =  response['data'][i].user_obj.email;
                   var phone_no =  response['data'][i].user_obj.phone_no;
+                  var iqama_number =  response['data'][i].iqama_number;
                   var commision_type =  response['data'][i].commision_type;
 
                 console.log('aaa',response['data'][i]);
@@ -100,6 +103,7 @@ $(document).ready(function(){
                     "<td>" +driver_name+ "</td>" +
                     "<td>" +email+ "</td>" +
                     "<td>" +phone_no+ "</td>" +
+                    "<td>" +iqama_number+ "</td>" +
                     "<td>" + format_value_for_display(commision_type)+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +

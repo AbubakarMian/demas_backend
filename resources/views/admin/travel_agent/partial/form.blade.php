@@ -122,6 +122,47 @@
             'maxlength'=>"100"]) !!}
         </div>
     </div>
+   
+    <div class="form-group">
+        {!! Form::label('license_num','License Num') !!}
+        <div>
+            {!! Form::number('license_num',null,  ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Enter License Number','required',
+            'maxlength'=>"100"]) !!}
+        </div>
+    </div>
+    <div class="form-group">
+        {!! Form::label('company_name','Company Name') !!}
+        <div>
+            {!! Form::number('company_name',null,  ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Enter Company name','required',
+            'maxlength'=>"100"]) !!}
+        </div>
+    </div>
+    <div class="form-group">
+        {!! Form::label('country','Country') !!}
+        <div>
+            {!! Form::number('country',null,  ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Enter Country name','required',
+            'maxlength'=>"100"]) !!}
+        </div>
+    </div>
+    <div class="form-group">
+        {!! Form::label('city','City') !!}
+        <div>
+            {!! Form::number('city',null,  ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Enter City name','required',
+            'maxlength'=>"100"]) !!}
+        </div>
+    </div>
     <div class="form-group">
         <label for="sale_agent">Sale Agents</label>
         {!! Form::select('user_sale_agent_id', $user_sale_agents, null, [

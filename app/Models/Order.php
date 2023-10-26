@@ -12,7 +12,7 @@ class Order extends Model
     protected $table = 'order';   
     public function user_obj()
     {
-        return $this->hasOne('App\Models\Users', 'id', 'user_driver_id')->withTrashed();
+        return $this->hasOne('App\Models\Users', 'id', 'user_id')->withTrashed();
     }
     public function payment()
     {

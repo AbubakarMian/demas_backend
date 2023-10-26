@@ -105,6 +105,23 @@
             'maxlength'=>"100"]) !!}
         </div>
     </div>
+  
+    <?php
+        $whatsapp_number = '';
+        if(isset($user)){
+            $whatsapp_number = $user->whatsapp_number;
+        }
+    ?>
+    <div class="form-group">
+        {!! Form::label('whatsapp_number','Phone Number') !!}
+        <div>
+            {!! Form::number('whatsapp_number',  $whatsapp_number, ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Enter Whatsapp Number','required',
+            'maxlength'=>"100"]) !!}
+        </div>
+    </div>
     <div class="form-group">
         <label for="sale_agent">Sale Agents</label>
         {!! Form::select('user_sale_agent_id', $user_sale_agents, null, [

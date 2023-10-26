@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Report\StaffPaymentsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
@@ -254,3 +255,16 @@ Route::group(['prefix' => 'admin/contactus'], function () {
 
 Route::get('invoice1', [UserController::class, 'invoice'])->name('invoice.invoice');
 Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.pdf_maker');
+   //  =================================  staff_payments ==========================
+   Route::group(['prefix' => 'reports/staff_payments'], function () {
+    Route::get('/', [StaffPaymentsController::class, 'index'])->name('staff_payments.index');
+    Route::get('get_staff_payments', [StaffPaymentsController::class, 'get_staff_payments'])->name('staff_payments.index');
+    Route::get('create', [StaffPaymentsController::class, 'create'])->name('staff_payments.create'); //add
+    Route::post('save', [StaffPaymentsController::class, 'save'])->name('staff_payments.save');
+    Route::get('edit/{id}', [StaffPaymentsController::class, 'edit'])->name('staff_payments.edit');
+    Route::post('update/{id}', [StaffPaymentsController::class, 'update'])->name('staff_payments.update');
+    Route::post('delete/{id}', [StaffPaymentsController::class, 'destroy_undestroy'])->name('staff_payments.delete');
+   
+
+});
+Route::get('reports/order/send_invoice/{order_id}', [OrderController::class, 'send_invoice'])->name('staff_payments.send_invoice'); //add

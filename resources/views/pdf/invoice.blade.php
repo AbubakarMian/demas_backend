@@ -10,7 +10,7 @@
             margin: 20px auto;
             padding: 20px;
             width: 80%;
-            background: #f9f9f9;
+            /* background: #f9f9f9; */
         }
         .invoice-header {
             text-align: center;
@@ -50,7 +50,7 @@
     <div class="invoice">
         <div class="invoice-header">
             {{-- <img src="{{ asset('images/logo.png') }}" alt="Logo"> --}}
-            <h1>Deemas Booking Invoice</h1>
+            <h1>Demas Invoice</h1>
         </div>
         <div class="invoice-info">
             <p><strong>Booking ID:</strong>2023-001</p>
@@ -119,7 +119,7 @@
                 </tr>
               
             </tbody>
-        </table>
+        </table>    
         {{-- <div class="invoice-total">
             <p><strong>Total:</strong> $190.00</p>
         </div> --}}

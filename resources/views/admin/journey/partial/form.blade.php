@@ -51,7 +51,7 @@ select#gender {
         {!! Form::text('name', null, ['class' => 'form-control location_name',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Pickup Location to Dropoff Location','required']) !!}
+        'placeholder'=>'Pickup Location to Dropoff Location']) !!}
     </div>
 </div>
 <span id="err" class="error-product"></span>

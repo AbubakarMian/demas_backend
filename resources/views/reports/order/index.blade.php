@@ -42,7 +42,7 @@
 
         {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
 
-    </div> --}}
+    </div> 
 
 @stop
 @section('table-properties')
@@ -99,6 +99,7 @@
                 <th>Paid</th>
                 <th>Order Details</th>
                 <th>Status </th>
+                <th>Invoice </th>
             </tr>
         </thead>
         <tbody>
@@ -128,7 +129,7 @@
 
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
-                        var name = response['data'][i].user_obj.name;
+                        var name = response['data'][i].user_obj?.name??'';
                         // var payment_id = response['data'][i].payment_id;
                         // var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
                         var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
@@ -154,6 +155,9 @@
                         var order_detail =
                             `<a class="btn btn-info" data-toggle="modal" data-target="#orderdetails"
                                 onclick="get_details(` + id + `)">View</a>`;
+                                var send_invoice =
+    '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' +id + '">Send Invoice</a>';
+
                         // 'orderdetail_' + response['data'][i].id + `">View</a>`;
                         createModal({
                             // id: 'orderdetail_' + response['data'][i].id,
@@ -225,6 +229,7 @@
                             "<td>" + order_detail + "</td>" +
                             `<td id='td_status_` + response['data'][i].id + `'>` +
                             status + `</td>` +
+                            "<td>" + send_invoice + "</td>" +
                             "</tr>";
                         $("#orderTableAppend tbody").append(tr_str);
                     }

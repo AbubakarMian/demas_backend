@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handler\CommissionHandler;
+use App\Http\Controllers\Handler\OrderHandler;
 use App\Models\Order;
 use App\Models\Order_Detail;
 use Illuminate\Http\Request;
@@ -98,6 +99,20 @@ class OrderController extends Controller
             $order_details->save();
         }
         $order->save();
+
+        $order_obj = Order::with('order_details')->find($order->id);
+        // generate pdf 
+        $order_handler = new OrderHandler();
+        $pdf = $order_handler->gernerate_pdf_order($order_obj,$order_obj->order_details);
+
+        // create pdf of order invoice save in invoice url
+        $order->receipt_url = $pdf['path'];
+        $order->save();
+
+        // return $pdf['stream'];
+
+        // $user->email send email with attachment
+
         return $this->sendResponse(200, $order);
     }
 

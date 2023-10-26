@@ -106,6 +106,7 @@ class DriverController extends Controller
         $driver->id = $request->id;
         $driver->user_id = $user->id;
         $driver->commision_type = $request->commision_type;
+        $driver->iqama_number = $request->iqama_number;
         $driver->commision = $request->commision;
         $driver->save();
         return Redirect('admin/driver');

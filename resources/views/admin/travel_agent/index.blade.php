@@ -37,6 +37,10 @@ width="400px" style="table-layout:fixed;"
 	<tr>
         <th>Name</th>
         <th>Email</th>
+        <th>Company no</th>
+        <th>License no</th>
+        <th>Country</th>
+        <th>City</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -71,6 +75,10 @@ $(document).ready(function(){
                   var id =  response['data'][i].id;
                   var travel_agent_name =  response['data'][i].user_obj.name;
                   var email =  response['data'][i].user_obj.email;
+                  var company_name =  response['data'][i].company_name;
+                  var license_num =  response['data'][i].license_num;
+                  var country =  response['data'][i].country;
+                  var city =  response['data'][i].city;
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);
@@ -95,6 +103,10 @@ $(document).ready(function(){
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
                     "<td>" +travel_agent_name+ "</td>" +
                     "<td>" +email+ "</td>" +
+                    "<td>" +company_name+ "</td>" +
+                    "<td>" +license_num+ "</td>" +
+                    "<td>" +country+ "</td>" +
+                    "<td>" +city+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
        

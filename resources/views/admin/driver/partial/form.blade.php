@@ -118,6 +118,26 @@
             'maxlength'=>"100"]) !!}
         </div>
     </div>
+    <div class="form-group">
+        {!! Form::label('iqama_number','Iqama Number') !!}
+        <div>
+            {!! Form::text('iqama_number',  $user->iqama_number, ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Enter Iqama Number','required',
+            'maxlength'=>"100"]) !!}
+        </div>
+    </div>
+    <div class="form-group">
+        {!! Form::label('iqama_number','Iqama Number') !!}
+        <div>
+            {!! Form::text('iqama_number',  $user->iqama_number, ['class' => 'form-control',
+            'data-parsley-required'=>'true',
+            'data-parsley-trigger'=>'change',
+            'placeholder'=>'Enter Iqama Number','required',
+            'maxlength'=>"100"]) !!}
+        </div>
+    </div>
     
     <div class="form-group">
         {!! Form::label('password','Password') !!}

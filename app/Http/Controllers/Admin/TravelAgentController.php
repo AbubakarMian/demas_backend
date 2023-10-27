@@ -97,6 +97,10 @@ class TravelAgentController extends Controller
         $travel_agent->id = $request->id;
         $travel_agent->user_id = $user->id;
         $travel_agent->user_sale_agent_id = $request->user_sale_agent_id;
+        $travel_agent->company_name = $request->company_name;
+        $travel_agent->license_num = $request->license_num;
+        $travel_agent->country = $request->country;
+        $travel_agent->city = $request->city;
         $travel_agent->save();
         return Redirect('admin/travel_agent');
     }

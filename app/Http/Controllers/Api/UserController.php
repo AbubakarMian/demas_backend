@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handler\EmailHandler;
+use App\Http\Controllers\Handler\NotificationHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -15,6 +16,12 @@ use stdClass;
 
 class UserController extends Controller
 {
+
+    public function send_msg(){
+        $msg = new NotificationHandler();
+        $m = $msg->send_notification();
+        dd($m);
+    }
     public function register_or_login(Request $request)
     {
         try {

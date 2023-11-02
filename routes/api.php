@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 
+Route::get('send',[UserController::class, 'send_msg']);
 Route::post('contactus',[ContactUsController::class, 'contactus']);
 
 

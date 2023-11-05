@@ -36,9 +36,10 @@ class SaltAgentController extends Controller
         $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
         $commission_types = Config::get('constants.sales_agent.commission_types');
 
-        return view('admin.sale_agent.create', compact('control',
-         'travel_agent',
-         'commission_types',
+        return view('admin.sale_agent.create', compact(
+            'control',
+            'travel_agent',
+            'commission_types',
         ));
     }
 
@@ -92,7 +93,7 @@ class SaltAgentController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->with('error', $validator->messages()->all());
         }
-        if($request->commision > 99 && in_array($request->commision_type,['profit_percent','sales_percent'])){
+        if ($request->commision > 99 && in_array($request->commision_type, ['profit_percent', 'sales_percent'])) {
             return redirect()->back()->with('error', ['Commission can not be greater that 99%']);
         }
         $user->name = $request->name;
@@ -119,20 +120,45 @@ class SaltAgentController extends Controller
     public function destroy_undestroy($id)
     {
         $sale_agent = SaleAgent::find($id);
+        $sale_agent->active = 0;
+        $sale_agent->save();
         if ($sale_agent) {
+            $sale_agent->active = 0;
+            $sale_agent->save();
             SaleAgent::destroy($id);
             Users::destroy($sale_agent->user_id);
-            $new_value = 'Activate';
+            $new_value = 'In Active';
         } else {
             SaleAgent::withTrashed()->find($id)->restore();
+            $sale_agent = SaleAgent::find($id);
+            $sale_agent->active = 1;
+            $sale_agent->save();
             Users::withTrashed()->find($sale_agent->user_id)->restore();
-            $new_value = 'Delete';
+            $new_value = 'Active';
         }
         $response = Response::json([
             "status" => true,
             'action' => Config::get('constants.ajax_action.delete'),
             'new_value' => $new_value
         ]);
+        return $response;
+    }
+
+    public function active_inactive($id)
+    {
+        $sale_agent = SaleAgent::withTrashed()->find($id);
+        $sale_agent->active = $sale_agent->active ? 0 : 1;
+        $sale_agent->save();
+        $new_value = $sale_agent->active ? 'Inactive':'Activate';
+        // $response = Response::json([
+        //     "status" => true,
+        //     'action' => Config::get('constants.ajax_action.update'),
+        //     'new_value' => $new_value
+        // ]);
+        $res = new \stdClass();
+        $res->new_value = $new_value;
+        $res->updated_obj = $sale_agent;
+        $response = $this->sendResponse(200,$res);
         return $response;
     }
 }

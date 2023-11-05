@@ -41,6 +41,7 @@
                 <th>Commision Type</th>
                 <th>Commision</th>
                 <th>Edit </th>
+                <th>Status </th>
                 <th>Delete </th>
             </tr>
         </thead>
@@ -72,13 +73,14 @@
                         for (var i = 0; i < len; i++) {
                             var id = response['data'][i].id;
                             var sale_agent_name = response['data'][i].user_obj.name;
-                            var commision_type = format_value_for_display(response['data'][i].commision_type);
+                            var commision_type = format_value_for_display(response['data'][i]
+                                .commision_type);
                             var commision = response['data'][i].commision;
 
                             console.log('aaa', response['data'][i]);
 
                             var edit =
-                            `<a class="btn btn-info" href="{!! asset('admin/sale_agent/edit/` + id + `') !!}">Edit</a>`;
+                                `<a class="btn btn-info" href="{!! asset('admin/sale_agent/edit/` + id + `') !!}">Edit</a>`;
                             createModal({
                                 id: 'sale_agent_' + response['data'][i].id,
                                 header: '<h4>Delete</h4>',
@@ -94,12 +96,15 @@
                             var delete_btn =
                                 `<a class="btn btn-info" data-toggle="modal" data-target="#` +
                                 'sale_agent_' + response['data'][i].id + `">Delete</a>`;
+                            var status_btn =
+                               get_status_btn_html(response['data'][i].id,response['data'][i].active);
 
                             var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
                                 "<td>" + sale_agent_name + "</td>" +
                                 "<td>" + commision_type + "</td>" +
                                 "<td>" + commision + "</td>" +
                                 "<td>" + edit + "</td>" +
+                                "<td>" + status_btn + "</td>" +
                                 "<td>" + delete_btn + "</td>" +
                                 "</tr>";
 
@@ -118,6 +123,15 @@
             }
 
         });
+
+        function get_status_btn_html(id, status){
+            console.log('update status',status);
+            return (
+                `<button class="btn btn-info"  onclick="status_request(`+ id + `)">
+                            ` + (status ? 'Inactive' : 'Active') + `
+                            </button>`
+            );
+        }
 
         function set_msg_modal(msg) {
             $('.set_msg_modal').html(msg);
@@ -138,6 +152,29 @@
                         var myTable = $('#sale_agentTableAppend').DataTable();
                         console.log('removeasdasdasd');
                         myTable.row('#row_' + id).remove().draw();
+                    }
+                }
+            });
+        }
+
+        function status_request(id) {
+            $.ajax({
+
+                url: "{!! asset('admin/sale_agent/active_inactive') !!}/" + id,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{!! @csrf_token() !!}'
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.status) {
+                        var myTable = $('#sale_agentTableAppend').DataTable();
+                        console.log('removeasdasdasd');
+                        // $('#row_' + id+'  td:nth-child(5)').html(response.response.new_value);
+                        $('#row_' + id+'  td:nth-child(5)').html(get_status_btn_html(id,response.response.updated_obj.active));
+                        // var row = myTable.row('#row_' + id);
+                        // row.cell(3).data('abasdsadsad').draw();
                     }
                 }
             });

@@ -74,6 +74,7 @@ class OrderController extends Controller
             
             $order_details = new Order_Detail();
             $order_details->order_id = $order->id;
+            $order_details->sub_order_id = $order_id_uniq.'-'.($detail_key+1);
             $order_details->pickup_location_id = $detail['pickup_id'];
             $order_details->drop_off_location_id = $detail['dropoff_id'];
             $order_details->transport_type_id = $detail['transport_type_id'];

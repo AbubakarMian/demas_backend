@@ -9,6 +9,9 @@ return [
 	'app-type' => [
 		'android' => "demas-app-mobile",
 	],
+	'settings' => [
+		'discount' => "discount",
+	],
     'driver'=>[
         'commission_types'=>[
             'monthly'=>'Monthly',

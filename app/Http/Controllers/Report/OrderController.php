@@ -90,7 +90,6 @@ class OrderController extends Controller
     
         // create pdf of order invoice save in invoice url
         $receipt_url = $pdf['path'];
-        
     
             $email_handler = new EmailHandler();
             $email_details = [];

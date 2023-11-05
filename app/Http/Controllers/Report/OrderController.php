@@ -27,12 +27,15 @@ class OrderController extends Controller
 
     public function get_order(Request $request)
     {
-        $order = Order::with(
+        $order = Order::with([
             'user_obj',
             'sale_agent.user_obj',
             'travel_agent.user_obj',
-            'driver.user_obj',
-            )->get();
+            'order_details' => [
+                'driver.user_obj',
+                'transport_type', 'journey' => ['pickup', 'dropoff']
+            ],
+            ])->get();
         $orderData['data'] = $order;
         echo json_encode($orderData);
     }

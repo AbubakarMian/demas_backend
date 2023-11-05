@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('order_details', function (Blueprint $table) {
+        Schema::table('order_detail', function (Blueprint $table) {
             $table->string('cash_collected_by',300)->nullable()->default(null)->comment('admin/sale_agent/travel_agent/driver');
             $table->bigInteger('cash_collected_by_user_id')->nullable()->default(0);
             $table->string('payment_type',300)->nullable()->default(null)->comment('paid/cod/later');
             $table->float('collection_amount_from_user',10,2)->nullable()->default(0);
             $table->tinyInteger('is_paid')->nullable()->default(0);
+            $table->string('sub_order_id',150)->nullable()->default('');
         });
     }
 

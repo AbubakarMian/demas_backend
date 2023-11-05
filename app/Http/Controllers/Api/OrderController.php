@@ -48,13 +48,13 @@ class OrderController extends Controller
         $booking = $request_params['booking_details'];
         $commission_details = new CommissionHandler();
         $order = new Order();
-        $order_pre = Order::orderbyDesc('order_id')->first();
+        $order_pre = Order::where('order_id','>',99999)->orderbyDesc('order_id')->first();
         if (!$order_pre) {
             $order_id_uniq = 100000;
         } else {
             $order_id_uniq = $order_pre->order_id + 1;
         }
-        // dd($request_params);
+        
         $order->user_id = $user->id;
         $order->order_id = $order_id_uniq;
         $order->total_price = 0;
@@ -71,7 +71,7 @@ class OrderController extends Controller
                 $user->id,
                 $detail['pickupdate_time']
             );
-            // dd($trip_price_details->journey_price);
+            
             $order_details = new Order_Detail();
             $order_details->order_id = $order->id;
             $order_details->pickup_location_id = $detail['pickup_id'];

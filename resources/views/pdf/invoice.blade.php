@@ -51,7 +51,7 @@
         <div class="invoice-header">
             <img src="{{ asset('images/logo.png') }}">
             {{-- <img src="'. public_path() .'/images/logo.png"> --}}
-            <h1>Booking Confirmation</h1>
+            <h1>Booking Information</h1>
         </div>
         <div class="invoice-info">
             <p><strong>Booking ID:</strong>2023-001</p>

@@ -30,15 +30,17 @@ class OrderHandler
         // Set the paper size to A4 and the orientation to portrait
         $pdf->setPaper('a4', 'portrait');
     
-        $pdfPath = public_path('invoice/'.$order->order_id.'pdf');
+        $path = 'invoice/'.$order->order_id.'pdf';
+        $pdfPath = public_path($path);
     
         // Save the PDF to the public/invoice directory
         $pdf->save($pdfPath);
+        $absolute_path = asset($path);
     
         // Return a response with a link to the saved PDF
         return[
             'stream'=>$pdf->stream($pdfPath),
-            'path'=>$pdfPath
+            'path'=>$absolute_path
         ] ;
         // return $pdf->stream('admin_invoice.pdf');
     }

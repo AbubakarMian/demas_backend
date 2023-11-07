@@ -19,7 +19,7 @@ class LocationTypeSeeder extends Seeder
             ['name'=>'Airport'],
             [
                 'name'=>'Airport',
-                'placeholder'=>'Ticket No'
+                'placeholder'=>'Flight No'
             ],
         );    
         Location_Type::firstOrCreate(

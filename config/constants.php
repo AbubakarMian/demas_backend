@@ -54,8 +54,13 @@ return [
         'user'=>'user',
         'sholar'=>'scholar'
     ],
-
+    'payment_type'=>[
+        'cod'=>'cod',
+        'card'=>'card',
+        'advance_collection'=>'advance_collection',
+    ],
     'payment_status'=>[
+        'pending'=>'pending',
         'paid'=>'paid',
         'refunded'=>'refunded',
     ],

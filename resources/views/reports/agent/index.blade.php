@@ -38,8 +38,9 @@
     </div>
     {{-- </div> --}}
     <div class="search">
-        {!! Form::button('Search', ['class' => 'btn btn-success pull-right',
-         'onclick' => 'fetchRecords()']) !!}
+
+
+        {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
 
     </div> 
 

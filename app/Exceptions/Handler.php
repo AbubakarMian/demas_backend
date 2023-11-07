@@ -40,30 +40,33 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-        return parent::render($request, $exception);
-
-        if(str_contains($request->url(),'localhost/')){
-            return parent::render($request, $exception);
-        }
-        Log::error('Exception Handler',[
+        // return parent::render($request, $exception);
+        Log::error('Exception Handler', [
             $exception->getMessage()
         ]);
 
-        if(str_contains($request->url(),'/api/')){
+        if (str_contains($request->url(), 'localhost/')) {
+            return parent::render($request, $exception);
+        }
+        
+
+        if (str_contains($request->url(), '/api/')) {
             return response()->json([
-                'status' 	=> 500,
-                'response' 	=> null,
-                'error' 	=> $exception->getMessage()
+                'status' => 500,
+                'response' => null,
+                'error' => $exception->getMessage()
             ]);
         }
 
         if ($exception instanceof TokenMismatchException) {
-            return redirect('admin/login');
-        }
-        else if ($exception instanceof NotFoundHttpException) {
+            if (str_contains($request->url(), '/admin/')) {
+                return redirect('admin/login');
+            } else {
+                return redirect('/');
+            }
+        } else if ($exception instanceof NotFoundHttpException) {
             return response()->view('error.error_404', [], 404);
-        }
-        else{
+        } else {
             return response()->view('error.error_500', [], 500);
 
             // return redirect('error/500');

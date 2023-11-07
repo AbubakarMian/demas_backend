@@ -9,6 +9,9 @@ return [
 	'app-type' => [
 		'android' => "demas-app-mobile",
 	],
+	'settings' => [
+		'discount' => "discount",
+	],
     'driver'=>[
         'commission_types'=>[
             'monthly'=>'Monthly',
@@ -51,8 +54,13 @@ return [
         'user'=>'user',
         'sholar'=>'scholar'
     ],
-
+    'payment_type'=>[
+        'cod'=>'cod',
+        'card'=>'card',
+        'advance_collection'=>'advance_collection',
+    ],
     'payment_status'=>[
+        'pending'=>'pending',
         'paid'=>'paid',
         'refunded'=>'refunded',
     ],

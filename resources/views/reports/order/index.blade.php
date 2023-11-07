@@ -124,7 +124,7 @@
                     console.log('response');
                     $("#orderTableAppend").css("opacity", 1);
                     var len = response['data'].length;
-                    console.log('response2');
+                    console.log('response2 mian fetch');
 
 
                     for (var i = 0; i < len; i++) {
@@ -260,9 +260,10 @@
                     if (response.status) {
                         var details_list = '';
                         $.each(response.response['order_details'], function(index, item) {
-                            console.log('response item', item);
+                            console.log('response item get_details ', item);
                             console.log('response index', index);
-                            var drivers = `<select onchange="change_driver('`+item.id+`',this)">`;
+                            var drivers = `<select onchange="change_driver('`+item.id+`',this)">
+                                <option value="0">Select Driver</option>`;
                                 $.each(response.response['drivers'],function(driver_index,driver_item){
                                     var user_driver = driver_item.user_obj;
                                     var selected = user_driver.id == item.driver_user_id ? 'selected':'';

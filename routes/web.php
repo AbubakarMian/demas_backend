@@ -166,6 +166,7 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::get('edit/{id}', [SaltAgentController::class, 'edit'])->name('sale_agent.edit');
         Route::post('update/{id}', [SaltAgentController::class, 'update'])->name('sale_agent.update');
         Route::post('delete/{id}', [SaltAgentController::class, 'destroy_undestroy'])->name('sale_agent.delete');
+        Route::post('active_inactive/{id}', [SaltAgentController::class, 'active_inactive'])->name('sale_agent.active_inactive');
     });
     //  =================================  travel_agent ==========================
     Route::group(['prefix' => 'travel_agent'], function () {

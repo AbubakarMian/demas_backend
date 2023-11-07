@@ -13,9 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('order', function (Blueprint $table) {
-            $table->bigInteger('cash_collected_by_user_id')->default(0);
-            
+        Schema::create('settings', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name')->nullable()->default('');
+            $table->string('lable')->nullable()->default('');
+            $table->string('value',3000)->nullable()->default('');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('settings');
     }
 };

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handler\EmailHandler;
+use App\Http\Controllers\Handler\NotificationHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -15,23 +16,50 @@ use stdClass;
 
 class UserController extends Controller
 {
+
+    public function send_msg(){
+        $msg = new NotificationHandler();
+        $m = $msg->send_notification();
+        dd($m);
+    }
     public function register_or_login(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'phone_no' => 'required|unique:users',
-                'email' => 'required|email|unique:users',
+                'phone_no' => 'required',
+                'whatsapp_no' => 'required',
+                'email' => 'required|email',
             ]);
 
             if ($validator->fails()) {
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
 
+                $user_phone = User::where('phone_no', $request->phone_no)
+                ->first();
+
+                $user_email = User::where('email', $request->email)
+                ->first();
+
+                $user = User::where('phone_no', $request->phone_no)
+                            ->where('email', $request->email)
+                            ->first();
+
+                // if( $user_phone->id != $user_email->id){
+                if( ($user_phone || $user_email) && !$user){
+                    $msg = '';
+                    $msg = $user_phone ? 'Phone number already taken':'';
+                    $msg .= $user_email ? ' Email already taken':'';
+
+                    return $this->sendResponse(500, null, [$msg]);
+                }
+
+
                 $name = 'user';
                 if ($request->email) {
                     $name = explode('@', $request->email)[0];
                 }
-                $user = User::where('phone_no', $request->phone_no)->first();
+                // $user = User::where('phone_no', $request->phone_no)->first();
                 if (!$user) {
                     $user = new User();
                     $user->role_id = 2;
@@ -42,6 +70,7 @@ class UserController extends Controller
                     $user->email = $request->email;
                 }
                 $user->phone_no = $request->phone_no;
+                $user->whatsapp_number = $request->whatsapp_no;
                 // $user->password = Hash::make($request->password);
                 $user->access_token = uniqid();
                 $user->otp = rand(10000, 99999);

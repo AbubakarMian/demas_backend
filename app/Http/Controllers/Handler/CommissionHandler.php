@@ -6,6 +6,7 @@ use App\Libraries\APIResponse;
 use App\Libraries\Common;
 use App\Models\Journey;
 use App\Models\Journey_Slot;
+use App\Models\Order;
 use App\Models\SaleAgent;
 use App\Models\Slot;
 use App\Models\Transport;
@@ -113,6 +114,14 @@ class CommissionHandler
             $res->sale_agent_commission = $sale_agent_commission->commision;
         }
         return $res;
+    }
+
+    public function update_order_commission_model($order_id){
+        $order = Order::with('order_details')->find($order_id);
+
+        foreach ($order->order_details as $order_detail_key => $order_detail) {
+            
+        }
     }
 
     public function get_sale_agent_commission($sale_agent_user_id,$journey_price,$travel_agent_commission)

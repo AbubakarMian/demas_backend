@@ -68,6 +68,9 @@ class OrderController extends Controller
         $order->user_id = $user->id;
         $order->order_id = $order_id_uniq;
         $order->discount = 0;
+        $order->customer_name = $booking['customer_name'];
+        $order->customer_number = $booking['customer_number'];
+        $order->customer_collection_price = 0;
         $order->discounted_price = 0;
         $order->actual_price = 0;
         $order->final_price = 0;
@@ -98,9 +101,12 @@ class OrderController extends Controller
             $order_details->pick_up_date_time = $detail['pickupdate_time'];
             $actucal_price = $trip_price_details->journey_price->price;
             $order_details->actual_price = $actucal_price;
+            $order_details->customer_collection_price = $booking['customer_collection_price'];
+            $order->customer_collection_price += $order_details->customer_collection_price;
+
             $order->actual_price += $actucal_price;
 
-            if($detail_count %3 == 0){
+            if($detail_count %3 == 0 && $user->role_id == 2){
                 $order_details->discount = $actucal_price * $discount_percent * 0.01;
                 $order_details->discounted_price = $actucal_price - $order_details->discount;
                 $order_details->final_price = $order_details->discounted_price;

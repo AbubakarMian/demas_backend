@@ -25,21 +25,23 @@ class TransportHandler
     public function get_car_details(Request $request, $car_id = 0)
     {
 
+        $user = $request->attributes->get('user');
         $journey_res = json_decode($this->get_journey($request));
         if (!$journey_res) {
             return $journey_res;
         }
 
         $journey = $journey_res->response;
-
         $slot = $this->get_slot($request);
-
         $cars = $this->get_cars($request, $journey, $slot, $car_id);
 
         $user = $request->attributes->get('user');
+        
         $travel_agent = Travel_Agent::where('user_id', $user->id)->first();
-
-        $cars = $this->transform_cars($journey, $slot, $cars, $travel_agent);
+        $request_params = $request->all();
+        $booking = $request_params['booking_details'];
+        $apply_discount = count($booking['details'] + 1) % 3 == 0 && $user->role_id == 2;
+        $cars = $this->transform_cars($journey, $slot, $cars, $travel_agent,$apply_discount);
         return $cars;
     }
     public function get_journey(Request $request)
@@ -96,43 +98,39 @@ class TransportHandler
         } else if ($request->transport_type_id) {
             $cars = $cars->where('transport_type_id', $request->transport_type_id); //->paginate(500);
         }
-        $cars = $cars->orderByDesc('created_at')->paginate(3);
+        $cars = $cars->orderByDesc('created_at')->paginate(1000);
         return $cars;
     }
 
-    public function transform_cars($journey, $slot, $cars, $travel_agent)
+    public function transform_cars($journey, $slot, $cars, $travel_agent,$apply_discount=false)
     {
 
         $discount_percent_obj = Settings::where('name', Config::get('constants.settings.discount'))
                                         ->first();
         $discount_percent = $discount_percent_obj->value;
-        $cars->transform(function ($item) use ($travel_agent, $journey, $slot, $discount_percent) {
-            $commission = 0;
-            if ($travel_agent) {
-                $travel_agent_commission = TravelAgentCommission::where('user_travel_agent_id', $travel_agent->user_id)
-                    ->where('journey_id', $journey->id)
-                    ->where('slot_id', $slot->id)
-                    ->where('transport_type_id', $item->transport_type_id)
-                    ->first();
-                $commission = $travel_agent_commission->commission;
-            }
-            // $transport_price = TransportPrices::
-            //   where('journey_id',$journey->id)
-            // ->where('slot_id',$slot->id)
-            // ->where('transport_type_id',$item->transport_type_id)
-            // ->first();
+        $cars->transform(function ($item) use ($travel_agent, $journey, $slot, $discount_percent,$apply_discount) {
+            // $commission = 0;
+            // if ($travel_agent) {
+            //     $travel_agent_commission = TravelAgentCommission::where('user_travel_agent_id', $travel_agent->user_id)
+            //         ->where('journey_id', $journey->id)
+            //         ->where('slot_id', $slot->id)
+            //         ->where('transport_type_id', $item->transport_type_id)
+            //         ->first();
+            //     $commission = $travel_agent_commission->commission;
+            // }
             $item->features = isset($item->features) ? explode(',', $item->features) : [];
             $item->booking =  isset($item->booking) ? explode(',', $item->booking) : [];
             $item->dontforget = isset($item->dontforget) ? explode(',', $item->dontforget) : [];
             $item->actual_price = '0';
             $item->booking_price = '0';
             $item->discounted_price = '0';
+            $item->apply_discount = $apply_discount;
             $transport_prices = $item->transport_price;
             if (isset($transport_prices) && count($transport_prices)) {
                 $transport_price = $transport_prices[0];
                 $item->transport_price_id = $transport_price->id;
                 $item->actual_price = $transport_price->price;
-                $item->booking_price = $transport_price->price - $commission;
+                $item->booking_price = $transport_price->price;// - $commission;
                 $item->discounted_price = $transport_price->price - ($transport_price->price * $discount_percent * 0.01);
             }
             $res[] = $item;

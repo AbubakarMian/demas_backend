@@ -14,13 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::table('order', function (Blueprint $table) {
-            $table->dropColumn(['cash_collected_by','payment_type','is_paid']);
-            // $table->string('customer_number')->nullable()->default(null);
-            // $table->float('customer_collection_price',10,2)->default(0);
+            $table->dropColumn(['cash_collected_by','payment_type','is_paid','payment_collected_type']);
+            $table->string('cash_collected_by_role')->nullable()->default(null)->comment('admin/travel_agent/driver');
+            $table->string('payment_status')->nullable()->default(null)->comment('pending/paid/refund');
         });
         Schema::table('order_detail', function (Blueprint $table) {
-            // $table->dropColumn('collection_amount_from_user');
-            // $table->float('customer_collection_price',10,2)->default(0);
+            $table->string('cash_collected_by_role')->nullable()->default(null)->comment('admin/travel_agent/driver');
+            $table->string('payment_status')->nullable()->default(null)->comment('pending/paid/refund');
+            $table->bigInteger('cash_collected_by_user_id')->nullable()->default(0);
         });
     }
 

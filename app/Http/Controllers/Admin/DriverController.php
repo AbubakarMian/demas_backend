@@ -33,11 +33,11 @@ class DriverController extends Controller
     public function create()
     {
         $control = 'create';
-        $commission_types = Config::get('constants.driver.commission_types');
+        $driver_categories = Config::get('constants.driver.categories');
 
         return view('admin.driver.create', compact(
             'control',
-            'commission_types'
+            'driver_categories'
         ));
     }
 
@@ -46,21 +46,19 @@ class DriverController extends Controller
         $driver = new Driver();
         $user = new User();
         return $this->add_or_update($request, $user, $driver);
-
-        // return redirect('admin/driver');
     }
     public function edit($id)
     {
         $control = 'edit';
         $driver = Driver::find($id);
-        $commission_types = Config::get('constants.driver.commission_types');
+        $driver_categories = Config::get('constants.driver.categories');
 
         return view(
             'admin.driver.create',
             compact(
                 'control',
                 'driver',
-                'commission_types'
+                'driver_categories'
             )
         );
     }
@@ -105,9 +103,17 @@ class DriverController extends Controller
         $user->save();
         $driver->id = $request->id;
         $driver->user_id = $user->id;
-        $driver->commision_type = $request->commision_type;
+        $driver->driver_category = $request->driver_category;
+        // $driver->commision_type = $request->commision_type;
         $driver->iqama_number = $request->iqama_number;
         $driver->commision = $request->commision;
+
+        if($request->driver_category == 'own'){
+            $driver->commision_type = Config::get('constants.driver.commission_types_keys.own');
+        }
+        else{//out_source
+            $driver->commision_type = Config::get('constants.driver.commission_types_keys.per_trip');
+        }
         $driver->save();
         return Redirect('admin/driver');
     }

@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('driver', function (Blueprint $table) {
-            // $table->string('iqama_number', 250)->nullable()->default(0);
-            
+             $table->string('iqama_number', 250)->nullable()->default("");
         });
     }
 

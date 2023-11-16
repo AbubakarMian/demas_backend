@@ -67,21 +67,21 @@
         </div>
     </div>
     <div class="form-group">
-        {!! Form::label('commision_type','Commision Type') !!}
+        {!! Form::label('driver_category','Drive Category') !!}
         <div>
-            {!! Form::select('commision_type',  $commission_types,null, ['class' => 'form-control',
+            {!! Form::select('driver_category',  $driver_categories,null, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change','required','onclick'=>'show_commission_box(this)']) !!}
         </div>
     </div>
 <?php 
-    $show_commission = '';
-    if(isset($driver) && $driver->commision_type == 'per_trip'){
-        $show_commission = 'display:none';
+    $show_category = '';
+    if(isset($driver) && $driver->driver_category == 'out_source'){
+        $show_category = 'display:none';
     }
 ?>
-    <div class="form-group commission_salary" style="{!!$show_commission!!}">
-        {!! Form::label('commission','Commission') !!}
+    <div class="form-group commission_salary" style="{!!$show_category!!}">
+        {!! Form::label('commission','Salary') !!}
         <div>
             {!! Form::number('commision',  null, ['class' => 'form-control',
             'data-parsley-required'=>'true',
@@ -129,17 +129,6 @@
         </div>
     </div>
     <div class="form-group">
-        {!! Form::label('iqama_number','Iqama Number') !!}
-        <div>
-            {!! Form::text('iqama_number',  $user->iqama_number, ['class' => 'form-control',
-            'data-parsley-required'=>'true',
-            'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter Iqama Number','required',
-            'maxlength'=>"100"]) !!}
-        </div>
-    </div>
-    
-    <div class="form-group">
         {!! Form::label('password','Password') !!}
         <div>
             {!! Form::password('password',  ['class' => 'form-control',
@@ -170,7 +159,7 @@
     @section('app_jquery')
     <script>
         function show_commission_box(e){
-            if($(e).val()=='monthly'){
+            if($(e).val()=='own'){
                 $('.commission_salary').css('display','block');
             }
             else{

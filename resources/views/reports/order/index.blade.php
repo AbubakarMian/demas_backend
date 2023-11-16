@@ -267,7 +267,7 @@
                                     var user_driver = driver_item.user_obj;
                                     var selected = user_driver.id == item.driver_user_id ? 'selected':'';
                                     drivers += `<option value="`+user_driver.id+`" `+selected+`>`+
-                                        user_driver.name+`</option>`;
+                                        user_driver.name+` (`+driver_item.drive_category+`) `+`</option>`;
                                 })
                                 drivers +='</select>';
                             details_list += `<tr>

@@ -20,6 +20,14 @@ return [
         'commission_types_keys'=>[
             'monthly'=>'monthly',
             'per_trip'=>'per_trip',
+        ],
+        'categories'=>[
+            'own'=>'Own',
+            'out_source'=>'Out Source',
+        ],
+        'categories_keys'=>[
+            'own'=>'own',
+            'out_source'=>'out_source',
         ]
     ],
     'sales_agent'=>[

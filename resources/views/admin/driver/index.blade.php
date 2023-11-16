@@ -40,7 +40,7 @@ width="400px" style="table-layout:fixed;"
         <th>Phone no</th>
         <th>whatsapp no</th>
         <th>Iqama no</th>
-        <th>Commision Type</th>
+        <th>Category</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -76,8 +76,9 @@ $(document).ready(function(){
                   var driver_name =  response['data'][i].user_obj.name;
                   var email =  response['data'][i].user_obj.email;
                   var phone_no =  response['data'][i].user_obj.phone_no;
+                  var whatsapp_number =  response['data'][i].user_obj.whatsapp_number;
                   var iqama_number =  response['data'][i].iqama_number;
-                  var commision_type =  response['data'][i].commision_type;
+                  var driver_category =  response['data'][i].driver_category;
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);
@@ -103,8 +104,9 @@ $(document).ready(function(){
                     "<td>" +driver_name+ "</td>" +
                     "<td>" +email+ "</td>" +
                     "<td>" +phone_no+ "</td>" +
+                    "<td>" +whatsapp_number+ "</td>" +
                     "<td>" +iqama_number+ "</td>" +
-                    "<td>" + format_value_for_display(commision_type)+ "</td>" +
+                    "<td>" + format_value_for_display(driver_category)+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
        

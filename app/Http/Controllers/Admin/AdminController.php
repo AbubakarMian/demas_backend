@@ -238,8 +238,13 @@ class AdminController extends Controller
             'title' => 'Staff Payments  ',
 
         ];        
-        // $reports[] = [
+        $reports[] = [
 
+            'url' => 'reports/agent ',
+            'title' => 'Agents  ',
+
+        ];        
+        // $reports[] = [
         //     'url' => 'admin/sub_admin/order',
         //     'title' => 'Order ',
 

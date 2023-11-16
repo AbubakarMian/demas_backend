@@ -92,6 +92,7 @@ class CommissionHandler
         if ($user->role_id == 3) { //sale_agent
             $sale_agent_user_id = $user->id;
         } else if ($user->role_id == 4) { //travel_agent
+            // dd($user);
             $travel_agent_commission = TravelAgentCommission::with(['travel_agent' => ['user_obj', 'sale_agent.user_obj']])
                 ->where('user_travel_agent_id', $user_id)
                 ->where('journey_id', $journey->id)

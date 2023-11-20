@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\NewAgentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
@@ -26,4 +27,7 @@ Route::group(['middleware' => 'auth.client_token'], function () {
 
     Route::post('register',[UserController::class, 'register']);
     Route::post('login',[UserController::class, 'login']);
+    Route::post('create_request_new_agent',[NewAgentRequest::class, 'create_request_new_agent']);
 });
+
+

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone')->nullable()->default("");
             $table->string('whatsapp')->nullable()->default("");
             $table->string('comments')->nullable()->default("");
+            $table->string('password')->nullable()->default("");
             $table->softDeletes();
             $table->timestamps();
         });

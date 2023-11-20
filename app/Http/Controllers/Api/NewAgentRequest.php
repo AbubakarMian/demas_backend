@@ -27,14 +27,15 @@ class NewAgentRequest extends Controller
             } else {
     
                 $new_agent = new ModelsNewAgentRequest();
-                $new_agent->name = $request->fullname;
+                $new_agent->name = $request->name;
                 $new_agent->email = $request->email;
-                $new_agent->phone_no = $request->phone_no;
+                $new_agent->phone = $request->phone;
+                $new_agent->whatsapp = $request->whatsapp;
+                $new_agent->comments = $request->comments;
                 $new_agent->password = Hash::make($request->password);
-                $new_agent->access_token = uniqid();
-                $user->save();
+                $new_agent->save();
     
-                return $this->sendResponse(200, $user);
+                return $this->sendResponse(200, $new_agent);
             }
         }
          catch (\Exception $e) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Driver;
 use App\Models\DriverJourney;
 use App\Models\Journey;
 use App\Models\Journey_Slot;
@@ -20,7 +21,7 @@ class DriverJourneyController extends Controller
 
     public function get_driver_journey(Request $request)
     {
-        $driver_journey = DriverJourney::with('journey','journey_slot')->orderBy('created_at', 'DESC')->select('*')->get();
+        $driver_journey = DriverJourney::with('journey','journey_slot')->orderBy('created_at', 'DESC')->get();
         $driver_journeyData['data'] = $driver_journey;
         echo json_encode($driver_journeyData);
     }
@@ -29,10 +30,12 @@ class DriverJourneyController extends Controller
     {
         $control = 'create';
         $journey = Journey::pluck('name','id');
-        $journey_slot = Journey_Slot::pluck('id');
+        $driver = Driver::pluck('name','id');
+        $journey_slot = Journey_Slot::pluck('name','id');
         return view('admin.driver_journey.create', compact(
             'control',
             'journey',
+            'driver',
             'journey_slot',
         ));
     }
@@ -49,11 +52,13 @@ class DriverJourneyController extends Controller
         $control = 'edit';
         $driver_journey = DriverJourney::find($id);
         $journey = Journey::pluck('name','id');
-        $journey_slot = Journey_Slot::pluck('id');
+        $driver = Driver::pluck('name','id');
+        $journey_slot = Journey_Slot::pluck('name','id');
         return view('admin.driver_journey.create', compact(
             'control',
             'driver_journey',
             'journey',
+            'driver',
             'journey_slot',
            
         ));
@@ -62,7 +67,6 @@ class DriverJourneyController extends Controller
     public function update(Request $request, $id)
     {
         $driver_journey = DriverJourney::find($id);
-        // DriverJourney::delete()
         $this->add_or_update($request, $driver_journey);
         return Redirect('admin/driver_journey');
     }
@@ -70,30 +74,11 @@ class DriverJourneyController extends Controller
 
     public function add_or_update(Request $request, $driver_journey)
     {
-        // dd($request->all());
         $driver_journey->user_driver_id = $request->user_driver_id;
         $driver_journey->journey_id = $request->journey_id;
         $driver_journey->journey_slot_id = $request->journey_slot_id;
         $driver_journey->rate = $request->rate;
-        // if($request->hasFile('upload_book')){
-
-        //     $file =$request->upload_book;
-        //     $filename = $file->getClientOriginalName();
-
-        //     $path = public_path().'/uploads/';
-        //     $u  =  $file->move($path, $filename);
-
-        //     $db_path_save_book = asset('/uploads/'.$filename);
-        //     $driver_journey->upload_book =  $db_path_save_book;
-        // }
-        // if ($request->hasFile('avatar')) {
-        //     $avatar = $request->avatar;
-        //     $root = $request->root();
-        //     $driver_journey->avatar = $this->move_img_get_path($avatar, $root, 'image');
-        // }
         $driver_journey->save();
-
-
         return redirect()->back();
     }
 

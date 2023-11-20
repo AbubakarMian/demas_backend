@@ -25,8 +25,8 @@
 @section('content')
 
     <ol class="breadcrumb">
-        <a href="{!! route('dashboard') !!}" class="btn btn-default btn-block btn-lg btn-parsley permiback"><i
-            class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
+        {{-- <a href="{!! route('dashboard') !!}" class="btn btn-default btn-block btn-lg btn-parsley permiback"><i
+            class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a> --}}
         <li>
             <a href="{{route('dashboard')}}"><i class="ti-home mr5"></i>
                 Dashboard</a>

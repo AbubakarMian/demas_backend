@@ -7,7 +7,7 @@ select#gender {
         border: 1px solid #e3e6f3;
 }
 .medsaveclick {
-    padding-top: 10px !important;
+    /* padding-top: 10px !important; */
     color: white;
 }
     </style>
@@ -33,10 +33,10 @@ select#gender {
         'maxlength'=>"100"]) !!}
     </div>
 </div>
-<div class="form-group">
+{{-- <div class="form-group">
     {!! Form::label('seats',' Seats') !!}
     <div>
-        {!! Form::text('seats', null, ['class' => 'form-control',
+        {!! Form::number('seats', null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
         'placeholder'=>'Enter Number Of Seats','required',
@@ -45,9 +45,9 @@ select#gender {
 </div>
 
 <div class="form-group">
-    {!! Form::label('luggage','luggage') !!}
+    {!! Form::label('luggage','Luggage') !!}
     <div>
-        {!! Form::text('luggage',  null, ['class' => 'form-control',
+        {!! Form::number('luggage',  null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
         'placeholder'=>'Enter Number Of Luggage','required',
@@ -55,44 +55,21 @@ select#gender {
     </div>
 </div>
 <div class="form-group">
-    {!! Form::label('passenger','Passenger') !!}
+    {!! Form::label('doors','Doors') !!}
     <div>
-        {!! Form::text('passenger',  null, ['class' => 'form-control',
+        {!! Form::number('doors',  null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter Number Of Passenger','required',
+        'placeholder'=>'Enter Number Of Doors','required',
         'maxlength'=>"100"]) !!}
     </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div> --}}
 
 <span id="err" class="error-product"></span>
 
 
 <div class="form-group col-md-12">
 </div>
-
-
-
 
 
 <div class="col-md-5 pull-left">

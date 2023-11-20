@@ -7,7 +7,7 @@ select#gender {
         border: 1px solid #e3e6f3;
 }
 .medsaveclick {
-    padding-top: 10px !important;
+    /* padding-top: 10px !important; */
     color: white;
 }
     </style>
@@ -29,7 +29,7 @@ select#gender {
         {!! Form::text('name', null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'First Name','required',
+        'placeholder'=>'Enter First Name','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
@@ -39,7 +39,7 @@ select#gender {
         {!! Form::text('last_name', null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Last Name','required',
+        'placeholder'=>'Enter Last Name','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
@@ -60,43 +60,49 @@ select#gender {
 <div class="form-group">
     {!! Form::label('email','Email') !!}
     <div>
-        {!! Form::text('email',  null, ['class' => 'form-control',
+        {!! Form::email('email',  null, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter email','required',
+        'placeholder'=>'Enter Email','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
+<?php
+    $address = '';
+    if(isset($user)){
+        $address = $user->adderss;
+    }
+?>
 <div class="form-group">
-    {!! Form::label('city','City') !!}
+    {!! Form::label('address','Address') !!}
     <div>
-        {!! Form::text('city',  null, ['class' => 'form-control',
+        {!! Form::text('adderss',  $address, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter city','required',
+        'placeholder'=>'Enter Address','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
+
+<?php
+$filteredRole = $role->toArray();
+$filteredRole = array_filter($filteredRole, function ($key) {
+    return $key !== 1;
+}, ARRAY_FILTER_USE_KEY);
+?>
+
 <div class="form-group">
-    {!! Form::label('state','State') !!}
-    <div>
-        {!! Form::text('state',  null, ['class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter State','required',
-        'maxlength'=>"100"]) !!}
-    </div>
+    <label for="role_id">Role</label>
+    {!! Form::select('role_id', $filteredRole, null, [
+        'class' => 'form-control',
+        'data-parsley-required' => 'true',
+        'data-parsley-trigger' => 'change',
+        'placeholder' => 'Select Role',
+        'required',
+        'maxlength' => '100',
+    ]) !!}
 </div>
-<div class="form-group">
-    {!! Form::label('role_id','Role') !!}
-    <div>
-        {!! Form::text('role_id',  null, ['class' => 'form-control',
-        'data-parsley-required'=>'true',
-        'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter Role','required',
-        'maxlength'=>"100"]) !!}
-    </div>
-</div>
+
 <?php
     $number = '';
     if(isset($user)){
@@ -106,10 +112,26 @@ select#gender {
 <div class="form-group">
     {!! Form::label('phone_no','Phone Number') !!}
     <div>
-        {!! Form::text('phone_no',  $number, ['class' => 'form-control',
+        {!! Form::number('phone_no',  $number, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
         'placeholder'=>'Enter Phone Number','required',
+        'maxlength'=>"100"]) !!}
+    </div>
+</div>
+<?php
+    $whatsapp_number = '';
+    if(isset($user)){
+        $whatsapp_number = $user->whatsapp_number;
+    }
+?>
+<div class="form-group">
+    {!! Form::label('whatsapp_number','WhatsappNumber') !!}
+    <div>
+        {!! Form::number('phone_no',  $whatsapp_number, ['class' => 'form-control',
+        'data-parsley-required'=>'true',
+        'data-parsley-trigger'=>'change',
+        'placeholder'=>'Enter Whatsapp Number','required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>

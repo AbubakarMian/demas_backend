@@ -36,10 +36,10 @@ class ClientOrAutherizationToken
         }
 
         $client = $this->sendResponse(
-            Config::get('error.code.INTERNAL_SERVER_ERROR'),
+            Config::get('error.code.UNAUTHORIZED_REQUEST'),
             [],
             ['Authorization token invalid'],
-            Config::get('error.code.INTERNAL_SERVER_ERROR')
+            Config::get('error.code.UNAUTHORIZED_REQUEST')
         );
 
         return response($client);
@@ -67,7 +67,13 @@ class ClientOrAutherizationToken
         $access_token = str_replace("Bearer ", "", $authorization_header);
 
         if ($access_token) {
-            $user = User::where('access_token', $access_token)->first();
+            $user = User::with([
+                'role',
+                'sale_agent.user_obj',
+                'travel_agent.user_obj',
+                'driver.user_obj',
+            ])
+            ->where('access_token', $access_token)->first();
             if ($user) {
                 $request->attributes->add(["user" => $user]);
                 return $request;
@@ -91,7 +97,9 @@ class ClientOrAutherizationToken
             ->where('client_secret', $client_secret)
             ->first();
         if ($client) {
-            $user['id'] = 0;
+            $user = new User();
+            $user->id = 0;
+            $user->name = 'Guest';
             $request->attributes->add(["user" => $user]);
             return $request;
         }

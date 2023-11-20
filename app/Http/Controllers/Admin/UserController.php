@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
-
+use PDF;
+use Twilio\Rest\Client;
+use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
@@ -28,9 +31,11 @@ class UserController extends Controller
     public function create()
     {
         $control = 'create';
-        // $courses = Courses::pluck('full_name','id');
+        $role = Role::pluck('name','id');
         // $category = Category::pluck('name','id');
-        return view('admin.user.create', compact('control'));
+        return view('admin.user.create', compact('control',
+    'role'
+    ));
     }
 
     public function save(Request $request)
@@ -44,11 +49,12 @@ class UserController extends Controller
     {
         $control = 'edit';
         $user = User::find($id);
-        // $courses = Courses::pluck('full_name','id');
+        $role = Role::pluck('name','id');
         // $category = Category::pluck('name','id');
         return view('admin.user.create', compact(
             'control',
             'user',
+            'role',
            
         ));
     }
@@ -68,11 +74,10 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
-        $user->city = $request->city;
-        $user->state = $request->state;
+        $user->adderss = $request->adderss;
         $user->phone_no = $request->phone_no;
-        $user->city = $request->city;
         $user->role_id = $request->role_id;
+        $user->whatsapp_number = $request->whatsapp_number;
         $user->password =  Hash::make($request->password);
 
 
@@ -115,4 +120,29 @@ class UserController extends Controller
         ]);
         return $response;
     }
+    public function invoice(){
+        return view('pdf.invoice');
+    }
+    public function pdf_maker()
+    {
+        $pdf = PDF::loadView('admin.invoice', [
+            'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
+            'description' => 'This is an example Laravel pdf tutorial.',
+            'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a'
+        ]);
+    
+        // Set the paper size to A4 and the orientation to portrait
+        $pdf->setPaper('a4', 'portrait');
+    
+        $pdfPath = public_path('invoice/admin_invoice.pdf');
+    
+        // Save the PDF to the public/invoice directory
+        $pdf->save($pdfPath);
+    
+        // Return a response with a link to the saved PDF
+        return $pdf->stream('admin_invoice.pdf');
+    }
+    
+    
+
 }

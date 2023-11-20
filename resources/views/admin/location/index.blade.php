@@ -5,7 +5,7 @@ LOCATIONS
 
 @section('add_btn')
 {!! Form::open(['method' => 'get', 'url' => ['admin/location/create'], 'files' => true]) !!}
-<span>{!! Form::submit('Add location', ['class' => 'btn btn-success pull-right']) !!}</span>
+<span>{!! Form::submit('Add Location', ['class' => 'btn btn-success pull-right']) !!}</span>
 {!! Form::close() !!}
 @stop
 @section('table-properties')
@@ -37,8 +37,8 @@ width="400px" style="table-layout:fixed;"
 	<tr>
 	    <th> Name</th>
         <th> Location Type</th>
-        <th> Latitude</th>
-        <th> Longitude</th>
+        {{-- <th> Latitude</th>
+        <th> Longitude</th> --}}
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -74,8 +74,8 @@ $(document).ready(function(){
                   var id =  response['data'][i].id;
                   var name =  response['data'][i].name;
                   var location_type =  response['data'][i].location_type.name;
-                  var latitude =  response['data'][i].latitude;
-                  var longitude =  response['data'][i].longitude;
+                //   var latitude =  response['data'][i].latitude;
+                //   var longitude =  response['data'][i].longitude;
                   
 				  var edit = `<a class="btn btn-info" href="{!!asset('admin/location/edit/` + id + `')!!}">Edit</a>`;
                        createModal({
@@ -95,8 +95,8 @@ $(document).ready(function(){
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
                     "<td>" +name+ "</td>" +
                     "<td>" +location_type+ "</td>" +
-                    "<td>" +latitude+ "</td>" +
-                    "<td>" +longitude+ "</td>" +
+                    // "<td>" +latitude+ "</td>" +
+                    // "<td>" +longitude+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
 

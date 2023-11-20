@@ -27,8 +27,6 @@ class TransportTypeController extends Controller
     public function create()
     {
         $control = 'create';
-        // $courses = Courses::pluck('full_name','id');
-        // $category = Category::pluck('name','id');
         return view('admin.transport_type.create', compact('control'));
     }
 
@@ -63,31 +61,11 @@ class TransportTypeController extends Controller
 
     public function add_or_update(Request $request, $transport_type)
     {
-        // dd($request->all());
         $transport_type->name = $request->name;
         $transport_type->seats = $request->seats;
         $transport_type->luggage = $request->luggage;
-        $transport_type->passenger = $request->passenger;
-
-        // if($request->hasFile('upload_book')){
-
-        //     $file =$request->upload_book;
-        //     $filename = $file->getClientOriginalName();
-
-        //     $path = public_path().'/uploads/';
-        //     $u  =  $file->move($path, $filename);
-
-        //     $db_path_save_book = asset('/uploads/'.$filename);
-        //     $transport_type->upload_book =  $db_path_save_book;
-        // }
-        // if ($request->hasFile('avatar')) {
-        //     $avatar = $request->avatar;
-        //     $root = $request->root();
-        //     $transport_type->avatar = $this->move_img_get_path($avatar, $root, 'image');
-        // }
+        $transport_type->doors = $request->doors;
         $transport_type->save();
-
-
         return redirect()->back();
     }
 

@@ -1,11 +1,11 @@
 @extends('layouts.default_module')
 @section('module_name')
-CARS
+Transports
 @stop
 
 @section('add_btn')
 {!! Form::open(['method' => 'get', 'url' => ['admin/car/create'], 'files' => true]) !!}
-<span>{!! Form::submit('Add car', ['class' => 'btn btn-success pull-right']) !!}</span>
+<span>{!! Form::submit('Add Transport', ['class' => 'btn btn-success pull-right']) !!}</span>
 {!! Form::close() !!}
 @stop
 @section('table-properties')
@@ -35,9 +35,12 @@ width="400px" style="table-layout:fixed;"
 <table class="fhgyt" id="carTableAppend" style="opacity: 0">
 <thead>
 	<tr>
+        <th> Name</th>
         <th> Transport Type</th>
-        <th> Driver</th>
-        <th> Details</th>
+        <th> Seats</th>
+        <th> Luggage</th>
+        <th> Doors</th>
+        {{-- <th> Details</th> --}}
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -70,13 +73,14 @@ $(document).ready(function(){
           
               for(var i=0; i<len; i++){
                   var id =  response['data'][i].id;
+                  var name =  response['data'][i].name;
                   var transport_type_name =  response['data'][i].transport_type?.name;
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);
 
 
-                  var user_owner_id =  response['data'][i].user_owner_id;
+                //   var user_owner_id =  response['data'][i].driver.user.name;
                   var details =  response['data'][i].details;
                   
 				  var edit = `<a class="btn btn-info" href="{!!asset('admin/car/edit/` + id + `')!!}">Edit</a>`;
@@ -93,11 +97,15 @@ $(document).ready(function(){
                                 `,
                         });
                         var delete_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#` + 'car_' + response['data'][i].id + `">Delete</a>`;
-
+                        // var img = `<img width="42" src="`+image+`">`;
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
+                    "<td>" +name+ "</td>" +
                     "<td>" +transport_type_name+ "</td>" +
-                    "<td>" +user_owner_id+ "</td>" +
-                    "<td>" +details+ "</td>" +
+                    "<td>" +response['data'][i].seats+ "</td>" +
+                    "<td>" +response['data'][i].luggage+ "</td>" +
+                    "<td>" +response['data'][i].doors+ "</td>" +
+                    // "<td>" +user_owner_id+ "</td>" +
+                    // "<td>" +details+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
        

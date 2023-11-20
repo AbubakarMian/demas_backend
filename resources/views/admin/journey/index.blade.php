@@ -5,7 +5,7 @@ JOURNEY
 
 @section('add_btn')
 {!! Form::open(['method' => 'get', 'url' => ['admin/journey/create'], 'files' => true]) !!}
-<span>{!! Form::submit('Add journey', ['class' => 'btn btn-success pull-right']) !!}</span>
+<span>{!! Form::submit('Add Journey', ['class' => 'btn btn-success pull-right']) !!}</span>
 {!! Form::close() !!}
 @stop
 @section('table-properties')
@@ -35,8 +35,8 @@ width="400px" style="table-layout:fixed;"
 <table class="fhgyt" id="journeyTableAppend" style="opacity: 0">
 <thead>
 	<tr>
-	    <th> PickUp Location</th>
-        <th> DropOff Location</th>
+	    <th> Journey</th>
+        {{-- <th> DropOff Location</th> --}}
 	    <th>Edit  </th>
 		<th>Delete  </th>
 	</tr>
@@ -70,8 +70,8 @@ $(document).ready(function(){
 
               for(var i=0; i<len; i++){
                   var id =  response['data'][i].id;
-                  var pickup_location_id =  response['data'][i].pickup_location_id;
-                  var dropoff_location_id =  response['data'][i].dropoff_location_id;
+                  var pickup_location_id =  response['data'][i].name;
+                //   var dropoff_location_id =  response['data'][i].dropoff_location_id;
                   
 				  var edit = `<a class="btn btn-info" href="{!!asset('admin/journey/edit/` + id + `')!!}">Edit</a>`;
                        createModal({
@@ -90,7 +90,7 @@ $(document).ready(function(){
 
                         var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
                     "<td>" +pickup_location_id+ "</td>" +
-                    "<td>" +dropoff_location_id+ "</td>" +
+                    // "<td>" +dropoff_location_id+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +
 

@@ -67,9 +67,9 @@
                       <div class="wrapper">
                           <section class="panel">
                               <header class="panel-heading no-b">
-                                  <a href="{!! $back_btn_link !!}"
+                                  {{-- <a href="{!! $back_btn_link !!}"
                                       class="btn btn-default btn-block btn-lg btn-parsley permiback"><i
-                                          class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a>
+                                          class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</a> --}}
                                   <h2>@yield('heading')</h2>
                               </header>
                               <div class="panel-body medinputs">

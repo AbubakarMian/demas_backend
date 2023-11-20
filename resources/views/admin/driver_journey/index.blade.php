@@ -38,6 +38,7 @@ width="400px" style="table-layout:fixed;"
 	    <th> Driver</th>
         <th> Journey</th>
         <th> Journey Slot</th>
+        <th> Journey Details</th>
         <th> Rate</th>
 	    <th>Edit  </th>
 		<th>Delete  </th>
@@ -75,7 +76,7 @@ $(document).ready(function(){
                   var user_driver_id =  response['data'][i].user_driver_id;
                   var journey_id =  response['data'][i].journey.name;
                   var journey_slot_id =  response['data'][i].journey_slot_id;
-                  var journey_detail = response['data'][i].journey.name +' - '+response['data'][i].journey_slot.name;
+                  var journey_detail = response['data'][i].journey +' - '+response['data'][i].journey_slot;
                   var rate =  response['data'][i].rate;
                   
 				  var edit = `<a class="btn btn-info" href="{!!asset('admin/driver_journey/edit/` + id + `')!!}">Edit</a>`;
@@ -97,6 +98,7 @@ $(document).ready(function(){
                     "<td>" +user_driver_id+ "</td>" +
                     "<td>" +journey_id+ "</td>" +
                     "<td>" +journey_slot_id+ "</td>" +
+                    "<td>" +journey_detail+ "</td>" +
                     "<td>" +rate+ "</td>" +
                     "<td>" +edit+ "</td>" +
                     "<td>" +delete_btn+ "</td>" +

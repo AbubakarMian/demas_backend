@@ -17,7 +17,7 @@ $admin_common = session()->get('admin_common');
 
     <!-- page level plugin styles -->
     <!-- /page level plugin styles -->
-
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <!-- build:css({.tmp,app}) styles/app.min.css -->
     <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
     <link rel="stylesheet" href="{{ asset('theme/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -28,7 +28,7 @@ $admin_common = session()->get('admin_common');
     <link rel="stylesheet" href="{{ asset('cssjs/myapp.css') }}">
     <link rel="stylesheet" href="{{ asset('cssjs/jquery.timeentry.css') }}">
     <!-- mobiscroll -->
-    <link rel="stylesheet" href="{{ asset('css/mobi/mobiscroll.jquery.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/mobi/mobiscroll.jquery.min.css') }}"> --}}
     <!--  -->
     {{-- Data Tables CSS --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
@@ -51,7 +51,7 @@ $admin_common = session()->get('admin_common');
 
     <!-- css multiselect  -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!--end multiselect  -->
 </head>
@@ -66,9 +66,17 @@ $admin_common = session()->get('admin_common');
     .medsaveclick {
     padding-top: 15px !important;
 }
+img.header-avatar.img-circle {
+    background-color: white;
+}
+img.logo_back {
+    background: white;
+    border-radius: 44px;
+}
 </style>
 
 <body>
+    @include('partial_layouts.cropper.cropper_html')
 
     <div class="app">
         <!-- top header -->
@@ -81,7 +89,7 @@ $admin_common = session()->get('admin_common');
 
                 <!-- logo -->
                 <a href="{{ asset('index.php/admin/dashboard') }}" class="navbar-brand">
-                    <img src="{{ asset('images/logo.png') }}" alt="">
+                    <img class="logo_back" src="{{ asset('images/logo.png') }}" alt="">
                     <span class="heading-font"></span>
                 </a>
                 <!-- /logo -->
@@ -103,7 +111,7 @@ $admin_common = session()->get('admin_common');
 
                 <li class="off-right hidden-xs">
                     <a href="javascript:;" data-toggle="dropdown" class="no-hover">
-                        <img src="{{ asset('theme/images/avatar.jpg') }} " class="header-avatar img-circle"
+                        <img src="{{ asset('/images/nabawi-mosque.png') }} " class="header-avatar img-circle"
                             alt="user" title="user">
                         {{--                    <span class="hidden-xs ml10">Welcome {!! $admin_common->name !!}</span> --}}
                         {{--                    <span class="hidden-xs ml10">Welcome {!! $admin_common->name !!}</span> --}}
@@ -141,6 +149,7 @@ $admin_common = session()->get('admin_common');
 
 
                         <!-- Modules -->
+                        @if(count($admin_common->modules))
                         <li>
                             <a href="javascript:;">
                                 <i class="toggle-accordion"></i>
@@ -159,10 +168,12 @@ $admin_common = session()->get('admin_common');
                                 @endforeach
                             </ul>
                         </li>
+                        @endif
                         <!-- /Modules -->
 
 
                         <!-- Reports -->
+                        @if(count($admin_common->reports))
                         <li>
                             <a href="javascript:;">
                                 <i class="toggle-accordion"></i>
@@ -183,6 +194,7 @@ $admin_common = session()->get('admin_common');
                                 @endforeach
                             </ul>
                         </li>
+                        @endif
                         <!-- /Reports -->
                     </ul>
                 </nav>

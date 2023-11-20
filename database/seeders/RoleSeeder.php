@@ -18,25 +18,46 @@ class RoleSeeder extends Seeder
         Role::firstOrCreate(
             [
                 'id'=>1,
+            ],
+            [
+                'id'=>1,
                 'name'=>'admin'    
             ],
         );    
         Role::firstOrCreate(
             [
                 'id'=>2,
-                'name'=>'user'    
+            ],
+            [
+                'id'=>2,
+                'name'=>'User'    
             ],
         );    
         Role::firstOrCreate(
             [
                 'id'=>3,
-                'name'=>'sales_agent'    
+            ],
+            [
+                'id'=>3,
+                'name'=>'Sales Agent'    
             ],
         );    
         Role::firstOrCreate(
             [
                 'id'=>4,
-                'name'=>'travel_agent'    
+            ],
+            [
+                'id'=>4,
+                'name'=>'Travel Agent'    
+            ],
+        );    
+        Role::firstOrCreate(
+            [
+                'id'=>5,
+            ],
+            [
+                'id'=>5,
+                'name'=>'Driver'    
             ],
         );    
 }

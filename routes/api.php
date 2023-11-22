@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\NewAgentRequest;
 use App\Http\Controllers\Api\CarController;
 use App\Http\Controllers\Api\LocationController;
 use Illuminate\Http\Request;
@@ -39,6 +40,9 @@ Route::group(['middleware' => 'auth.client_token'], function () {
     Route::post('validate_otp',[UserController::class, 'validate_otp']);
     // Route::post('register',[UserController::class, 'register']);
     Route::post('login',[UserController::class, 'login']);
+    Route::post('create_request_new_agent',[NewAgentRequest::class, 'create_request_new_agent']);
+
+
     Route::get('journey/verify',[JourneyController::class, 'verify_journey']);
     Route::get('cars/get_all',[CarController::class, 'get_all']);
     Route::get('car/details/{car_id}',[CarController::class, 'car_details']);

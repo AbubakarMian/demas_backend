@@ -240,7 +240,7 @@ class AdminController extends Controller
         ];        
         $reports[] = [
 
-            'url' => 'reports/agent ',
+            'url' => 'admin/reports/agent ',
             'title' => 'Agents  ',
 
         ];        

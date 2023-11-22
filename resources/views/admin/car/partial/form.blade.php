@@ -11,32 +11,34 @@
         /* padding-top: 10px !important; */
         color: white;
     }
-    .remove_btn {
-    position: absolute;
-    top: -11px;
-    right: -10px;
-    background: red;
-    text-align: right;
-    padding-right: 5px;
-    font-size: 15px;
-    color: white;
-    /* font-weight: bold; */
-    cursor: pointer;
-    border-radius: 50px;
-    width: 20px;
-    height: 20px;
-}
 
-.car_images.col-md-2 {
-    margin: 13px 3px;
-    border: solid 1px #996418;
-    border-radius: 10px;
-    padding: 5px;
-}
-.car_images {
-    position: relative;
-    display: inline-block;
-}
+    .remove_btn {
+        position: absolute;
+        top: -11px;
+        right: -10px;
+        background: red;
+        text-align: right;
+        padding-right: 5px;
+        font-size: 15px;
+        color: white;
+        /* font-weight: bold; */
+        cursor: pointer;
+        border-radius: 50px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .car_images.col-md-2 {
+        margin: 13px 3px;
+        border: solid 1px #996418;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    .car_images {
+        position: relative;
+        display: inline-block;
+    }
 </style>
 
 @if ($message = Session::get('error'))
@@ -51,7 +53,21 @@
 @endif
 
 <div class="form-group">
-    {!! Form::label('name', 'Name') !!}
+    {!! Form::label('owner_name', 'Owner Name') !!}
+    <div>
+        {!! Form::text('owner_name', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Enter Name',
+            'required',
+            'maxlength' => '100',
+        ]) !!}
+    </div>
+</div>
+
+<div class="form-group">
+    {!! Form::label('name', 'Car Name') !!}
     <div>
         {!! Form::text('name', null, [
             'class' => 'form-control',
@@ -59,6 +75,7 @@
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Enter Name',
             'required',
+            'maxlength' => '201',
         ]) !!}
     </div>
 </div>
@@ -76,8 +93,7 @@
 <label for="transport_type_id">Upload Images</label>
 
 
-<input type="file" accept="image/*" class="form-control prof_box crop_upload_image" 
-    image_width="500" image_height="225"
+<input type="file" accept="image/*" class="form-control prof_box crop_upload_image" image_width="500" image_height="225"
     aspect_ratio_width="0" aspect_ratio_height="0" multiple upload_input_by_name="car_images[]"
     onsuccess_function="show_image">
 <div class="row">
@@ -96,6 +112,20 @@
 
     </div>
 </div>
+
+<div class="form-group">
+    {!! Form::label('number_plate', 'Number Plate') !!}
+    <div>
+        {!! Form::text('number_plate', null, [
+            'class' => 'form-control',
+            'data-parsley-required' => 'true',
+            'data-parsley-trigger' => 'change',
+            'placeholder' => 'Number Plate',
+            'required',
+            'maxlength' => '100',
+        ]) !!}
+    </div>
+</div>
 <div class="form-group">
     {!! Form::label('seats', 'Seats') !!}
     <div>
@@ -104,7 +134,7 @@
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Number of Seats',
-            'min'=>0,
+            'min' => 0,
             'required',
         ]) !!}
     </div>
@@ -117,7 +147,7 @@
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Number of Luggage',
-            'min'=>0,
+            'min' => 0,
             'required',
         ]) !!}
     </div>
@@ -130,7 +160,7 @@
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Number of Doors',
-            'min'=>0,
+            'min' => 0,
             'required',
         ]) !!}
     </div>
@@ -225,10 +255,9 @@
         function validateForm() {
             return true;
             var total_images = $(".car_images_upload").length;
-            if(total_images){
+            if (total_images) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
         }

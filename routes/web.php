@@ -210,36 +210,32 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
     Route::group(['prefix' => 'order'], function () {
         Route::get('/', [OrderController::class, 'index'])->name('order.index');
         Route::get('get_order', [OrderController::class, 'get_order'])->name('order.index');
-        Route::get('details_list/{order_id}', [OrderController::class, 'get_order_details_list'])->name('order.get_order_details_list');
-        Route::post('update_order_status/{order_id}', [OrderController::class, 'update_order_status'])->name('order.update_order_status');
-        Route::post(
-            'update_order_detail_driver/{order_detail_id}',
-            [OrderController::class, 'update_order_detail_driver']
-        );
-        Route::get('create', [OrderController::class, 'create'])->name('order.create'); //add
-        Route::post('save', [OrderController::class, 'save'])->name('order.save');
-        Route::get('edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
-        Route::post('update/{id}', [OrderController::class, 'update'])->name('order.update');
-        Route::post('delete/{id}', [OrderController::class, 'destroy_undestroy'])->name('order.delete');
-    });
-    //admin/sub_admin
-    Route::group(['prefix' => 'reports/agent'], function () {
-        Route::get('/', [AgentsController::class, 'index'])->name('agent.index');
-        Route::get('get_agent', [AgentsController::class, 'get_agent'])->name('agent.index');
-        Route::get('details_list/{agent_id}', [AgentsController::class, 'get_agent_details_list'])->name('agent.get_agent_details_list');
-        Route::post('update_agent_status/{agent_id}', [AgentsController::class, 'update_agent_status'])->name('agent.update_agent_status');
-        Route::post(
-            'update_agent_detail_driver/{agent_detail_id}',
-            [AgentsController::class, 'update_agent_detail_driver']
-        );
-        Route::get('create', [AgentsController::class, 'create'])->name('agent.create'); //add
-        Route::post('save', [AgentsController::class, 'save'])->name('agent.save');
-        Route::get('edit/{id}', [AgentsController::class, 'edit'])->name('agent.edit');
-        Route::post('update/{id}', [AgentsController::class, 'update'])->name('agent.update');
-        Route::post('delete/{id}', [AgentsController::class, 'destroy_undestroy'])->name('agent.delete');
+        Route::post('get_order', [OrderController::class, 'get_order'])->name('order.index');
+        // Route::get('details_list/{order_id}', [OrderController::class, 'get_order_details_list'])->name('order.get_order_details_list');
+        // Route::post('update_order_status/{order_id}', [OrderController::class, 'update_order_status'])->name('order.update_order_status');
+        // Route::post(
+        //     'update_order_detail_driver/{order_detail_id}',
+        //     [OrderController::class, 'update_order_detail_driver']
+        // );
+    
     });
 
 });
+
+
+    //admin/sub_admin
+    Route::group(['prefix' => 'admin/reports/agent'], function () {
+        Route::get('/', [AgentsController::class, 'index'])->name('agent.index');
+        Route::get('get_order', [AgentsController::class, 'get_order'])->name('order.agent.index');
+        Route::post('get_order', [AgentsController::class, 'get_order'])->name('order.agent.index');
+        // Route::get('get_agent', [AgentsController::class, 'get_agent'])->name('agent.index');
+        // Route::get('details_list/{agent_id}', [AgentsController::class, 'get_agent_details_list'])->name('agent.get_agent_details_list');
+        // Route::post('update_agent_status/{agent_id}', [AgentsController::class, 'update_agent_status'])->name('agent.update_agent_status');
+        // Route::post(
+        //     'update_agent_detail_driver/{agent_detail_id}',
+        //     [AgentsController::class, 'update_agent_detail_driver']
+        // );
+    });
 
 
 Route::group(['prefix' => 'admin/sub_admin', 'middleware' => 'sub_admin_auth'], function () {

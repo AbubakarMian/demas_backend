@@ -4,44 +4,45 @@
 @stop
 
 @section('add_btn')
- {{-- <div class="row">
-        <div class="col-md-3">
-            {!! Form::select('journey_id', $journey_list, null, [
+    <div class="row">
+        <form class="search_filter">
+            <div class="col-md-3">
+                {!! Form::select('journey_id', $journey_list, null, [
+                    'class' => 'form-control',
+                    'data-parsley-required' => 'true',
+                    'data-parsley-trigger' => 'change',
+                    'placeholder' => 'Select Journey',
+                ]) !!}
+            </div>
+            <div class="col-md-3"> {!! Form::select('slot_id', $slot_list, null, [
                 'class' => 'form-control',
                 'data-parsley-required' => 'true',
                 'data-parsley-trigger' => 'change',
-                'placeholder' => 'Select Journey',
-            ]) !!}
-        </div>
-        <div class="col-md-3"> {!! Form::select('slot_id', $slot_list, null, [
-            'class' => 'form-control',
-            'data-parsley-required' => 'true',
-            'data-parsley-trigger' => 'change',
-            'placeholder' => 'Select Slot',
-        ]) !!}</div>
-        <div class="col-md-3">{!! Form::select('transport_type_id', $transport_type_list, null, [
-            'class' => 'form-control',
-            'data-parsley-required' => 'true',
-            'data-parsley-trigger' => 'change',
-            'placeholder' => 'Select Transport Type',
-        ]) !!}</div>
-        <div class="col-md-3">
-
-
-            {!! Form::select('user_travel_agent_id', $travel_agent_list, null, [
+                'placeholder' => 'Select Slot',
+            ]) !!}</div>
+            <div class="col-md-3">{!! Form::select('transport_type_id', $transport_type_list, null, [
                 'class' => 'form-control',
                 'data-parsley-required' => 'true',
                 'data-parsley-trigger' => 'change',
-                'placeholder' => 'Select Agent',
-            ]) !!}
-        </div>
+                'placeholder' => 'Select Transport Type',
+            ]) !!}</div>
+            <div class="col-md-3">
+
+
+                {!! Form::select('travel_agent_user_id', $travel_agent_list, null, [
+                    'class' => 'form-control',
+                    'data-parsley-required' => 'true',
+                    'data-parsley-trigger' => 'change',
+                    'placeholder' => 'Select Agent',
+                ]) !!}
+            </div>
+        </form>
     </div>
-    {{-- </div> --}}
+    </div>
     <div class="search">
-        {!! Form::button('Search', ['class' => 'btn btn-success pull-right',
-         'onclick' => 'fetchRecords()']) !!}
+        {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
 
-    </div> 
+    </div>
 
 @stop
 @section('table-properties')
@@ -110,14 +111,24 @@
 
     <script>
         $(document).ready(function() {
+            $('#orderTableAppend').DataTable({
+                dom: '<"top_datatable"B>lftipr',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+            });
             fetchRecords();
         });
 
         function fetchRecords() {
 
+            var formdata = $('.search_filter').serialize();
+            // $.post('url', data);
+            $('#orderTableAppend').DataTable().destroy();
             $.ajax({
                 url: '{!! asset('admin/order/get_order') !!}',
-                type: 'get',
+                type: 'post',
+                data: formdata,
                 dataType: 'json',
                 success: function(response) {
                     console.log('response');
@@ -125,14 +136,16 @@
                     var len = response['data'].length;
                     console.log('response2 mian fetch');
 
-
+                    $("#orderTableAppend tbody").html('');
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
-                        var name = response['data'][i].user_obj?.name??'';
+                        var name = response['data'][i].user_obj?.name ?? '';
                         // var payment_id = response['data'][i].payment_id;
                         // var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
-                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
-                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name??'';//response['data'][i].sale_agent.user_obj.name;
+                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name ??
+                            ''; //response['data'][i].sale_agent.user_obj.name;
+                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name ??
+                            ''; //response['data'][i].sale_agent.user_obj.name;
                         // var user_travel_agent_name = response['data'][i].travel_agent.user_obj.name;
                         // var user_driver_id = response['data'][i].driver.user_obj.name;
                         var cash_collected_by = response['data'][i].cash_collected_by;
@@ -154,8 +167,9 @@
                         var order_detail =
                             `<a class="btn btn-info" data-toggle="modal" data-target="#orderdetails"
                                 onclick="get_details(` + id + `)">View</a>`;
-                                var send_invoice =
-    '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' +id + '">Send Invoice</a>';
+                        var send_invoice =
+                            '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' + id +
+                            '">Send Invoice</a>';
 
                         // 'orderdetail_' + response['data'][i].id + `">View</a>`;
                         createModal({
@@ -232,15 +246,16 @@
                             "</tr>";
                         $("#orderTableAppend tbody").append(tr_str);
                     }
-                    $(document).ready(function() {
-                        console.log('sadasdasdad');
-                        $('#orderTableAppend').DataTable({
-                            dom: '<"top_datatable"B>lftipr',
-                            buttons: [
-                                'copy', 'csv', 'excel', 'pdf', 'print'
-                            ],
-                        });
+                    // $(document).ready(function() {
+                    console.log('sadasdasdad');
+
+                    $('#orderTableAppend').DataTable({
+                        dom: '<"top_datatable"B>lftipr',
+                        buttons: [
+                            'copy', 'csv', 'excel', 'pdf', 'print'
+                        ],
                     });
+                    // });
                 }
             });
         }
@@ -261,15 +276,18 @@
                         $.each(response.response['order_details'], function(index, item) {
                             console.log('response item get_details ', item);
                             console.log('response index', index);
-                            var drivers = `<select onchange="change_driver('`+item.id+`',this)">
+                            var drivers = `<select onchange="change_driver('` + item.id + `',this)">
                                 <option value="0">Select Driver</option>`;
-                                $.each(response.response['drivers'],function(driver_index,driver_item){
-                                    var user_driver = driver_item.user_obj;
-                                    var selected = user_driver.id == item.driver_user_id ? 'selected':'';
-                                    drivers += `<option value="`+user_driver.id+`" `+selected+`>`+
-                                        user_driver.name+` (`+driver_item.drive_category+`) `+`</option>`;
-                                })
-                                drivers +='</select>';
+                            $.each(response.response['drivers'], function(driver_index, driver_item) {
+                                var user_driver = driver_item.user_obj;
+                                var selected = user_driver.id == item.driver_user_id ?
+                                    'selected' : '';
+                                drivers += `<option value="` + user_driver.id + `" ` +
+                                    selected + `>` +
+                                    user_driver.name + ` (` + driver_item.drive_category +
+                                    `) ` + `</option>`;
+                            })
+                            drivers += '</select>';
                             details_list += `<tr>
                                 <td>` + item.journey.name + `</td>
                                 <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
@@ -305,7 +323,7 @@
                     console.log(response.status);
                     console.log('response', response.status);
                     if (response.status) {
-                        console.log('updated row ',order_detail_id);
+                        console.log('updated row ', order_detail_id);
                     } else {
                         alert('Someting went wrong');
                     }
@@ -333,7 +351,7 @@
                     $('.orderdetails_list').html('');
                     if (response.status) {
                         var myTable = $('#orderTableAppend').DataTable();
-                        console.log('removeasdasdasd row ','#row_' + order_id);
+                        console.log('removeasdasdasd row ', '#row_' + order_id);
                         let rowIndex = myTable.row('#row_' + order_id).index();
                         myTable.cell(rowIndex, 7).data(capitalize_first_letter(status));
                         myTable.draw();

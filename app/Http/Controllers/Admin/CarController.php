@@ -90,6 +90,8 @@ class CarController extends Controller
         $car->details = $request->details;
         $car->images = $request->car_images_upload;
         $car->features = $request->features;
+        $car->number_plate = $request->number_plate;
+        $car->owner_name = $request->owner_name;
         $car->seats = $request->seats;
         $car->luggage = $request->luggage;
         $car->doors = $request->doors;

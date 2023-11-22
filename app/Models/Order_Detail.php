@@ -35,6 +35,10 @@ class Order_Detail extends Model
     {
         return $this->hasOne('App\Models\Travel_Agent', 'user_id', 'travel_agent_user_id')->withTrashed();
     }
+    public function transport()
+    {
+        return $this->hasOne('App\Models\Transport', 'id', 'transport_id')->withTrashed();
+    }
     public function transport_type()
     {
         return $this->hasOne('App\Models\Transport_Type', 'id', 'transport_type_id')->withTrashed();

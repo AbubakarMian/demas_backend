@@ -8,8 +8,10 @@ use App\Http\Controllers\Handler\EmailHandler;
 use App\Http\Controllers\Handler\OrderHandler;
 use App\Models\Driver;
 use App\Models\DriverCommission;
+use App\Models\Journey;
 use App\Models\Order;
 use App\Models\Order_Detail;
+use App\Models\Slot;
 use App\Models\Transport_Type;
 use App\Models\Users;
 use Illuminate\Http\Request;
@@ -24,7 +26,20 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $drivers = Users::where('role_id', 5)->pluck('name', 'id');
-        return view('reports.order.index', compact('drivers'));
+        $journey_list = Journey::pluck('name', 'id');
+        $slot_list = Slot::pluck('name', 'id');
+        $transport_type_list = Transport_Type::pluck('name', 'id');
+        $travel_agent_list = Users::where('role_id',Config::get('constants.role.sale_agent'))->pluck('name', 'id');
+        return view(
+            'reports.order.index',
+            compact(
+                'drivers',
+                'journey_list',
+                'slot_list',
+                'transport_type_list',
+                'travel_agent_list',
+            )
+        );
     }
 
 
@@ -38,8 +53,28 @@ class OrderController extends Controller
                 'driver.user_obj',
                 'transport_type', 'journey' => ['pickup', 'dropoff']
             ],
-        ])->get();
-        $orderData['data'] = $order;
+        ]);
+        $search_params = $request->all();
+        // if($request->journey_id){
+        $order = $order->whereHas(
+            'order_details',
+            function ($q) use ($search_params) {
+                if (isset($search_params['journey_id'])) {
+                    $q->where('journey_id', $search_params['journey_id']);
+                }
+                if (isset($search_params['slot_id'])) {
+                    $q->where('slot_id', $search_params['slot_id']);
+                }
+                if (isset($search_params['transport_type_id'])) {
+                    $q->where('transport_type_id', $search_params['transport_type_id']);
+                }
+                if (isset($search_params['travel_agent_user_id'])) {
+                    $q->where('travel_agent_user_id', $search_params['travel_agent_user_id']);
+                }
+            }
+        );
+        // }
+        $orderData['data'] = $order->get();
         echo json_encode($orderData);
     }
 
@@ -82,7 +117,7 @@ class OrderController extends Controller
     public function update_order_detail_driver(Request $request, $order_detail_id)
     {
         $driver_user_id = $request->driver_user_id;
-        $order_detail = Order_Detail::with('sale_agent','order')->find($order_detail_id);
+        $order_detail = Order_Detail::with('sale_agent', 'order')->find($order_detail_id);
         $driver = Driver::where('driver_user_id', $driver_user_id)->first();
         $sale_agent = $order_detail->sale_agent;
         $order_detail->driver_user_id = $driver_user_id;

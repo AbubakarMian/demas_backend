@@ -4,8 +4,10 @@
 @stop
 
 @section('add_btn')
-    <div class="row">
-        <form class="search_filter">
+    <form class="search_filter">
+        <div class="row">
+            <div class="row show_columns">
+            </div>
             <div class="row">
                 <div class="col-md-2">
                     <label>. From:</label>
@@ -68,8 +70,8 @@
                 ]) !!}
 
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
     </div>
     <div class="search">
 
@@ -148,8 +150,8 @@
         function fetchRecords() {
             console.log('agent ftach er');
             var formdata = $('.search_filter').serialize();
-            $('#orderTableAppend').DataTable().destroy();
 
+            // Destroy DataTable after the AJAX request is complete
             $.ajax({
                 url: "{!! asset('admin/reports/agent/get_order') !!}",
                 type: 'post',
@@ -157,78 +159,56 @@
                 dataType: 'json',
                 success: function(response) {
                     console.log('response', response);
+
+                    // Clear previous table data
+                    $("#orderTableAppend").DataTable().clear().destroy();
+
                     $("#orderTableAppend").css("opacity", 1);
-                    // var len = response['data'].length;
-                    console.log('response2 mian fetch');
-                    $("#orderTableAppend thead").html('');
-                    $("#orderTableAppend tbody").html('');
+
                     var thead = '<tr>';
-                    var data = '<tr>';
-                    var response_info = response['table_info'];
-                    var response_data = response['report_data'];
                     var tbody = '';
 
+                    var response_info = response['table_info'];
+                    var response_data = response['report_data'];
+
+                    $('.show_columns').html(show_columns_filter_html(response_info));
+
+                    $.each(response_info, function(report_info_index, report_info_data) {
+                        $.each(report_info_data['columns'], function(column_index, column) {
+                            thead += '<th>' + column['heading'] + '</th>';
+                        });
+                    });
+
+                    thead += '</tr>';
+
                     $.each(response_data, function(res_data_index, res_data) {
-                            tbody += '<tr>';
+                        tbody += '<tr>';
                         $.each(response_info, function(report_info_index, report_info_data) {
-
-                            console.log('res_data 1', res_data);
-
                             $.each(report_info_data['columns'], function(column_index, column) {
-                                if (!res_data_index) {
-                                    thead += '<th>' + column['heading'] + '</th>';
-                                }
                                 tbody += `<td>` + res_data[column['data_column']] +
                                     `</td>`;
-                                // tbody += `<td>` + `asdsadsad` +`</td>`;
-                                console.log('data_column ', column['data_column']);
-                                console.log('res_data 2 ', res_data[column[
-                                    'data_column']]);
-                                //     console.log('column heading ', report_table_index,
-                                //         column['heading']);
-                                //     console.log('column data_column ', column[
-                                //         'data_column']);
                             });
-                        })
-
-
+                        });
                         tbody += '</tr>';
-
-
                     });
-                    console.log('tbody', tbody);
-                    $("#orderTableAppend tbody").append(tbody);
-                    $("#orderTableAppend thead").append(thead);
+                    $("#orderTableAppend thead").html(thead);
+                    $("#orderTableAppend tbody").html(tbody);
 
-
-                    // $.each(response_info, function(report_table_index, report_table) {
-                    //     tbody += '<tr>';
-                    //     $.each(report_table['columns'], function(column_index, column) {
-                    //         thead += `<th>` +
-                    //             column['heading'] +
-                    //             `</th>`;
-                    //         tbody += `<td>` +
-                    //             response_data[column['data_column']][column_index] +
-                    //             `</td>`;
-                    //     });
-                    //     tbody += '</tr>';
-                    // });
-                    // thead += `</th>`;
-                    // $("#orderTableAppend thead").append(thead);
-                    // $("#orderTableAppend tbody").append(tbody);
+                    // Reinitialize DataTable after updating the table
+                    $('#orderTableAppend').DataTable({
+                        dom: '<"top_datatable"B>lftipr',
+                        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
                 }
             });
-            // return;
+        }
 
+        function show_columns_filter_html(column){
+            var html  = '';
 
-            // $(document).ready(function() {
-            console.log('sadasdasdad');
-            $('#orderTableAppend').DataTable({
-                dom: '<"top_datatable"B>lftipr',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ],
-            });
         }
 
         function get_details(order_id) {

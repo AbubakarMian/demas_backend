@@ -49,7 +49,8 @@ class OrderHandler
 
     public function get_report(Request $request)
     {
-        $order_details = Order_Detail::with('driver','travel_agent','sale_agent','transport')->get(); //with('order')->
+        $order_details = Order_Detail::with('driver','travel_agent','sale_agent','transport')
+        ->latest()->get(); //with('order')->
         $order_details_arr = $this->admin_report_detail($request, $order_details);
         return $order_details_arr;
     }

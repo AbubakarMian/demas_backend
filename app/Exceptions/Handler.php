@@ -39,15 +39,15 @@ class Handler extends ExceptionHandler
      */
 
     public function render($request, Throwable $exception)
-    {dd("HandlerHandlerHandlerHandler");
+    {
         // return parent::render($request, $exception);
         Log::error('Exception Handler', [
             $exception->getMessage()
         ]);
 
-        // if (str_contains($request->url(), 'localhost/')) {
-        //     return parent::render($request, $exception);
-        // }
+        if (str_contains($request->url(), 'localhost/')) {
+            return parent::render($request, $exception);
+        }
         
 
         if (str_contains($request->url(), '/api/')) {

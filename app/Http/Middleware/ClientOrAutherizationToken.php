@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Exceptions\UnAuthorizedRequestException;
 use App\Libraries\APIResponse;
 use App\Models\User;
+use App\Models\Users;
 use Closure;
 use Exception;
 use Illuminate\Support\Facades\Config;
@@ -61,25 +62,27 @@ class ClientOrAutherizationToken
     }
 
     public function validate_user($request)
-    {   $headers = Request::header();
-        $authorization_header = $headers['Authorization'] ?? $headers['authorization']??null;
-        $authorization_header = $authorization_header ?? $headers['Authorization-secure']?? $headers['authorization-secure'];
-        $access_token = str_replace("Bearer ", "", $authorization_header);
-
-        if ($access_token) {
-            $user = User::with([
+    {
+        $headers = $request->header();
+        $authorizationHeader = $headers['authorization'] ?? $headers['authorization-secure'] ?? null;
+   
+        if ($authorizationHeader) {
+            $accessToken = str_replace("Bearer ", "", $authorizationHeader[0]); 
+            // $user = Users::where('access_token', $accessToken)->first();
+            $user = Users::with([
                 'role',
                 'sale_agent.user_obj',
                 'travel_agent.user_obj',
                 'driver.user_obj',
             ])
-            ->where('access_token', $access_token)->first();
+            ->where('access_token', $accessToken)->first();
+            
             if ($user) {
-                $request->attributes->add(["user" => $user]);
+                $request->attributes->add(['user' => $user]);
                 return $request;
             }
-
         }
+    
         return false;
     }
 

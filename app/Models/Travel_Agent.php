@@ -23,8 +23,8 @@ class Travel_Agent extends Model
     public function sale_agent(){
         return $this->hasOne('App\Models\SaleAgent','user_id','user_sale_agent_id');
     }
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
+    public function user()
+    {
+        return $this->hasOne('App\Models\Users', 'id', 'user_id')->withTrashed();
+    }
 }

@@ -45,6 +45,7 @@ Route::group(['middleware' => 'auth.client_token'], function () {
 
     Route::get('journey/verify',[JourneyController::class, 'verify_journey']);
     Route::get('cars/get_all',[CarController::class, 'get_all']);
+    Route::get('get_cars_by_types',[CarController::class, 'get_cars_by_types']);
     Route::get('car/details/{car_id}',[CarController::class, 'car_details']);
     Route::get('locations/get_all',[LocationController::class, 'get_all']);
 

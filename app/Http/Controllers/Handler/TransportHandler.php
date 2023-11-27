@@ -8,6 +8,7 @@ use App\Models\Journey;
 use App\Models\Settings;
 use App\Models\Slot;
 use App\Models\Transport;
+use App\Models\Transport_Type;
 use App\Models\TransportPrices;
 use App\Models\Travel_Agent;
 use App\Models\TravelAgentCommission;
@@ -46,7 +47,6 @@ class TransportHandler
     }
     public function get_journey(Request $request)
     {
-        // $request = $this->request;
         $pickup_id = $request->pickup_id ?? 0;
         $dropoff_id = $request->dropoff_id ?? 0;
 
@@ -216,5 +216,16 @@ class TransportHandler
     {
         $car = Transport::with('transport_type')->find($car_id);
         return $this->sendResponse(200, $car);
+    }
+    public function get_cars_by_types(Request $request)
+    {
+        $type_id = $request->type_id ?? 0;
+        $transport_types = Transport_Type::with('transports');
+
+        if($type_id){
+            $transport_types = $transport_types->where('id',$type_id);
+        }
+        $transport_types = $transport_types->get();
+        return $transport_types;
     }
 }

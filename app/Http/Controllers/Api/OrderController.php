@@ -69,14 +69,14 @@ class OrderController extends Controller
         $order->order_id = $order_id_uniq;
         $order->discount = 0;
         $order->customer_name = $booking['customer_name'];
-        $order->customer_number = $booking['customer_number'];
+        $order->customer_number = $booking['customer_whatsapp_number'];
         $order->customer_collection_price = 0;
         $order->discounted_price = 0;
         $order->actual_price = 0;
         $order->final_price = 0;
         $order->trip_type = $booking['type'];
-        $order->payment_type = Config::get('constants.payment_type.cod');
-        $order->cash_collected_by = null;
+        // $order->payment_type = Config::get('constants.payment_type.cod');
+        // $order->cash_collected_by = null;
         $order->status = 'pending';
         $order->save();
         $discount_percent_obj = Settings::where('name', Config::get('constants.settings.discount'))
@@ -85,11 +85,13 @@ class OrderController extends Controller
         $detail_count = 1;
         foreach ($booking['details'] as $detail_key => $detail) {
             $trip_price_details = $commission_details->get_trip_price_details(
+                $request,
                 $detail['pickup_id'],
                 $detail['dropoff_id'],
                 $detail['transport_type_id'],
                 $user->id,
-                $detail['pickupdate_time']
+                $detail['pickupdate_time'],
+                $detail['customer_collection_price']
             );
             
             $order_details = new Order_Detail();
@@ -101,7 +103,7 @@ class OrderController extends Controller
             $order_details->pick_up_date_time = $detail['pickupdate_time'];
             $actucal_price = $trip_price_details->journey_price->price;
             $order_details->actual_price = $actucal_price;
-            $order_details->customer_collection_price = $booking['customer_collection_price'];
+            $order_details->customer_collection_price = $detail['customer_collection_price'];
             $order->customer_collection_price += $order_details->customer_collection_price;
 
             $order->actual_price += $actucal_price;

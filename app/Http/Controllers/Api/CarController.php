@@ -14,10 +14,18 @@ use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
-    public function get_all(Request $request){
+    public function get_cars_for_booking(Request $request){
 
         $transport_handler = new TransportHandler();
         $cars = $transport_handler->get_car_details($request);
+        return $this->sendResponse(200,$cars);
+    }
+    
+    public function get_all(Request $request){
+
+        $transport_handler = new TransportHandler();
+        $cars = $transport_handler->get_all_cars($request);
+        $cars = $cars->items();
         return $this->sendResponse(200,$cars);
     }
     
@@ -25,6 +33,13 @@ class CarController extends Controller
 
         $transport_handler = new TransportHandler();
         $transport_types = $transport_handler->get_cars_by_types($request);
+        return $this->sendResponse(200,$transport_types);
+    }
+
+    public function get_transport_types(Request $request){
+
+        $transport_handler = new TransportHandler();
+        $transport_types = $transport_handler->get_transport_types($request);
         return $this->sendResponse(200,$transport_types);
     }
 

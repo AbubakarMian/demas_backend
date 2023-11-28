@@ -45,6 +45,13 @@ class TransportHandler
         $cars = $this->transform_cars($journey, $slot, $cars, $travel_agent,$apply_discount);
         return $cars;
     }
+    public function get_all_cars(Request $request)
+    {
+        $cars = Transport::with('transport_type');
+        $cars = $this->apply_filters_car_list($request,$cars);
+        $cars = $cars->orderByDesc('created_at')->paginate(1000);
+        return $cars;
+    }
     public function get_journey(Request $request)
     {
         $pickup_id = $request->pickup_id ?? 0;
@@ -95,10 +102,23 @@ class TransportHandler
         ]);
         if ($car_id) {
             $cars = $cars->where('id', $car_id);
-        } else if ($request->transport_type_id) {
-            $cars = $cars->where('transport_type_id', $request->transport_type_id); //->paginate(500);
         }
+        $cars = $this->apply_filters_car_list($request,$cars);
         $cars = $cars->orderByDesc('created_at')->paginate(1000);
+        return $cars;
+    }
+
+    public function apply_filters_car_list(Request $request,$cars){
+        
+        if ($request->transport_type_id) {
+            $cars = $cars->where('transport_type_id', $request->transport_type_id);
+        }
+        if ($request->seats) {
+            $cars = $cars->where('seats', $request->seats);
+        }
+        if ($request->luggage) {
+            $cars = $cars->where('luggage', $request->luggage);
+        }
         return $cars;
     }
 
@@ -217,6 +237,7 @@ class TransportHandler
         $car = Transport::with('transport_type')->find($car_id);
         return $this->sendResponse(200, $car);
     }
+
     public function get_cars_by_types(Request $request)
     {
         $type_id = $request->type_id ?? 0;
@@ -227,5 +248,24 @@ class TransportHandler
         }
         $transport_types = $transport_types->get();
         return $transport_types;
+    }
+
+    public function get_transport_types(Request $request)
+    {
+        // $type = Transport_Type::groupBy(['name','id'])->orderBy('name','asc')->get(['id','name']);
+        // $seats = Transport_Type::groupBy('seats')->orderBy('seats','asc')->get(['seats']);
+        // $luggage = Transport_Type::groupBy('luggage')->orderBy('luggage','asc')->get(['luggage']);
+
+        
+        $type = Transport_Type::distinct('name')->orderBy('name','asc')->get(['id','name']);
+        $seats = Transport_Type::distinct('seats')->orderBy('seats','asc')->get(['seats']);
+        $luggage = Transport_Type::distinct('luggage')->orderBy('luggage','asc')->get(['luggage']);
+        
+        
+        return [
+            'type'=>$type,
+            'seats'=>$seats,
+            'luggage'=>$luggage,
+        ];
     }
 }

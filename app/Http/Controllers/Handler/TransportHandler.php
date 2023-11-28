@@ -258,9 +258,8 @@ class TransportHandler
 
         
         $type = Transport_Type::distinct('name')->orderBy('name','asc')->get(['id','name']);
-        $seats = Transport_Type::distinct('seats')->orderBy('seats','asc')->get(['seats']);
-        $luggage = Transport_Type::distinct('luggage')->orderBy('luggage','asc')->get(['luggage']);
-        
+        $seats = Transport::distinct('seats')->orderBy('seats','asc')->get(['seats']);
+        $luggage = Transport::distinct('luggage')->orderBy('luggage','asc')->get(['luggage']);        
         
         return [
             'type'=>$type,

@@ -6,8 +6,8 @@
 @section('single_file_use')
     <div>
         <form class="search_filter">
-            <div class="row">
-                <button onclick="filter_columns()">Columns</button>
+            <div class="row filter_box_p">
+                <button style="margin-left: 10px;" onclick="filter_columns()">Columns</button>
                 {{-- modal --}}
                 <div class="row show_columns aa-modal">
 

@@ -26,7 +26,7 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'phone_no' => 'required',
+                // 'phone_no' => 'required',
                 'whatsapp_no' => 'required',
                 'email' => 'required|email',
             ]);
@@ -38,21 +38,30 @@ class UserController extends Controller
                 $user_phone = User::where('phone_no', $request->phone_no)
                 ->first();
 
+                $user_whatsapp_no = User::where('whatsapp_number', $request->whatsapp_no)
+                ->first();
+
                 $user_email = User::where('email', $request->email)
                 ->first();
 
-                $user = User::where('phone_no', $request->phone_no)
+                $user = User::where('whatsapp_number', $request->whatsapp_no)
                             ->where('email', $request->email)
                             ->first();
 
-                // if( $user_phone->id != $user_email->id){
-                if( ($user_phone || $user_email) && !$user){
+                if( ($user_whatsapp_no || $user_email) && !$user){
                     $msg = '';
-                    $msg = $user_phone ? 'Phone number already taken':'';
+                    $msg = $user_whatsapp_no ? 'Phone number already taken':'';
                     $msg .= $user_email ? ' Email already taken':'';
 
                     return $this->sendResponse(500, null, [$msg]);
                 }
+                // if( ($user_phone || $user_email) && !$user){
+                //     $msg = '';
+                //     $msg = $user_phone ? 'Phone number already taken':'';
+                //     $msg .= $user_email ? ' Email already taken':'';
+
+                //     return $this->sendResponse(500, null, [$msg]);
+                // }
 
 
                 $name = 'user';
@@ -69,7 +78,8 @@ class UserController extends Controller
                 if ($request->email) {
                     $user->email = $request->email;
                 }
-                $user->phone_no = $request->phone_no;
+                // $user->phone_no = $request->phone_no;
+                $user->phone_no = $request->phone_no??$request->whatsapp_no;
                 $user->whatsapp_number = $request->whatsapp_no;
                 // $user->password = Hash::make($request->password);
                 $user->access_token = uniqid();
@@ -80,16 +90,7 @@ class UserController extends Controller
 
                     $email_handler = new EmailHandler();
                     $email_details = [];
-                    // $email_details['cc'] = [];
-                    // $email_details['cc'][] = [
-                    //     'from_email' => 'saadyasirthegreat@gmailcom',
-                    //     'from_name' => 'Saad cc',
-                    // ];
 
-                    $email_details['bcc'][] = [
-                        'from_email' => 'abubakarhere90@gmailcom',
-                        'from_name' => 'Abubakar here bcc',
-                    ];
                     $email_details['subject'] = 'Demas OTP';
                     // $email_details['to_email'] = 'abubakrmianmamoon@gmail.com';
                     $email_details['to_email'] = $user->email;

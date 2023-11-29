@@ -31,7 +31,7 @@ class AgentsController extends Controller
         $transport_type_list = Transport_Type::pluck('name', 'id');
         $travel_agent_list = Users::where('role_id',Config::get('constants.role.sale_agent'))->pluck('name', 'id');
         return view(
-            'reports.agent.index',
+            'reports/agent/index',
             compact(
                 'drivers',
                 'journey_list',

@@ -49,8 +49,9 @@ class OrderHandler
 
     public function get_report(Request $request)
     {
-        $order_details = Order_Detail::with('driver','travel_agent','sale_agent','transport')
+        $order_details = Order_Detail::with('driver','travel_agent','sale_agent','transport.transport_type')
         ->latest()->get(); //with('order')->
+        // dd($request->all());
         $order_details_arr = $this->admin_report_detail($request, $order_details);
         return $order_details_arr;
     }
@@ -73,6 +74,7 @@ class OrderHandler
             $row['iqama_number'] = $order_detail->driver->iqama_number ?? '';
             $row['number_plate'] = $order_detail->transport->number_plate ?? '';
             $row['owner_name'] = $order_detail->transport->owner_name ?? '';
+            $row['vehicle_type'] = $order_detail->transport->transport_type->name ?? '';
             $row['seats'] = $order_detail->transport->seats ?? '';
             $report_data[] = $row;
         }
@@ -125,6 +127,11 @@ class OrderHandler
                         'heading' => 'Vehicle Owner',
                         'data_column' =>  'owner_name',
                         'data' => array_column($report_data, 'owner_name'),
+                    ],
+                    [
+                        'heading' => 'Vehicle Type',
+                        'data_column' =>  'vehicle_type',
+                        'data' => array_column($report_data, 'vehicle_type'),
                     ],
                     [
                         'heading' => 'Seating Capacity',

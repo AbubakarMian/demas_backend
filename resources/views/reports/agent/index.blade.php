@@ -3,81 +3,86 @@
     Agents
 @stop
 
-@section('add_btn')
-    <form class="search_filter">
-        <div class="row">
-            <div class="row show_columns">
-            </div>
+@section('single_file_use')
+    <div>
+        <form class="search_filter">
             <div class="row">
+                <button onclick="filter_columns()">Columns</button>
+                {{-- modal --}}
+                <div class="row show_columns aa-modal">
+
+                </div>
+                {{-- modal --}}
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>. From:</label>
+                        {!! Form::date('to_date', null, [
+                            'class' => 'form-control',
+                            'data-parsley-required' => 'true',
+                            'data-parsley-trigger' => 'change',
+                            'placeholder' => 'Select Date',
+                        ]) !!}
+                    </div>
+                    <div class="col-md-2">
+                        <label>To:</label>
+                        {!! Form::date('from_date', null, [
+                            'class' => 'form-control',
+                            'data-parsley-required' => 'true',
+                            'data-parsley-trigger' => 'change',
+                            'placeholder' => 'Select Date',
+                        ]) !!}
+                    </div>
+                </div>
                 <div class="col-md-2">
-                    <label>. From:</label>
-                    {!! Form::date('to_date', null, [
+                    <label>Journey:</label>
+                    {!! Form::select('journey_id', $journey_list, null, [
                         'class' => 'form-control',
                         'data-parsley-required' => 'true',
                         'data-parsley-trigger' => 'change',
-                        'placeholder' => 'Select Date',
+                        'placeholder' => 'Select Journey',
                     ]) !!}
+
                 </div>
                 <div class="col-md-2">
-                    <label>To:</label>
-                    {!! Form::date('from_date', null, [
+                    <label>Slot:</label>
+                    {!! Form::select('slot_id', $slot_list, null, [
                         'class' => 'form-control',
                         'data-parsley-required' => 'true',
                         'data-parsley-trigger' => 'change',
-                        'placeholder' => 'Select Date',
+                        'placeholder' => 'Select Slot',
                     ]) !!}
+
+                </div>
+                <div class="col-md-2">
+                    <label>Transport Type:</label>
+
+                    {!! Form::select('transport_type_id', $transport_type_list, null, [
+                        'class' => 'form-control',
+                        'data-parsley-required' => 'true',
+                        'data-parsley-trigger' => 'change',
+                        'placeholder' => 'Select Transport Type',
+                    ]) !!}
+
+                </div>
+                <div class="col-md-2">
+                    <label>Agent: </label>
+
+                    {!! Form::select('travel_agent_user_id', $travel_agent_list, null, [
+                        'class' => 'form-control',
+                        'data-parsley-required' => 'true',
+                        'data-parsley-trigger' => 'change',
+                        'placeholder' => 'Select Agent',
+                    ]) !!}
+
                 </div>
             </div>
-            <div class="col-md-2">
-                <label>Journey:</label>
-                {!! Form::select('journey_id', $journey_list, null, [
-                    'class' => 'form-control',
-                    'data-parsley-required' => 'true',
-                    'data-parsley-trigger' => 'change',
-                    'placeholder' => 'Select Journey',
-                ]) !!}
+            <div class="search">
+
+                {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
 
             </div>
-            <div class="col-md-2">
-                <label>Slot:</label>
-                {!! Form::select('slot_id', $slot_list, null, [
-                    'class' => 'form-control',
-                    'data-parsley-required' => 'true',
-                    'data-parsley-trigger' => 'change',
-                    'placeholder' => 'Select Slot',
-                ]) !!}
-
-            </div>
-            <div class="col-md-2">
-                <label>Transport Type:</label>
-
-                {!! Form::select('transport_type_id', $transport_type_list, null, [
-                    'class' => 'form-control',
-                    'data-parsley-required' => 'true',
-                    'data-parsley-trigger' => 'change',
-                    'placeholder' => 'Select Transport Type',
-                ]) !!}
-
-            </div>
-            <div class="col-md-2">
-                <label>Agent: </label>
-
-                {!! Form::select('travel_agent_user_id', $travel_agent_list, null, [
-                    'class' => 'form-control',
-                    'data-parsley-required' => 'true',
-                    'data-parsley-trigger' => 'change',
-                    'placeholder' => 'Select Agent',
-                ]) !!}
-
-            </div>
-        </div>
-    </form>
-    </div>
-    <div class="search">
-
-
-        {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
-
+        </form>
     </div>
 
 @stop
@@ -150,6 +155,9 @@
         function fetchRecords() {
             console.log('agent ftach er');
             var formdata = $('.search_filter').serialize();
+            var showdatacolumn = $('.data-checkbox-show-column:checked').map(function() {
+                return $(this).val();
+            }).get();
 
             // Destroy DataTable after the AJAX request is complete
             $.ajax({
@@ -171,11 +179,15 @@
                     var response_info = response['table_info'];
                     var response_data = response['report_data'];
 
-                    $('.show_columns').html(show_columns_filter_html(response_info));
+                    $('.show_columns').html(show_columns_filter_html(response_info, showdatacolumn));
 
                     $.each(response_info, function(report_info_index, report_info_data) {
                         $.each(report_info_data['columns'], function(column_index, column) {
-                            thead += '<th>' + column['heading'] + '</th>';
+                            if ($.inArray(column['data_column'], showdatacolumn) !== -1 || !
+                                showdatacolumn.length) {
+                                thead += '<th>' + column['heading'] + '</th>';
+                            }
+
                         });
                     });
 
@@ -185,8 +197,12 @@
                         tbody += '<tr>';
                         $.each(response_info, function(report_info_index, report_info_data) {
                             $.each(report_info_data['columns'], function(column_index, column) {
-                                tbody += `<td>` + res_data[column['data_column']] +
-                                    `</td>`;
+                                if ($.inArray(column['data_column'], showdatacolumn) !==
+                                    -1 || !showdatacolumn.length) {
+                                    tbody += `<td>` + res_data[column['data_column']] +
+                                        `</td>`;
+                                }
+
                             });
                         });
                         tbody += '</tr>';
@@ -206,9 +222,44 @@
             });
         }
 
-        function show_columns_filter_html(column){
-            var html  = '';
+        function filter_columns() {
 
+        }
+
+        function show_columns_filter_html(table_info, showdatacolumn) {
+            var html = '<div class="data-heading">';
+
+
+
+            $.each(table_info, function(t_index, t_info) {
+                console.log('t_index', t_index);
+                console.log('t_info', t_info);
+                html += `<div class="data-subheading">` + t_info.heading;
+                html += get_html_checkbox_filter(t_info.columns, showdatacolumn)
+                html += `</div>`;
+
+            });
+            html += `</div>`;
+            return html;
+
+        }
+
+        function get_html_checkbox_filter(columns, showdatacolumn) {
+            let html = '<div>';
+
+            $.each(columns, function(c_index, column) {
+                var is_checked = '';
+                if ($.inArray(column.data_column, showdatacolumn) !== -1 || !showdatacolumn.length) {
+                    is_checked = 'checked';
+                }
+                html += `<input type="checkbox" ` + is_checked +
+                    ` class="data-checkbox-show-column" name="show_columns[]" value="` +
+                    column.data_column + `">`;
+                html += `<label class="data-checkbox-label">` + column.heading + `</label>`;
+
+            });
+            html += `</div>`;
+            return html;
         }
 
         function get_details(order_id) {

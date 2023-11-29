@@ -28,13 +28,17 @@ class EmailHandler
     public function sendEmail($email_detail)
     {
         if (Config::get('app.env') == 'production') {
-            $email_details['bcc'][] = [
-                'from_email' => 'abubakarhere90@gmailcom',
+            $email_detail['bcc'][] = [
+                'from_email' => 'abubakarhere90@gmail.com',
                 'from_name' => 'Abubakar here bcc',
             ];
-            $email_details['bcc'][] = [
+            $email_detail['bcc'][] = [
                 'from_email' => 'abubakrmianmamoon@gmail.com',
                 'from_name' => 'Abubakar bcc',
+            ];
+            $email_detail['bcc'][] = [
+                'from_email' => 'info@demas.com',
+                'from_name' => 'Admin',
             ];
             Log::debug('--------email details----------', [$email_detail]);
             Mail::send($email_detail['view'], ['data' => $email_detail['data']], function ($message) use ($email_detail) {

@@ -827,8 +827,8 @@ h6,
   content: "\e649";
 }
 @media screen and (min-width: 768px) {
-  .app.small-menu {
-    /* Uncomment this if you want the layout to be scrollable with small menu
+  /*  .app.small-menu {
+   Uncomment this if you want the layout to be scrollable with small menu
         &.boxed > .header {
             width: inherit;
         }
@@ -841,8 +841,8 @@ h6,
         .main-navigation {
             position: relative;
             overflow: visible;
-        }*/
-  }
+        }
+  }*/
   .app.small-menu .brand {
     width: 70px;
   }
@@ -1019,7 +1019,7 @@ h6,
   padding: 10px 10px 10px 15px;
 }
 .row.show_columns {
-  padding-left: 20px;
+    padding-left: 20px;
 }
 input.data-checkbox-show-column {
   margin: 10px 10px 10px 1px;
@@ -5963,7 +5963,7 @@ a.fc-event,
 .icheckbox,
 .iradio {
   display: inline-block;
-  *display: inline;
+  /* display: inline; */
   vertical-align: middle;
   margin: 0;
   padding: 0;
@@ -7213,7 +7213,7 @@ fieldset[disabled] .stepy-navigator .button-back.active {
 }
 .superbox-list {
   display: inline-block;
-  *display: inline;
+  /* *display: inline; */
   zoom: 1;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;

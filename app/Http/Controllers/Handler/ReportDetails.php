@@ -81,13 +81,13 @@ class ReportDetails
             $row = $this->default_report_detail($order_detail);
             $row = $this->admin_travel_agent_travel_agent_service_report_detail($order_detail, $row);
             $row = $this->admin_travel_agent_Margin_calculation_report_detail($order_detail, $row);
-            // $row = $this->admin_travel_agent_payment_section_report_detail($order_detail, $row);
+            $row = $this->admin_travel_agent_payment_section_report_detail($order_detail, $row);
             $report_data[] = $row;
         }
         $table_info = $this->default_report_detail_info();
         $table_info = $this->admin_travel_agent_travel_agent_service_detail_info($table_info);
         $table_info = $this->admin_travel_agent_Margin_calculation_detail_info($table_info);
-        // $table_info = $this->admin_travel_agent_payment_section_report_detail_info($table_info);
+        $table_info = $this->admin_travel_agent_payment_section_report_detail_info($table_info);
 
         return [
             'table_info' => $table_info,
@@ -97,15 +97,16 @@ class ReportDetails
 
     public function admin_travel_agent_payment_section_report_detail($order_detail, $row)
     {
-        $office_profit = $order_detail->customer_collection_price -
-            $order_detail->travel_agent_commission - $order_detail->sale_agent_commission - $order_detail->driver_commission;
-        $row['admin_margin_calculation_booking_rate'] = $order_detail->customer_collection_price; // match with db
-        $row['admin_margin_calculation_travel_agent'] = $order_detail->travel_agent_commission;
-        $row['admin_margin_calculation_sales_agent'] = $order_detail->sale_agent_commission;
-        $row['admin_margin_calculation_hire_rate'] = $order_detail->driver_commission;
-        $row['admin_margin_calculation_office_profit'] = $office_profit;
+        $row['admin_travel_agent_payment_type'] = $order_detail->customer_collection_price; // match with db
+        $row['admin_travel_agent_ac_recievable_to_travel_agent'] = $order_detail->travel_agent_commission;
+        $row['admin_travel_agent_ac_payable_to_travel_agent'] = $order_detail->sale_agent_commission;
+        $row['admin_travel_agent_bank_credit'] = $order_detail->driver_commission;
         return $row;
     }
+
+
+
+
     public function admin_margin_calculation_report_detail($order_detail, $row)
     {
         $office_profit = $order_detail->customer_collection_price -
@@ -121,14 +122,15 @@ class ReportDetails
     public function admin_travel_agent_travel_agent_service_report_detail($order_detail, $row)
     {
         $row['admin_travel_agent_travel_agent'] = $order_detail->customer_collection_price; // match with db //not match 
-        $row['admin_travel_agent_serivce_type'] = $order_detail->travel_agent_commission;
+        $row['admin_travel_agent_serivce_type'] = $order_detail->journey->name ?? '';
+        // $row['admin_travel_agent_serivce_type'] = 'db mismatch Not found';
         return $row;
     }
 
     public function admin_travel_agent_Margin_calculation_report_detail($order_detail, $row)
     {
         $row['admin_travel_agent_booking_rate'] = $order_detail->customer_collection_price; // match with db //not match 
-        $row['admin_travel_agent_travel_agent_margin'] = $order_detail->travel_agent_commission; //not match
+        $row['admin_travel_agent_travel_agent_margin'] = $order_detail->travel_agent_commission;
         return $row;
     }
 
@@ -231,17 +233,25 @@ class ReportDetails
 
     public function admin_travel_agent_payment_section_report_detail_info($table_info)
     {
-        $table_info['margin_calculation'] = [
-            'heading' => 'Margin Calculation',
+        $table_info['payment_section'] = [
+            'heading' => 'Payment Section',
             'color' => 'rgb(64 133 193)',
             'columns' => [
                 [
                     'heading' => 'BOOKING RATE',
-                    'data_column' =>  'admin_travel_agent_booking_rate', //match with pre function
+                    'data_column' =>  'admin_travel_agent_payment_type', //match with pre function
                 ],
                 [
                     'heading' => 'Travel agent margin',
-                    'data_column' =>  'admin_travel_agent_travel_agent_margin',
+                    'data_column' =>  'admin_travel_agent_ac_recievable_to_travel_agent',
+                ],
+                [
+                    'heading' => 'A/c Payable to Travel Agent',
+                    'data_column' =>  'admin_travel_agent_ac_payable_to_travel_agent', //match with pre function
+                ],
+                [
+                    'heading' => 'Bank Credit',
+                    'data_column' =>  'admin_travel_agent_bank_credit',
                 ],
             ],
         ];
@@ -251,7 +261,7 @@ class ReportDetails
     {
         $table_info['margin_calculation'] = [
             'heading' => 'Margin Calculation',
-            'color' => 'rgb(64 133 193)',
+            'color' => 'rgb(189,215,238)',
             'columns' => [
                 [
                     'heading' => 'BOOKING RATE',

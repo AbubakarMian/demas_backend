@@ -58,26 +58,13 @@ class OrderHandler
 
     public function admin_report_detail(Request $request, $order_details)
     {
-        $report_data = $this->default_report_detail($request, $order_details);
-        return $report_data;
-    }
-    public function default_report_detail(Request $request, $order_details)
-    {
         $report_data = [];
 
         foreach ($order_details as $key => $order_detail) {
-            $row = [];
-            $row['booking_id'] = $order_detail->sub_order_id ?? '';
-            $row['booking_date'] = date('Y-m-d', $order_detail->pick_up_date_time) ?? '';
-            $row['driver_name'] = $order_detail->driver->user_obj->name ?? '';
-            $row['iqama_number'] = $order_detail->driver->iqama_number ?? '';
-            $row['number_plate'] = $order_detail->transport->number_plate ?? '';
-            $row['owner_name'] = $order_detail->transport->owner_name ?? '';
-            $row['vehicle_type'] = $order_detail->transport->transport_type->name ?? '';
-            $row['seats'] = $order_detail->transport->seats ?? '';
+            $row = $this->default_report_detail( $order_detail);
             $report_data[] = $row;
         }
-
+        
         $report_table = [
             'booking_details' => [
                 'heading' => 'Booking Detail',
@@ -137,6 +124,19 @@ class OrderHandler
             'table_info' => $report_table,
             'report_data' => $report_data,
         ];
+    }
+    public function default_report_detail($order_detail)
+    {
+            $row = [];
+            $row['booking_id'] = $order_detail->sub_order_id ?? '';
+            $row['booking_date'] = date('Y-m-d', $order_detail->pick_up_date_time) ?? '';
+            $row['driver_name'] = $order_detail->driver->user_obj->name ?? '';
+            $row['iqama_number'] = $order_detail->driver->iqama_number ?? '';
+            $row['number_plate'] = $order_detail->transport->number_plate ?? '';
+            $row['owner_name'] = $order_detail->transport->owner_name ?? '';
+            $row['vehicle_type'] = $order_detail->transport->transport_type->name ?? '';
+            $row['seats'] = $order_detail->transport->seats ?? '';
+            return $row;
     }
 
     public function sale_agent_report_detail(Request $request)

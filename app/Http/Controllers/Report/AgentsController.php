@@ -46,41 +46,8 @@ class AgentsController extends Controller
     public function get_order(Request $request)
     {
         $order_handler = new OrderHandler();
-        $order_data = $order_handler->get_report($request);
-        // echo json_encode($orderData);
+        $order_data = $order_handler->get_admin_report_detail_report($request);
         echo json_encode($order_data);
-
-        // $order = Order::with([
-        //     'user_obj',
-        //     'sale_agent.user_obj',
-        //     'travel_agent.user_obj',
-        //     'order_details' => [
-        //         'driver.user_obj',
-        //         'transport_type', 'journey' => ['pickup', 'dropoff']
-        //     ],
-        // ]);
-        // $search_params = $request->all();
-        // // if($request->journey_id){
-        // $order = $order->whereHas(
-        //     'order_details',
-        //     function ($q) use ($search_params) {
-        //         if (isset($search_params['journey_id'])) {
-        //             $q->where('journey_id', $search_params['journey_id']);
-        //         }
-        //         if (isset($search_params['slot_id'])) {
-        //             $q->where('slot_id', $search_params['slot_id']);
-        //         }
-        //         if (isset($search_params['transport_type_id'])) {
-        //             $q->where('transport_type_id', $search_params['transport_type_id']);
-        //         }
-        //         if (isset($search_params['travel_agent_user_id'])) {
-        //             $q->where('travel_agent_user_id', $search_params['travel_agent_user_id']);
-        //         }
-        //     }
-        // );
-        // // }
-        // $orderData['data'] = $order->get();
-        // echo json_encode($orderData);
     }
 
     public function get_order_details_list(Request $request, $order_id)

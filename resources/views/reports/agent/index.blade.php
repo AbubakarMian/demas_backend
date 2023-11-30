@@ -5,14 +5,13 @@
 
 @section('single_file_use')
     <div>
-        <form class="search_filter">
             <div class="row filter_box_p">
-                <button style="margin-left: 10px;">Columns</button>
-                {{-- modal --}}
-                <div class="row show_columns aa-modal">
+                <button style="margin-left: 10px;" onclick="select_visible_columns()">Columns</button>
+                
+        <form class="search_filter">
+                <div class="row show_columns" style="display: none;">
 
                 </div>
-                {{-- modal --}}
 
                 <div class="row">
                     <div class="col-md-2">
@@ -77,12 +76,12 @@
 
                 </div>
             </div>
+        </form>
             <div class="search">
 
                 {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
 
             </div>
-        </form>
     </div>
 
 @stop
@@ -216,8 +215,6 @@
         function show_columns_filter_html(table_info, showdatacolumn) {
             var html = '<div class="data-heading">';
             $.each(table_info, function(t_index, t_info) {
-                console.log('t_index', t_index);
-                console.log('t_info', t_info);
                 html += `<div class="data-subheading">` + t_info.heading;
                 html += get_html_checkbox_filter(t_info.columns, showdatacolumn)
                 html += `</div>`;
@@ -229,7 +226,9 @@
         function get_html_checkbox_filter(columns, showdatacolumn) {
             let check_all = !showdatacolumn.length ? 'checked' : '';
             let html = `<div class="segement-area">` +
-                `<input type="checkbox" onclick="check_segment(this)" ` + check_all + `>`;
+                `<label class="data-checkbox-label"> All</label>
+                <input type="checkbox" onclick="check_segment(this)" ` + check_all + `>
+                `;
 
             $.each(columns, function(c_index, column) {
                 var is_checked = '';
@@ -253,6 +252,9 @@
             } else {
                 $(e).closest('.segement-area').find('.data-checkbox-show-column').prop("checked", false);
             }
+        }
+        function select_visible_columns() {
+            $('.show_columns').toggle();
         }
     </script>
 @endsection

@@ -1018,6 +1018,9 @@ h6,
 .show_columns.aa-modal {
   padding: 10px 10px 10px 15px;
 }
+.row.show_columns {
+  padding-left: 20px;
+}
 input.data-checkbox-show-column {
   margin: 10px 10px 10px 1px;
 }

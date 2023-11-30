@@ -49,11 +49,10 @@ class OrderHandler
 
     public function get_admin_report_detail_report(Request $request)
     {
-        $order_details = Order_Detail::with('order', 'driver', 'driver_user', 'travel_agent_user', 'sale_agent_user', 'transport.transport_type')
-            ->latest()->get(); //with('order')->
-        // dd($request->all());
         $report_details = new ReportDetails();
-        $order_details_arr = $report_details->admin_report_detail($request, $order_details);
+        // $order_details_arr = $report_details->admin_report_detail($request);
+        $order_details_arr = $report_details->travel_agent_report_detail($request);
+        // $order_details_arr = $report_details->sale_agent_report_detail($request);
         return $order_details_arr;
     }
 

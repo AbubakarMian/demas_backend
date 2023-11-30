@@ -49,8 +49,8 @@ class OrderHandler
 
     public function get_report(Request $request)
     {
-        $order_details = Order_Detail::with('driver','travel_agent','sale_agent','transport.transport_type')
-        ->latest()->get(); //with('order')->
+        $order_details = Order_Detail::with('order', 'driver', 'driver_user', 'travel_agent_user', 'sale_agent_user', 'transport.transport_type')
+            ->latest()->get(); //with('order')->
         // dd($request->all());
         $order_details_arr = $this->admin_report_detail($request, $order_details);
         return $order_details_arr;
@@ -61,11 +61,70 @@ class OrderHandler
         $report_data = [];
 
         foreach ($order_details as $key => $order_detail) {
-            $row = $this->default_report_detail( $order_detail);
+            $row = $this->default_report_detail($order_detail);
+            $row = $this->admin_agent_report_detail($order_detail, $row);
             $report_data[] = $row;
         }
-        
-        $report_table = [
+        $table_info = $this->default_report_detail_info();
+        $table_info = $this->admin_agent_report_detail_info($table_info);
+
+
+        return [
+            'table_info' => $table_info,
+            'report_data' => $report_data,
+        ];
+    }
+    public function admin_agent_report_detail($order_detail, $row)
+    {
+        $row['admin_agent_direct_customer'] = $order_detail->order->user_obj->role_id == 2 ?
+            $order_detail->order->user_obj->name : '';
+        $row['admin_agent_travel_agent'] = $order_detail->travel_agent_user->name ?? '';
+        $row['admin_agent_sales_agent'] = $order_detail->sale_agent_user->name ?? '';
+        $row['admin_agent_service_type'] = $order_detail->journey->name ?? '';
+        return $row;
+    }
+    public function default_report_detail($order_detail)
+    {
+        $row = [];
+        $row['booking_id'] = $order_detail->sub_order_id ?? '';
+        $row['booking_date'] = date('Y-m-d', $order_detail->pick_up_date_time) ?? '';
+        $row['driver_name'] = $order_detail->driver_user->name ?? '';
+        $row['iqama_number'] = $order_detail->driver->iqama_number ?? '';
+        $row['number_plate'] = $order_detail->transport->number_plate ?? '';
+        $row['owner_name'] = $order_detail->transport->owner_name ?? '';
+        $row['vehicle_type'] = $order_detail->transport->transport_type->name ?? '';
+        $row['seats'] = $order_detail->transport->seats ?? '';
+        return $row;
+    }
+    public function admin_agent_report_detail_info($table_info)
+    {
+        $table_info['admin_agent_details'] = [
+            'heading' => 'Agent Details',
+            'color' => 'rgb(248 203 173)',
+            'columns' => [
+                [
+                    'heading' => 'Direct Customer',
+                    'data_column' =>  'admin_agent_direct_customer',
+                ],
+                [
+                    'heading' => 'Travel Agent',
+                    'data_column' =>  'admin_agent_travel_agent',
+                ],
+                [
+                    'heading' => 'Sales Agent',
+                    'data_column' =>  'admin_agent_sales_agent',
+                ],
+                [
+                    'heading' => 'Service Type',
+                    'data_column' =>  'admin_agent_service_type',
+                ],
+            ],
+        ];
+        return $table_info;
+    }
+    public function default_report_detail_info()
+    {
+        $table_info = [
             'booking_details' => [
                 'heading' => 'Booking Detail',
                 'color' => 'rgb(255 230 153)',
@@ -120,23 +179,7 @@ class OrderHandler
 
             ],
         ];
-        return [
-            'table_info' => $report_table,
-            'report_data' => $report_data,
-        ];
-    }
-    public function default_report_detail($order_detail)
-    {
-            $row = [];
-            $row['booking_id'] = $order_detail->sub_order_id ?? '';
-            $row['booking_date'] = date('Y-m-d', $order_detail->pick_up_date_time) ?? '';
-            $row['driver_name'] = $order_detail->driver->user_obj->name ?? '';
-            $row['iqama_number'] = $order_detail->driver->iqama_number ?? '';
-            $row['number_plate'] = $order_detail->transport->number_plate ?? '';
-            $row['owner_name'] = $order_detail->transport->owner_name ?? '';
-            $row['vehicle_type'] = $order_detail->transport->transport_type->name ?? '';
-            $row['seats'] = $order_detail->transport->seats ?? '';
-            return $row;
+        return $table_info;
     }
 
     public function sale_agent_report_detail(Request $request)

@@ -63,7 +63,6 @@ class OrderHandler
     }
     public function default_report_detail(Request $request, $order_details)
     {
-
         $report_data = [];
 
         foreach ($order_details as $key => $order_detail) {
@@ -82,61 +81,53 @@ class OrderHandler
         $report_table = [
             'booking_details' => [
                 'heading' => 'Booking Detail',
-                'color' => 'red',
+                'color' => 'rgb(255 230 153)',
                 'columns' => [
                     [
                         'heading' => 'Booking ID',
                         'data_column' =>  'booking_id',
-                        'data' => array_column($report_data, 'booking_id')
                     ],
                     [
                         'heading' => 'Booking Date',
                         'data_column' =>  'booking_date',
-                        'data' => array_column($report_data, 'booking_date'),
                     ],
                 ],
 
             ],
             'driver_details' => [
                 'heading' => 'Driver Details',
-                'color' => 'green',
+                'color' => 'rgb(248 203 173)',
                 'columns' => [
                     [
                         'heading' => 'Driver Name',
                         'data_column' =>  'driver_name',
-                        'data' => array_column($report_data, 'driver_name'),
                     ],
                     [
                         'heading' => 'Driver Iqama',
                         'data_column' =>  'iqama_number',
-                        'data' => array_column($report_data, 'iqama_number'),
                     ],
                 ],
 
             ],
             'vehicle_details' => [
                 'heading' => 'Vehicle Details',
-                'color' => 'blue',
+                'color' => 'rgb(255 230 153)',
                 'columns' => [
                     [
                         'heading' => 'Number Plate',
                         'data_column' =>  'number_plate',
-                        'data' => array_column($report_data, 'number_plate'),
                     ],
                     [
                         'heading' => 'Vehicle Owner',
                         'data_column' =>  'owner_name',
-                        'data' => array_column($report_data, 'owner_name'),
                     ],
                     [
                         'heading' => 'Vehicle Type',
                         'data_column' =>  'vehicle_type',
-                        'data' => array_column($report_data, 'vehicle_type'),
                     ],
                     [
                         'heading' => 'Seating Capacity',
                         'data_column' =>  'seats',
-                        'data' => array_column($report_data, 'seats'),
                     ],
                 ],
 

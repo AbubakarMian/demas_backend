@@ -7,7 +7,7 @@
     <div>
         <form class="search_filter">
             <div class="row filter_box_p">
-                <button style="margin-left: 10px;" onclick="filter_columns()">Columns</button>
+                <button style="margin-left: 10px;">Columns</button>
                 {{-- modal --}}
                 <div class="row show_columns aa-modal">
 
@@ -167,32 +167,24 @@
                 dataType: 'json',
                 success: function(response) {
                     console.log('response', response);
-
                     // Clear previous table data
                     $("#orderTableAppend").DataTable().clear().destroy();
-
                     $("#orderTableAppend").css("opacity", 1);
-
                     var thead = '<tr>';
                     var tbody = '';
-
                     var response_info = response['table_info'];
                     var response_data = response['report_data'];
-
                     $('.show_columns').html(show_columns_filter_html(response_info, showdatacolumn));
-
                     $.each(response_info, function(report_info_index, report_info_data) {
                         $.each(report_info_data['columns'], function(column_index, column) {
                             if ($.inArray(column['data_column'], showdatacolumn) !== -1 || !
                                 showdatacolumn.length) {
-                                thead += '<th>' + column['heading'] + '</th>';
+                                // thead += '<th style="background-color:  red">' + column['heading'] + '</th>';
+                                thead += `<th style="background-color:`+report_info_data['color']+`">` + column['heading'] + `</th>`;
                             }
-
                         });
                     });
-
                     thead += '</tr>';
-
                     $.each(response_data, function(res_data_index, res_data) {
                         tbody += '<tr>';
                         $.each(response_info, function(report_info_index, report_info_data) {
@@ -202,7 +194,6 @@
                                     tbody += `<td>` + res_data[column['data_column']] +
                                         `</td>`;
                                 }
-
                             });
                         });
                         tbody += '</tr>';
@@ -222,30 +213,23 @@
             });
         }
 
-        function filter_columns() {
-
-        }
-
         function show_columns_filter_html(table_info, showdatacolumn) {
             var html = '<div class="data-heading">';
-
-
-
             $.each(table_info, function(t_index, t_info) {
                 console.log('t_index', t_index);
                 console.log('t_info', t_info);
                 html += `<div class="data-subheading">` + t_info.heading;
                 html += get_html_checkbox_filter(t_info.columns, showdatacolumn)
                 html += `</div>`;
-
             });
             html += `</div>`;
             return html;
-
         }
 
         function get_html_checkbox_filter(columns, showdatacolumn) {
-            let html = '<div>';
+            let check_all = !showdatacolumn.length ? 'checked' : '';
+            let html = `<div class="segement-area">` +
+                `<input type="checkbox" onclick="check_segment(this)" ` + check_all + `>`;
 
             $.each(columns, function(c_index, column) {
                 var is_checked = '';
@@ -262,133 +246,13 @@
             return html;
         }
 
-        function get_details(order_id) {
-            console.log('get_details order_id', order_id);
-            $.ajax({
-                url: "{!! asset('admin/order/details_list') !!}/" + order_id,
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    _token: '{!! @csrf_token() !!}'
-                },
-                success: function(response) {
-                    $('.orderdetails_list').html('');
-                    if (response.status) {
-                        var details_list = '';
-                        $.each(response.response['order_details'], function(index, item) {
-                            console.log('response item get_details ', item);
-                            console.log('response index', index);
-                            var drivers = `<select onchange="change_driver('` + item.id + `',this)">
-                                <option value="0">Select Driver</option>`;
-                            $.each(response.response['drivers'], function(driver_index, driver_item) {
-                                var user_driver = driver_item.user_obj;
-                                var selected = user_driver.id == item.driver_user_id ?
-                                    'selected' : '';
-                                drivers += `<option value="` + user_driver.id + `" ` +
-                                    selected + `>` +
-                                    user_driver.name + `</option>`;
-                            })
-                            drivers += '</select>';
-                            details_list += `<tr>
-                                <td>` + item.journey.name + `</td>
-                                <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
-                                <td>` + item.price + `</td>
-                                <td>` + drivers + `</td>
-                                </tr>`;
-                        })
-                        // <td>` + item.driver.user_obj.name + `</td>
-                        $('.orderdetails_list').html(details_list);
-                    } else {
-                        alert('Someting went wrong');
-                    }
-                },
-                error: function(err) {
-                    console.log('ajax error');
-                }
-            });
-
-        }
-
-        function change_driver(order_detail_id, e) {
-            console.log('get_details order_detail_id', order_detail_id);
-            var driver_user_id = $(e).find(':selected').val();
-            $.ajax({
-                url: "{!! asset('admin/order/update_order_detail_driver') !!}/" + order_detail_id,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    _token: '{!! @csrf_token() !!}',
-                    driver_user_id: driver_user_id
-                },
-                success: function(response) {
-                    console.log(response.status);
-                    console.log('response', response.status);
-                    if (response.status) {
-                        console.log('updated row ', order_detail_id);
-                    } else {
-                        alert('Someting went wrong');
-                    }
-                },
-                error: function(err) {
-                    console.log('ajax error');
-                }
-            });
-
-        }
-
-        function change_status(order_id, status) {
-            console.log('get_details order_id', order_id);
-            $.ajax({
-                url: "{!! asset('admin/order/update_order_status') !!}/" + order_id,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    _token: '{!! @csrf_token() !!}',
-                    status: status
-                },
-                success: function(response) {
-                    console.log(response.status);
-                    console.log('response', response.status);
-                    $('.orderdetails_list').html('');
-                    if (response.status) {
-                        var myTable = $('#orderTableAppend').DataTable();
-                        console.log('removeasdasdasd row ', '#row_' + order_id);
-                        let rowIndex = myTable.row('#row_' + order_id).index();
-                        myTable.cell(rowIndex, 7).data(capitalize_first_letter(status));
-                        myTable.draw();
-                    } else {
-                        alert('Someting went wrong');
-                    }
-                },
-                error: function(err) {
-                    console.log('ajax error');
-                }
-            });
-
-        }
-
-        function set_msg_modal(msg) {
-            $('.set_msg_modal').html(msg);
-        }
-
-        function delete_request(id) {
-            $.ajax({
-
-                url: "{!! asset('admin/order/delete') !!}/" + id,
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    _token: '{!! @csrf_token() !!}'
-                },
-                success: function(response) {
-                    console.log(response.status);
-                    if (response) {
-                        var myTable = $('#orderTableAppend').DataTable();
-                        console.log('removeasdasdasd');
-                        myTable.row('#row_' + id).remove().draw();
-                    }
-                }
-            });
+        function check_segment(e) {
+            var is_checked = $(e).is(":checked");
+            if (is_checked) {
+                $(e).closest('.segement-area').find('.data-checkbox-show-column').prop("checked", true);
+            } else {
+                $(e).closest('.segement-area').find('.data-checkbox-show-column').prop("checked", false);
+            }
         }
     </script>
 @endsection

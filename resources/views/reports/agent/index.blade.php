@@ -6,16 +6,16 @@
 @section('single_file_use')
     <div>
             <div class="row filter_box_p">
-                <button style="margin-left: 10px;" onclick="select_visible_columns()">Columns</button>
+                <button style="margin: 10px; " class="btn btn-success" onclick="select_visible_columns()">Columns</button>
                 
         <form class="search_filter">
                 <div class="row show_columns" style="display: none;">
 
                 </div>
 
-                <div class="row">
+                <div class="row letf_box_side">
                     <div class="col-md-2">
-                        <label>. From:</label>
+                        <label>From:</label>
                         {!! Form::date('to_date', null, [
                             'class' => 'form-control',
                             'data-parsley-required' => 'true',
@@ -213,9 +213,15 @@
         }
 
         function show_columns_filter_html(table_info, showdatacolumn) {
+            let check_all = !showdatacolumn.length ? 'checked' : '';
             var html = '<div class="data-heading">';
             $.each(table_info, function(t_index, t_info) {
-                html += `<div class="data-subheading">` + t_info.heading;
+                html += `<div class="data-subheading segement-area">`+
+                `
+                <input type="checkbox" onclick="check_segment(this)" ` + check_all + `>
+                <label class="data-checkbox-label"> `+  t_info.heading+`</label>
+                `
+                ;
                 html += get_html_checkbox_filter(t_info.columns, showdatacolumn)
                 html += `</div>`;
             });
@@ -224,11 +230,7 @@
         }
 
         function get_html_checkbox_filter(columns, showdatacolumn) {
-            let check_all = !showdatacolumn.length ? 'checked' : '';
-            let html = `<div class="segement-area">` +
-                `<label class="data-checkbox-label"> All</label>
-                <input type="checkbox" onclick="check_segment(this)" ` + check_all + `>
-                `;
+            let html = `<div class="sub-column-heading">`;
 
             $.each(columns, function(c_index, column) {
                 var is_checked = '';
@@ -238,7 +240,7 @@
                 html += `<input type="checkbox" ` + is_checked +
                     ` class="data-checkbox-show-column" name="show_columns[]" value="` +
                     column.data_column + `">`;
-                html += `<label class="data-checkbox-label">` + column.heading + `</label>`;
+                html += `<span class="data-checkbox-label">` + column.heading + ` </span>`;
 
             });
             html += `</div>`;

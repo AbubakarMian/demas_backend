@@ -1857,6 +1857,18 @@ aside > .fffix > footer .btn-xs.navbar-btn {
   display: block;
   border-radius: 4px 4px 0 0;
 }
+
+.data-subheading {
+  background: #9964181c;
+  margin: 10px 15px 15px 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.row.letf_box_side {
+  padding-left: 7px;
+}
+
 /* Photo Widget */
 .photobox-heading {
   background: #ffffff url(../img/cover.jpg) no-repeat center center;

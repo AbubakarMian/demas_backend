@@ -11,6 +11,12 @@ class TravelAgentCommission extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'travel_agent_commission';
+    protected $appends = ['price'];
+
+    public function getPriceAttribute()
+    {
+        return $this->commission;
+    }
     public function user_obj()
     {
         return $this->hasOne('App\Models\Users', 'id', 'user_travel_agent_id')->withTrashed();

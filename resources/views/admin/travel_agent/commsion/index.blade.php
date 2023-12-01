@@ -1,6 +1,6 @@
 @extends('layouts.default_module')
 @section('module_name')
-    Travel Agent Commissions
+    Travel Agent Trip Prices
 @stop
 
 @section('add_btn')

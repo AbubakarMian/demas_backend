@@ -124,20 +124,11 @@ class TransportHandler
 
     public function transform_cars($journey, $slot, $cars, $travel_agent,$apply_discount=false)
     {
-
         $discount_percent_obj = Settings::where('name', Config::get('constants.settings.discount'))
                                         ->first();
         $discount_percent = $discount_percent_obj->value;
         $cars->transform(function ($item) use ($travel_agent, $journey, $slot, $discount_percent,$apply_discount) {
-            // $commission = 0;
-            // if ($travel_agent) {
-            //     $travel_agent_commission = TravelAgentCommission::where('user_travel_agent_id', $travel_agent->user_id)
-            //         ->where('journey_id', $journey->id)
-            //         ->where('slot_id', $slot->id)
-            //         ->where('transport_type_id', $item->transport_type_id)
-            //         ->first();
-            //     $commission = $travel_agent_commission->commission;
-            // }
+            
             $item->features = isset($item->features) ? explode(',', $item->features) : [];
             $item->booking =  isset($item->booking) ? explode(',', $item->booking) : [];
             $item->dontforget = isset($item->dontforget) ? explode(',', $item->dontforget) : [];
@@ -145,7 +136,23 @@ class TransportHandler
             $item->booking_price = '0';
             $item->discounted_price = '0';
             $item->apply_discount = $apply_discount;
+            if ($travel_agent) {
+                $travel_agent_commission = TravelAgentCommission::where('user_travel_agent_id', $travel_agent->user_id)
+                    ->where('journey_id', $journey->id)
+                    ->where('slot_id', $slot->id)
+                    ->where('transport_type_id', $item->transport_type_id)
+                    ->first();
+                    // travel agent commission is now treated asa trip price for travel agent
+                $trip_price = $travel_agent_commission->price;
+
+                $item->transport_price_id = $travel_agent_commission->id;
+                $item->actual_price = $trip_price;
+                $item->booking_price = $trip_price;// - $commission;
+                $item->discounted_price = $trip_price;
+            }
+           
             $transport_prices = $item->transport_price;
+            
             if (isset($transport_prices) && count($transport_prices)) {
                 $transport_price = $transport_prices[0];
                 $item->transport_price_id = $transport_price->id;
@@ -164,6 +171,10 @@ class TransportHandler
 
         $pickup_id = $request->pickup_id ?? 0;
         $dropoff_id = $request->dropoff_id ?? 0;
+
+        $discount_percent_obj = Settings::where('name', Config::get('constants.settings.discount'))
+                                        ->first();
+        $discount_percent = $discount_percent_obj->value;
 
         $journey = Journey::where('pickup_location_id', $pickup_id)
             ->where('dropoff_location_id', $dropoff_id)->first();
@@ -202,20 +213,23 @@ class TransportHandler
 
         $travel_agent = Travel_Agent::where('user_id', $user->id)->first();
 
-        $cars->transform(function ($item) use ($travel_agent, $journey, $slot) {
+        $cars->transform(function ($item) use ($travel_agent, $journey, $slot,$discount_percent) {
             $commission = 0;
             if ($travel_agent) {
-                $travel_agent_commission = TravelAgentCommission::where('user_travel_agent_id', $travel_agent->user_id)
+                $transport_price = TravelAgentCommission::where('user_travel_agent_id', $travel_agent->user_id)
                     ->where('journey_id', $journey->id)
                     ->where('slot_id', $slot->id)
                     ->where('transport_type_id', $item->transport_type_id)
                     ->first();
-                $commission = $travel_agent_commission->commission;
+                // $price = $travel_agent_commission->price;
             }
-            $transport_price = TransportPrices::where('journey_id', $journey->id)
+            else{
+                $transport_price = TransportPrices::where('journey_id', $journey->id)
                 ->where('slot_id', $slot->id)
                 ->where('transport_type_id', $item->transport_type_id)
                 ->first();
+            }
+            
             $item->features = isset($item->features) ? explode(',', $item->features) : [];
             $item->booking =  isset($item->booking) ? explode(',', $item->booking) : [];
             $item->dontforget = isset($item->dontforget) ? explode(',', $item->dontforget) : [];
@@ -224,7 +238,8 @@ class TransportHandler
             if ($transport_price) {
                 $item->transport_price_id = $transport_price->id;
                 $item->actual_price = $transport_price->price;
-                $item->booking_price = $transport_price->price - $commission;
+                $item->booking_price = $transport_price->price ;
+                $item->discounted_price = $transport_price->price - ($transport_price->price * $discount_percent * 0.01);
             }
             return $item;
         });

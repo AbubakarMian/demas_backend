@@ -229,6 +229,7 @@ class ReportDetails
         $row['admin_margin_calculation_sales_agent'] = $order_detail->sale_agent_commission;
         $row['admin_margin_calculation_hire_rate'] = $order_detail->driver_commission;
         $row['admin_margin_calculation_office_profit'] = $office_profit;
+
         return $row;
     }
 
@@ -259,16 +260,16 @@ class ReportDetails
     public function admin_payment_section_report_detail($order_detail, $row)
     {
 
-        $row['admin_payment_section_customer_collection_price'] = $order_detail->customer_collection_price ?? ''; // match with db
+        // $row['admin_payment_section_customer_collection_price'] = $order_detail->customer_collection_price ?? ''; // match with db
         $row['admin_payment_section_payment_type'] = $order_detail->payment_type ?? ''; // match with db
-        $row['admin_payment_section_ac_receivable_travel_agent'] = "not found"; //$order_detail->travel_agent_commission;
-        $row['admin_payment_section_ac_payable_travel_agent'] ="not found"; // $order_detail->travel_agent_commission;
-        $row['admin_payment_section_ac_receivable_sales_agent'] = "not found"; //$order_detail->sale_agent_commission;
-        $row['admin_payment_section_a_reciveble_to_hired_vehicle'] ="not found"; // $order_detail->sale_agent_commission; //i don't not match
-        $row['admin_payment_section_ac_payable_to_hired_vehicle'] = "not found"; //$order_detail->travel_agent_commission; //i don'tnot match
-        $row['admin_payment_section_ac_receivable_to_owner_driver'] = "not found"; //$order_detail->travel_agent_commission; //i don'tnot match
-        $row['admin_payment_section_ac_payable_to_owner_vehicle'] ="not found"; // $order_detail->travel_agent_commission; //i don'tnot match
-        $row['admin_payment_section_bank_credit'] = "not found"; //$order_detail->travel_agent_commission; //i don'tnot match
+        $row['admin_payment_section_ac_receivable_travel_agent'] = $order_detail->travel_agent_commission;
+        $row['admin_payment_section_ac_payable_travel_agent'] = $order_detail->travel_agent_commission;
+        $row['admin_payment_section_ac_receivable_sales_agent'] = $order_detail->sale_agent_commission;
+        $row['admin_payment_section_a_reciveble_to_hired_vehicle'] = $order_detail->driver_commission; //i don't not match
+        $row['admin_payment_section_ac_payable_to_hired_vehicle'] = $order_detail->travel_agent_commission; //i don'tnot match
+        $row['admin_payment_section_ac_receivable_to_owner_driver'] = $order_detail->travel_agent_commission; //i don'tnot match
+        $row['admin_payment_section_ac_payable_to_owner_vehicle'] = $order_detail->travel_agent_commission; //i don'tnot match
+        $row['admin_payment_section_bank_credit'] = $order_detail->travel_agent_commission; //i don'tnot match
         return $row;
     }
 

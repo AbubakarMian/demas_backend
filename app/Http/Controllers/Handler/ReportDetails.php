@@ -50,6 +50,8 @@ class ReportDetails
             'report_data' => $report_data,
         ];
     }
+
+
     public function sale_agent_report_detail(Request $request)
     {
         $order_details = Order_Detail::with('order', 'driver', 'driver_user', 'travel_agent_user', 'sale_agent_user', 'transport.transport_type')
@@ -76,6 +78,8 @@ class ReportDetails
             'report_data' => $report_data,
         ];
     }
+
+
     public function travel_agent_report_detail(Request $request)
     {
         $order_details = Order_Detail::with('order', 'driver', 'driver_user', 'travel_agent_user', 'sale_agent_user', 'transport.transport_type')
@@ -127,7 +131,7 @@ class ReportDetails
     {
         $row['admin_travel_agent_payment_type'] = $order_detail->customer_collection_price; // match with db
         $row['admin_travel_agent_ac_recievable_to_travel_agent'] = $order_detail->travel_agent_commission;
-        $row['admin_travel_agent_ac_payable_to_travel_agent'] = $order_detail->sale_agent_commission;
+        $row['admin_travel_agent_ac_payable_to_travel_agent'] = $order_detail->travel_agent_commission;
         $row['admin_travel_agent_bank_credit'] = $order_detail->driver_commission;
         return $row;
     }
@@ -163,6 +167,7 @@ class ReportDetails
         ];
         return $table_info;
     }
+
     
     public function admin_sales_agent_margin_report_detail_info($table_info)
     {
@@ -190,11 +195,12 @@ class ReportDetails
 
     public function admin_sales_agent_travel_agent_report_detail($order_detail, $row)
     {
-        $row['admin_sales_agent_travel_agent'] = $order_detail->customer_collection_price; //not match with db
-        $row['admin_sales_agent_sales_agentt'] = $order_detail->travel_agent_commission;//not match with db
+        $row['admin_sales_agent_travel_agent'] = $order_detail->travel_agent_commission; //not match with db
+        $row['admin_sales_agent_sales_agentt'] = $order_detail->sale_agent_commission;//not match with db
         $row['admin_sales_agent_service_type'] = $order_detail->sale_agent_commission;//not match with db
         return $row;
     }
+
 
     public function admin_sales_agent_travel_agent_report_detail_info($table_info)
     {
@@ -233,6 +239,7 @@ class ReportDetails
         return $row;
     }
 
+
     public function admin_travel_agent_travel_agent_service_report_detail($order_detail, $row)
     {
         $row['admin_travel_agent_travel_agent'] = $order_detail->customer_collection_price; // match with db //not match 
@@ -240,6 +247,7 @@ class ReportDetails
 
         return $row;
     }
+
 
     public function admin_travel_agent_Margin_calculation_report_detail($order_detail, $row)
     {
@@ -266,12 +274,13 @@ class ReportDetails
         $row['admin_payment_section_ac_payable_travel_agent'] = $order_detail->travel_agent_commission;
         $row['admin_payment_section_ac_receivable_sales_agent'] = $order_detail->sale_agent_commission;
         $row['admin_payment_section_a_reciveble_to_hired_vehicle'] = $order_detail->driver_commission; //i don't not match
-        $row['admin_payment_section_ac_payable_to_hired_vehicle'] = $order_detail->travel_agent_commission; //i don'tnot match
-        $row['admin_payment_section_ac_receivable_to_owner_driver'] = $order_detail->travel_agent_commission; //i don'tnot match
-        $row['admin_payment_section_ac_payable_to_owner_vehicle'] = $order_detail->travel_agent_commission; //i don'tnot match
-        $row['admin_payment_section_bank_credit'] = $order_detail->travel_agent_commission; //i don'tnot match
+        $row['admin_payment_section_ac_payable_to_hired_vehicle'] = $order_detail->driver_commission; //i don'tnot match
+        $row['admin_payment_section_ac_receivable_to_owner_driver'] = $order_detail->driver_commission; //i don'tnot match
+        $row['admin_payment_section_ac_payable_to_owner_vehicle'] = $order_detail->driver_commission; //i don'tnot match
+        $row['admin_payment_section_bank_credit'] = $order_detail->payment_status; //i don'tnot match
         return $row;
     }
+
 
     public function admin_agent_report_detail($order_detail, $row)
     {
@@ -282,6 +291,7 @@ class ReportDetails
         $row['admin_agent_service_type'] = $order_detail->journey->name ?? '';
         return $row;
     }
+
 
     public function default_report_detail($order_detail)
     {
@@ -296,6 +306,7 @@ class ReportDetails
         $row['seats'] = $order_detail->transport->seats ?? '';
         return $row;
     }
+
 
     public function admin_margin_calculation_report_detail_info($table_info)
     {
@@ -328,6 +339,7 @@ class ReportDetails
         return $table_info;
     }
 
+
     public function admin_travel_agent_travel_agent_service_detail_info($table_info)
     {
         $table_info['admin_travel_agent'] = [
@@ -346,6 +358,7 @@ class ReportDetails
         ];
         return $table_info;
     }
+
 
     public function admin_travel_agent_payment_section_report_detail_info($table_info)
     {
@@ -373,6 +386,8 @@ class ReportDetails
         ];
         return $table_info;
     }
+
+
     public function admin_travel_agent_Margin_calculation_detail_info($table_info)
     {
         $table_info['margin_calculation'] = [
@@ -392,6 +407,7 @@ class ReportDetails
         return $table_info;
     }
 
+
     public function admin_pkr_cash_report_detail_info($table_info)
     {
         $table_info['admin_petty_cash_received'] = [
@@ -410,6 +426,7 @@ class ReportDetails
         ];
         return $table_info;
     }
+
 
     public function admin_agent_report_detail_info($table_info)
     {
@@ -438,16 +455,14 @@ class ReportDetails
         return $table_info;
     }
 
+
     public function admin_payment_section_report_detail_info($table_info)
     {
         $table_info['admin_payment_section'] = [
             'heading' => 'Payment Section',
             'color' => 'rgb(189 215 238)',
             'columns' => [
-                [
-                    'heading' => 'Customer Collection',
-                    'data_column' =>  'admin_payment_section_customer_collection_price',
-                ],
+
                 [
                     'heading' => 'Payment Type',
                     'data_column' =>  'admin_payment_section_payment_type',
@@ -488,6 +503,7 @@ class ReportDetails
         ];
         return $table_info;
     }
+
 
     public function default_report_detail_info()
     {
@@ -554,4 +570,6 @@ class ReportDetails
     public function driver_report_detail(Request $request)
     {
     }
+
+    
 }

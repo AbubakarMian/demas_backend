@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('travel_agent_commission', function (Blueprint $table) {
-            $table->bigInteger('trip_price')->nullable()->default(0);
+            $table->bigInteger('price')->nullable()->default(0);
         });
     }
 

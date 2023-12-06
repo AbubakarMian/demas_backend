@@ -135,7 +135,7 @@
                         var journey = response['data'][i].journey.name;
                         var slot = response['data'][i].slot.name;
                         var agent = response['data'][i].user_obj.name;
-                        var commission = response['data'][i].commission;
+                        var price = response['data'][i].price;
                         var transport_prices_id = response['data'][i].id;
 
                         tr_str += "<tr id='row_" + response['data'][i].id + "'>" +
@@ -144,7 +144,7 @@
                             "<td>" + agent + "</td>" +
                             "<td>" + transport_type_name + "</td>" +
                             "<td><input onchange=update_user_price(" + transport_prices_id +
-                            ",this) type='text' value='" + commission + "'></td>" +
+                            ",this) type='text' value='" + price + "'></td>" +
 
                             "</tr>";
 
@@ -174,9 +174,9 @@
 
         function update_user_price(transport_prices_id, e) {
 
-            var commission = $(e).val();
+            var price = $(e).val();
             $.ajax({
-                url: '{!! asset('admin/travel_agent_commission/update_price') !!}/' + transport_prices_id + '?commission=' + commission,
+                url: '{!! asset('admin/travel_agent_commission/update_price') !!}/' + transport_prices_id + '?price=' + price,
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {

@@ -55,6 +55,7 @@ class TravelAgentCommissionController extends Controller
                             $transport_prices_obj->transport_type_id = $transport_type_id;
                             $transport_prices_obj->is_default = $slot->is_default;
                             $transport_prices_obj->commission = 0;
+                            $transport_prices_obj->price = 0;
                             $transport_prices_obj->save();
                         } else {
                             // dd($data, $transport_prices_obj);
@@ -87,7 +88,8 @@ class TravelAgentCommissionController extends Controller
     public function update_price(Request $request, $transport_Prices_id)
     {
         $Transport_Prices = TravelAgentCommission::find($transport_Prices_id);
-        $Transport_Prices->commission = $request->commission;
+        // $Transport_Prices->commission = $request->commission;
+        $Transport_Prices->price = $request->commission;
         $Transport_Prices->save();
         return $this->sendResponse(200, $Transport_Prices);
     }

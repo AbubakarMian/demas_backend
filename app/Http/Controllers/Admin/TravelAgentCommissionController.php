@@ -89,7 +89,7 @@ class TravelAgentCommissionController extends Controller
     {
         $Transport_Prices = TravelAgentCommission::find($transport_Prices_id);
         // $Transport_Prices->commission = $request->commission;
-        $Transport_Prices->price = $request->commission;
+        $Transport_Prices->price = $request->price;
         $Transport_Prices->save();
         return $this->sendResponse(200, $Transport_Prices);
     }

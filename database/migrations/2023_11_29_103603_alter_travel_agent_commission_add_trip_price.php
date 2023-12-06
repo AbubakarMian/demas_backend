@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('travel_agent_commission', function (Blueprint $table) {
-            $table->bigInteger('price')->nullable()->default(0);
+        Schema::table('travel_agent_commission', function (Blueprint $table) {            
+            $table->double('price' ,20,2)->nullable()->default(0);
         });
     }
 

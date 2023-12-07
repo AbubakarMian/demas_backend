@@ -17,7 +17,8 @@ use stdClass;
 class UserController extends Controller
 {
 
-    public function send_msg(){
+    public function send_msg()
+    {
         $msg = new NotificationHandler();
         $m = $msg->send_notification();
         dd($m);
@@ -36,22 +37,22 @@ class UserController extends Controller
             } else {
 
                 $user_phone = User::where('phone_no', $request->phone_no)
-                ->first();
+                    ->first();
 
                 $user_whatsapp_no = User::where('whatsapp_number', $request->whatsapp_no)
-                ->first();
+                    ->first();
 
                 $user_email = User::where('email', $request->email)
-                ->first();
+                    ->first();
 
                 $user = User::where('whatsapp_number', $request->whatsapp_no)
-                            ->where('email', $request->email)
-                            ->first();
+                    ->where('email', $request->email)
+                    ->first();
 
-                if( ($user_whatsapp_no || $user_email) && !$user){
+                if (($user_whatsapp_no || $user_email) && !$user) {
                     $msg = '';
-                    $msg = $user_whatsapp_no ? 'Phone number already taken':'';
-                    $msg .= $user_email ? ' Email already taken':'';
+                    $msg = $user_whatsapp_no ? 'Phone number already taken' : '';
+                    $msg .= $user_email ? ' Email already taken' : '';
 
                     return $this->sendResponse(500, null, [$msg]);
                 }
@@ -79,7 +80,7 @@ class UserController extends Controller
                     $user->email = $request->email;
                 }
                 // $user->phone_no = $request->phone_no;
-                $user->phone_no = $request->phone_no??$request->whatsapp_no;
+                $user->phone_no = $request->phone_no ?? $request->whatsapp_no;
                 $user->whatsapp_number = $request->whatsapp_no;
                 // $user->password = Hash::make($request->password);
                 $user->access_token = uniqid();
@@ -122,7 +123,7 @@ class UserController extends Controller
             } else {
 
                 $user = User::where('otp', $request->otp)
-                ->where('access_token', $request->access_token)->first();
+                    ->where('access_token', $request->access_token)->first();
                 if (!$user) {
                     return $this->sendResponse(500, null, ['Invalid OTP']);
                 }
@@ -203,13 +204,47 @@ class UserController extends Controller
 
                 return $this->sendResponse($status_code, $response, $error, $custom_error_code);
             }
+        }catch (\Exception $e) {
+            return $this->sendResponse(
+                500,
+                null,
+                [$e->getMessage()]
+            );
+        }
+    }
+    public function user_update_profile(Request $request)
+    {
+        try {
+            $user = $request->attributes->get('user');
+
+            $validation = Validator::make($request->all(), [
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'phone_no' => 'required|unique:users,phone_no,' . $user->id,
+                'whatsapp_number' => 'required|unique:users,whatsapp_number,'. $user->id,
+            ]);
+
+            if ($validation->fails()) {
+                return $this->sendResponse(
+                    Config::get('error.code.BAD_REQUEST'),
+                    null,
+                    $validation->getMessageBag()->all(),
+                    Config::get('error.code.BAD_REQUEST')
+                );
+            } else {
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->phone_no = $request->phone_no;
+                $user->whatsapp_number = $request->whatsapp_number;
+                $user->save();
+
+                return $this->sendResponse(200, $user);
+            }
         } catch (\Exception $e) {
-            return [
-                'status' => Config::get('error.code.INTERNAL_SERVER_ERROR'),
-                'response' => null,
-                'error' => [$e->errorInfo[2]],
-                'custom_error_code' => $e->errorInfo[0]
-            ];
+            return $this->sendResponse(
+                500,
+                null,
+                [$e->getMessage()]
+            );
         }
     }
 }

@@ -29,7 +29,7 @@ class OrderController extends Controller
         $journey_list = Journey::pluck('name', 'id');
         $slot_list = Slot::pluck('name', 'id');
         $transport_type_list = Transport_Type::pluck('name', 'id');
-        $travel_agent_list = Users::where('role_id',Config::get('constants.role.sale_agent'))->pluck('name', 'id');
+        $travel_agent_list = Users::where('role_id', Config::get('constants.role.sale_agent'))->pluck('name', 'id');
         return view(
             'reports.order.index',
             compact(
@@ -41,7 +41,6 @@ class OrderController extends Controller
             )
         );
     }
-
 
     public function get_order(Request $request)
     {
@@ -124,13 +123,7 @@ class OrderController extends Controller
         $order_detail->driver_commission_type = $driver->commision_type;
         $order_detail->save();
 
-        if (
-            $sale_agent && $sale_agent->commision_type ==
-            Config::get('constants.commission_types.profit_percent')
-            && $order_detail->driver->commision_type == Config::get('constants.driver.commission_types.per_trip')
-        ) {
-            // get commission
-            // $commission = round(($journey_price->price - $travel_agent_commission) * 0.01 * $sale_agent->commision);
+        if ($order_detail->driver->commision_type == Config::get('constants.driver.commission_types.per_trip')) {
 
             $driver_commission = DriverCommission::where()
                 ->where('user_driver_id', $driver_user_id)
@@ -139,18 +132,18 @@ class OrderController extends Controller
                 ->where('transport_type_id', $order_detail->transport_type_id)
                 ->first();
             if ($driver_commission) {
-                $profit = $order_detail->final_price - $order_detail->sale_agent_commission
-                    - $order_detail->travel_agent_commission - $driver_commission->commission;
-                $commission = round($profit  * 0.01 * $sale_agent->commision);
-                $order_detail->sale_agent_commission = $commission;
                 $order_detail->driver_commission = $driver_commission->commission;
                 $order_detail->save();
             }
         }
-        // $order_detail->save();
-        // $order = $order_detail->order;
         $commission_handler = new CommissionHandler();
-        $commission_handler->update_order_commission_model($order_detail->order_id);
+        $order = Order::with([
+            'order_details', 'user_obj',
+            'travel_agent',
+            'sale_agent',
+            'travel_agent_user', 'sale_agent_user'
+        ])->find($order_detail->order_id);
+        $commission_handler->update_commissions_prices($order);
         return $this->sendResponse(200, $order_detail);
     }
     public function send_invoice($order_id)

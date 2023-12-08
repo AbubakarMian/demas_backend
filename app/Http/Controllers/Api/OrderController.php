@@ -57,7 +57,7 @@ class OrderController extends Controller
 
         $request_params = $request->all();
         $booking = $request_params['booking_details'];
-        $commission_details = new CommissionHandler();
+        $commission_handler = new CommissionHandler();
         $order = new Order();
         $order_pre = Order::where('order_id','>',99999)->orderbyDesc('order_id')->first();
         if (!$order_pre) {
@@ -66,6 +66,7 @@ class OrderController extends Controller
             $order_id_uniq = $order_pre->order_id + 1;
         }
         $order->user_id = $user->id;
+        $order->order_created_by_role_id = $user->role_id;
         $order->order_id = $order_id_uniq;
         $order->discount = 0;
         $order->customer_name = $booking['customer_name'];
@@ -79,21 +80,18 @@ class OrderController extends Controller
         // $order->cash_collected_by = null;
         $order->status = 'pending';
         $order->save();
-        $discount_percent_obj = Settings::where('name', Config::get('constants.settings.discount'))
-                                        ->first();
-        $discount_percent = $discount_percent_obj->value;
-        $detail_count = 1;
+        $detail_count = 0;
         foreach ($booking['details'] as $detail_key => $detail) {
-            $trip_price_details = $commission_details->get_trip_price_details(
-                $request,
-                $detail['pickup_id'],
-                $detail['dropoff_id'],
-                $detail['transport_type_id'],
-                $user->id,
-                $detail['pickupdate_time'],
-                $detail['customer_collection_price']
-            );
-            
+            // $trip_price_details = $commission_details->get_trip_price_details(
+            //     $request,
+            //     $detail['pickup_id'],
+            //     $detail['dropoff_id'],
+            //     $detail['transport_type_id'],
+            //     $user->id,
+            //     $detail['pickupdate_time'],
+            //     $detail['customer_collection_price']
+            // );
+            $detail_count++;
             $order_details = new Order_Detail();
             $order_details->order_id = $order->id;
             $order_details->sub_order_id = $order_id_uniq.'-'.($detail_key+1);
@@ -101,44 +99,24 @@ class OrderController extends Controller
             $order_details->drop_off_location_id = $detail['dropoff_id'];
             $order_details->transport_type_id = $detail['transport_type_id'];
             $order_details->pick_up_date_time = $detail['pickupdate_time'];
-            $actucal_price = $trip_price_details->journey_price->price;
-            $order_details->actual_price = $actucal_price;
             $order_details->customer_collection_price = $detail['customer_collection_price'];
             $order->customer_collection_price += $order_details->customer_collection_price;
-
-            $order->actual_price += $actucal_price;
-
-            if($detail_count %3 == 0 && $user->role_id == 2){
-                $order_details->discount = $actucal_price * $discount_percent * 0.01;
-                $order_details->discounted_price = $actucal_price - $order_details->discount;
-                $order_details->final_price = $order_details->discounted_price;
-                $order->discount += $order_details->discount;
-                $order->discounted_price += $order_details->discounted_price;
-                $order->final_price += $order->discounted_price;
-            }
-            else{
-                $order_details->final_price = $actucal_price;
-                $order->final_price += $order_details->final_price;
-            }
-            $detail_count++;
-            $order_details->journey_id = $trip_price_details->journey_price->journey_id;
-            $order_details->slot_id = $trip_price_details->journey_price->slot_id;
-            $order_details->journey_slot_id = $trip_price_details->journey_slot->id;
-            $order_details->sale_agent_user_id = $trip_price_details->commission_details->sale_agent_user_id;
-            $order_details->sale_agent_commission = $trip_price_details->commission_details->sale_agent_commission;
-            $order_details->sale_agent_commission_type = $trip_price_details->commission_details->sale_agent_commission_type;
-            $order_details->travel_agent_user_id = $trip_price_details->commission_details->travel_agent_user_id;
-            $order_details->travel_agent_commission = $trip_price_details->commission_details->travel_agent_commission;
-            $order_details->status = 'pending';
+            $order_details->journey_id = $commission_handler->get_journey($detail['pickup_id'], $detail['dropoff_id'])->id;
+            $order_details->slot_id = $commission_handler->get_slot($detail['pickupdate_time'])->id;
+            $order_details->journey_slot_id = $commission_handler->get_journey_slot($order_details->journey_id, $order_details->slot_id);
+            $order_details->status = Config::get('constants.order_status.pending');
             $order_details->payment_type = Config::get('constants.payment_type.cod');
-            $order->sale_agent_user_id = $order_details->sale_agent_user_id;
-            $order->sale_agent_commission_total += $order_details->sale_agent_commission;
-            $order->sale_agent_commission_type = $order_details->sale_agent_commission_type;
-            $order->travel_agent_user_id = $order_details->travel_agent_user_id;
-            $order->travel_agent_commission_total += $order_details->travel_agent_commission;
             $order_details->save();
         }
         $order->save();
+        $order = Order::with(['order_details','user_obj',
+        'travel_agent',
+        'sale_agent',
+        'travel_agent_user','sale_agent_user'])->find($order->id);
+        
+        $commission_handler->set_order_ref_agents($order);
+        $commission_handler->update_trip_prices($order);
+        $commission_handler->update_commissions_prices($order);
 
         $order_obj = Order::with('order_details')->find($order->id);
         // generate pdf 

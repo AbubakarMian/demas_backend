@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth.client_token'], function () {
     Route::post('validate_otp',[UserController::class, 'validate_otp']);
     // Route::post('register',[UserController::class, 'register']);
     Route::post('login',[UserController::class, 'login']);
-    Route::post('update',[UserController::class, 'user_update_profile']);
+    Route::put('update',[UserController::class, 'user_update_profile']);
     
     Route::post('create_request_new_agent',[NewAgentRequest::class, 'create_request_new_agent']);
 

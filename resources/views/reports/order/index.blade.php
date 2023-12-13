@@ -179,6 +179,7 @@
                                             <th>Journey</th>
                                             <th>PickUp Date/Time</th>
                                             <th>Price</th>
+                                            <th>Transport Type</th>
                                             <th>Driver</th>
                                             <th>Transport</th>
                                             <th></th>
@@ -322,29 +323,17 @@
                         $.each(response.response['order_details'], function(index, item) {
                             console.log('response item get_details ', item);
                             console.log('response index', index);
-                            var drivers = `<select onchange="change_driver('` + item.id + `',this)">
-                                <option value="0">Select Driver</option>`;
-                            $.each(response.response['drivers'], function(driver_index, driver_item) {
-                                var user_driver = driver_item.user_obj;
-                                var selected = user_driver.id == item.driver_user_id ?
-                                    'selected' : '';
-                                drivers += `<option value="` + user_driver.id + `" ` +
-                                    selected + `>` +
-                                    user_driver.name + ` (` + driver_item.driver_category +
-                                    `) ` + `</option>`;
-                            })
-                            drivers += '</select>';
                             var divers_transport_select = get_divers_transport_select(item);
                                 details_list += `<tr>
                                 <td>` + item.journey.name + `</td>
                                 <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
                                 <td>` + item.final_price + `</td>
+                                <td>` + item.transport_type.name + `</td>
                                 <td>` + divers_transport_select.drivers + `</td>
                                 <td>` + divers_transport_select.transport + `</td>
                                 <td>` + divers_transport_select.update_btn + `</td>
                                 </tr>`;
                         })
-                        // <td>` + item.driver.user_obj.name + `</td>
                         $('.orderdetails_list').html(details_list);
                     } else {
                         alert('Someting went wrong');
@@ -402,7 +391,6 @@
                     $('.orderdetails_list').html('');
                     if (response.status) {
                         var myTable = $('#orderTableAppend').DataTable();
-                        console.log('removeasdasdasd row ', '#row_' + order_id);
                         let rowIndex = myTable.row('#row_' + order_id).index();
                         myTable.cell(rowIndex, 7).data(capitalize_first_letter(status));
                         myTable.draw();

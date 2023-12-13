@@ -34,7 +34,7 @@ class OrderController extends Controller
         $drivers_list = Driver::with('user_obj')->get();
         $transport_list = Transport::with('transport_type:id,name')->get();
 
-        $drivers_list->transform(function($driver){
+        $drivers_list->transform(function ($driver) {
             $item = new \stdClass();
             $item->user_obj_name = $driver->user_obj->name;
             $item->driver_user_id = $driver->user_obj->id;
@@ -42,15 +42,15 @@ class OrderController extends Controller
             $item->driver_category = $driver->driver_category;
             return $item;
         });
-        
-        $transport_list->transform(function($transport){
+
+        $transport_list->transform(function ($transport) {
             $item = new \stdClass();
             $item->transport_type_name = $transport->transport_type->name;
             $item->id = $transport->id;
             $item->name = $transport->name;
             return $item;
         });
-        
+
         // $drivers_list = Users::where('role_id', Config::get('constants.role.driver'))->pluck('name', 'id');
         return view(
             'reports.order.index',
@@ -111,10 +111,12 @@ class OrderController extends Controller
                 'driver.user_obj',
                 'journey', // its necessary
                 'journey_slot.slot', // its not necessary
+                'transport_type'
             ])->get();
+            // dd($order_details);
         // $user_drivers = Users::where('role_id',5)->get();
-        $drivers = Driver::where('commision_type', 'per_trip')->with('user_obj')->get(); //Users::where('role_id',5)->get();
-        $res = ['order_details' => $order_details, 'drivers' => $drivers];
+        // $drivers = Driver::where('commision_type', 'per_trip')->with('user_obj')->get(); //Users::where('role_id',5)->get();
+        $res = ['order_details' => $order_details];
 
         return $this->sendResponse(200, $res);
     }
@@ -143,13 +145,17 @@ class OrderController extends Controller
         $transport_id = $request->transport_id;
         $order_detail = Order_Detail::with('sale_agent', 'order')->find($order_detail_id);
         $driver = Driver::where('user_id', $driver_user_id)->first();
-        $sale_agent = $order_detail->sale_agent;
+        // $sale_agent = $order_detail->sale_agent;
         $order_detail->driver_user_id = $driver_user_id;
         $order_detail->transport_id = $transport_id;
-        $order_detail->driver_commission_type = $driver->commision_type;
+        if ($driver) {
+            $order_detail->driver_commission_type = $driver->commision_type;
+        } else {
+            $order_detail->driver_commission_type = null;
+        }
         $order_detail->save();
 
-        $order_detail = Order_Detail::with('sale_agent', 'order','driver')->find($order_detail_id);
+        $order_detail = Order_Detail::with( 'order', 'driver')->find($order_detail_id);
 
         if ($order_detail->driver && $order_detail->driver->commision_type == Config::get('constants.driver.commission_types.per_trip')) {
 

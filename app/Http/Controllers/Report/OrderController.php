@@ -149,7 +149,9 @@ class OrderController extends Controller
         $order_detail->driver_commission_type = $driver->commision_type;
         $order_detail->save();
 
-        if ($order_detail->driver->commision_type == Config::get('constants.driver.commission_types.per_trip')) {
+        $order_detail = Order_Detail::with('sale_agent', 'order','driver')->find($order_detail_id);
+
+        if ($order_detail->driver && $order_detail->driver->commision_type == Config::get('constants.driver.commission_types.per_trip')) {
 
             $driver_commission = DriverCommission::where()
                 ->where('user_driver_id', $driver_user_id)

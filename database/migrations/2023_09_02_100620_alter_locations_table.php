@@ -18,9 +18,10 @@ return new class extends Migration
             $table->dropColumn('longitude');
         });
         Schema::table('locations', function (Blueprint $table) {
-            $table->string('latitude',1000)->nullable()->default('[]');
-            $table->string('longitude',1000)->nullable()->default('[]');
-        });    }
+            $table->string('latitude', 1000)->nullable()->default('[]');
+            $table->string('longitude', 1000)->nullable()->default('[]');
+        });
+    }
 
     /**
      * Reverse the migrations.

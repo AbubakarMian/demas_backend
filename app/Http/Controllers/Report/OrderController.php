@@ -12,6 +12,7 @@ use App\Models\Journey;
 use App\Models\Order;
 use App\Models\Order_Detail;
 use App\Models\Slot;
+use App\Models\Transport;
 use App\Models\Transport_Type;
 use App\Models\Users;
 use Illuminate\Http\Request;
@@ -29,7 +30,28 @@ class OrderController extends Controller
         $journey_list = Journey::pluck('name', 'id');
         $slot_list = Slot::pluck('name', 'id');
         $transport_type_list = Transport_Type::pluck('name', 'id');
-        $travel_agent_list = Users::where('role_id',Config::get('constants.role.sale_agent'))->pluck('name', 'id');
+        $travel_agent_list = Users::where('role_id', Config::get('constants.role.sale_agent'))->pluck('name', 'id');
+        $drivers_list = Driver::with('user_obj')->get();
+        $transport_list = Transport::with('transport_type:id,name')->get();
+
+        $drivers_list->transform(function($driver){
+            $item = new \stdClass();
+            $item->user_obj_name = $driver->user_obj->name;
+            $item->driver_user_id = $driver->user_obj->id;
+            $item->id = $driver->id;
+            $item->driver_category = $driver->driver_category;
+            return $item;
+        });
+        
+        $transport_list->transform(function($transport){
+            $item = new \stdClass();
+            $item->transport_type_name = $transport->transport_type->name;
+            $item->id = $transport->id;
+            $item->name = $transport->name;
+            return $item;
+        });
+        
+        // $drivers_list = Users::where('role_id', Config::get('constants.role.driver'))->pluck('name', 'id');
         return view(
             'reports.order.index',
             compact(
@@ -38,19 +60,20 @@ class OrderController extends Controller
                 'slot_list',
                 'transport_type_list',
                 'travel_agent_list',
+                'drivers_list',
+                'transport_list',
             )
         );
     }
 
-
     public function get_order(Request $request)
     {
         $order = Order::with([
-            'user_obj',
-            'sale_agent.user_obj',
-            'travel_agent.user_obj',
+            'user_obj:name,role_id',
+            'sale_agent.user_obj:name,role_id',
+            'travel_agent.user_obj:name,role_id',
             'order_details' => [
-                'driver.user_obj',
+                'driver.user_obj:name,role_id',
                 'transport_type', 'journey' => ['pickup', 'dropoff']
             ],
         ]);
@@ -74,7 +97,7 @@ class OrderController extends Controller
             }
         );
         // }
-        $orderData['data'] = $order->get();
+        $orderData['data'] = $order->latest()->get();
         echo json_encode($orderData);
     }
 
@@ -117,20 +140,18 @@ class OrderController extends Controller
     public function update_order_detail_driver(Request $request, $order_detail_id)
     {
         $driver_user_id = $request->driver_user_id;
+        $transport_id = $request->transport_id;
         $order_detail = Order_Detail::with('sale_agent', 'order')->find($order_detail_id);
-        $driver = Driver::where('driver_user_id', $driver_user_id)->first();
+        $driver = Driver::where('user_id', $driver_user_id)->first();
         $sale_agent = $order_detail->sale_agent;
         $order_detail->driver_user_id = $driver_user_id;
+        $order_detail->transport_id = $transport_id;
         $order_detail->driver_commission_type = $driver->commision_type;
         $order_detail->save();
 
-        if (
-            $sale_agent && $sale_agent->commision_type ==
-            Config::get('constants.commission_types.profit_percent')
-            && $order_detail->driver->commision_type == Config::get('constants.driver.commission_types.per_trip')
-        ) {
-            // get commission
-            // $commission = round(($journey_price->price - $travel_agent_commission) * 0.01 * $sale_agent->commision);
+        $order_detail = Order_Detail::with('sale_agent', 'order','driver')->find($order_detail_id);
+
+        if ($order_detail->driver && $order_detail->driver->commision_type == Config::get('constants.driver.commission_types.per_trip')) {
 
             $driver_commission = DriverCommission::where()
                 ->where('user_driver_id', $driver_user_id)
@@ -139,18 +160,18 @@ class OrderController extends Controller
                 ->where('transport_type_id', $order_detail->transport_type_id)
                 ->first();
             if ($driver_commission) {
-                $profit = $order_detail->final_price - $order_detail->sale_agent_commission
-                    - $order_detail->travel_agent_commission - $driver_commission->commission;
-                $commission = round($profit  * 0.01 * $sale_agent->commision);
-                $order_detail->sale_agent_commission = $commission;
                 $order_detail->driver_commission = $driver_commission->commission;
                 $order_detail->save();
             }
         }
-        // $order_detail->save();
-        // $order = $order_detail->order;
         $commission_handler = new CommissionHandler();
-        $commission_handler->update_order_commission_model($order_detail->order_id);
+        $order = Order::with([
+            'order_details', 'user_obj',
+            'travel_agent',
+            'sale_agent',
+            'travel_agent_user', 'sale_agent_user'
+        ])->find($order_detail->order_id);
+        $commission_handler->update_commissions_prices($order);
         return $this->sendResponse(200, $order_detail);
     }
     public function send_invoice($order_id)

@@ -19,6 +19,13 @@ return [
         "travel_agent" => '4',
         "driver" => '5',
     ],
+    'order_status'=>[
+        'pending'=>'pending',
+        'cancelled'=>'cancelled',
+        'accepted'=>'accepted',
+        'rejected'=>'rejected',
+        'completed'=>'completed',
+    ],
     'role_id' => [
         '1' => "admin",
         '2' => "User",
@@ -46,6 +53,11 @@ return [
     ],
     'sales_agent' => [
         'commission_types' => [
+            'fix_amount' => 'fix_amount',
+            'profit_percent' => 'profit_percent',
+            'sales_percent' => 'sales_percent',
+        ],
+        'commission_lables' => [
             'fix_amount' => 'Fix Amount',
             'profit_percent' => 'Profit Percent',
             'sales_percent' => 'Sales Percent',

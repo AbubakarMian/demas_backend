@@ -110,6 +110,9 @@
 @section('app_jquery')
 
     <script>
+        var order_list = [];
+        var drivers_list = JSON.parse(`{!! json_encode($drivers_list) !!}`);
+        var transport_list = JSON.parse(`{!! json_encode($transport_list) !!}`);;
         $(document).ready(function() {
             $('#orderTableAppend').DataTable({
                 dom: '<"top_datatable"B>lftipr',
@@ -137,23 +140,18 @@
                     console.log('response2 mian fetch');
 
                     $("#orderTableAppend tbody").html('');
+                    order_list = response['data'];
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
                         var name = response['data'][i].user_obj?.name ?? '';
-                        // var payment_id = response['data'][i].payment_id;
-                        // var user_sale_agent_name = response['data'][i].sale_agent.user_obj.name;
-                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name ??
-                            ''; //response['data'][i].sale_agent.user_obj.name;
-                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name ??
-                            ''; //response['data'][i].sale_agent.user_obj.name;
-                        // var user_travel_agent_name = response['data'][i].travel_agent.user_obj.name;
-                        // var user_driver_id = response['data'][i].driver.user_obj.name;
+                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name ?? '';
+                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name ?? '';
                         var cash_collected_by = response['data'][i].cash_collected_by;
                         var cash_collected_by_user_id = response['data'][i].cash_collected_by_user_id;
-                        var price = response['data'][i].price;
+                        var final_price = response['data'][i].final_price;
                         var type = response['data'][i].type;
                         var trip_type = response['data'][i].trip_type;
-                        var total_price = response['data'][i].total_price;
+                        // var total_price = response['data'][i].total_price;
                         var ispaid = response['data'][i].is_paid ? 'True' : 'False';
                         var status = response['data'][i].status;
                         var payment_collected_type = response['data'][i].payment_collected_type;
@@ -170,8 +168,6 @@
                         var send_invoice =
                             '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' + id +
                             '">Send Invoice</a>';
-
-                        // 'orderdetail_' + response['data'][i].id + `">View</a>`;
                         createModal({
                             // id: 'orderdetail_' + response['data'][i].id,
                             id: 'orderdetails',
@@ -184,6 +180,8 @@
                                             <th>PickUp Date/Time</th>
                                             <th>Price</th>
                                             <th>Driver</th>
+                                            <th>Transport</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody class="orderdetails_list">
@@ -236,7 +234,7 @@
                             "<td>" + name + "</td>" +
                             "<td>" + user_sale_agent_name + "</td>" +
                             "<td>" + user_travel_agent_name + "</td>" +
-                            "<td>" + total_price + "</td>" +
+                            "<td>" + final_price + "</td>" +
                             "<td>" + capitalize_first_letter(trip_type) + "</td>" +
                             "<td>" + ispaid + "</td>" +
                             "<td>" + order_detail + "</td>" +
@@ -254,10 +252,58 @@
                         buttons: [
                             'copy', 'csv', 'excel', 'pdf', 'print'
                         ],
+                        order: [
+                            [0, 'desc']
+                        ],
                     });
                     // });
                 }
             });
+
+        }
+
+        function get_divers_transport_select(order_detail_item) {
+            console.log('drivers_list', drivers_list);
+            console.log('transport_list', transport_list);
+            var order_detail_id = order_detail_item.id;
+            var selected = '';
+            var drivers = `<select class="select_driver_`+order_detail_item.id+`">
+                                <option value="0">Select Driver</option>`;
+            $.each(drivers_list, function(driver_index, driver_item) {
+                console.log('order_detail_item.driver_user_id',order_detail_item.driver_user_id);
+                console.log('driver_item.user_id',driver_item.driver_user_id);
+                selected = order_detail_item.driver_user_id == driver_item.driver_user_id ?
+                    'selected' : '';
+                drivers += `<option value="` + driver_item.driver_user_id + `" ` +
+                    selected + `>` +
+                    driver_item.user_obj_name + ` (` + driver_item.driver_category +
+                    `) ` + `</option>`;
+            })
+            drivers += '</select>';
+            var transport = `<select class="select_transport_`+order_detail_id+`">
+                                <option value="0">Select Transport</option>`;
+            $.each(transport_list, function(transport_index, transport_item) {
+                var selected_transport_id = order_detail_item.transport_id;
+                selected = selected_transport_id == transport_item.id ?
+                    'selected' : '';
+                    transport += `<option value="` + transport_item.id + `" ` +
+                    selected + `>` +
+                    transport_item.name + ` (` + transport_item.transport_type_name +
+                    `) ` + `</option>`;
+            })
+            transport += '</select>';
+            var update_btn = `
+                <button 
+                onclick="update_order_transport_driver(` + order_detail_id + `,'.select_driver_` + order_detail_id + `','.select_transport_` + order_detail_id + `')">
+                    Update</button>
+            `;
+
+            return {
+                drivers,
+                transport,
+                update_btn
+            };
+
         }
 
         function get_details(order_id) {
@@ -284,15 +330,18 @@
                                     'selected' : '';
                                 drivers += `<option value="` + user_driver.id + `" ` +
                                     selected + `>` +
-                                    user_driver.name + ` (` + driver_item.drive_category +
+                                    user_driver.name + ` (` + driver_item.driver_category +
                                     `) ` + `</option>`;
                             })
                             drivers += '</select>';
-                            details_list += `<tr>
+                            var divers_transport_select = get_divers_transport_select(item);
+                                details_list += `<tr>
                                 <td>` + item.journey.name + `</td>
                                 <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
-                                <td>` + item.price + `</td>
-                                <td>` + drivers + `</td>
+                                <td>` + item.final_price + `</td>
+                                <td>` + divers_transport_select.drivers + `</td>
+                                <td>` + divers_transport_select.transport + `</td>
+                                <td>` + divers_transport_select.update_btn + `</td>
                                 </tr>`;
                         })
                         // <td>` + item.driver.user_obj.name + `</td>
@@ -308,16 +357,18 @@
 
         }
 
-        function change_driver(order_detail_id, e) {
+        function update_order_transport_driver(order_detail_id, driver_select,transport_select) {
             console.log('get_details order_detail_id', order_detail_id);
-            var driver_user_id = $(e).find(':selected').val();
+            var driver_user_id = $(driver_select).find(':selected').val();
+            var transport_id = $(transport_select).find(':selected').val();
             $.ajax({
                 url: "{!! asset('admin/order/update_order_detail_driver') !!}/" + order_detail_id,
                 type: 'post',
                 dataType: 'json',
                 data: {
                     _token: '{!! @csrf_token() !!}',
-                    driver_user_id: driver_user_id
+                    driver_user_id: driver_user_id,
+                    transport_id: transport_id,
                 },
                 success: function(response) {
                     console.log(response.status);

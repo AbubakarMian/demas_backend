@@ -145,33 +145,33 @@ class CommissionHandler
         return $journey_price;
     }
 
-    public function get_trip_price_details(
-        Request $request,
-        $pickup_id,
-        $dropoff_id,
-        $transport_type_id,
-        $user_id,
-        $pickupdate_time,
-        $customer_collection_price
-    ) {
-        $user = Users::with(['sale_agent', 'travel_agent', 'driver'])->find($user_id);
+    // public function get_trip_price_details(
+    //     Request $request,
+    //     $pickup_id,
+    //     $dropoff_id,
+    //     $transport_type_id,
+    //     $user_id,
+    //     $pickupdate_time,
+    //     $customer_collection_price
+    // ) {
+    //     $user = Users::with(['sale_agent', 'travel_agent', 'driver'])->find($user_id);
 
-        $slot = $this->get_slot($pickupdate_time);
-        $journey = $this->get_journey($pickup_id, $dropoff_id);
-        $journey_slot = $this->get_journey_slot($journey, $slot);
-        $journey_price = $this->get_journey_price($journey->id, $slot->id, $transport_type_id, $user);
-        $commission_details = $this->get_car_commission_details($slot, $journey, $journey_price, $transport_type_id, $user, $customer_collection_price);
-        $response = new \stdClass();
-        $response->journey_price = $journey_price;
-        $response->commission_details = $commission_details;
-        $response->journey_slot = $journey_slot;
-        return $response;
-    }
+    //     $slot = $this->get_slot($pickupdate_time);
+    //     $journey = $this->get_journey($pickup_id, $dropoff_id);
+    //     $journey_slot = $this->get_journey_slot($journey, $slot);
+    //     $journey_price = $this->get_journey_price($journey->id, $slot->id, $transport_type_id, $user);
+    //     $commission_details = $this->get_car_commission_details($slot, $journey, $journey_price, $transport_type_id, $user, $customer_collection_price);
+    //     $response = new \stdClass();
+    //     $response->journey_price = $journey_price;
+    //     $response->commission_details = $commission_details;
+    //     $response->journey_slot = $journey_slot;
+    //     return $response;
+    // }
 
-    public function get_journey_slot($journey_id, $slot)
+    public function get_journey_slot($journey_id, $slot_id)
     {
         $journey_slot = Journey_Slot::where('journey_id', $journey_id)
-            ->where('slot_id', $slot->id)
+            ->where('slot_id', $slot_id)
             ->first();
         return $journey_slot;
     }

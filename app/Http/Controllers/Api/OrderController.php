@@ -103,7 +103,7 @@ class OrderController extends Controller
             $order->customer_collection_price += $order_details->customer_collection_price;
             $order_details->journey_id = $commission_handler->get_journey($detail['pickup_id'], $detail['dropoff_id'])->id;
             $order_details->slot_id = $commission_handler->get_slot($detail['pickupdate_time'])->id;
-            $order_details->journey_slot_id = $commission_handler->get_journey_slot($order_details->journey_id, $order_details->slot_id);
+            $order_details->journey_slot_id = $commission_handler->get_journey_slot($order_details->journey_id, $order_details->slot_id)->id;
             $order_details->status = Config::get('constants.order_status.pending');
             $order_details->payment_type = Config::get('constants.payment_type.cod');
             $order_details->save();

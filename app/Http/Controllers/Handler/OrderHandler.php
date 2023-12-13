@@ -50,8 +50,8 @@ class OrderHandler
     public function get_admin_report_detail_report(Request $request)
     {
         $report_details = new ReportDetails();
-        // $order_details_arr = $report_details->admin_report_detail($request);
-        $order_details_arr = $report_details->travel_agent_report_detail($request);
+        $order_details_arr = $report_details->admin_report_detail($request);
+        // $order_details_arr = $report_details->travel_agent_report_detail($request);
         // $order_details_arr = $report_details->sale_agent_report_detail($request);
         return $order_details_arr;
     }

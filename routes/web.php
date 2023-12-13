@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SaleAgentCommissionController;
 use App\Http\Controllers\Report\AgentsController;
 use App\Http\Controllers\Report\StaffPaymentsController;
 use Illuminate\Support\Facades\Route;
@@ -142,6 +143,11 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::get('get_travel_agent_commission', [TravelAgentCommissionController::class, 'get_commision_prices'])->name('get_travel_agent_commission.index');
         Route::get('/', [TravelAgentCommissionController::class, 'index'])->name('travel_agent_commission.index');
         Route::get('update_price/{id}', [TravelAgentCommissionController::class, 'update_price'])->name('travel_agent_commission.update_price');
+    });
+    Route::group(['prefix' => 'sale_agent_commission'], function () {
+        Route::get('get_sale_agent_commission', [SaleAgentCommissionController::class, 'get_commision_prices'])->name('get_sale_agent_commission.index');
+        Route::get('/', [SaleAgentCommissionController::class, 'index'])->name('sale_agent_commission.index');
+        Route::get('update_price/{id}', [SaleAgentCommissionController::class, 'update_price'])->name('sale_agent_commission.update_price');
     });
     Route::group(['prefix' => 'driver_commission'], function () {
         Route::get('get_driver_commission', [DriverCommissionController::class, 'get_commision_prices'])->name('driver_commission.index');

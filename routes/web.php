@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\TravelAgentCommissionController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\DriverCommissionController;
+use App\Http\Controllers\Admin\NewAgentController;
 use App\Http\Controllers\Report\OrderController;
 use App\Http\Controllers\Report\SubAdminOrderController;
 use App\Http\Controllers\User\CommonServicesController;
@@ -84,6 +85,16 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::post('update/{id}', [UserController::class, 'update'])->name('user.update');
         Route::post('delete/{id}', [UserController::class, 'destroy_undestroy'])->name('user.delete');
     });
+        //  =================================  new_agent ==========================
+        Route::group(['prefix' => 'new_agent'], function () {
+            Route::get('/', [NewAgentController::class, 'index'])->name('new_agent.index');
+            Route::get('get_new_agent', [NewAgentController::class, 'get_new_agent'])->name('new_agent.index');
+            Route::get('create', [NewAgentController::class, 'create'])->name('new_agent.create'); //add
+            Route::post('save', [NewAgentController::class, 'save'])->name('new_agent.save');
+            Route::get('edit/{id}', [NewAgentController::class, 'edit'])->name('new_agent.edit');
+            Route::post('update/{id}', [NewAgentController::class, 'update'])->name('new_agent.update');
+            Route::post('delete/{id}', [NewAgentController::class, 'destroy_undestroy'])->name('new_agent.delete');
+        });
     //  =================================  location ==========================
     Route::group(['prefix' => 'location'], function () {
         Route::get('/', [LocationController::class, 'index'])->name('location.index');

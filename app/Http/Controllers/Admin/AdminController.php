@@ -217,6 +217,7 @@ class AdminController extends Controller
             'image' => "{{ asset('/images/car-1.png') }} ", // Add the image path for Module 1
 
         ];
+     
         // $modules[] = [
 
         //     'url' => 'admin/transport_journey_prices',
@@ -229,6 +230,13 @@ class AdminController extends Controller
             'url' => 'admin/contactus',
             'title' => 'Contact Us',
             'image' => '/', // Add the image path for Module 1
+
+        ];
+        $modules[] = [
+
+            'url' => 'admin/new_agent',
+            'title' => 'Agent Request',
+            'image' => "{{ asset('/images/car-1.png') }} ", // Add the image path for Module 1
 
         ];
 

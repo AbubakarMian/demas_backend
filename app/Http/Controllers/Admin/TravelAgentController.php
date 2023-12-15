@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\TripCommissionHandler;
 use App\Models\SaleAgent;
 use App\Models\Travel_Agent;
 use App\Models\User;
@@ -42,7 +43,11 @@ class TravelAgentController extends Controller
     {
         $travel_agent = new Travel_Agent();
         $user = new User();
-        return $this->add_or_update($request, $user, $travel_agent);
+        $travel_agent = $this->add_or_update($request, $user, $travel_agent);
+        $trip_commission_handler = new TripCommissionHandler();
+        $trip_commission_handler->create_sale_agent_trip_prices([],[$travel_agent]);
+        return Redirect('admin/travel_agent');
+        
     }
     public function edit($id)
     {
@@ -65,8 +70,8 @@ class TravelAgentController extends Controller
     {
         $travel_agent = Travel_Agent::with('user_obj')->find($id);
         $user = $travel_agent->user_obj;
-        return $this->add_or_update($request, $user, $travel_agent);
-        // return Redirect('admin/travel_agent');
+        $travel_agent =  $this->add_or_update($request, $user, $travel_agent);
+        return Redirect('admin/travel_agent');
     }
 
 
@@ -102,7 +107,8 @@ class TravelAgentController extends Controller
         $travel_agent->country = $request->country;
         $travel_agent->city = $request->city;
         $travel_agent->save();
-        return Redirect('admin/travel_agent');
+            
+        return $travel_agent;
     }
 
     public function destroy_undestroy($id)

@@ -25,4 +25,7 @@ class SalesAgentTripPrice extends Model
     function transport_type(){
         return $this->hasOne('App\Models\Transport_Type','id','transport_type_id');
     }
+    function transport_price_obj(){
+        return $this->hasOne('App\Models\TransportPrices','id','transport_price_id');
+    }
 }

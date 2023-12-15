@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\TripCommissionHandler;
 use App\Models\Journey;
 use App\Models\SaleAgent;
 use App\Models\SalesAgentTripPrice;
@@ -30,38 +31,8 @@ class SaleAgentCommissionController extends Controller
     }
     public function get_commision_prices(Request $request)
     {
-        $data = [];
-        // $transport_types = Transport_Type::get();
-        // $journies = Journey::get();
-        // $slots = Slot::get();
-        $transport_prices = TransportPrices::get();
-        // dd(Config::get('constants.sales_agent.commission_types.agreed_trip_rate'));
-        $sale_agents = SaleAgent::where('commision_type', Config::get('constants.sales_agent.commission_types.agreed_trip_rate'))->get();
-        // 
-        // $slot_arr = Journey_Slot::get();
-        foreach ($transport_prices as $transport_price_key => $transport_price) {
-            
-            foreach ($sale_agents as $sale_agent_key => $sale_agent) {
-                $transport_prices_obj = SalesAgentTripPrice::where('transport_price_id', $transport_price->id)
-                    ->where('user_sale_agent_id', $sale_agent->user_id)
-                    ->first(); // Use 'first' to retrieve a single record
-                    
-                if (!$transport_prices_obj) {
-                    $transport_prices_obj = new SalesAgentTripPrice();
-                    $transport_prices_obj->transport_price_id = $transport_price->id;
-                    $transport_prices_obj->user_sale_agent_id = $sale_agent->user_id;
-                    $transport_prices_obj->journey_id = $transport_price->journey_id;
-                    $transport_prices_obj->slot_id = $transport_price->slot_id;
-                    $transport_prices_obj->transport_type_id = $transport_price->transport_type_id;
-                    $transport_prices_obj->is_default = $transport_price->is_default;
-                    $transport_prices_obj->commission = 0;
-                    $transport_prices_obj->price = $transport_price->price;
-                    $transport_prices_obj->save();
-                } 
-            }
-        }
         $sale_agent_commission = SalesAgentTripPrice::with([
-            'journey', 'slot', 'transport_type', 'user_obj'
+            'journey', 'slot', 'transport_type', 'user_obj','transport_price_obj'
         ]);
 
         if ($request->journey_id) {

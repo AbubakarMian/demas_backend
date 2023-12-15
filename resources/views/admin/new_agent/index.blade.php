@@ -38,7 +38,7 @@ width="400px" style="table-layout:fixed;"
             <th>phone_no</th>
             <th>whatsapp_number</th>
             <th>message</th>
-            <th>Actions </th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -69,7 +69,7 @@ width="400px" style="table-layout:fixed;"
         function fetchRecords() {
 
             $.ajax({
-                url: '{!! asset('admin/new_agent/get_new_agent') !!}',
+                url: '{!! asset('admin/new_agent/get_new_agent ') !!}',
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
@@ -152,7 +152,7 @@ width="400px" style="table-layout:fixed;"
                 }
             });
         }
-
+    
     });
 
     function set_msg_modal(msg) {
@@ -178,6 +178,7 @@ width="400px" style="table-layout:fixed;"
             }
         });
     }
+
     function save_request(id) {
         $.ajax({
 
@@ -197,5 +198,6 @@ width="400px" style="table-layout:fixed;"
             }
         });
     }
+    
 </script>
 @endsection

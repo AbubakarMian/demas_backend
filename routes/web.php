@@ -89,7 +89,7 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::group(['prefix' => 'new_agent'], function () {
             Route::get('/', [NewAgentController::class, 'index'])->name('new_agent.index');
             Route::get('get_new_agent', [NewAgentController::class, 'get_new_agent'])->name('new_agent.index');
-            Route::get('create', [NewAgentController::class, 'create'])->name('new_agent.create'); //add
+            Route::post('create/{id}', [NewAgentController::class, 'create'])->name('new_agent.create'); //add
             Route::post('save', [NewAgentController::class, 'save'])->name('new_agent.save');
             Route::get('edit/{id}', [NewAgentController::class, 'edit'])->name('new_agent.edit');
             Route::post('update/{id}', [NewAgentController::class, 'update'])->name('new_agent.update');

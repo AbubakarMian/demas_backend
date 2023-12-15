@@ -34,7 +34,7 @@ class SaltAgentController extends Controller
     {
         $control = 'create';
         $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
-        $commission_types = Config::get('constants.sales_agent.commission_types');
+        $commission_types = Config::get('constants.sales_agent.commission_lables');
 
         return view('admin.sale_agent.create', compact(
             'control',
@@ -56,7 +56,7 @@ class SaltAgentController extends Controller
         $control = 'edit';
         $sale_agent = SaleAgent::find($id);
         $user = $sale_agent->user_obj;
-        $commission_types = Config::get('constants.sales_agent.commission_types');
+        $commission_types = Config::get('constants.sales_agent.commission_lables');
         $travel_agent = Travel_Agent::with('user_obj')->pluck('id');
         // $transport_type = Transport_Type::pluck('name', 'id');
         return view(

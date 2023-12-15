@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sales_agent_trip_price', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_travel_agent_id')->nullable()->default(0);
+            $table->bigInteger('user_sale_agent_id')->nullable()->default(0);
             $table->bigInteger('journey_id')->nullable()->default(0);
             $table->bigInteger('slot_id')->nullable()->default(0);
             $table->bigInteger('transport_type_id')->nullable()->default(0);

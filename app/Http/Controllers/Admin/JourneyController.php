@@ -97,13 +97,6 @@ class JourneyController extends Controller
         return $response;
     }
     function add_journey_slot(Request $request, $journey){
-        // $journey = new Journey();
-        // $pickup_j = Locations::find($request->pickup_id);
-        // $drop_off_j = Locations::find($request->drop_off_id);
-        // $journey->name = $pickup_j->name.' - '.$drop_off_j->name;
-        // $journey->drop_off_location_id = $request->drop_off_id;
-
-        // $journey->save();
         $slots = Slot::get();
         foreach ($slots as $key => $slot) {
             $journey_slot = new Journey_Slot();

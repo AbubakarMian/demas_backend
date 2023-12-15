@@ -13,49 +13,51 @@ use Illuminate\Support\Facades\Response;
 
 class NewAgentController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view('admin.new_agent.index');
-
     }
-    public function get_new_agent($id = 0){
-        $user = NewAgent::orderby('id','asc')->select('*')->get();
+    public function get_new_agent($id = 0)
+    {
+        $user = NewAgent::orderby('id', 'asc')->select('*')->get();
         $userData['data'] = $user;
 
         echo json_encode($userData);
-
     }
     public function create()
     {
         $control = 'create';
         // $journey = Journey::pluck('name', 'id');
-        return view('admin.$new_agent.create', compact('control', 
-        // 'journey'
-    ));
+        return view('new_agent.index', compact(
+            'control',
+            // 'journey'
+        ));
     }
 
     public function save(Request $request)
-{
-    $new_agent = new NewAgent();
-    $user = new User();
-    $travel_agent = new Travel_Agent();
+    {
+        $new_agent = new NewAgent();
+        $user = new User();
+        $travel_agent = new Travel_Agent();
 
-    $this->add_or_update($request,
-        $new_agent,
-        $travel_agent,
-        $user
-    );
+        $this->add_or_update(
+            $request,
+            $new_agent,
+            $travel_agent,
+            $user
+        );
 
-    // Save the user model
-    $user->save();
+        // Save the user model
+        $user->save();
 
-    // Assign the user ID to travel_agent
-    $travel_agent->user_id = $user->id;
+        // Assign the user ID to travel_agent
+        $travel_agent->user_id = $user->id;
 
-    // Save the travel_agent model
-    $travel_agent->save();
+        // Save the travel_agent model
+        $travel_agent->save();
 
-    return redirect('admin/$new_agent');
-}
+        return redirect('admin/$new_agent');
+    }
     public function edit($id)
     {
         $control = 'edit';
@@ -75,32 +77,33 @@ class NewAgentController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $new_agent = NewAgent::find($id);
-    $user = User::find($id);
-    $travel_agent = Travel_Agent::find($id);
-
-    $this->add_or_update($request,
-        $new_agent,
-        $travel_agent,
-        $user
-    );
-
-    // Save the user model
-    $user->save();
-
-    // Assign the user ID to travel_agent
-    $travel_agent->user_id = $user->id;
-
-    // Save the travel_agent model
-    $travel_agent->save();
-
-    return Redirect('admin/$new_agent');
-}
-
-    public function add_or_update(Request $request, $new_agent ,$user , $travel_agent)
     {
-        
+        $new_agent = NewAgent::find($id);
+        $user = User::find($id);
+        $travel_agent = Travel_Agent::find($id);
+
+        $this->add_or_update(
+            $request,
+            $new_agent,
+            $travel_agent,
+            $user
+        );
+
+        // Save the user model
+        $user->save();
+
+        // Assign the user ID to travel_agent
+        $travel_agent->user_id = $user->id;
+
+        // Save the travel_agent model
+        $travel_agent->save();
+
+        return Redirect('admin/$new_agent');
+    }
+
+    public function add_or_update(Request $request, $new_agent, $user, $travel_agent)
+    {
+
         $user->name = $new_agent->name;
         $user->last_name = $new_agent->last_name;
         $user->email = $new_agent->email;
@@ -108,19 +111,11 @@ class NewAgentController extends Controller
         $user->phone_no = $new_agent->phone_no;
         $user->whatsapp_number = $new_agent->whatsapp_number;
         $user->role_id = 4;
-        if($request->password){
+        if ($request->password) {
             $user->password =  Hash::make($new_agent->password);
         }
 
-        // $new_agent->id = $request->id;
-        // $new_agent->user_id = $user->id;
-        // $new_agent->name = $request->name;
-        // $new_agent->email = $request->email;
-        // $new_agent->phone_no = $request->phone_no;
-        // $new_agent->whatsapp_number = $request->whatsapp_number;
-        // $new_agent->password = Hash::make($request->password);
-        // $new_agent->message = $request->message;
-        // $new_agent->save();
+
 
         $travel_agent->id = $new_agent->id;
         $travel_agent->user_id = $user->id;
@@ -145,5 +140,4 @@ class NewAgentController extends Controller
         ]);
         return $response;
     }
-    
-}
+};

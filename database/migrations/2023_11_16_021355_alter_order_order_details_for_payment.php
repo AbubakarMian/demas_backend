@@ -21,7 +21,6 @@ return new class extends Migration
         Schema::table('order_detail', function (Blueprint $table) {
             $table->string('cash_collected_by_role')->nullable()->default(null)->comment('admin/travel_agent/driver');
             $table->string('payment_status')->nullable()->default(null)->comment('pending/paid/refund');
-            $table->bigInteger('cash_collected_by_user_id')->nullable()->default(0);
         });
     }
 

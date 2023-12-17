@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\TripCommissionHandler;
 use App\Models\Journey;
 use App\Models\Journey_Slot;
 use App\Models\Locations;
@@ -106,6 +107,8 @@ class SlotController extends Controller
             $journey_slot->slot_id = $slot->id;
             $journey_slot->journey_id = $journey->id;
             $journey_slot->save();
+            $trip_commission_handler = new TripCommissionHandler();
+            $trip_commission_handler->create_transport_prices([],[$journey_slot]);
         }
     }
 }

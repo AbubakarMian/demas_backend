@@ -29,41 +29,37 @@ class TravelAgentCommissionController extends Controller
     }
     public function get_commision_prices(Request $request)
     {
-        $data = [];
-        $transport_types = Transport_Type::get();
-        $journies = Journey::get();
-        $slots = Slot::get();
-        $travel_agents = Travel_Agent::get();
-        // 
-        // $slot_arr = Journey_Slot::get();
-        foreach ($slots as $slot_key => $slot) {
-            foreach ($travel_agents as $travel_agent_key => $travel_agent) {
-                foreach ($journies as $journey_key => $journey) {
-                    foreach ($transport_types as $transport_type_key => $transport_type) {
-                        $transport_type_id = $transport_type->id;
-                        $transport_prices_obj = TravelAgentCommission::where('transport_type_id', $transport_type_id)
-                            ->where('slot_id', $slot->id)
-                            ->where('journey_id', $journey->id)
-                            ->where('user_travel_agent_id', $travel_agent->user_id)
-                            ->first(); // Use 'first' to retrieve a single record
+        // $data = [];
+        // $transport_types = Transport_Type::get();
+        // $journies = Journey::get();
+        // $slots = Slot::get();
+        // $travel_agents = Travel_Agent::get();
+        // foreach ($slots as $slot_key => $slot) {
+        //     foreach ($travel_agents as $travel_agent_key => $travel_agent) {
+        //         foreach ($journies as $journey_key => $journey) {
+        //             foreach ($transport_types as $transport_type_key => $transport_type) {
+        //                 $transport_type_id = $transport_type->id;
+        //                 $transport_prices_obj = TravelAgentCommission::where('transport_type_id', $transport_type_id)
+        //                     ->where('slot_id', $slot->id)
+        //                     ->where('journey_id', $journey->id)
+        //                     ->where('user_travel_agent_id', $travel_agent->user_id)
+        //                     ->first(); // Use 'first' to retrieve a single record
 
-                        if (!$transport_prices_obj) {
-                            $transport_prices_obj = new TravelAgentCommission();
-                            $transport_prices_obj->user_travel_agent_id = $travel_agent->user_id;
-                            $transport_prices_obj->journey_id = $journey->id;
-                            $transport_prices_obj->slot_id = $slot->id;
-                            $transport_prices_obj->transport_type_id = $transport_type_id;
-                            $transport_prices_obj->is_default = $slot->is_default;
-                            $transport_prices_obj->commission = 0;
-                            $transport_prices_obj->price = 0;
-                            $transport_prices_obj->save();
-                        } else {
-                            // dd($data, $transport_prices_obj);
-                        }
-                    }
-                }
-            }
-        }
+        //                 if (!$transport_prices_obj) {
+        //                     $transport_prices_obj = new TravelAgentCommission();
+        //                     $transport_prices_obj->user_travel_agent_id = $travel_agent->user_id;
+        //                     $transport_prices_obj->journey_id = $journey->id;
+        //                     $transport_prices_obj->slot_id = $slot->id;
+        //                     $transport_prices_obj->transport_type_id = $transport_type_id;
+        //                     $transport_prices_obj->is_default = $slot->is_default;
+        //                     $transport_prices_obj->commission = 0;
+        //                     $transport_prices_obj->price = 0;
+        //                     $transport_prices_obj->save();
+        //                 } 
+        //             }
+        //         }
+        //     }
+        // }
         $travel_agent_commission = TravelAgentCommission::with([
             'journey', 'slot', 'transport_type','user_obj'
         ]);

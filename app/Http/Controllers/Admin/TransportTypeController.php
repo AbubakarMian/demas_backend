@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\TripCommissionHandler;
 use App\Models\Transport_Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -33,16 +34,16 @@ class TransportTypeController extends Controller
     public function save(Request $request)
     {
         $transport_type = new Transport_Type();
-        $this->add_or_update($request, $transport_type);
+        $transport_type = $this->add_or_update($request, $transport_type);
 
+        $trip_commission_handler = new TripCommissionHandler();
+        $trip_commission_handler->create_transport_prices([$transport_type]);
         return redirect('admin/transport_type');
     }
     public function edit($id)
     {
         $control = 'edit';
         $transport_type = Transport_Type::find($id);
-        // $courses = Courses::pluck('full_name','id');
-        // $category = Category::pluck('name','id');
         return view('admin.transport_type.create', compact(
             'control',
             'transport_type',
@@ -53,7 +54,6 @@ class TransportTypeController extends Controller
     public function update(Request $request, $id)
     {
         $transport_type = Transport_Type::find($id);
-        // Transport_Type::delete()
         $this->add_or_update($request, $transport_type);
         return Redirect('admin/transport_type');
     }
@@ -66,7 +66,7 @@ class TransportTypeController extends Controller
         $transport_type->luggage = $request->luggage;
         $transport_type->doors = $request->doors;
         $transport_type->save();
-        return redirect()->back();
+        return $transport_type;
     }
 
     public function destroy_undestroy($id)

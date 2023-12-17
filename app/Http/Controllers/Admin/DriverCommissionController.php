@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\TripCommissionHandler;
 use App\Models\Driver;
 use App\Models\DriverCommission;
 use App\Models\Journey;
@@ -28,40 +29,42 @@ class DriverCommissionController extends Controller
     }
     public function get_commision_prices(Request $request)
     {
-        $transport_types = Transport_Type::get();
-        $journies = Journey::get();
-        $slots = Slot::get();
-        $drivers = Driver::where('commision_type',
-                    Config::get('constants.driver.commission_types_keys.per_trip'))->get();
-        // dd(Config::get('constants.driver.commission_types_keys.per_trip'));
-        // $slot_arr = Journey_Slot::get();
-        foreach ($slots as $slot_key => $slot) {
-            foreach ($drivers as $driver_key => $driver) {
-                foreach ($journies as $journey_key => $journey) {
-                    foreach ($transport_types as $transport_type_key => $transport_type) {
-                        $transport_type_id = $transport_type->id;
-                        $driver_commission_obj = DriverCommission::where('transport_type_id', $transport_type_id)
-                            ->where('slot_id', $slot->id)
-                            ->where('journey_id', $journey->id)
-                            ->where('user_driver_id', $driver->user_id)
-                            ->first(); // Use 'first' to retrieve a single record
+        // $transport_types = Transport_Type::get();
+        // $journies = Journey::get();
+        // $slots = Slot::get();
+        // $drivers = Driver::where('commision_type',
+        //             Config::get('constants.driver.commission_types_keys.per_trip'))->get();
+        // foreach ($slots as $slot_key => $slot) {
+        //     foreach ($drivers as $driver_key => $driver) {
+        //         foreach ($journies as $journey_key => $journey) {
+        //             foreach ($transport_types as $transport_type_key => $transport_type) {
+        //                 $transport_type_id = $transport_type->id;
+        //                 $driver_commission_obj = DriverCommission::where('transport_type_id', $transport_type_id)
+        //                     ->where('slot_id', $slot->id)
+        //                     ->where('journey_id', $journey->id)
+        //                     ->where('user_driver_id', $driver->user_id)
+        //                     ->first(); // Use 'first' to retrieve a single record
 
-                        if (!$driver_commission_obj) {
-                            $driver_commission_obj = new DriverCommission();
-                            $driver_commission_obj->user_driver_id = $driver->user_id;
-                            $driver_commission_obj->journey_id = $journey->id;
-                            $driver_commission_obj->slot_id = $slot->id;
-                            $driver_commission_obj->transport_type_id = $transport_type_id;
-                            $driver_commission_obj->is_default = $slot->is_default;
-                            $driver_commission_obj->commission = 0;
-                            $driver_commission_obj->save();
-                        } else {
-                            // dd($data, $transport_prices_obj);
-                        }
-                    }
-                }
-            }
-        }
+        //                 if (!$driver_commission_obj) {
+        //                     $driver_commission_obj = new DriverCommission();
+        //                     $driver_commission_obj->user_driver_id = $driver->user_id;
+        //                     $driver_commission_obj->journey_id = $journey->id;
+        //                     $driver_commission_obj->slot_id = $slot->id;
+        //                     $driver_commission_obj->transport_type_id = $transport_type_id;
+        //                     $driver_commission_obj->is_default = $slot->is_default;
+        //                     $driver_commission_obj->commission = 0;
+        //                     $driver_commission_obj->save();
+        //                 } else {
+        //                     // dd($data, $transport_prices_obj);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        
+        // $trip_commission_handler = new TripCommissionHandler();
+        // $trip_commission_handler->create_driver_trip_prices();
+        
         $driver_commission = DriverCommission::with([
             'journey', 'slot', 'transport_type','user_obj'
         ])

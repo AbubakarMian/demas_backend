@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\TripCommissionHandler;
 use App\Models\Driver;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -21,8 +22,8 @@ class DriverController extends Controller
 
     public function get_driver(Request $request)
     {
-        $drivers = Driver::with('user_obj')->whereHas('user_obj',function($q){
-            $q->where('role_id',5);
+        $drivers = Driver::with('user_obj')->whereHas('user_obj', function ($q) {
+            $q->where('role_id', 5);
         })->orderBy('created_at', 'DESC')->get();
         $driverData['data'] = $drivers;
         echo json_encode($driverData);
@@ -108,13 +109,16 @@ class DriverController extends Controller
         $driver->iqama_number = $request->iqama_number;
         $driver->commision = $request->commision;
 
-        if($request->driver_category == 'own'){
+        if ($request->driver_category == 'own') {
             $driver->commision_type = Config::get('constants.driver.commission_types_keys.own');
-        }
-        else{//out_source
+            $driver->save();
+        } else { //out_source
             $driver->commision_type = Config::get('constants.driver.commission_types_keys.per_trip');
+            $driver->save();
+            $trip_commission_handler = new TripCommissionHandler();
+            $trip_commission_handler->create_driver_trip_prices([], [$driver]);
         }
-        $driver->save();
+
         return Redirect('admin/driver');
     }
 

@@ -48,9 +48,7 @@ class SaltAgentController extends Controller
     {
         $sale_agent = new SaleAgent();
         $user = new User();
-        $this->add_or_update($request, $user, $sale_agent);
-
-        return redirect('admin/sale_agent');
+        return $this->add_or_update($request, $user, $sale_agent);
     }
     public function edit($id)
     {
@@ -76,7 +74,6 @@ class SaltAgentController extends Controller
     {
         $sale_agent = SaleAgent::find($id);
         $user = $sale_agent->user_obj;
-        // SaleAgent::delete()
         return $this->add_or_update($request, $user, $sale_agent);
         // return Redirect('admin/sale_agent');
     }
@@ -118,8 +115,8 @@ class SaltAgentController extends Controller
             $trip_commission_handler = new TripCommissionHandler();
             $trip_commission_handler->create_sale_agent_trip_prices([],[$sale_agent]);
         }
-       
-        return Redirect('admin/sale_agent');
+
+        return redirect('admin/sale_agent');
     }
 
     public function destroy_undestroy($id)

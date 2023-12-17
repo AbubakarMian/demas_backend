@@ -44,10 +44,11 @@ class TravelAgentController extends Controller
         $travel_agent = new Travel_Agent();
         $user = new User();
         $travel_agent = $this->add_or_update($request, $user, $travel_agent);
-        $trip_commission_handler = new TripCommissionHandler();
-        $trip_commission_handler->create_sale_agent_trip_prices([],[$travel_agent]);
-        return Redirect('admin/travel_agent');
-        
+        if($travel_agent->status){
+            $trip_commission_handler = new TripCommissionHandler();
+            $trip_commission_handler->create_travel_agent_trip_prices([],[$travel_agent->travel_agent]);            
+        }
+        return $travel_agent->response;
     }
     public function edit($id)
     {
@@ -71,13 +72,14 @@ class TravelAgentController extends Controller
         $travel_agent = Travel_Agent::with('user_obj')->find($id);
         $user = $travel_agent->user_obj;
         $travel_agent =  $this->add_or_update($request, $user, $travel_agent);
-        return Redirect('admin/travel_agent');
+        // return Redirect('admin/travel_agent');
+        return $travel_agent->response;
     }
 
 
     public function add_or_update(Request $request, $user, $travel_agent)
     {
-        
+        $res = new \stdClass();
         $validator = Validator::make(
             $request->all(),
             [
@@ -86,7 +88,9 @@ class TravelAgentController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return redirect()->back()->with('error', $validator->messages()->all());
+            $res->status = false;
+            $res->response = redirect()->back()->with('error', $validator->messages()->all());
+            return $res;
         }
         $user->name = $request->name;
         $user->last_name = $request->last_name;
@@ -108,7 +112,10 @@ class TravelAgentController extends Controller
         $travel_agent->city = $request->city;
         $travel_agent->save();
             
-        return $travel_agent;
+        $res->status = true;
+        $res->travel_agent = $travel_agent;
+        $res->response = Redirect('admin/travel_agent');
+        return $res;
     }
 
     public function destroy_undestroy($id)

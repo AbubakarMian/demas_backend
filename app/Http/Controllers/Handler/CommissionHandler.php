@@ -33,13 +33,13 @@ class CommissionHandler
     {
         if ($order->travel_agent) { //travel_agent
             foreach ($order->order_details as $key => $order_details) {
-                $order_details->travel_agent_user_id = $order->user_id;
+                // $order_details->travel_agent_user_id = $order->user_id;
                 $order_details->travel_agent_commission = $order_details->customer_collection_price - $order_details->final_price;
                 $order->travel_agent_commission_total += $order_details->travel_agent_commission;
-                if ($order->travel_agent->sale_agent) {
-                    $order_details->sale_agent_user_id = $order->travel_agent->sale_agent->user_id;
-                    $order->sale_agent_user_id = $order_details->sale_agent_user_id;
-                }
+                // if ($order->travel_agent->sale_agent) {
+                    // $order_details->sale_agent_user_id = $order->travel_agent->sale_agent->user_id;
+                    // $order->sale_agent_user_id = $order_details->sale_agent_user_id;
+                // }
                 $order_details->save();
                 $order->save();
             }
@@ -48,6 +48,7 @@ class CommissionHandler
     public function update_sale_agent_commission($order)
     {
         $sale_agent = $order->sale_agent;
+        $extra_commission = 0;
         if ($sale_agent) {
             $sale_agent_commission_types = Config::get('constants.sales_agent.commission_types');
             foreach ($order->order_details as $key => $order_details) {
@@ -60,7 +61,10 @@ class CommissionHandler
                     $commission = round(($order_details->final_price - $order_details->travel_agent_commission - $order_details->driver_commission)
                         * 0.01 * $sale_agent->commision);
                 }
-                $order_details->sale_agent_commission = $commission + ($order_details['customer_collection_price'] + $commission);
+                if($order->user_obj->sale_agent){
+                    $extra_commission = ($order_details['customer_collection_price'] -  $order_details->final_price);
+                }
+                $order_details->sale_agent_commission = $commission + $extra_commission;
                 $order->sale_agent_commission_total += $order_details->sale_agent_commission;
                 $order_details->sale_agent_commission_type = $sale_agent->commision_type;
                 $order->sale_agent_commission_type = $sale_agent->commision_type;
@@ -75,6 +79,7 @@ class CommissionHandler
     {
 
         foreach ($order->order_details as $order_detail_count => $order_details) {
+            $order_detail_count++;
             $journey_price = $this->journey_price($order, $order_details);
             $actual_price = $journey_price->price;
 
@@ -112,61 +117,46 @@ class CommissionHandler
                 }
             } else if ($order->sale_agent) {
                 $order_details->sale_agent_user_id = $order->user_obj->id;
+                $order_details->sale_agent_user_id = $order->user_obj->id;
                 $order->sale_agent_user_id = $order_details->sale_agent_user_id;
+                $order_details->travel_agent_user_id = $order->travel_agent_user_id;
             }
             $order_details->save();
-            # code...
         }
         $order->save();
     }
 
     public function journey_price($order, $order_detail)
     {
-        if ($order->user_obj->travel_agent) { //travel agent
-            $journey_price = TravelAgentCommission::with(['travel_agent' => ['user_obj', 'sale_agent.user_obj']])
-                ->where('user_travel_agent_id', $order->user_obj->id)
-                ->where('journey_id', $order_detail->journey_id)
-                ->where('slot_id', $order_detail->slot_id)
-                ->where('transport_type_id', $order_detail->transport_type_id)
-                ->first();
-        } else if ($order->user_obj->sale_agent) {
-            $journey_price = SalesAgentTripPrice::with(['user_obj'])
-                ->where('user_travel_agent_id', $order->user_obj->id)
-                ->where('journey_id', $order_detail->journey_id)
-                ->where('slot_id', $order_detail->slot_id)
-                ->where('transport_type_id', $order_detail->transport_type_id)
-                ->first();
-        } else { // if($order->user_obj->role_id == 2) user
-            $journey_price = TransportPrices::where('transport_type_id', $order_detail->transport_type_id)
-                ->where('journey_id', $order_detail->journey_id)
-                ->where('slot_id', $order_detail->slot_id)
-                ->first();
-        }
+        $journey_price = $this->get_journey_price_db($order->user_id,$order_detail->journey_id,
+                                $order_detail->slot_id,$order_detail->transport_type_id)->first();
         return $journey_price;
     }
 
-    // public function get_trip_price_details(
-    //     Request $request,
-    //     $pickup_id,
-    //     $dropoff_id,
-    //     $transport_type_id,
-    //     $user_id,
-    //     $pickupdate_time,
-    //     $customer_collection_price
-    // ) {
-    //     $user = Users::with(['sale_agent', 'travel_agent', 'driver'])->find($user_id);
+    public function get_journey_price_db($order_created_by_user_id,$journey_id,$slot_id,$transport_type_id=0){
+        $user = Users::with(['sale_agent', 'travel_agent',
+        ])->find($order_created_by_user_id);
 
-    //     $slot = $this->get_slot($pickupdate_time);
-    //     $journey = $this->get_journey($pickup_id, $dropoff_id);
-    //     $journey_slot = $this->get_journey_slot($journey, $slot);
-    //     $journey_price = $this->get_journey_price($journey->id, $slot->id, $transport_type_id, $user);
-    //     $commission_details = $this->get_car_commission_details($slot, $journey, $journey_price, $transport_type_id, $user, $customer_collection_price);
-    //     $response = new \stdClass();
-    //     $response->journey_price = $journey_price;
-    //     $response->commission_details = $commission_details;
-    //     $response->journey_slot = $journey_slot;
-    //     return $response;
-    // }
+        $where = [
+            'journey_id'=>$journey_id,
+            'slot_id'=>$slot_id,
+        ];
+        if($transport_type_id){
+            $where['transport_type_id'] = $transport_type_id;
+        }
+        if($user->travel_agent){
+            $where['user_travel_agent_id'] = $order_created_by_user_id;
+            $journey_price = TravelAgentCommission::where($where);
+        }
+        elseif($user->sale_agent){
+            $where['user_sale_agent_id'] = $order_created_by_user_id;
+            $journey_price = SalesAgentTripPrice::where($where);
+        }
+        else{
+            $journey_price = TransportPrices::where($where);
+        }
+        return $journey_price;
+    }
 
     public function get_journey_slot($journey_id, $slot_id)
     {

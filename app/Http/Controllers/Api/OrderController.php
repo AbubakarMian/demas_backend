@@ -71,6 +71,7 @@ class OrderController extends Controller
         $order->discount = 0;
         $order->customer_name = $booking['customer_name'];
         $order->customer_number = $booking['customer_whatsapp_number'];
+        $order->travel_agent_user_id = $booking['travel_agent_user_id'] ?? 0;
         $order->customer_collection_price = 0;
         $order->discounted_price = 0;
         $order->actual_price = 0;
@@ -82,15 +83,6 @@ class OrderController extends Controller
         $order->save();
         $detail_count = 0;
         foreach ($booking['details'] as $detail_key => $detail) {
-            // $trip_price_details = $commission_details->get_trip_price_details(
-            //     $request,
-            //     $detail['pickup_id'],
-            //     $detail['dropoff_id'],
-            //     $detail['transport_type_id'],
-            //     $user->id,
-            //     $detail['pickupdate_time'],
-            //     $detail['customer_collection_price']
-            // );
             $detail_count++;
             $order_details = new Order_Detail();
             $order_details->order_id = $order->id;
@@ -100,12 +92,14 @@ class OrderController extends Controller
             $order_details->transport_type_id = $detail['transport_type_id'];
             $order_details->pick_up_date_time = $detail['pickupdate_time'];
             $order_details->customer_collection_price = $detail['customer_collection_price'];
+            // $order_details->travel_agent_user_id = $order->travel_agent_user_id; // if sale agent is select a travel agent from its drop down
             $order->customer_collection_price += $order_details->customer_collection_price;
             $order_details->journey_id = $commission_handler->get_journey($detail['pickup_id'], $detail['dropoff_id'])->id;
             $order_details->slot_id = $commission_handler->get_slot($detail['pickupdate_time'])->id;
             $order_details->journey_slot_id = $commission_handler->get_journey_slot($order_details->journey_id, $order_details->slot_id)->id;
             $order_details->status = Config::get('constants.order_status.pending');
             $order_details->payment_type = Config::get('constants.payment_type.cod');
+            $order_details->user_payment_status = Config::get('constants.user_payment_status.pending');
             $order_details->save();
         }
         $order->save();

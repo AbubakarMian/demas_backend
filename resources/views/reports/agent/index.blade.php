@@ -176,8 +176,8 @@
                     $('.show_columns').html(show_columns_filter_html(response_info, showdatacolumn));
                     $.each(response_info, function(report_info_index, report_info_data) {
                         $.each(report_info_data['columns'], function(column_index, column) {
-                            if ($.inArray(column['data_column'], showdatacolumn) !== -1 || !
-                                showdatacolumn.length) {
+                            if ($.inArray(column['data_column'], showdatacolumn) !== -1 || 
+                                !showdatacolumn.length) {
                                 // thead += '<th style="background-color:  red">' + column['heading'] + '</th>';
                                 thead += `<th style="background-color:`+report_info_data['color']+`">` + column['heading'] + `</th>`;
                             }

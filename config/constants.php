@@ -12,6 +12,11 @@ return [
     'settings' => [
         'discount' => "discount",
     ],
+    'user_payment_status' => [
+        'pending' => "pending",
+        'paid' => "paid",
+        'refund' => "refund",
+    ],
     'role' => [
         "admin" => '1',
         "user" => '2',

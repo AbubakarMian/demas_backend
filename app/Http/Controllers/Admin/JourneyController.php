@@ -37,8 +37,8 @@ class JourneyController extends Controller
 
     public function save(Request $request)
     {
-        $journey = new journey();
-        $this->add_or_update($request, $journey, true);
+        $journey = new Journey();
+        return $this->add_or_update($request, $journey, true);
 
         return redirect('admin/journey');
     }
@@ -58,19 +58,33 @@ class JourneyController extends Controller
     public function update(Request $request, $id)
     {
         $journey = Journey::find($id);
-        $this->add_or_update($request, $journey, false);
+        return $this->add_or_update($request, $journey, false);
         return Redirect('admin/journey');
     }
 
 
     public function add_or_update(Request $request, $journey, $add_journey_slot = true)
     {
+        $journey_chk = Journey::where('id', '!=', $journey->id)
+            ->where('pickup_location_id', $request->pickup_location_id)
+            ->where('dropoff_location_id', $request->dropoff_location_id)
+            ->first();
+
+        $location_pickup = Locations::find($request->pickup_location_id);
+        $location_dropoff = Locations::find($request->dropoff_location_id);
+        $journey_name = $location_pickup->name . ' to ' . $location_dropoff->name;
+
+        
+        if ($journey_chk) {
+            return redirect('admin/journey/edit/'.$journey_chk->id)->with('error',[ $journey_name.' is already created']);
+            // return redirect()->back()->with('error', $journey_name.' is already created');
+        }
         if ($request->name) {
             $journey->name = $request->name;
         } else {
             $location_pickup = Locations::find($request->pickup_location_id);
             $location_dropoff = Locations::find($request->dropoff_location_id);
-            $journey->name = $location_pickup->name . ' to ' . $location_dropoff->name;
+            $journey->name = $journey_name;
         }
         $journey->pickup_location_id = $request->pickup_location_id;
         $journey->dropoff_location_id = $request->dropoff_location_id;
@@ -102,7 +116,7 @@ class JourneyController extends Controller
     }
     function add_journey_slot(Request $request, $journey)
     {
-        
+
         $slots = Slot::get();
         foreach ($slots as $key => $slot) {
             $journey_slot = new Journey_Slot();

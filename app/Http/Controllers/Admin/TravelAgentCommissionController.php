@@ -29,39 +29,21 @@ class TravelAgentCommissionController extends Controller
     }
     public function get_commision_prices(Request $request)
     {
-        // $data = [];
-        // $transport_types = Transport_Type::get();
-        // $journies = Journey::get();
-        // $slots = Slot::get();
-        // $travel_agents = Travel_Agent::get();
-        // foreach ($slots as $slot_key => $slot) {
-        //     foreach ($travel_agents as $travel_agent_key => $travel_agent) {
-        //         foreach ($journies as $journey_key => $journey) {
-        //             foreach ($transport_types as $transport_type_key => $transport_type) {
-        //                 $transport_type_id = $transport_type->id;
-        //                 $transport_prices_obj = TravelAgentCommission::where('transport_type_id', $transport_type_id)
-        //                     ->where('slot_id', $slot->id)
-        //                     ->where('journey_id', $journey->id)
-        //                     ->where('user_travel_agent_id', $travel_agent->user_id)
-        //                     ->first(); // Use 'first' to retrieve a single record
+        $travel_agent_commission = $this->get_travel_agent_commission($request);
+        $priceData['data'] = $travel_agent_commission;
+        echo json_encode($priceData);
+    }
 
-        //                 if (!$transport_prices_obj) {
-        //                     $transport_prices_obj = new TravelAgentCommission();
-        //                     $transport_prices_obj->user_travel_agent_id = $travel_agent->user_id;
-        //                     $transport_prices_obj->journey_id = $journey->id;
-        //                     $transport_prices_obj->slot_id = $slot->id;
-        //                     $transport_prices_obj->transport_type_id = $transport_type_id;
-        //                     $transport_prices_obj->is_default = $slot->is_default;
-        //                     $transport_prices_obj->commission = 0;
-        //                     $transport_prices_obj->price = 0;
-        //                     $transport_prices_obj->save();
-        //                 } 
-        //             }
-        //         }
-        //     }
-        // }
+    public function get_travel_agent_commission(Request $request){
+
         $travel_agent_commission = TravelAgentCommission::with([
-            'journey', 'slot', 'transport_type','user_obj'
+            'journey',
+            'slot',
+            'transport_type',
+            'user_obj',
+            'sale_agent_commission'=>function($q){
+                $q->join('sale_agent', 'sale_agent.user_id', '=', 'sales_agent_trip_price.user_sale_agent_id');
+            }
         ]);
 
         if($request->journey_id){
@@ -76,11 +58,19 @@ class TravelAgentCommissionController extends Controller
         if($request->user_travel_agent_id){
             $travel_agent_commission = $travel_agent_commission->where('user_travel_agent_id',$request->user_travel_agent_id);
         }
+        $travel_agent_commission = $travel_agent_commission->get();
+        $travel_agent_commission->transform(function($travel_agent_commission_item){
+            $sale_agent_commission_obj = null;
+            if(isset($travel_agent_commission_item->sale_agent_commission[0])){
+                $sale_agent_commission_obj = $travel_agent_commission_item->sale_agent_commission[0];
+            }
+            $travel_agent_commission_item->sale_agent_commission_obj = $sale_agent_commission_obj;
+            unset($travel_agent_commission_item->sale_agent_commission);
+            return $travel_agent_commission_item;
+        });
 
-        $priceData['data'] = $travel_agent_commission->get();
-        echo json_encode($priceData);
+        return $travel_agent_commission;
     }
-
     public function update_price(Request $request, $transport_Prices_id)
     {
         $Transport_Prices = TravelAgentCommission::find($transport_Prices_id);

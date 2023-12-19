@@ -81,6 +81,7 @@
             <tr>
                 <th> Journey</th>
                 <th> Slots</th>
+                <th> Sale Agent Price</th>
                 <th> Agent</th>
                 <th> Transport Type</th>
                 <th> Price</th>
@@ -135,12 +136,14 @@
                         var journey = response['data'][i].journey.name;
                         var slot = response['data'][i].slot.name;
                         var agent = response['data'][i].user_obj.name;
+                        var sale_agent_price = response['data'][i].sale_agent_commission_obj.price;
                         var price = response['data'][i].price;
                         var transport_prices_id = response['data'][i].id;
 
                         tr_str += "<tr id='row_" + response['data'][i].id + "'>" +
                             "<td>" + journey + "</td>" +
                             "<td>" + slot + "</td>" +
+                            "<td>" + sale_agent_price + "</td>" +
                             "<td>" + agent + "</td>" +
                             "<td>" + transport_type_name + "</td>" +
                             "<td><input onchange=update_user_price(" + transport_prices_id +

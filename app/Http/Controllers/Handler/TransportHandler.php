@@ -158,55 +158,46 @@ class TransportHandler
             ->first();
         $discount_percent = $discount_percent_obj->value;
 
-        $cars = $cars->transform(function ($item) use ($travel_agent, $journey, $slot, $discount_percent, $apply_discount) {
+        $cars = $cars->transform(function ($car_item) use ($travel_agent, $journey, $slot, $discount_percent, $apply_discount) {
 
-            $item->features = isset($item->features) ? explode(',', $item->features) : [];
-            $item->booking =  isset($item->booking) ? explode(',', $item->booking) : [];
-            $item->dontforget = isset($item->dontforget) ? explode(',', $item->dontforget) : [];
+            $item = new \stdClass();
+            $item->id = $car_item->id;
+            $item->transport_type_id = $car_item->transport_type_id;
+            $item->details = $car_item->details;
+            $item->name = $car_item->name;
+            $item->seats = $car_item->seats;
+            $item->luggage = $car_item->luggage;
+            $item->doors = $car_item->doors;
+            $item->number_plate = $car_item->number_plate;
+            $item->owner_name = $car_item->owner_name;
+            $item->features = isset($car_item->features) ? explode(',', $car_item->features) : [];
+            $item->booking =  isset($car_item->booking) ? explode(',', $car_item->booking) : [];
+            $item->dontforget = isset($car_item->dontforget) ? explode(',', $car_item->dontforget) : [];
             $item->actual_price = '0';
             $item->booking_price = '0';
             $item->discounted_price = '0';
             $item->apply_discount = $apply_discount;
-
-            if(isset($item->transport_price[0])){
-                $item->transport_price = $item->transport_price[0];
-                $item->transport_price_id = $item->transport_price->id;
-                $item->actual_price = $item->transport_price->price;
-                $item->booking_price = $item->transport_price->price; 
-                $item->discounted_price = $item->transport_price->price - ($item->transport_price->price * $discount_percent * 0.01);
+            $transport_price = null;
+            if(isset($car_item->transport_price[0])){
+                $transport_price = $car_item->transport_price[0];
             }
-// dd($item->transport_price->sale_agent_trip_price);
-            if(isset($item->transport_price->sale_agent_trip_price)){
-                $item->transport_price = $item->transport_price->sale_agent_trip_price;
+            if(isset($transport_price->sale_agent_trip_price)){
+                $transport_price = $transport_price->sale_agent_trip_price;
             }
             else if(isset($item->transport_price->travel_agent_trip_price)){
-                $item->transport_price = $item->transport_price->travel_agent_trip_price;
+                $transport_price = $transport_price->travel_agent_trip_price;
             }
-            
-            // if ($travel_agent) {
-            //     $travel_agent_commission = TravelAgentCommission::where('user_travel_agent_id', $travel_agent->user_id)
-            //         ->where('journey_id', $journey->id)
-            //         ->where('slot_id', $slot->id)
-            //         ->where('transport_type_id', $item->transport_type_id)
-            //         ->first();
-            //     // travel agent commission is now treated asa trip price for travel agent
-            //     $trip_price = $travel_agent_commission->price;
-
-            //     $item->transport_price_id = $travel_agent_commission->id;
-            //     $item->actual_price = $trip_price;
-            //     $item->booking_price = $trip_price; // - $commission;
-            //     $item->discounted_price = $trip_price;
-            // }
-
-            // $transport_prices = $item->transport_price;
-            // if (isset($transport_prices) && count($transport_prices)) {
-            //     // $transport_price = $transport_prices[0];
-            //     $item->transport_price_id = $transport_price->id;
-            //     $item->actual_price = $transport_price->price;
-            //     $item->booking_price = $transport_price->price; 
-            //     $item->discounted_price = $transport_price->price - ($transport_price->price * $discount_percent * 0.01);
-            // }
-            $res[] = $item;
+            else{ //user
+                $transport_price = $transport_price;
+                $item->transport_price_id = $transport_price->id;
+            }
+            if(isset($transport_price)){
+                $item->actual_price = $transport_price->price;
+                $item->booking_price = $transport_price->price; 
+                $item->discounted_price = $transport_price->price - ($transport_price->price * $discount_percent * 0.01);
+            }
+            $item->transport_price = $transport_price;
+            $item->images = $car_item->images;
             return $item;
         });
         return $cars;

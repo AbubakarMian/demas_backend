@@ -80,6 +80,7 @@
         <table class="invoice-table">
             <thead>
                 <tr>
+                    <th>Booking ID</th>
                     <th>Pickup</th>
                     <th>Dropoff</th>
                     <th>Vehicle</th>
@@ -87,10 +88,12 @@
                     <th>Driver Whatsapp Number</th>
                     <th>Pickup Date</th>
                     <th>Pickup Time</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
+                    <td>2023-202</td>
                     <td>Madinah Airport
                         (30APR PK 743
                         KHI MED2200 0
@@ -103,8 +106,10 @@
                     <td>123-456-7890</td>
                     <td>16-06-2023</td>
                     <td>08:30 AM</td>
+                    <td>Completed</td>
                 </tr>
                 <tr>
+                    <td>2023-109</td>
                     <td>Madinah Airport
                         (30APR PK 743
                         KHI MED2200 0
@@ -117,6 +122,8 @@
                     <td>123-456-7890</td>
                     <td>16-06-2023</td>
                     <td>08:30 AM</td>
+                    <td>Pending</td>
+
                 </tr>
               
             </tbody>

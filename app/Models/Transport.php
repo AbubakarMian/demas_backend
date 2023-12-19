@@ -22,11 +22,4 @@ class Transport extends Model
     public function transport_price(){
         return $this->hasMany('App\Models\TransportPrices','transport_type_id','transport_type_id');
     }
-    // public function transport_sale_agent_price(){
-    //     return $this->hasMany('App\Models\TransportPrices','transport_type_id','transport_type_id');
-    // }
-    // public function transport_travel_agent_price(){
-    //     return $this->hasMany('App\Models\TransportPrices','transport_type_id','transport_type_id');
-    // }
-    
 }

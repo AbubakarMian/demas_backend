@@ -77,7 +77,6 @@ class JourneyController extends Controller
         
         if ($journey_chk) {
             return redirect('admin/journey/edit/'.$journey_chk->id)->with('error',[ $journey_name.' is already created']);
-            // return redirect()->back()->with('error', $journey_name.' is already created');
         }
         if ($request->name) {
             $journey->name = $request->name;

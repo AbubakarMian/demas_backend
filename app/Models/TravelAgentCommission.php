@@ -34,6 +34,6 @@ class TravelAgentCommission extends Model
         return $this->hasOne('App\Models\Travel_Agent','user_id','user_travel_agent_id');
     }
     function sale_agent_commission(){
-        return $this->hasOne('App\Models\Travel_Agent','transport_price_id','transport_price_id');
+        return $this->hasMany('App\Models\SalesAgentTripPrice','transport_price_id','transport_price_id');
     }
 }

@@ -16,6 +16,8 @@ use App\Models\Travel_Agent;
 use App\Models\TravelAgentCommission;
 use App\Models\Users;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use PDF;
 
 class OrderHandler
@@ -56,32 +58,68 @@ class OrderHandler
         // return $pdf->stream('admin_invoice.pdf');
     }
 
-    // public function pdf_maker()
-    // {
-    //     $pdf = PDF::loadView('pdf.invoice', [
-    //         'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
-    //         'description' => 'This is an example Laravel pdf tutorial.',
-    //         'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a'
-    //     ]);
-    
-    //     // Set the paper size to A4 and the orientation to portrait
-    //     $pdf->setPaper('a4', 'portrait');
-    
-    //     $pdfPath = public_path('invoice/admin_invoice.pdf');
-    
-    //     // Save the PDF to the public/invoice directory
-    //     $pdf->save($pdfPath);
-    
-    //     // Return a response with a link to the saved PDF
-    //     return $pdf->stream('admin_invoice.pdf');
-    // }
+    public function order_collect_payment($user_id,$order_obj_type,$order_id)
+    {
+        $user = Users::with(['sale_agent','travel_agent','driver','role'])->first($user_id);
+        $order = null;
+        if($order_obj_type == "order_detail"){
+            $order_details = Order_Detail::with('order')->find($order_id);
+            $order = $order_details->order;
+            $order_details = [$order_details];
+            
+        }
+        else{ // order
+            $order = Order::with('order_details')->find($order_id);
+            $order_details = $order->order_details;
+        }
+        foreach ($order_details as $key => $order_detail) {
+            $this->collect_order_detail_payment($user,$order,$order_detail);
+        }
+    }
+
+    public function collect_order_detail_payment($user_collecting_payment,$order,$order_detail){
+
+        $order_detail->cash_collected_by = $user_collecting_payment->role->name;
+        $order_detail->cash_collected_by_role = $user_collecting_payment->role_id;
+        $order_detail->cash_collected_by_user_id = $user_collecting_payment->id;
+        $order_detail->user_payment_status = Config::get('constants.user_payment_status.paid');
+        $order_detail->is_paid = 1;
+
+        if($user_collecting_payment->sale_agent){
+            $order_detail->payable_to_admin = $order_detail->final_price - $order_detail->sale_agent_commission;
+            $order_detail->sale_agent_payment_status = Config::get('constants.sales_agent.payment_status.paid');
+            $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.pending');
+
+        }else if($user_collecting_payment->travel_agent){
+            $order_detail->payable_to_admin = $order_detail->final_price - $order_detail->travel_agent_commission;
+            $order_detail->travel_agent_payment_status = Config::get('constants.travel_agent.payment_status.paid');
+            $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.pending');
+        }else if($user_collecting_payment->driver){// driver
+            $order_detail->payable_to_admin = $order_detail->final_price - $order_detail->driver_commission;
+            $order_detail->driver_payment_status = Config::get('constants.driver.payment_status.paid');
+            $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.pending');
+
+        }else{ //admin
+            $order_detail->payable_to_admin = 0;
+            $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.paid');
+        }
+        $order_detail->save();
+
+    }
 
     public function get_admin_report_detail_report(Request $request)
     {
+        $user = Auth::user();
         $report_details = new ReportDetails();
-        $order_details_arr = $report_details->admin_report_detail($request);
-        // $order_details_arr = $report_details->travel_agent_report_detail($request);
-        // $order_details_arr = $report_details->sale_agent_report_detail($request);
+        if($user->role_id == 1){
+            $order_details_arr = $report_details->admin_report_detail($request);
+        }
+        if($user->role_id == 3){
+            $order_details_arr = $report_details->sale_agent_report_detail($request);
+        }
+        if($user->role_id == 4){
+            $order_details_arr = $report_details->travel_agent_report_detail($request);
+        }
         return $order_details_arr;
     }
 

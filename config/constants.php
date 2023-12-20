@@ -17,6 +17,11 @@ return [
         'paid' => "paid",
         'refund' => "refund",
     ],
+    'admin_payment_status' => [
+        'pending' => "pending",
+        'paid' => "paid",
+        'refund' => "refund",
+    ],
     'role' => [
         "admin" => '1',
         "user" => '2',
@@ -54,7 +59,12 @@ return [
         'categories_keys' => [
             'own' => 'own',
             'out_source' => 'out_source',
-        ]
+        ],
+        'payment_status' => [
+            'pending' => "pending",
+            'paid' => "paid",
+            'refund' => "refund",
+        ],
     ],
     'sales_agent' => [
         'commission_types' => [
@@ -68,7 +78,12 @@ return [
             'profit_percent' => 'Profit Percent',
             'sales_percent' => 'Sales Percent',
             'agreed_trip_rate' => 'Agreed Trip Price',
-        ]
+        ],
+        'payment_status' => [
+            'pending' => "pending",
+            'paid' => "paid",
+            'refund' => "refund",
+        ],
     ],
     'travel_agent' => [
         'commission_types' => [
@@ -77,7 +92,12 @@ return [
         'commission_types_keys' => [
             'monthly' => 'monthly',
             'per_trip' => 'per_trip',
-        ]
+        ],
+        'payment_status' => [
+            'pending' => "pending",
+            'paid' => "paid",
+            'refund' => "refund",
+        ],
     ],
     'order_status' => [
         'pending' => 'pending',

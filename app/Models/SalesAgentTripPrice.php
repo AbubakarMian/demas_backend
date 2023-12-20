@@ -16,6 +16,10 @@ class SalesAgentTripPrice extends Model
     {
         return $this->hasOne('App\Models\Users', 'id', 'user_sale_agent_id')->withTrashed();
     }
+    public function sale_agent()
+    {
+        return $this->hasOne('App\Models\SaleAgent', 'id', 'user_sale_agent_id')->withTrashed();
+    }
     function journey(){
         return $this->hasOne('App\Models\Journey','id','journey_id');
     }

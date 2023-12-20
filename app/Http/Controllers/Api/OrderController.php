@@ -144,13 +144,18 @@ class OrderController extends Controller
         return $this->sendResponse(200, $order);
     }
 
-    public function order_pay(Request $request, $order_id)
+    public function order_collect_payment(Request $request, $order_id)
     {
         $user = $request->attributes->get('user');
-        $order = Order:: find($order_id);
-        $order->is_paid = true;
-        $order->cash_collected_by = 'driver';
-        $order->cash_collected_by_user_id = $user->id;
-        return $this->sendResponse(200, $order);
+        // $order = Order:: find($order_id);
+        // $order->is_paid = true;
+        // $order->cash_collected_by = 'driver';
+        // $order->cash_collected_by_user_id = $user->id;
+        $order_handler = new OrderHandler();
+        $order_handler->order_collect_payment($user->id,$request->order_type,$order_id);
+        return $this->sendResponse(200, [
+            'order_id',$order_id,
+            'request',$request->all()
+        ]);
     }
 }

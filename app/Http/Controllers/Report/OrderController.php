@@ -184,7 +184,9 @@ class OrderController extends Controller
     {
         $order = Order::with('order_details', 'user_obj')->find($order_id);
         $order_handler = new OrderHandler();
-        $pdf = $order_handler->gernerate_pdf_order($order, $order->order_details);
+        $pdf = $order_handler->gernerate_pdf_order($order_id);
+        // $pdf = $order_handler->gernerate_pdf_order($order, $order->order_details);
+        return $pdf['stream'];
 
         // create pdf of order invoice save in invoice url
         $receipt_url = $pdf['path'];

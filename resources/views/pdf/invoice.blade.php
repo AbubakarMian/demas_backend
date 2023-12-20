@@ -54,9 +54,9 @@
             <h1>Booking Information</h1>
         </div>
         <div class="invoice-info">
-            <p><strong>Booking ID:</strong>2023-001</p>
-            <p><strong>Invoice Date:</strong> October 21, 2023</p>
-            <p><strong>Due Date:</strong> November 21, 2023</p>
+            <p><strong>Booking ID:</strong>{!!$order->order_id!!}</p>
+            <p><strong>Invoice Date:</strong>{!!$order->created_at!!}</p>
+            {{-- <p><strong>Due Date:</strong> November 21, 2023</p> --}}
         </div>
         <table class="invoice-table">
             <thead>
@@ -69,10 +69,10 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Abu bakar</td>
-                    <td>123-456-7890 </td>
-                    <td>123-456-7890</td>
-                    <td>Confirmed</td>
+                    <td>{!!$order->customer_name!!}</td>
+                    <td>{!!$order->customer_whatsapp_number!!} </td>
+                    <td>{!!$order->customer_number!!}</td>
+                    <td>{!!$order->status!!}</td>
                 </tr>
               
             </tbody>
@@ -80,45 +80,31 @@
         <table class="invoice-table">
             <thead>
                 <tr>
+                    <th>Booking ID</th>
                     <th>Pickup</th>
                     <th>Dropoff</th>
                     <th>Vehicle</th>
                     <th>Driver Name</th>
                     <th>Driver Whatsapp Number</th>
                     <th>Pickup Date</th>
-                    <th>Pickup Time</th>
+                    <th>Status</th>
+                    <th>Payment</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Madinah Airport
-                        (30APR PK 743
-                        KHI MED2200 0
-                        030)</td>
-                    <td>Madina Hotel
-                        (Emmar Royal
-                        Madinah) </td>
-                    <td>Sedan</td>
-                    <td>Ali</td>
-                    <td>123-456-7890</td>
-                    <td>16-06-2023</td>
-                    <td>08:30 AM</td>
+                @foreach ($order->order_details as $key=> $order_item)
+                <tr> 
+                    <td>{!!$order_item->order_id!!}</td>
+                    <td>{!!$order_item->pickup_location->name.($order_item->pick_extrainfo?'('.$order_item->pick_extrainfo.')':'') !!}</td>
+                    <td>{!!$order_item->dropoff_location->name.($order_item->dropoff_extrainfo?'('.$order_item->dropoff_extrainfo.')':'') !!}</td>
+                    <td>{!!$order_item->transport_type->name!!}</td>
+                    <td>{!!$order_item->driver_user?->name??''!!}</td>
+                    <td>{!!$order_item->driver_user?->whatsapp_number??''!!}</td>
+                    <td>{!!date('Y-m-d H:i:s', $order_item->pick_up_date_time)!!}</td>
+                    <td>{!!$order_item->status!!}</td>
+                    <td>{!!$order_item->user_payment_status!!}</td>
                 </tr>
-                <tr>
-                    <td>Madinah Airport
-                        (30APR PK 743
-                        KHI MED2200 0
-                        030)</td>
-                    <td>Madina Hotel
-                        (Emmar Royal
-                        Madinah) </td>
-                    <td>Sedan</td>
-                    <td>Ali</td>
-                    <td>123-456-7890</td>
-                    <td>16-06-2023</td>
-                    <td>08:30 AM</td>
-                </tr>
-              
+                @endforeach
             </tbody>
         </table>    
         {{-- <div class="invoice-total">

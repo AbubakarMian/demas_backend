@@ -62,7 +62,6 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        // user::delete()
         $this->add_or_update($request, $user);
         return Redirect('admin/user');
     }
@@ -70,7 +69,6 @@ class UserController extends Controller
 
     public function add_or_update(Request $request, $user)
     {
-        // dd($request->all());
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
@@ -79,27 +77,7 @@ class UserController extends Controller
         $user->role_id = $request->role_id;
         $user->whatsapp_number = $request->whatsapp_number;
         $user->password =  Hash::make($request->password);
-
-
-        // if($request->hasFile('upload_book')){
-
-        //     $file =$request->upload_book;
-        //     $filename = $file->getClientOriginalName();
-
-        //     $path = public_path().'/uploads/';
-        //     $u  =  $file->move($path, $filename);
-
-        //     $db_path_save_book = asset('/uploads/'.$filename);
-        //     $user->upload_book =  $db_path_save_book;
-        // }
-        // if ($request->hasFile('avatar')) {
-        //     $avatar = $request->avatar;
-        //     $root = $request->root();
-        //     $user->avatar = $this->move_img_get_path($avatar, $root, 'image');
-        // }
         $user->save();
-
-
         return redirect()->back();
     }
 
@@ -125,7 +103,7 @@ class UserController extends Controller
     }
     public function pdf_maker()
     {
-        $pdf = PDF::loadView('admin.invoice', [
+        $pdf = PDF::loadView('pdf.invoice', [
             'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
             'description' => 'This is an example Laravel pdf tutorial.',
             'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a'

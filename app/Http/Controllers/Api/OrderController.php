@@ -70,7 +70,8 @@ class OrderController extends Controller
         $order->order_id = $order_id_uniq;
         $order->discount = 0;
         $order->customer_name = $booking['customer_name'];
-        $order->customer_number = $booking['customer_whatsapp_number'];
+        $order->customer_phone_number = $booking['customer_phone_number'];
+        $order->customer_whatsapp_number = $booking['customer_whatsapp_number'];
         $order->travel_agent_user_id = $booking['travel_agent_user_id'] ?? 0;
         $order->customer_collection_price = 0;
         $order->discounted_price = 0;
@@ -112,10 +113,9 @@ class OrderController extends Controller
         $commission_handler->update_trip_prices($order);
         $commission_handler->update_commissions_prices($order);
 
-        $order_obj = Order::with('order_details')->find($order->id);
         // generate pdf 
         $order_handler = new OrderHandler();
-        $pdf = $order_handler->gernerate_pdf_order($order_obj,$order_obj->order_details);
+        $pdf = $order_handler->gernerate_pdf_order($order->id);
 
         // create pdf of order invoice save in invoice url
         $order->receipt_url = $pdf['path'];

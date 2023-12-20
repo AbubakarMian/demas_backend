@@ -6,6 +6,7 @@ use App\Libraries\APIResponse;
 use App\Libraries\Common;
 use App\Models\Journey;
 use App\Models\Journey_Slot;
+use App\Models\Order;
 use App\Models\Order_Detail;
 use App\Models\SaleAgent;
 use App\Models\Slot;
@@ -21,12 +22,20 @@ class OrderHandler
 {
     use Common, APIResponse;
 
-    public function gernerate_pdf_order($order, $order_details)
+    public function gernerate_pdf_order($order_id)
     {
 
+        $order = Order::with(['user_obj',
+        'order_details'=>[
+            'journey',
+            'transport_type',
+            'pickup_location',
+            'dropoff_location',
+            'driver_user'
+        ],  
+        ])->find($order_id);
         $pdf = PDF::loadView('pdf.invoice', [
             'order' => $order,
-            'order_details' =>  $order_details,
         ]);
 
         // Set the paper size to A4 and the orientation to portrait
@@ -46,6 +55,26 @@ class OrderHandler
         ];
         // return $pdf->stream('admin_invoice.pdf');
     }
+
+    // public function pdf_maker()
+    // {
+    //     $pdf = PDF::loadView('pdf.invoice', [
+    //         'title' => 'CodeAndDeploy.com Laravel Pdf Tutorial',
+    //         'description' => 'This is an example Laravel pdf tutorial.',
+    //         'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a'
+    //     ]);
+    
+    //     // Set the paper size to A4 and the orientation to portrait
+    //     $pdf->setPaper('a4', 'portrait');
+    
+    //     $pdfPath = public_path('invoice/admin_invoice.pdf');
+    
+    //     // Save the PDF to the public/invoice directory
+    //     $pdf->save($pdfPath);
+    
+    //     // Return a response with a link to the saved PDF
+    //     return $pdf->stream('admin_invoice.pdf');
+    // }
 
     public function get_admin_report_detail_report(Request $request)
     {

@@ -228,13 +228,11 @@ class ReportDetails
 
     public function admin_margin_calculation_report_detail($order_detail, $row)
     {
-        $office_profit = $order_detail->customer_collection_price -
-            $order_detail->travel_agent_commission - $order_detail->sale_agent_commission - $order_detail->driver_commission;
-        $row['admin_margin_calculation_booking_rate'] = $order_detail->final_price; // match with db
+        $row['admin_margin_calculation_booking_rate'] = $order_detail->customer_collection_price; // match with db
         $row['admin_margin_calculation_travel_agent'] = $order_detail->travel_agent_commission;
         $row['admin_margin_calculation_sales_agent'] = $order_detail->sale_agent_commission;
         $row['admin_margin_calculation_hire_rate'] = $order_detail->driver_commission;
-        $row['admin_margin_calculation_office_profit'] = $office_profit;
+        $row['admin_margin_calculation_office_profit'] = $order_detail->office_profit;
 
         return $row;
     }

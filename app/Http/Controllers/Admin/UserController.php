@@ -110,7 +110,7 @@ class UserController extends Controller
         ]);
     
         // Set the paper size to A4 and the orientation to portrait
-        $pdf->setPaper('a4', 'portrait');
+        $pdf->setPaper('a3', 'portrait');
     
         $pdfPath = public_path('invoice/admin_invoice.pdf');
     

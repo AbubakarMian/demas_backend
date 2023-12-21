@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Handler;
 
 use App\Libraries\APIResponse;
 use App\Libraries\Common;
+use App\Models\DriverCommission;
 use App\Models\Journey;
 use App\Models\Journey_Slot;
 use App\Models\Order;
+use App\Models\Order_Detail;
 use App\Models\SaleAgent;
 use App\Models\SalesAgentTripPrice;
 use App\Models\Settings;
@@ -26,7 +28,7 @@ class CommissionHandler
     public function update_commissions_prices($order) // order with order_details
     {
         $this->update_travel_agent_commission($order);
-        $this->update_sale_agent_commission($order);
+        $this->update_sale_agent_commission($order,$order->order_details);
     }
 
     public function update_travel_agent_commission($order)
@@ -45,13 +47,36 @@ class CommissionHandler
             }
         }
     }
-    public function update_sale_agent_commission($order)
+
+    public function update_driver_commission($order_detail_id){
+        $order_detail = Order_Detail::with( 'order', 'driver')->find($order_detail_id);
+        $driver = $order_detail;
+
+        if ($driver && $driver->commision_type == Config::get('constants.driver.commission_types.per_trip')) {
+
+            $driver_commission = DriverCommission::where()
+                ->where('user_driver_id', $order_detail->driver_user_id)
+                ->where('journey_id', $order_detail->journey_id)
+                ->where('slot_id', $order_detail->slot_id)
+                ->where('transport_type_id', $order_detail->transport_type_id)
+                ->first();
+            if ($driver_commission) {
+                $order_detail->driver_commission = $driver_commission->commission;
+                $order_detail->save();
+            }
+        }
+        $commission_handler = new CommissionHandler();
+        $commission_handler->update_sale_agent_commission($order_detail->order,[$order_detail]);
+
+    }
+
+    public function update_sale_agent_commission($order,$order_details_arr)
     {
         $sale_agent = $order->sale_agent;
         $extra_commission = 0;
         if ($sale_agent) {
             $sale_agent_commission_types = Config::get('constants.sales_agent.commission_types');
-            foreach ($order->order_details as $key => $order_details) {
+            foreach ($order_details_arr as $key => $order_details) {
                 $commission = 0;
                 if ($sale_agent->commision_type == $sale_agent_commission_types['fix_amount']) {
                     $commission = $sale_agent->commision;
@@ -77,7 +102,6 @@ class CommissionHandler
 
     public function update_trip_prices($order)
     {
-
         foreach ($order->order_details as $order_detail_count => $order_details) {
             $order_detail_count++;
             $journey_price = $this->journey_price($order, $order_details);

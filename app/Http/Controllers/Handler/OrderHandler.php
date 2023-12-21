@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Handler;
 
 use App\Libraries\APIResponse;
 use App\Libraries\Common;
+use App\Models\Driver;
+use App\Models\DriverCommission;
 use App\Models\Journey;
 use App\Models\Journey_Slot;
 use App\Models\Order;
@@ -105,6 +107,33 @@ class OrderHandler
         }
         $order_detail->save();
 
+    }
+    function update_order_detail_driver($driver_user_id,$order_detail_id){
+        $order_detail = Order_Detail::with('sale_agent', 'travel_agent','order')->find($order_detail_id);
+        $driver = Driver::where('user_id', $driver_user_id)->first();
+        $order_detail->driver_user_id = $driver_user_id;
+        
+        if ($driver) {
+            $order_detail->driver_commission_type = $driver->commision_type;
+        } else {
+            $order_detail->driver_commission_type = null;
+        }
+        $order_detail->save();
+        $commission_handler = new CommissionHandler();
+        $commission_handler->update_driver_commission($order_detail->id);
+
+
+        
+    }
+
+    function update_order_detail_status($user_id,$order_detail_id,$status,$reason=''){
+        $order_detail = Order_Detail::find($order_detail_id);
+        $order = $order_detail->order;
+        $order_detail->status = $status;
+        $order_detail->status_updated_by_user_id = $user_id;
+        $order_detail->reason = $reason;
+        $order_detail->save();
+        return $order_detail;
     }
 
     public function get_admin_report_detail_report(Request $request)

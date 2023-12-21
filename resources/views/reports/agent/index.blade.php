@@ -5,10 +5,10 @@
 
 @section('single_file_use')
     <div>
-            <div class="row filter_box_p">
-                <button style="margin: 10px; " class="btn btn-success" onclick="select_visible_columns()">Columns</button>
-                
-        <form class="search_filter">
+        <div class="row filter_box_p">
+            <button style="margin: 10px; " class="btn btn-success" onclick="select_visible_columns()">Columns</button>
+
+            <form class="search_filter">
                 <div class="row show_columns" style="display: none;">
 
                 </div>
@@ -75,13 +75,13 @@
                     ]) !!}
 
                 </div>
-            </div>
+        </div>
         </form>
-            <div class="search">
+        <div class="search">
 
-                {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
+            {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
 
-            </div>
+        </div>
     </div>
 
 @stop
@@ -176,10 +176,11 @@
                     $('.show_columns').html(show_columns_filter_html(response_info, showdatacolumn));
                     $.each(response_info, function(report_info_index, report_info_data) {
                         $.each(report_info_data['columns'], function(column_index, column) {
-                            if ($.inArray(column['data_column'], showdatacolumn) !== -1 || 
+                            if ($.inArray(column['data_column'], showdatacolumn) !== -1 ||
                                 !showdatacolumn.length) {
                                 // thead += '<th style="background-color:  red">' + column['heading'] + '</th>';
-                                thead += `<th style="background-color:`+report_info_data['color']+`">` + column['heading'] + `</th>`;
+                                thead += `<th style="background-color:` + report_info_data[
+                                    'color'] + `">` + column['heading'] + `</th>`;
                             }
                         });
                     });
@@ -203,7 +204,10 @@
                     // Reinitialize DataTable after updating the table
                     $('#orderTableAppend').DataTable({
                         dom: '<"top_datatable"B>lftipr',
-                        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                        buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                        order: [
+                            [0, 'desc']
+                        ],
                     });
                 },
                 error: function(xhr, status, error) {
@@ -216,12 +220,11 @@
             let check_all = !showdatacolumn.length ? 'checked' : '';
             var html = '<div class="data-heading">';
             $.each(table_info, function(t_index, t_info) {
-                html += `<div class="data-subheading segement-area">`+
-                `
+                html += `<div class="data-subheading segement-area">` +
+                    `
                 <input type="checkbox" onclick="check_segment(this)" ` + check_all + `>
-                <label class="data-checkbox-label"> `+  t_info.heading+`</label>
-                `
-                ;
+                <label class="data-checkbox-label"> ` + t_info.heading + `</label>
+                `;
                 html += get_html_checkbox_filter(t_info.columns, showdatacolumn)
                 html += `</div>`;
             });
@@ -255,6 +258,7 @@
                 $(e).closest('.segement-area').find('.data-checkbox-show-column').prop("checked", false);
             }
         }
+
         function select_visible_columns() {
             $('.show_columns').toggle();
         }

@@ -97,8 +97,8 @@
                 <th>Price</th>
                 <th>Trip Type</th>
                 <th>Paid</th>
-                <th>Order Details</th>
-                <th>Status </th>
+                <th>Detail</th>
+                {{-- <th>Status </th> --}}
                 <th>Invoice </th>
             </tr>
         </thead>
@@ -124,9 +124,7 @@
         });
 
         function fetchRecords() {
-
             var formdata = $('.search_filter').serialize();
-            // $.post('url', data);
             $('#orderTableAppend').DataTable().destroy();
             $.ajax({
                 url: '{!! asset('admin/order/get_order') !!}',
@@ -151,7 +149,6 @@
                         var final_price = response['data'][i].final_price;
                         var type = response['data'][i].type;
                         var trip_type = response['data'][i].trip_type;
-                        // var total_price = response['data'][i].total_price;
                         var ispaid = response['data'][i].is_paid ? 'True' : 'False';
                         var status = response['data'][i].status;
                         var payment_collected_type = response['data'][i].payment_collected_type;
@@ -159,11 +156,8 @@
                         var payment_collected_price = response['data'][i].payment_collected_price;
                         var order_type = response['data'][i].order_type;
                         var payment_type = response['data'][i].payment_type;
-
-                        console.log('aaa', response['data'][i]);
-
                         var order_detail =
-                            `<a class="btn btn-info" data-toggle="modal" data-target="#orderdetails"
+                            `<a class="btn btn-success" data-toggle="modal" data-target="#orderdetails"
                                 onclick="get_details(` + id + `)">View</a>`;
                         var send_invoice =
                             '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' + id +
@@ -177,12 +171,13 @@
                                     <thead>
                                         <tr>
                                             <th>Journey</th>
-                                            <th>PickUp Date/Time</th>
+                                            <th>PickUp</th>
                                             <th>Price</th>
                                             <th>Transport Type</th>
                                             <th>Driver</th>
                                             <th>Transport</th>
                                             <th></th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody class="orderdetails_list">
@@ -239,15 +234,12 @@
                             "<td>" + capitalize_first_letter(trip_type) + "</td>" +
                             "<td>" + ispaid + "</td>" +
                             "<td>" + order_detail + "</td>" +
-                            `<td id='td_status_` + response['data'][i].id + `'>` +
-                            status + `</td>` +
+                            // `<td id='td_status_` + response['data'][i].id + `'>` +
+                            // status + `</td>` +
                             "<td>" + send_invoice + "</td>" +
                             "</tr>";
                         $("#orderTableAppend tbody").append(tr_str);
                     }
-                    // $(document).ready(function() {
-                    console.log('sadasdasdad');
-
                     $('#orderTableAppend').DataTable({
                         dom: '<"top_datatable"B>lftipr',
                         buttons: [
@@ -257,22 +249,17 @@
                             [0, 'desc']
                         ],
                     });
-                    // });
                 }
             });
 
         }
 
         function get_divers_transport_select(order_detail_item) {
-            console.log('drivers_list', drivers_list);
-            console.log('transport_list', transport_list);
             var order_detail_id = order_detail_item.id;
             var selected = '';
             var drivers = `<select class="select_driver_`+order_detail_item.id+`">
                                 <option value="0">Select Driver</option>`;
             $.each(drivers_list, function(driver_index, driver_item) {
-                console.log('order_detail_item.driver_user_id',order_detail_item.driver_user_id);
-                console.log('driver_item.user_id',driver_item.driver_user_id);
                 selected = order_detail_item.driver_user_id == driver_item.driver_user_id ?
                     'selected' : '';
                 drivers += `<option value="` + driver_item.driver_user_id + `" ` +
@@ -296,15 +283,12 @@
             var update_btn = `
                 <button 
                 onclick="update_order_transport_driver(` + order_detail_id + `,'.select_driver_` + order_detail_id + `','.select_transport_` + order_detail_id + `')">
-                    Update</button>
-            `;
-
+                    Update</button>`;
             return {
                 drivers,
                 transport,
                 update_btn
             };
-
         }
 
         function get_details(order_id) {
@@ -318,11 +302,52 @@
                 },
                 success: function(response) {
                     $('.orderdetails_list').html('');
+                    console.log('response item get_details response ', response);
                     if (response.status) {
                         var details_list = '';
                         $.each(response.response['order_details'], function(index, item) {
-                            console.log('response item get_details ', item);
-                            console.log('response index', index);
+                            
+                        createModal({
+                            id: 'confirm_order_detail_' + item.id,
+                            header: '<h4>Confirm</h4>',
+                            body: 'Do you want to continue ?',
+                            footer: `
+                                <button class="btn btn-success" 
+                                onclick="change_order_detail_status(` + item.id + `,'confirm')"
+                                data-dismiss="modal">
+                                    Confirm
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                `,
+                        });
+                            createModal({
+                            id: 'cancel_order_detail_' + item.id,
+                            header: '<h4>Cancel</h4>',
+                            body: `<p>Do you want to cancel  ?</p> <p>
+                                    <input type="text" placeholder="reason" id="reason_`+item.id+`">
+                                </p>`,
+                            footer: `
+                                <button class="btn btn-danger" 
+                                onclick="change_order_detail_status(` + item.id + `,'cancel')"
+                                data-dismiss="modal">
+                                    Confirm
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                `,
+                        });
+                        var status = item.status;
+                        if (status == 'pending') {
+                            var confirm_btn =
+                                `<a class="btn btn-info" data-toggle="modal" data-target="#` +
+                                'confirm_order_detail_' + item.id + `">Confirm</a>`;
+                            var reject_btn =
+                                `<a class="btn btn-danger" data-toggle="modal" data-target="#` +
+                                'cancel_order_detail_' + item.id + `">Cancel</a>`;
+                            status = confirm_btn + reject_btn;
+                        } else {
+                            var status = capitalize_first_letter(item.status);
+                        }
+
                             var divers_transport_select = get_divers_transport_select(item);
                                 details_list += `<tr>
                                 <td>` + item.journey.name + `</td>
@@ -332,6 +357,7 @@
                                 <td>` + divers_transport_select.drivers + `</td>
                                 <td>` + divers_transport_select.transport + `</td>
                                 <td>` + divers_transport_select.update_btn + `</td>
+                                <td id="order_detail_`+item.id+`">` + status + `</td>
                                 </tr>`;
                         })
                         $('.orderdetails_list').html(details_list);
@@ -364,6 +390,38 @@
                     console.log('response', response.status);
                     if (response.status) {
                         console.log('updated row ', order_detail_id);
+                    } else {
+                        alert('Someting went wrong');
+                    }
+                },
+                error: function(err) {
+                    console.log('ajax error');
+                }
+            });
+
+        }
+
+        function change_order_detail_status(order_detail_id, status) {
+            console.log('get_details order_detail_id', order_detail_id);
+            var reason = $("#reason_"+ order_detail_id).val();
+            $.ajax({
+                url: "{!! asset('admin/order/update_order_detail_status') !!}/" + order_detail_id,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    _token: '{!! @csrf_token() !!}',
+                    status: status,
+                    reason: reason
+                },
+                success: function(response) {
+                    console.log(response.status);
+                    console.log('response', response);
+                    if (response.status) {
+                        $('#order_detail_'+order_detail_id).html(capitalize_first_letter(status));
+                        // var myTable = $('#orderTableAppend').DataTable();
+                        // let rowIndex = myTable.row('#row_' + order_detail_id).index();
+                        // myTable.cell(rowIndex, 7).data(capitalize_first_letter(status));
+                        // myTable.draw();
                     } else {
                         alert('Someting went wrong');
                     }

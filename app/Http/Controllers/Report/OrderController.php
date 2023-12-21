@@ -50,8 +50,6 @@ class OrderController extends Controller
             $item->name = $transport->name;
             return $item;
         });
-
-        // $drivers_list = Users::where('role_id', Config::get('constants.role.driver'))->pluck('name', 'id');
         return view(
             'reports.order.index',
             compact(
@@ -78,7 +76,6 @@ class OrderController extends Controller
             ],
         ]);
         $search_params = $request->all();
-        // if($request->journey_id){
         $order = $order->whereHas(
             'order_details',
             function ($q) use ($search_params) {
@@ -113,12 +110,18 @@ class OrderController extends Controller
                 'journey_slot.slot', // its not necessary
                 'transport_type'
             ])->get();
-            // dd($order_details);
-        // $user_drivers = Users::where('role_id',5)->get();
-        // $drivers = Driver::where('commision_type', 'per_trip')->with('user_obj')->get(); //Users::where('role_id',5)->get();
         $res = ['order_details' => $order_details];
 
         return $this->sendResponse(200, $res);
+    }
+    
+
+    public function update_order_detail_status(Request $request, $order_detail_id)
+    {
+        $user = Auth::user();
+        $order_handler = new OrderHandler();
+        $order_detail = $order_handler->update_order_detail_status($user->id,$order_detail_id,$request->status,$request->reason);
+        return $this->sendResponse(200,$order_detail);
     }
 
     public function update_order_status(Request $request, $order_id)
@@ -141,43 +144,13 @@ class OrderController extends Controller
 
     public function update_order_detail_driver(Request $request, $order_detail_id)
     {
-        $driver_user_id = $request->driver_user_id;
+        $order_handler = new OrderHandler();
         $transport_id = $request->transport_id;
-        $order_detail = Order_Detail::with('sale_agent', 'order')->find($order_detail_id);
-        $driver = Driver::where('user_id', $driver_user_id)->first();
-        // $sale_agent = $order_detail->sale_agent;
-        $order_detail->driver_user_id = $driver_user_id;
+        $order_detail = Order_Detail::find($order_detail_id);
         $order_detail->transport_id = $transport_id;
-        if ($driver) {
-            $order_detail->driver_commission_type = $driver->commision_type;
-        } else {
-            $order_detail->driver_commission_type = null;
-        }
         $order_detail->save();
-
-        $order_detail = Order_Detail::with( 'order', 'driver')->find($order_detail_id);
-
-        if ($order_detail->driver && $order_detail->driver->commision_type == Config::get('constants.driver.commission_types.per_trip')) {
-
-            $driver_commission = DriverCommission::where()
-                ->where('user_driver_id', $driver_user_id)
-                ->where('journey_id', $order_detail->journey_id)
-                ->where('slot_id', $order_detail->slot_id)
-                ->where('transport_type_id', $order_detail->transport_type_id)
-                ->first();
-            if ($driver_commission) {
-                $order_detail->driver_commission = $driver_commission->commission;
-                $order_detail->save();
-            }
-        }
-        $commission_handler = new CommissionHandler();
-        $order = Order::with([
-            'order_details', 'user_obj',
-            'travel_agent',
-            'sale_agent',
-            'travel_agent_user', 'sale_agent_user'
-        ])->find($order_detail->order_id);
-        $commission_handler->update_commissions_prices($order);
+        $order_detail = $order_handler->update_order_detail_driver($request->driver_user_id,$order_detail_id);
+        
         return $this->sendResponse(200, $order_detail);
     }
     public function send_invoice($order_id)
@@ -185,10 +158,6 @@ class OrderController extends Controller
         $order = Order::with('order_details', 'user_obj')->find($order_id);
         $order_handler = new OrderHandler();
         $pdf = $order_handler->gernerate_pdf_order($order_id);
-        // $pdf = $order_handler->gernerate_pdf_order($order, $order->order_details);
-        return $pdf['stream'];
-
-        // create pdf of order invoice save in invoice url
         $receipt_url = $pdf['path'];
 
         $email_handler = new EmailHandler();
@@ -206,7 +175,6 @@ class OrderController extends Controller
         ];
         $email_details['subject'] = 'Demas Invoice';
         $email_details['attachments'][] = $receipt_url;
-        // $email_details['to_email'] = 'abubakrmianmamoon@gmail.com';
         $email_details['to_email'] = $user->email;
         $email_details['to_name'] = 'Abubakar';
         $email_details['data'] = $user;

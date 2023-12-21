@@ -121,9 +121,6 @@ class OrderHandler
         $order_detail->save();
         $commission_handler = new CommissionHandler();
         $commission_handler->update_driver_commission($order_detail->id);
-
-
-        
     }
 
     function update_order_detail_status($user_id,$order_detail_id,$status,$reason=''){

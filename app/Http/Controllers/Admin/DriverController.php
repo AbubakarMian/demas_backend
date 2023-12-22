@@ -108,12 +108,12 @@ class DriverController extends Controller
         // $driver->commision_type = $request->commision_type;
         $driver->iqama_number = $request->iqama_number;
         $driver->commision = $request->commision;
-
+        $driver->commision_type = Config::get('constants.driver.commission_types_keys.per_trip');
         if ($request->driver_category == 'own') {
-            $driver->commision_type = Config::get('constants.driver.commission_types_keys.own');
+            // $driver->commision_type = Config::get('constants.driver.commission_types_keys.own');
             $driver->save();
         } else { //out_source
-            $driver->commision_type = Config::get('constants.driver.commission_types_keys.per_trip');
+            // $driver->commision_type = Config::get('constants.driver.commission_types_keys.per_trip');
             $driver->save();
             $trip_commission_handler = new TripCommissionHandler();
             $trip_commission_handler->create_driver_trip_prices([], [$driver]);

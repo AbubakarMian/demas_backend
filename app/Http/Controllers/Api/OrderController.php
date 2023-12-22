@@ -70,7 +70,7 @@ class OrderController extends Controller
         $order->order_id = $order_id_uniq;
         $order->discount = 0;
         $order->customer_name = $booking['customer_name'];
-        $order->customer_phone_number = $booking['customer_phone_number'];
+        $order->customer_number = $booking['customer_phone_number'];
         $order->customer_whatsapp_number = $booking['customer_whatsapp_number'];
         $order->travel_agent_user_id = $booking['travel_agent_user_id'] ?? 0;
         $order->customer_collection_price = 0;
@@ -104,14 +104,14 @@ class OrderController extends Controller
             $order_details->save();
         }
         $order->save();
-        $order = Order::with(['order_details','user_obj',
-        'travel_agent',
-        'sale_agent',
-        'travel_agent_user','sale_agent_user'])->find($order->id);
+        // $order = Order::with(['order_details','user_obj',
+        // 'travel_agent',
+        // 'sale_agent',
+        // 'travel_agent_user','sale_agent_user'])->find($order->id);
         
-        $commission_handler->set_order_ref_agents($order);
-        $commission_handler->update_trip_prices($order);
-        $commission_handler->update_commissions_prices($order);
+        $commission_handler->set_order_ref_agents($order->id);
+        $commission_handler->update_trip_prices($order->id);
+        $commission_handler->update_commissions_prices($order->id);
 
         // generate pdf 
         $order_handler = new OrderHandler();

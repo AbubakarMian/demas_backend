@@ -123,7 +123,7 @@ return [
     'payment_status' => [
         'pending' => 'pending',
         'paid' => 'paid',
-        'refunded' => 'refunded',
+        'refund' => 'refund',
     ],
 
     'ajax_action' => [

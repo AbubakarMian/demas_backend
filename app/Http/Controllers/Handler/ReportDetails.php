@@ -15,6 +15,7 @@ use App\Models\Travel_Agent;
 use App\Models\TravelAgentCommission;
 use App\Models\Users;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use PDF;
 
 class ReportDetails
@@ -136,7 +137,7 @@ class ReportDetails
         return $row;
     }
 
-    
+
     public function admin_sales_agent_payment_report_detail_info($table_info)
     {
         $table_info['admin_payment'] = [
@@ -168,7 +169,7 @@ class ReportDetails
         return $table_info;
     }
 
-    
+
     public function admin_sales_agent_margin_report_detail_info($table_info)
     {
         $table_info['admin_margin'] = [
@@ -196,8 +197,8 @@ class ReportDetails
     public function admin_sales_agent_travel_agent_report_detail($order_detail, $row)
     {
         $row['admin_sales_agent_travel_agent'] = $order_detail->travel_agent_commission; //not match with db
-        $row['admin_sales_agent_sales_agentt'] = $order_detail->sale_agent_commission;//not match with db
-        $row['admin_sales_agent_service_type'] = $order_detail->sale_agent_commission;//not match with db
+        $row['admin_sales_agent_sales_agentt'] = $order_detail->sale_agent_commission; //not match with db
+        $row['admin_sales_agent_service_type'] = $order_detail->sale_agent_commission; //not match with db
         return $row;
     }
 
@@ -224,7 +225,7 @@ class ReportDetails
         ];
         return $table_info;
     }
-    
+
 
     public function admin_margin_calculation_report_detail($order_detail, $row)
     {
@@ -257,25 +258,66 @@ class ReportDetails
 
     public function admin_pkr_cash_report_detail($order_detail, $row)
     {
-        $row['admin_cash_received_in_pakistan_petty_cash'] = $order_detail->customer_collection_price; // match with db
-        $row['admin_cash_received_in_saudia_petty_cash'] = $order_detail->sale_agent_commission; //i don't not match
-
+        $row['admin_cash_received_in_pakistan_petty_cash'] = $this->cash_recieved_in_pakistan($order_detail) ? $order_detail->customer_collection_price : 0; // match with db
+        $row['admin_cash_received_in_saudia_petty_cash'] = $this->cash_recieved_in_saudia($order_detail) ? $order_detail->customer_collection_price : 0; //i don't not match
         return $row;
     }
+    public function cash_recieved_in_pakistan($order_detail)
+    {
+        return $order_detail->payment_type == Config::get('constants.payment_type.advance_collection');
+    }
+
+    public function cash_recieved_in_saudia($order_detail)
+    {
+        return $order_detail->payment_type == Config::get('constants.payment_type.cod');
+    }
+
+    public function amount_collected_admin($order_detail)
+    {
+        return $order_detail->cash_collected_by_role == 1;
+    }
+    public function amount_collected_sale_agent($order_detail)
+    {
+        return $order_detail->cash_collected_by_role == 3;
+    }
+    public function amount_collected_travel_agent($order_detail)
+    {
+        return $order_detail->cash_collected_by_role == 4;
+    }
+    public function amount_collected_driver($order_detail)
+    {
+        return $order_detail->cash_collected_by_role == 5;
+    }
+    public function driver_is_own($order_detail)
+    {
+        return $order_detail->driver && $order_detail->driver->driver_category == Config::get('constants.driver.categories_keys.own');
+    }
+    public function driver_is_hired($order_detail)
+    {
+        return $order_detail->driver && $order_detail->driver->driver_category == Config::get('constants.driver.categories_keys.out_source');
+    }
+    public function is_bank_credit($order_detail)
+    {
+        return $order_detail->payment_type == Config::get('constants.payment_type.card');
+    }
+
 
     public function admin_payment_section_report_detail($order_detail, $row)
     {
-
         // $row['admin_payment_section_customer_collection_price'] = $order_detail->customer_collection_price ?? ''; // match with db
         $row['admin_payment_section_payment_type'] = $order_detail->payment_type ?? ''; // match with db
-        $row['admin_payment_section_ac_receivable_travel_agent'] = $order_detail->travel_agent_commission;
-        $row['admin_payment_section_ac_payable_travel_agent'] = $order_detail->travel_agent_commission;
-        $row['admin_payment_section_ac_receivable_sales_agent'] = $order_detail->sale_agent_commission;
-        $row['admin_payment_section_a_reciveble_to_hired_vehicle'] = $order_detail->driver_commission; //i don't not match
-        $row['admin_payment_section_ac_payable_to_hired_vehicle'] = $order_detail->driver_commission; //i don'tnot match
-        $row['admin_payment_section_ac_receivable_to_owner_driver'] = $order_detail->driver_commission; //i don'tnot match
-        $row['admin_payment_section_ac_payable_to_owner_vehicle'] = $order_detail->driver_commission; //i don'tnot match
-        $row['admin_payment_section_bank_credit'] = $order_detail->payment_status; //i don'tnot match
+        $row['admin_payment_section_ac_receivable_travel_agent'] = $this->amount_collected_travel_agent($order_detail) ? $order_detail->payable_to_admin : 0;
+        $row['admin_payment_section_ac_payable_travel_agent'] = $this->amount_collected_travel_agent($order_detail) ? 0 : $order_detail->travel_agent_commission;
+        $row['admin_payment_section_ac_payable_sales_agent'] = $this->amount_collected_sale_agent($order_detail) ? 0 : $order_detail->sale_agent_commission;
+        $row['admin_payment_section_a_reciveble_to_hired_vehicle'] = $this->driver_is_hired($order_detail) ?
+            ($this->amount_collected_driver($order_detail) ? $order_detail->payable_to_admin : 0) : 0;
+        $row['admin_payment_section_ac_payable_to_hired_vehicle'] = $this->driver_is_hired($order_detail) ?
+            ($this->amount_collected_driver($order_detail) ? 0 : $order_detail->driver_commission) : 0;
+        $row['admin_payment_section_ac_receivable_to_owner_driver'] = $this->driver_is_own($order_detail) ?
+            ($this->amount_collected_driver($order_detail) ? $order_detail->payable_to_admin : 0) : 0;
+        $row['admin_payment_section_ac_payable_to_owner_vehicle'] = $this->driver_is_own($order_detail) ?
+            ($this->amount_collected_driver($order_detail) ? 0 : $order_detail->driver_commission) : 0;
+        $row['admin_payment_section_bank_credit'] = $this->is_bank_credit($order_detail) ? $order_detail->customer_collection_price : 0;
         return $row;
     }
 
@@ -475,7 +517,7 @@ class ReportDetails
                 ],
                 [
                     'heading' => 'A/C Payable To Sales agent',
-                    'data_column' =>  'admin_payment_section_ac_receivable_sales_agent',
+                    'data_column' =>  'admin_payment_section_ac_payable_sales_agent',
                 ],
                 [
                     'heading' => 'A/C Receivable To Hired Vehicle',
@@ -486,11 +528,11 @@ class ReportDetails
                     'data_column' =>  'admin_payment_section_ac_payable_to_hired_vehicle',
                 ],
                 [
-                    'heading' => 'A/C Receivable To Owner Driver',
+                    'heading' => 'A/C Receivable To Own Driver',
                     'data_column' =>  'admin_payment_section_ac_receivable_to_owner_driver',
                 ],
                 [
-                    'heading' => 'A/C Payable To Owner Vehicle',
+                    'heading' => 'A/C Payable To Own Vehicle',
                     'data_column' =>  'admin_payment_section_ac_payable_to_owner_vehicle',
                 ],
                 [
@@ -568,6 +610,4 @@ class ReportDetails
     public function driver_report_detail(Request $request)
     {
     }
-
-    
 }

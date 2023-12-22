@@ -255,9 +255,9 @@
 
     function createModal(modal_param) {
         var modal = `
-    <div class="modal fade" id="` + modal_param.id + `" role="dialog">
+    <div class="modal fade " id="` + modal_param.id + `" role="dialog">
     <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content custom_mdl_class">
         <div class="modal-header">
             ` + modal_param.header + `
         </div>
@@ -369,7 +369,7 @@
         var formattedDate = (
             ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
             ('0' + date.getDate()).slice(-2) + '/' +
-            date.getFullYear() 
+            date.getFullYear()
             // + ' ' +
             // ('0' + date.getHours()).slice(-2) + ':' +
             // ('0' + date.getMinutes()).slice(-2) + ':' +
@@ -383,10 +383,10 @@
         var res_arr = [];
         res_arr['date'] = formattedDate;
         res_arr['time'] = formattedTime;
-        res_arr['date_time'] = formattedDate+' '+formattedTime;
+        res_arr['date_time'] = formattedDate + ' ' + formattedTime;
         res_arr['date_obj'] = date;
-        console.log('time spamp',timestamp);
-        console.log('res datetime',res_arr);
+        console.log('time spamp', timestamp);
+        console.log('res datetime', res_arr);
         return res_arr; //Output: "09/18/2021 15:50:00"
     }
 </script>

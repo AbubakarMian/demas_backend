@@ -37,38 +37,59 @@
         padding: 10px;
     }
 
-    .modal-dialog {
+    /* .modal-dialog {
         width: auto !important;
         padding: 10px !important;
         margin: 30px auto !important;
         display: flex;
         justify-content: center;
     }
+    .modal-content.custom_mdl_class {
+    min-width: 40%;
+} */
 </style>
 @section('table')
     <table class="fhgyt" id="orderTableAppend" style="opacity: 0">
         <thead>
-            @if ($user->role_id == 5)
+            @if ($user->role_id == 3)
                 <tr>
                     <th>OrderId</th>
-                    <th>User</th>
-                    <th>Journey</th>
-                    <th>Driver</th>
-                    <th>Pickup Time</th>
-                    <th>Commission</th>
-                    <th>Status </th>
+                    <th>Customer Name</th>
+                    <th>Created by </th>
+                    <th>Travel Agent Commission</th>
+                    <th>Sale Agent Commission</th>
+                    <th>Travel Agent Payment Status</th>
+                    <th>Sale Agent Payment Status</th>
+                    <th>Admin Payment Status</th>
+                    <th>User Payment Status</th>
+                    <th>Order Status</th>
+                    <th>Reason</th>
+                </tr>
+            @elseif($user->role_id == 4)
+                <tr>
+                    <th>OrderId</th>
+                    <th>Customer Name</th>
+                    <th>Created by </th>
+                    <th>Travel Agent Commission</th>
+                    <th>Travel Agent Payment Status</th>
+                    <th>Sale Agent Payment Status</th>
+                    <th>Admin Payment Status</th>
+                    <th>User Payment Status</th>
+                    <th>Order Status</th>
+                    <th>Reason</th>
                 </tr>
             @else
                 <tr>
                     <th>OrderId</th>
-                    <th>User</th>
-                    <th>Sale Agent</th>
-                    <th>Travel Agent</th>
-                    <th>Commission</th>
-                    <th>Trip Type</th>
-                    <th>Paid</th>
-                    <th>Order Details</th>
-                    <th>Status </th>
+                    <th>Customer Name</th>
+                    <th>Created by </th>
+                    <th>Driver Commmission </th>
+                    <th>Travel Agent Payment Status</th>
+                    <th>Sale Agent Payment Status</th>
+                    <th>Admin Payment Status</th>
+                    <th>User Payment Status</th>
+                    <th>Order Status</th>
+                    <th>Reason</th>
                 </tr>
             @endif
         </thead>
@@ -81,8 +102,8 @@
 
     <script>
         $(document).ready(function() {
-            if ("{!!$user['role_id']!!}" == 5) {
-                fetchDriverRecords();
+            if ("{!! $user['role_id'] !!}" == 3) {
+                fetchRecords();
             } else {
                 fetchRecords();
             }
@@ -127,6 +148,92 @@
             });
         }
 
+        function sale_agent_data(data) {
+            var reason =  `<a class="btn btn-warning" data-toggle="modal" data-target="#` +
+                                'reason_' + data.order_id + `">Reason</a>`;
+
+            createModal({
+                id: 'reason_' + data.order_id,
+                header: '<h4>Cancelation Reason</h4>',
+                body: `
+            <p>
+                ` + data.reason + `
+               
+            </p>`,
+                footer: `
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        `,
+            });({
+                id: 'reason_' + data.order_id,
+                header: '<h4>Cancelation Reason</h4>',
+                body: `
+            <p>
+                ` + data.reason + `
+               
+            </p>`,
+                footer: `
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        `,
+            });
+
+
+            var tr_str = "<tr id='row_" + data.order_id + "'>" +
+                "<td>" + data.order_id + "</td>" +
+                "<td>" + data.order.customer_name + "</td>" +
+                "<td>" + data.order.user_obj.name + "</td>" +
+                "<td>" + data.travel_agent_commission + "</td>" +
+                "<td>" + data.sale_agent_commission + "</td>" +
+                "<td>" + data.travel_agent_payment_status + "</td>" +
+                "<td>" + data.sale_agent_payment_status + "</td>" +
+                "<td>" + data.admin_payment_status + "</td>" +
+                "<td>" + data.user_payment_status + "</td>" +
+                "<td>" + data.status + "</td>" +
+                "<td>" + reason + "</td>" +
+                `<td id='td_status_` + data.id + `'>` +
+                status + `</td>` +
+                "</tr>";
+            return tr_str;
+        }
+
+        function travel_agent_data(data) {
+
+            var tr_str = "<tr id='row_" + data.order_id + "'>" +
+                "<td>" + data.order_id + "</td>" +
+                "<td>" + data.order.customer_name + "</td>" +
+                "<td>" + data.order.user_obj.name + "</td>" +
+                "<td>" + data.travel_agent_commission + "</td>" +
+                "<td>" + data.travel_agent_payment_status + "</td>" +
+                "<td>" + data.sale_agent_payment_status + "</td>" +
+                "<td>" + data.admin_payment_status + "</td>" +
+                "<td>" + data.user_payment_status + "</td>" +
+                "<td>" + data.order_status + "</td>" +
+                "<td>" + data.reason + "</td>" +
+                `<td id='td_status_` + data.id + `'>` +
+                status + `</td>` +
+                "</tr>";
+            return tr_str;
+        }
+
+        function driver_data(data) {
+
+            var tr_str = "<tr id='row_" + data.order_id + "'>" +
+                "<td>" + data.order_id + "</td>" +
+                "<td>" + data.order.customer_name + "</td>" +
+                "<td>" + data.order.user_obj.name + "</td>" +
+                "<td>" + data.driver_commission + "</td>" +
+                "<td>" + data.travel_agent_payment_status + "</td>" +
+                "<td>" + data.sale_agent_payment_status + "</td>" +
+                "<td>" + data.admin_payment_status + "</td>" +
+                "<td>" + data.user_payment_status + "</td>" +
+                "<td>" + data.order_status + "</td>" +
+                "<td>" + data.reason + "</td>" +
+                `<td id='td_status_` + data.id + `'>` +
+                status + `</td>` +
+                "</tr>";
+            return tr_str;
+        }
+
+
         function fetchRecords() {
 
             $.ajax({
@@ -134,47 +241,55 @@
                 type: 'get',
                 dataType: 'json',
                 success: function(response) {
-                    console.log('response', response);
+                    console.log('responsesadss', response);
                     $("#orderTableAppend").css("opacity", 1);
                     var len = response['data'].length;
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
-                        var name = response['data'][i].user_obj.name;
-                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name ??
-                            '';
-                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name ??
-                            '';
-                        var cash_collected_by = response['data'][i].cash_collected_by;
-                        var cash_collected_by_user_id = response['data'][i].cash_collected_by_user_id;
-                        var price = response['data'][i].price;
-                        var type = response['data'][i].type;
-                        var trip_type = response['data'][i].trip_type;
-                        var total_price = response['data'][i].total_price;
-                        var ispaid = response['data'][i].is_paid ?  '<i class="fa fa-check" style="color:#38da38;" aria-hidden="true"></i>' : '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
-                        var status = response['data'][i].status;
-                        var payment_collected_type = response['data'][i].payment_collected_type;
-                        var payment_collected_user_id = response['data'][i].payment_collected_user_id;
-                        var payment_collected_price = response['data'][i].payment_collected_price;
-                        var order_type = response['data'][i].order_type;
-                        var payment_type = response['data'][i].payment_type;
-                        var order_detail =
-                            `<a class="btn btn-info" data-toggle="modal" data-target="#orderdetails"
+                        var customer_name = response['data'][i].order.customer_name;
+                        var created_by_user_name = response['data'][i].order.order_created_by_role_id;
+                        var travel_agent_commission = response['data'][i].travel_agent_commission;
+                        var sale_agent_commission = response['data'][i].sale_agent_commission;
+                        var travel_agent_payment_status = response['data'][i].travel_agent_payment_status;
+                        var sale_agent_payment_status = response['data'][i].sale_agent_payment_status;
+                        var admin_payment_status = response['data'][i].admin_payment_status;
+                        var user_payment_status = response['data'][i].user_payment_status;
+                        var order_status = response['data'][i].status;
+                        // var reason = response['data'][i].order.order_created_by_role_id;
+                        // var created_by_user_name = response['data'][i].order.order_created_by_role_id;
+                        // var created_by_user_name = response['data'][i].order.order_created_by_role_id;
+                        // var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name ??
+                        //     '';
+                        // var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name ??
+                        //     '';
+                        // var cash_collected_by = response['data'][i].cash_collected_by;
+                        // var cash_collected_by_user_id = response['data'][i].cash_collected_by_user_id;
+                        // var price = response['data'][i].price;
+                        // var type = response['data'][i].type;
+                        // var trip_type = response['data'][i].trip_type;
+                        // var total_price = response['data'][i].total_price;
+                        // var ispaid = response['data'][i].is_paid ?
+                        //     '<i class="fa fa-check" style="color:#38da38;" aria-hidden="true"></i>' :
+                        //     '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
+                        // var status = response['data'][i].status;
+                        // var payment_collected_type = response['data'][i].payment_collected_type;
+                        // var payment_collected_user_id = response['data'][i].payment_collected_user_id;
+                        // var payment_collected_price = response['data'][i].payment_collected_price;
+                        // var order_type = response['data'][i].order_type;
+                        // var payment_type = response['data'][i].payment_type;
+                        var reason =
+                            `<a class="btn btn-info" data-toggle="modal" data-target="#reason_"
                                 onclick="get_details(` + id + `)">View</a>`;
                         // 'orderdetail_' + response['data'][i].id + `">View</a>`;
                         createModal({
-                            // id: 'orderdetail_' + response['data'][i].id,
-                            id: 'orderdetails',
-                            header: '<h4>Order details</h4>',
+                            id: 'reason_' + response['data'][i].id,
+                            // id: 'reason',
+                            header: '<h4>Cancelation Reason</h4>',
                             body: `
                                 <table class="modal_table fhgyt";>
-                                    <thead>
-                                        <tr>
-                                            <th>Journey</th>
-                                            <th>PickUp Date/Time</th>
-                                            <th>Commission</th>
-                                            <th>Driver</th>
-                                        </tr>
-                                    </thead>
+                                   <p>
+                                    ` + response['data'][i].reason + `
+                                   </p>
                                     <tbody class="orderdetails_list">
                                     </tbody>
                                 </table>`,
@@ -228,18 +343,16 @@
                             var commission = response['data'][i].travel_agent_commission_total;
                         }
 
-                        var tr_str = "<tr id='row_" + response['data'][i].order_id + "'>" +
-                            "<td>" + response['data'][i].order_id + "</td>" +
-                            "<td>" + name + "</td>" +
-                            "<td>" + user_sale_agent_name + "</td>" +
-                            "<td>" + user_travel_agent_name + "</td>" +
-                            "<td>" + commission + "</td>" +
-                            "<td>" + capitalize_first_letter(trip_type) + "</td>" +
-                            "<td>" + ispaid + "</td>" +
-                            "<td>" + order_detail + "</td>" +
-                            `<td id='td_status_` + response['data'][i].id + `'>` +
-                            status + `</td>` +
-                            "</tr>";
+                        if (response['role_id'] == 3) {
+                            var tr_str = sale_agent_data(response['data'][i]);
+                        }
+                        if (response['role_id'] == 4) {
+                            var tr_str = travel_agent_data(response['data'][i]);
+                        }
+                        if (response['role_id'] == 5) {
+                            var tr_str = driver_data(response['data'][i]);
+                        }
+
                         $("#orderTableAppend tbody").append(tr_str);
                     }
                     $(document).ready(function() {
@@ -256,9 +369,9 @@
         }
 
         function get_details(order_id) {
-            console.log('get_details order_id', order_id);
+            // console.log('get_details order_id', order_id);
             $.ajax({
-                url: "{!! asset('admin/order/details_list') !!}/" + order_id,
+                url: "{!! asset('admin/sub_admin/order/details_list') !!}/" + order_id,
                 type: 'GET',
                 dataType: 'json',
                 data: {
@@ -301,7 +414,7 @@
 
 
         function change_status(order_id, status) {
-            console.log('get_details order_id', order_id);
+            // console.log('get_details order_id', order_id);
             $.ajax({
                 url: "{!! asset('admin/order/update_order_status') !!}/" + order_id,
                 type: 'post',

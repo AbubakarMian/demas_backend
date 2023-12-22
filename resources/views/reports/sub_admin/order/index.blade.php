@@ -150,7 +150,7 @@
                         var type = response['data'][i].type;
                         var trip_type = response['data'][i].trip_type;
                         var total_price = response['data'][i].total_price;
-                        var ispaid = response['data'][i].is_paid ? 'True' : 'False';
+                        var ispaid = response['data'][i].is_paid ?  '<i class="fa fa-check" style="color:#38da38;" aria-hidden="true"></i>' : '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
                         var status = response['data'][i].status;
                         var payment_collected_type = response['data'][i].payment_collected_type;
                         var payment_collected_user_id = response['data'][i].payment_collected_user_id;

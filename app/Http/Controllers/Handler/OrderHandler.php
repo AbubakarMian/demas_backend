@@ -91,19 +91,23 @@ class OrderHandler
             $order_detail->payable_to_admin = $order_detail->final_price - $order_detail->sale_agent_commission;
             $order_detail->sale_agent_payment_status = Config::get('constants.sales_agent.payment_status.paid');
             $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.pending');
+            $order_detail->payment_type =  Config::get('constants.payment_type.advance_collection');
 
         }else if($user_collecting_payment->travel_agent){
             $order_detail->payable_to_admin = $order_detail->final_price - $order_detail->travel_agent_commission;
             $order_detail->travel_agent_payment_status = Config::get('constants.travel_agent.payment_status.paid');
             $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.pending');
+            $order_detail->payment_type =  Config::get('constants.payment_type.advance_collection');
         }else if($user_collecting_payment->driver){// driver
             $order_detail->payable_to_admin = $order_detail->final_price - $order_detail->driver_commission;
             $order_detail->driver_payment_status = Config::get('constants.driver.payment_status.paid');
             $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.pending');
+            $order_detail->payment_type =  Config::get('constants.payment_type.cod');
 
         }else{ //admin
             $order_detail->payable_to_admin = 0;
             $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.paid');
+            $order_detail->payment_type =  Config::get('constants.payment_type.card');
         }
         $order_detail->save();
 

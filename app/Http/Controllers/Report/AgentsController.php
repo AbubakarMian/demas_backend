@@ -122,7 +122,8 @@ class AgentsController extends Controller
         // $order_detail->save();
         // $order = $order_detail->order;
         $commission_handler = new CommissionHandler();
-        $commission_handler->update_commissions_prices($order_detail->order_id);
+        $commission_handler->update_driver_commission($order_detail->id);
+        // $commission_handler->update_commissions_prices($order_detail->order_id);
         return $this->sendResponse(200, $order_detail);
     }
     public function send_invoice($order_id)

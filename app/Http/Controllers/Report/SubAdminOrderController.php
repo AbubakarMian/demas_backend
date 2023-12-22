@@ -42,9 +42,9 @@ class SubAdminOrderController extends Controller
         $user = Auth::user();
         $order = Order::with('user_obj', 'sale_agent.user_obj', 'travel_agent.user_obj');
         if ($user->role_id == 3) { // 3 = sale_agent 
-            $order = $order->where('user_sale_agent_id', $user->id);
+            $order = $order->where('sale_agent_user_id', $user->id);
         } elseif ($user->role_id == 4) { // 4 = travel_agent 
-            $order = $order->where('user_travel_agent_id', $user->id);
+            $order = $order->where('travel_agent_user_id', $user->id);
         } 
         $order = $order->orderBy('created_at', 'DESC')->select('*')->get();
         $orderData['data'] = $order;

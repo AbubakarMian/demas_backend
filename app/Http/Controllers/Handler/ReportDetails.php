@@ -38,6 +38,7 @@ class ReportDetails
             $row = $this->admin_margin_calculation_report_detail($order_detail, $row);
             $row = $this->admin_payment_section_report_detail($order_detail, $row);
             $row = $this->admin_pkr_cash_report_detail($order_detail, $row);
+            $row = $this->admin_pkr_cash_report_recived_status_detail($order_detail, $row);
             $report_data[] = $row;
         }
         $table_info = $this->default_report_detail_info();
@@ -45,6 +46,7 @@ class ReportDetails
         $table_info = $this->admin_margin_calculation_report_detail_info($table_info);
         $table_info = $this->admin_payment_section_report_detail_info($table_info);
         $table_info = $this->admin_pkr_cash_report_detail_info($table_info);
+        $table_info = $this->admin_pkr_cash_report_recived_status_detail_info($table_info);
 
         return [
             'table_info' => $table_info,
@@ -258,8 +260,15 @@ class ReportDetails
 
     public function admin_pkr_cash_report_detail($order_detail, $row)
     {
-        $row['admin_cash_received_in_pakistan_petty_cash'] = $this->cash_recieved_in_pakistan($order_detail) ? $order_detail->customer_collection_price : 0; // match with db
-        $row['admin_cash_received_in_saudia_petty_cash'] = $this->cash_recieved_in_saudia($order_detail) ? $order_detail->customer_collection_price : 0; //i don't not match
+        $row['admin_cash_received_in_pakistan_petty_cash'] = $this->cash_recieved_in_pakistan($order_detail) ? $order_detail->customer_collection_price : 0;
+        $row['admin_cash_received_in_saudia_petty_cash'] = $this->cash_recieved_in_saudia($order_detail) ? $order_detail->customer_collection_price : 0;
+        return $row;
+    }
+    public function admin_pkr_cash_report_recived_status_detail($order_detail, $row)
+    {
+        $row['admin_cash_received_status_admin'] = $order_detail->admin_payment_status;
+        $row['admin_cash_received_status_sale_agent'] = $order_detail->sale_agent_payment_status;
+        $row['admin_cash_received_status_travel_agent'] = $order_detail->travel_agent_payment_status;
         return $row;
     }
     public function cash_recieved_in_pakistan($order_detail)
@@ -448,6 +457,28 @@ class ReportDetails
     }
 
 
+    public function admin_pkr_cash_report_recived_status_detail_info($table_info)
+    {
+        $table_info['admin_cash_received_details'] = [
+            'heading' => 'Payment Status',
+            'color' => 'rgb(255, 255, 0)',
+            'columns' => [
+                [
+                    'heading' => 'Admin Payment Status',
+                    'data_column' =>  'admin_cash_received_status_admin', //match with pre function
+                ],
+                [
+                    'heading' => 'Sale agent payment status',
+                    'data_column' =>  'admin_cash_received_status_sale_agent',
+                ],
+                [
+                    'heading' => 'Travel agent payment status',
+                    'data_column' =>  'admin_cash_received_status_travel_agent',
+                ],
+            ],
+        ];
+        return $table_info;
+    }
     public function admin_pkr_cash_report_detail_info($table_info)
     {
         $table_info['admin_petty_cash_received'] = [

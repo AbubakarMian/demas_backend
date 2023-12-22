@@ -62,7 +62,7 @@ class OrderHandler
 
     public function order_collect_payment($user_id,$order_obj_type,$order_id)
     {
-        $user = Users::with(['sale_agent','travel_agent','driver','role'])->first($user_id);
+        $user = Users::with(['sale_agent','travel_agent','driver','role'])->find($user_id);
         $order = null;
         if($order_obj_type == "order_detail"){
             $order_details = Order_Detail::with('order')->find($order_id);

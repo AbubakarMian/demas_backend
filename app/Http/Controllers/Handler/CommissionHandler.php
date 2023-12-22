@@ -252,7 +252,12 @@ class CommissionHandler
             $where['transport_type_id'] = $transport_type_id;
         }
         if ($user->sale_agent || $user->travel_agent->sale_agent) {
-            $where['user_sale_agent_id'] = $user->travel_agent->sale_agent->user_id;
+            if($user->sale_agent ){
+                $where['user_sale_agent_id'] = $user->sale_agent->user_id;
+            }
+            else{
+                $where['user_sale_agent_id'] = $user->travel_agent->sale_agent->user_id;
+            }
             $journey_price = SalesAgentTripPrice::where($where);
         } elseif ($user->travel_agent) {
             $where['user_travel_agent_id'] = $order_created_by_user_id;

@@ -101,6 +101,7 @@ class OrderController extends Controller
             $order_details->status = Config::get('constants.order_status.pending');
             $order_details->payment_type = Config::get('constants.payment_type.cod');
             $order_details->user_payment_status = Config::get('constants.user_payment_status.pending');
+            $order_details->driver_payment_status = Config::get('constants.driver.payment_status.paid');
             $order_details->save();
         }
         $order->save();

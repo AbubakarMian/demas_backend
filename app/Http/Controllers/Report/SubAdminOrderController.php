@@ -40,14 +40,33 @@ class SubAdminOrderController extends Controller
     public function get_order(Request $request)
     {
         $user = Auth::user();
-        $order = Order::with('user_obj', 'sale_agent.user_obj', 'travel_agent.user_obj');
-        if ($user->role_id == 3) { // 3 = sale_agent 
-            $order = $order->where('sale_agent_user_id', $user->id);
-        } elseif ($user->role_id == 4) { // 4 = travel_agent 
-            $order = $order->where('travel_agent_user_id', $user->id);
-        } 
-        $order = $order->orderBy('created_at', 'DESC')->select('*')->get();
-        $orderData['data'] = $order;
+
+        $order_details = Order_Detail::with(
+            ['order' => ['user_obj', 'sale_agent.user_obj', 'travel_agent.user_obj'],
+            'pickup_location',
+            'dropoff_location',
+            'journey',
+            'driver.user_obj',
+            'journey_slot',
+        ]);
+        if($user->role_id == 3){
+            $order_details = $order_details->where('sale_agent_user_id', $user->id);
+        }
+        else if($user->role_id == 4){
+                $order_details = $order_details->where('travel_agent_user_id', $user->id);            
+        }
+        else{ //$user->role_id == 5
+            $order_details = $order_details->where('driver_user_id', $user->id);
+        }
+
+        // $order = Order::with('user_obj', 'sale_agent.user_obj', 'travel_agent.user_obj');
+        // if ($user->role_id == 3) { // 3 = sale_agent 
+        //     $order = $order->where('sale_agent_user_id', $user->id);
+        // } elseif ($user->role_id == 4) { // 4 = travel_agent 
+        //     $order = $order->where('travel_agent_user_id', $user->id);
+        // } 
+        $order_details = $order_details->latest()->select('*')->get();
+        $orderData['data'] = $order_details;
         $orderData['role_id'] = $user->role_id;
         echo json_encode($orderData);
     }
@@ -57,6 +76,7 @@ class SubAdminOrderController extends Controller
         $user = Auth::user();
         $order_details = Order_Detail::where('order_id', $order_id)
             ->with([
+                'order',
                 'pickup_location',
                 'dropoff_location',
                 'driver.user_obj',

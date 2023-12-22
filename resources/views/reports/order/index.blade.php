@@ -149,7 +149,8 @@
                         var final_price = response['data'][i].final_price;
                         var type = response['data'][i].type;
                         var trip_type = response['data'][i].trip_type;
-                        var ispaid = response['data'][i].is_paid ? 'True' : 'False';
+                        // var ispaid = response['data'][i].is_paid ? 'True' : 'False';
+                        var ispaid = response['data'][i].is_paid ? '<i class="fa fa-check" style="color:#38da38;" aria-hidden="true"></i>' : '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
                         var status = response['data'][i].status;
                         var payment_collected_type = response['data'][i].payment_collected_type;
                         var payment_collected_user_id = response['data'][i].payment_collected_user_id;
@@ -311,6 +312,7 @@
                             id: 'confirm_order_detail_' + item.id,
                             header: '<h4>Confirm</h4>',
                             body: 'Do you want to continue ?',
+                            class: 'mddd',
                             footer: `
                                 <button class="btn btn-success" 
                                 onclick="change_order_detail_status(` + item.id + `,'confirm')"

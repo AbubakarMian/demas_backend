@@ -130,9 +130,15 @@ class OrderHandler
     function update_order_detail_status($user_id,$order_detail_id,$status,$reason=''){
         $order_detail = Order_Detail::find($order_detail_id);
         $order = $order_detail->order;
-        $order_detail->status = $status;
         $order_detail->status_updated_by_user_id = $user_id;
-        $order_detail->reason = $reason;
+        if($status == Config::get('constants.order_status.cancelled')){
+            $order_detail->reason = $reason;
+            if($status == Config::get('constants.user_payment_status.pending')){
+                $order_detail->user_payment_status =  Config::get('constants.user_payment_status.cancelled');
+            }
+        }
+        $order_detail->status = $status;
+        
         $order_detail->save();
         return $order_detail;
     }

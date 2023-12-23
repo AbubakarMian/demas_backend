@@ -96,7 +96,7 @@
                 <th>Travel Agent</th>
                 <th>Price</th>
                 <th>Trip Type</th>
-                <th>Paid</th>
+                <th>Order Status</th>
                 <th>Detail</th>
                 {{-- <th>Status </th> --}}
                 <th>Invoice </th>
@@ -152,6 +152,7 @@
                         // var ispaid = response['data'][i].is_paid ? 'True' : 'False';
                         var ispaid = response['data'][i].is_paid ? '<i class="fa fa-check" style="color:#38da38;" aria-hidden="true"></i>' : '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
                         var status = response['data'][i].status;
+                        var orderdetailsstatus = response['data'][i].orderdetailsstatus;
                         var payment_collected_type = response['data'][i].payment_collected_type;
                         var payment_collected_user_id = response['data'][i].payment_collected_user_id;
                         var payment_collected_price = response['data'][i].payment_collected_price;
@@ -233,7 +234,7 @@
                             "<td>" + user_travel_agent_name + "</td>" +
                             "<td>" + final_price + "</td>" +
                             "<td>" + capitalize_first_letter(trip_type) + "</td>" +
-                            "<td>" + ispaid + "</td>" +
+                            "<td>" + orderdetailsstatus + "</td>" +
                             "<td>" + order_detail + "</td>" +
                             // `<td id='td_status_` + response['data'][i].id + `'>` +
                             // status + `</td>` +

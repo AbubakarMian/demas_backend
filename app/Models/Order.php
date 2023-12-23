@@ -9,7 +9,8 @@ class Order extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'order';   
+    protected $table = 'order';
+    protected $appends = ['orderdetailsstatus'];
     public function user_obj()
     {
         return $this->hasOne('App\Models\Users', 'id', 'user_id')->withTrashed();
@@ -40,7 +41,28 @@ class Order extends Model
     // }
     public function order_details()
     {
-        return $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')->withTrashed();
+        return $this->hasMany('App\Models\Order_Detail', 'order_id', 'id');
+    }
+    public function order_details_status()
+    {   
+        return $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')
+        ->select('status', \DB::raw('count(*) as count'))
+        ->groupBy('status');
+    }
+
+    public function getOrderDetailsStatusAttribute()
+    {
+        // $post->custom;
+        $order_status = '';
+        $comma = '';
+        $order_details = $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')->get();
+        foreach ($order_details as $key => $order_detail) {
+            $order_status .= $comma.ucfirst($order_detail->status);
+            $comma = ',';
+        }
+        // $title = $this->attributes['status']; 
+
+        return $order_status;
     }
 
 

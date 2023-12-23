@@ -66,6 +66,8 @@ class OrderController extends Controller
 
     public function get_order(Request $request)
     {
+        // $order = Order::with('order_details')->first();
+        // dd($order->orderdetailsstatus);
         $order = Order::with([
             'user_obj:name,role_id',
             'sale_agent.user_obj:name,role_id',

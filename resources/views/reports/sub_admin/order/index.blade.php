@@ -149,8 +149,8 @@
         }
 
         function sale_agent_data(data) {
-            var reason =  `<a class="btn btn-warning" data-toggle="modal" data-target="#` +
-                                'reason_' + data.order_id + `">Reason</a>`;
+            var reason =  data.status == 'cancelled'? `<a class="btn btn-warning" data-toggle="modal" data-target="#` +
+                                'reason_' + data.order_id + `">Reason</a>`:'';
 
             createModal({
                 id: 'reason_' + data.order_id,
@@ -189,14 +189,37 @@
                 "<td>" + data.user_payment_status + "</td>" +
                 "<td>" + data.status + "</td>" +
                 "<td>" + reason + "</td>" +
-                `<td id='td_status_` + data.id + `'>` +
-                status + `</td>` +
                 "</tr>";
             return tr_str;
         }
 
         function travel_agent_data(data) {
+            var reason =  data.status == 'cancelled'? `<a class="btn btn-warning" data-toggle="modal" data-target="#` +
+                                'reason_' + data.order_id + `">Reason</a>`:'';
 
+            createModal({
+                id: 'reason_' + data.order_id,
+                header: '<h4>Cancelation Reason</h4>',
+                body: `
+            <p>
+                ` + data.reason + `
+               
+            </p>`,
+                footer: `
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        `,
+            });({
+                id: 'reason_' + data.order_id,
+                header: '<h4>Cancelation Reason</h4>',
+                body: `
+            <p>
+                ` + data.reason + `
+               
+            </p>`,
+                footer: `
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        `,
+            });
             var tr_str = "<tr id='row_" + data.order_id + "'>" +
                 "<td>" + data.order_id + "</td>" +
                 "<td>" + data.order.customer_name + "</td>" +
@@ -206,16 +229,39 @@
                 "<td>" + data.sale_agent_payment_status + "</td>" +
                 "<td>" + data.admin_payment_status + "</td>" +
                 "<td>" + data.user_payment_status + "</td>" +
-                "<td>" + data.order_status + "</td>" +
-                "<td>" + data.reason + "</td>" +
-                `<td id='td_status_` + data.id + `'>` +
-                status + `</td>` +
+                "<td>" + data.status + "</td>" +
+                "<td>" + reason + "</td>" +
                 "</tr>";
             return tr_str;
         }
 
         function driver_data(data) {
+            var reason =  data.status == 'cancelled'? `<a class="btn btn-warning" data-toggle="modal" data-target="#` +
+                                'reason_' + data.order_id + `">Reason</a>`:'';
 
+            createModal({
+                id: 'reason_' + data.order_id,
+                header: '<h4>Cancelation Reason</h4>',
+                body: `
+            <p>
+                ` + data.reason + `
+               
+            </p>`,
+                footer: `
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        `,
+            });({
+                id: 'reason_' + data.order_id,
+                header: '<h4>Cancelation Reason</h4>',
+                body: `
+            <p>
+                ` + data.reason + `
+               
+            </p>`,
+                footer: `
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        `,
+            });
             var tr_str = "<tr id='row_" + data.order_id + "'>" +
                 "<td>" + data.order_id + "</td>" +
                 "<td>" + data.order.customer_name + "</td>" +
@@ -225,10 +271,8 @@
                 "<td>" + data.sale_agent_payment_status + "</td>" +
                 "<td>" + data.admin_payment_status + "</td>" +
                 "<td>" + data.user_payment_status + "</td>" +
-                "<td>" + data.order_status + "</td>" +
-                "<td>" + data.reason + "</td>" +
-                `<td id='td_status_` + data.id + `'>` +
-                status + `</td>` +
+                "<td>" + data.status + "</td>" +
+                "<td>" + reason + "</td>" +
                 "</tr>";
             return tr_str;
         }

@@ -16,6 +16,7 @@ return [
         'pending' => "pending",
         'paid' => "paid",
         'refund' => "refund",
+        'cancelled'=>'cancelled',
     ],
     'admin_payment_status' => [
         'pending' => "pending",

@@ -71,7 +71,9 @@ class OrderHandler
             
         }
         else{ // order
-            $order = Order::with('order_details')->find($order_id);
+            $order = Order::with('order_details',function($q){
+                $q->where('user_payment_status',Config::get('constants.user_payment_status.pending'));
+            })->find($order_id);
             $order_details = $order->order_details;
         }
         foreach ($order_details as $key => $order_detail) {
@@ -110,7 +112,20 @@ class OrderHandler
             $order_detail->payment_type =  Config::get('constants.payment_type.card');
         }
         $order_detail->save();
+        $this->collect_admin_payment_from_wallet($user_collecting_payment,$order_detail);
 
+    }
+
+    function collect_admin_payment_from_wallet($user_collecting_payment,$order_detail){
+        if($user_collecting_payment->wallet >=$order_detail->payable_to_admin){
+            $user_collecting_payment->wallet = $user_collecting_payment->wallet - $order_detail->payable_to_admin;
+            $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.paid');
+            $user_collecting_payment->save();
+        }
+        else{
+            $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.pending');
+        }
+        $order_detail->save();
     }
     function update_order_detail_driver($driver_user_id,$order_detail_id){
         $order_detail = Order_Detail::with('sale_agent', 'travel_agent','order')->find($order_detail_id);

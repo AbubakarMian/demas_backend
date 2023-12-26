@@ -169,7 +169,7 @@ class OrderController extends Controller
             // 'travel_agent'=>['user_obj'=>'name','role_id'],
 
             'order_details' => [
-                'driver'=>['user_obj'=>'name,role_id'],
+                'driver'=>['user_obj'],
                 // 'driver'=>['user_obj'=>'name','role_id'],
                 // 'driver.user_obj:name,role_id',
                 'transport_type', 'journey' => ['pickup', 'dropoff']

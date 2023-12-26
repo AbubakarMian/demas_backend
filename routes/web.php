@@ -300,4 +300,5 @@ Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.p
    
 
 });
+
 Route::get('reports/order/send_invoice/{order_id}', [OrderController::class, 'send_invoice'])->name('staff_payments.send_invoice'); //add

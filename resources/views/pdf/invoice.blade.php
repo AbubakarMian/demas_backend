@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<?php 
+    $order = $data['order'];
+?>
 <html>
 <head>
     <title>Invoice</title>

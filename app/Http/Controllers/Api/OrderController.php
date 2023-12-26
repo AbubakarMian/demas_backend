@@ -153,7 +153,7 @@ class OrderController extends Controller
                 'user_obj', 'sale_agent', 'travel_agent',
                 'order_details' => [
                     'driver.user_obj',
-                    'transport_type', 'journey'
+                    'transport_type', 'journey' => ['pickup', 'dropoff']
                 ]
             ])
             ->where('id', $order_id)->first();

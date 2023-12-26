@@ -203,7 +203,8 @@ class OrderController extends Controller
             'order'=>$order,
         ];
         // $email_details['order'] = $order;
-        $email_details['view'] = 'pdf.invoice';
+        // $email_details['view'] = 'pdf.invoice';
+        $email_details['view'] = 'pdf.order_update_email';
         $email_handler->sendEmail($email_details);
         // dd('asdas');
         return redirect()->back()->with('success', 'Invoice sent');

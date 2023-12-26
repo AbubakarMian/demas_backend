@@ -69,9 +69,16 @@ class TravelAgentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $travel_agent = Travel_Agent::with('user_obj')->find($id);
-        $user = $travel_agent->user_obj;
-        $travel_agent =  $this->add_or_update($request, $user, $travel_agent);
+        if(!$id){
+            return $this->save($request);
+        
+        }
+        else{
+            $travel_agent = Travel_Agent::with('user_obj')->find($id);
+            $user = $travel_agent->user_obj;
+            $travel_agent =  $this->add_or_update($request, $user, $travel_agent);
+        }
+
         // return Redirect('admin/travel_agent');
         return $travel_agent->response;
     }

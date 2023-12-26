@@ -90,13 +90,16 @@ class TravelAgentCommissionController extends Controller
         $travel_agent_commission->transform(function ($travel_agent_commission_item) use ($user_obj) {
             $sale_agent_commission_obj = new \stdClass();
             $sale_agent_commission_obj->price = '-';
+            $travel_agent_commission_item->sale_agent_commission_obj = $sale_agent_commission_obj;
         
             if ($user_obj->travel_agent) {
                 $travel_agent_commission_item->sale_agent_commission_obj = $sale_agent_commission_obj;
-            } else if (isset($travel_agent_commission_item->travel_agent->sale_agent)) {
+            } else if (isset($travel_agent_commission_item->travel_agent->sale_agent) ) {
                 $sale_agent_commission = SalesAgentTripPrice::where('transport_price_id', $travel_agent_commission_item->transport_price_id)
                     ->where('user_sale_agent_id', $travel_agent_commission_item->travel_agent->sale_agent->user_id)->first();
-                $sale_agent_commission_obj = $sale_agent_commission;
+                    if($sale_agent_commission){
+                        $sale_agent_commission_obj = $sale_agent_commission;
+                    }
                 $travel_agent_commission_item->sale_agent_commission_obj = $sale_agent_commission_obj;
             }
         
@@ -119,7 +122,7 @@ class TravelAgentCommissionController extends Controller
         //     $travel_agent_commission_item->sale_agent_commission_obj = $sale_agent_commission_obj;
         //     return $travel_agent_commission_item;
         // });
-
+// dd();
         return $travel_agent_commission;
     }
     public function update_price(Request $request, $transport_Prices_id)

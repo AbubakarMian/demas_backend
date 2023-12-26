@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Response;
 use DB;
+use Illuminate\Support\Facades\Log;
 
 // use Excel;
 // use Excel;
@@ -69,6 +70,12 @@ trait Common
             'Content-Type: application/json'
         ];
         
+
+        Log::info('-----------start whats app ----------','---');
+
+        Log::info('-----------url ----------',[$url]);
+        Log::info('-----------payload ----------',[$payload]);
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);

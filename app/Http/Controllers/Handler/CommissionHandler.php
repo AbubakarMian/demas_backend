@@ -251,7 +251,7 @@ class CommissionHandler
         if ($transport_type_id) {
             $where['transport_type_id'] = $transport_type_id;
         }
-        if ($user->sale_agent || $user->travel_agent->sale_agent) {
+        if ($user->sale_agent || ($user->travel_agent && $user->travel_agent->sale_agent)) {
             if($user->sale_agent ){
                 $where['user_sale_agent_id'] = $user->sale_agent->user_id;
             }

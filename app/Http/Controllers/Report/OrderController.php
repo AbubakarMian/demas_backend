@@ -181,10 +181,10 @@ class OrderController extends Controller
         // ];
 
         $user = $order->user_obj;
-        $email_details['bcc'][] = [
-            'from_email' => 'abubakarhere90@gmailcom',
-            'from_name' => 'Abubakar here bcc',
-        ];
+        // $email_details['bcc'][] = [
+        //     'from_email' => 'abubakarhere90@gmailcom',
+        //     'from_name' => 'Abubakar here bcc',
+        // ];
         $email_details['subject'] = 'Demas Invoice';
         $email_details['attachments'][] = $receipt_url;
         $email_details['to_email'] = $user->email;

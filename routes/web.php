@@ -226,6 +226,7 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::post('get_order', [OrderController::class, 'get_order'])->name('order.index');
         Route::get('details_list/{order_id}', [OrderController::class, 'get_order_details_list'])->name('order.get_order_details_list');
         Route::post('update_order_status/{order_id}', [OrderController::class, 'update_order_status'])->name('order.update_order_status');
+        Route::post('update_order_detail_status/{order_id}', [OrderController::class, 'update_order_detail_status'])->name('order.update_order_detail_status');
         Route::post(
             'update_order_detail_driver/{order_detail_id}',
             [OrderController::class, 'update_order_detail_driver']

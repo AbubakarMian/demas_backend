@@ -156,7 +156,16 @@ class OrderController extends Controller
         return $this->sendResponse(200, $order_detail);
     }
     public function send_invoice($order_id){
-        $order = Order::with('order_details', 'user_obj')->find($order_id);
+        // $order = Order::with('order_details', 'user_obj')->find($order_id);
+        $order = Order::with([
+            'user_obj:name,role_id',
+            'sale_agent.user_obj:name,role_id',
+            'travel_agent.user_obj:name,role_id',
+            'order_details' => [
+                'driver.user_obj:name,role_id',
+                'transport_type', 'journey' => ['pickup', 'dropoff']
+            ],
+        ])->find($order_id);
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_order($order_id);
@@ -167,7 +176,7 @@ class OrderController extends Controller
         // $whast_app_urls = $receipt_url;
 
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
-        // dd($whast_app_urls , $whast_app_url);
+    
 
        $this->send_url_file_whatsapp('+923343722073',$whast_app_url);
        $this->send_url_file_whatsapp($order->customer_whatsapp_number,$whast_app_url);
@@ -189,7 +198,11 @@ class OrderController extends Controller
         $email_details['attachments'][] = $receipt_url;
         $email_details['to_email'] = $user->email;
         $email_details['to_name'] = 'Abubakar';
-        $email_details['data'] = $user;
+        $email_details['data'] = [
+            'user'=>$user,
+            'order'=>$order,
+        ];
+        // $email_details['order'] = $order;
         $email_details['view'] = 'pdf.invoice';
         $email_handler->sendEmail($email_details);
         // dd('asdas');

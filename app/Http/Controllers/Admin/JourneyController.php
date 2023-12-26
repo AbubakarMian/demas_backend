@@ -74,9 +74,9 @@ class JourneyController extends Controller
         $location_dropoff = Locations::find($request->dropoff_location_id);
         $journey_name = $location_pickup->name . ' to ' . $location_dropoff->name;
 
-        
+
         if ($journey_chk) {
-            return redirect('admin/journey/edit/'.$journey_chk->id)->with('error',[ $journey_name.' is already created']);
+            return redirect('admin/journey/edit/' . $journey_chk->id)->with('error', [$journey_name . ' is already created']);
         }
         if ($request->name) {
             $journey->name = $request->name;
@@ -115,13 +115,15 @@ class JourneyController extends Controller
     }
     function add_journey_slot(Request $request, $journey)
     {
-
         $slots = Slot::get();
         foreach ($slots as $key => $slot) {
-            $journey_slot = new Journey_Slot();
-            $journey_slot->slot_id = $slot->id;
-            $journey_slot->journey_id = $journey->id;
-            $journey_slot->save();
+            $journey_slot = Journey_Slot::where('slot_id', $slot->id)->where('journey_id', $journey->id)->first();
+            if (!$journey_slot) {
+                $journey_slot = new Journey_Slot();
+                $journey_slot->slot_id = $slot->id;
+                $journey_slot->journey_id = $journey->id;
+                $journey_slot->save();
+            }
             $trip_commission_handler = new TripCommissionHandler();
             $trip_commission_handler->create_transport_prices([], [$journey_slot]);
         }

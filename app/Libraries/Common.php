@@ -41,10 +41,57 @@ trait Common
         echo $response;
     }
 
+    public function get_absolute_server_url_path($path){
+        // https://demastransport.com/demas_backend/public/invoice/3pdf
+        // /home/demastransport/public_html/demas_backend/public/invoice/3pdf
+        $str = str_replace('/home/demastransport/public_html/demas_backend/public','',
+            $path
+        );
+        $str = asset($str);
+        return $str;
+    }
+    // $whats_app_number="=9233437222073";
+    public function send_url_file_whatsapp($whats_app_number,$file_url){
+        
+        $id_instance = Config::get('whatsapp.');
+        $apiTokenInstance = Config::get('whatsapp.');
+        $url = "https://api.green-api.com/waInstance".$id_instance."//sendFileByUrl/".$apiTokenInstance;
+        $payload = json_encode([
+            'chatId' => 'mailto:'.$whats_app_number.'@c.us',
+            'urlFile' => $file_url,
+            // 'urlFile' => 'https://avatars.mds.yandex.net/get-pdb/477388/77f64197-87d2-42cf-9305-14f49c65f1da/s375',
+            'fileName' => 'invoice.pdf',
+            'caption' => 'Details'
+            // 'caption' => 'лошадка'
+        ]);
+        
+        $headers = [
+            'Content-Type: application/json'
+        ];
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        $response = curl_exec($ch);
+        
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
+        }
+        
+        curl_close($ch);
+        
+        echo $response;
+    }
+
     public function sendFile_whatsapp()
     {
+        $id_instance = Config::get('whatsapp.');
+        $apiTokenInstance = Config::get('whatsapp.');
 
-        $url = "https://api.green-api.com/waInstance{{idInstance}}/sendFileByUpload/{{apiTokenInstance}}";
+        $url = 'https://api.green-api.com/waInstance' . $id_instance . '//sendFileByUpload/' . $apiTokenInstance;
 
         $payload = [
             'chatId' => '11001234567@c.us',
@@ -52,7 +99,7 @@ trait Common
         ];
 
         $files = [
-            // 'file' => new CURLFile('C:/window.jpg', 'image/jpeg', 'window.jpg')
+            'file' => new CURLFile('C:/window.jpg', 'image/jpeg', 'window.jpg')
             // 'file' => new CURLFile('C:/window.jpg', 'image/jpeg', 'window.jpg')
         ];
 

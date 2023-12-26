@@ -41,7 +41,8 @@ class EmailHandler
                 'from_name' => 'Admin',
             ];
             Log::debug('--------email details----------', [$email_detail]);
-            Mail::send($email_detail['view'], ['data' => $email_detail['data']], function ($message) use ($email_detail) {
+            Mail::send($email_detail['view'], 
+            ['order' => $email_detail['data']], function ($message) use ($email_detail) {
                 if (!isset($email_detail['from_email'])) {
                     $email_detail['from_email'] = 'admin@demas.com';
                 }

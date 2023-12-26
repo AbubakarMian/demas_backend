@@ -89,9 +89,9 @@ class JourneyController extends Controller
         $journey->dropoff_location_id = $request->dropoff_location_id;
 
         $journey->save();
-        if ($add_journey_slot) {
+        // if ($add_journey_slot) {
             $this->add_journey_slot($request, $journey);
-        }
+        // }
 
         return redirect()->back();
     }

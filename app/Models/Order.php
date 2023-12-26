@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
  use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Config;
+
 class Order extends Model
 {
     use HasFactory;
     use SoftDeletes;
     protected $table = 'order';
-    protected $appends = ['orderdetailsstatus'];
+    protected $appends = ['orderdetailsstatus','ispayable','orderpayable'];
     public function user_obj()
     {
         return $this->hasOne('App\Models\Users', 'id', 'user_id')->withTrashed();
@@ -65,5 +67,26 @@ class Order extends Model
         return $order_status;
     }
 
+    public function getIsPayableAttribute() // is_payable
+    {
+        $order_details = $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')->get();
+        foreach ($order_details as $key => $order_detail) {
+            if($order_detail->user_payment_status == Config::get('constants.user_payment_status.pending')){
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public function getOrderPayableAttribute() // is_payable
+    {
+        $payable = 0;
+        $order_details = $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')->get();
+        foreach ($order_details as $key => $order_detail) {
+            if($order_detail->user_payment_status == Config::get('constants.user_payment_status.pending')){
+                $payable = $payable+$order_detail->customer_collection_price;
+            }
+        }
+        return $payable;
+    }
 }

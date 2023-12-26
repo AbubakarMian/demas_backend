@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Config;
+
 class Order_Detail extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'order_detail';   
-    
+    protected $table = 'order_detail';
+    protected $appends = ['ispayable'];
+
+
     public function order()
     {
         return $this->hasOne('App\Models\Order', 'id', 'order_id')->withTrashed();
@@ -63,8 +67,11 @@ class Order_Detail extends Model
     {
         return $this->hasOne('App\Models\Journey_Slot', 'id', 'journey_slot_id')->withTrashed();
     }
-    // public function slot()
-    // {
-    //     return $this->hasOne('App\Models\Slot', 'id', 'slot_id')->withTrashed();
-    // }
+    public function getIsPayableAttribute() // is_payable
+    {
+        if ($this->attributes['user_payment_status'] == Config::get('constants.user_payment_status.pending')) {
+            return true;
+        }
+        return false;
+    }
 }

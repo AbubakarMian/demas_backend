@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php 
-    $order = $data['order'];
+     $order = $data['data']['order'];
 ?>
 <html>
 <head>

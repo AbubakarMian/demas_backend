@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\NewAgent;
+use App\Models\SaleAgent;
 use App\Models\Travel_Agent;
 use App\Models\User;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -24,14 +26,36 @@ class NewAgentController extends Controller
 
         echo json_encode($userData);
     }
-    public function create()
+    // public function create()
+    // {
+    //     $control = 'create';
+    //     // $journey = Journey::pluck('name', 'id');
+    //     return view('new_agent.index', compact(
+    //         'control',
+    //         // 'journey'
+    //     ));
+    // }
+
+    public function create($new_agent_id)
     {
-        $control = 'create';
-        // $journey = Journey::pluck('name', 'id');
-        return view('new_agent.index', compact(
-            'control',
-            // 'journey'
-        ));
+        $control = 'edit';
+        $new_agent = NewAgent::find($new_agent_id);
+        $travel_agent = new Travel_Agent();
+        // $user_obj = new Users();
+        $user_obj = $new_agent;
+        $travel_agent->id = 0;
+        $travel_agent->user_obj = $user_obj;   
+        $user = $user_obj;
+        $user_sale_agents = SaleAgent::with('user_obj')->get()->pluck('user_obj.name', 'user_obj.id');
+        return view(
+            'admin.travel_agent.create',
+            compact(
+                'control',
+                'travel_agent',
+                'user',
+                'user_sale_agents',
+            )
+        );
     }
 
     public function save(Request $request)

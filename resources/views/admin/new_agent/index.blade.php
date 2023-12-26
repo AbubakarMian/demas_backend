@@ -180,23 +180,27 @@ width="400px" style="table-layout:fixed;"
     }
 
     function save_request(id) {
-        $.ajax({
 
-            url: "{!! asset('admin/new_agent/create') !!}/" + id,
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                _token: '{!! @csrf_token() !!}'
-            },
-            success: function(response) {
-                console.log(response.status);
-                if (response) {
-                    var myTable = $('#new_agentTableAppend').DataTable();
-                    console.log('removeasdasdasd');
-                    myTable.row('#row_' + id).remove().draw();
-                }
-            }
-        });
+        var create_agent_url = "{!! asset('admin/new_agent/create') !!}/" + id;
+        window.location.href = create_agent_url;
+        // localtion.url();
+        // $.ajax({
+
+        //     url: "{!! asset('admin/new_agent/create') !!}/" + id,
+        //     type: 'POST',
+        //     dataType: 'json',
+        //     data: {
+        //         _token: '{!! @csrf_token() !!}'
+        //     },
+        //     success: function(response) {
+        //         console.log(response.status);
+        //         if (response) {
+        //             var myTable = $('#new_agentTableAppend').DataTable();
+        //             console.log('removeasdasdasd');
+        //             myTable.row('#row_' + id).remove().draw();
+        //         }
+        //     }
+        // });
     }
     
 </script>

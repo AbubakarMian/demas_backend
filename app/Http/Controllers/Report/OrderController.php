@@ -158,14 +158,24 @@ class OrderController extends Controller
     public function send_invoice($order_id){
         // $order = Order::with('order_details', 'user_obj')->find($order_id);
         $order = Order::with([
-            'user_obj:name,role_id',
-            'sale_agent.user_obj:name,role_id',
-            'travel_agent.user_obj:name,role_id',
+            'user_obj',
+            'sale_agent',
+            'travel_agent',
+            // 'sale_agent'=>['user_obj'=>'name,role_id'],
+            // 'sale_agent'=>['user_obj'=>'name','role_id'],
+            // 'sale_agent.user_obj:name,role_id',
+            // 'travel_agent.user_obj:name,role_id',
+            // 'travel_agent'=>['user_obj:name,role_id'],
+            // 'travel_agent'=>['user_obj'=>'name','role_id'],
+
             'order_details' => [
-                'driver.user_obj:name,role_id',
+                'driver'=>['user_obj'=>'name,role_id'],
+                // 'driver'=>['user_obj'=>'name','role_id'],
+                // 'driver.user_obj:name,role_id',
                 'transport_type', 'journey' => ['pickup', 'dropoff']
             ],
         ])->find($order_id);
+        
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_order($order_id);
@@ -190,6 +200,7 @@ class OrderController extends Controller
         // ];
 
         $user = $order->user_obj;
+        // dd($user);
         // $email_details['bcc'][] = [
         //     'from_email' => 'abubakarhere90@gmailcom',
         //     'from_name' => 'Abubakar here bcc',

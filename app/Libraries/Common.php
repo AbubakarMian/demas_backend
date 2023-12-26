@@ -13,11 +13,11 @@ use DB;
 trait Common
 {
 
-    public function send_whatsapp_sms($whats_app_number,$text)
+    public function send_whatsapp_sms($whats_app_number, $text)
     {
-        $id_instance= Config::get('whatsapp.');
-        $apiTokenInstance= Config::get('whatsapp.');
-        $url = 'https://api.green-api.com/waInstance'.$id_instance.'//sendMessage/'.$apiTokenInstance;
+        $id_instance = Config::get('whatsapp.');
+        $apiTokenInstance = Config::get('whatsapp.');
+        $url = 'https://api.green-api.com/waInstance' . $id_instance . '//sendMessage/' . $apiTokenInstance;
         // $url = 'https://api.green-api.com/waInstance{{idInstance}}/sendMessage/{{apiTokenInstance}}';
 
         //chatId is the number to send the message to (@c.us for private chats, @g.us for group chats)
@@ -37,6 +37,40 @@ trait Common
         $context = stream_context_create($options);
 
         $response = file_get_contents($url, false, $context);
+
+        echo $response;
+    }
+
+    public function sendFile_whatsapp()
+    {
+
+        $url = "https://api.green-api.com/waInstance{{idInstance}}/sendFileByUpload/{{apiTokenInstance}}";
+
+        $payload = [
+            'chatId' => '11001234567@c.us',
+            'caption' => 'Описание'
+        ];
+
+        $files = [
+            // 'file' => new CURLFile('C:/window.jpg', 'image/jpeg', 'window.jpg')
+            // 'file' => new CURLFile('C:/window.jpg', 'image/jpeg', 'window.jpg')
+        ];
+
+        $headers = [];
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload + $files);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
+        }
+
+        curl_close($ch);
 
         echo $response;
     }

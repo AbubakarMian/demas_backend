@@ -64,7 +64,7 @@
                     <th>Guest Name</th>
                     <th>Guest Whatsapp</th>
                     <th>Guest Contact</th>
-                    <th>Booking Status</th>
+                    {{-- <th>Booking Status</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -72,7 +72,7 @@
                     <td>{!!$order->customer_name!!}</td>
                     <td>{!!$order->customer_whatsapp_number!!} </td>
                     <td>{!!$order->customer_number!!}</td>
-                    <td>{!!$order->status!!}</td>
+                    {{-- <td>{!!$order->status!!}</td> --}}
                 </tr>
               
             </tbody>
@@ -87,6 +87,7 @@
                     <th>Driver Name</th>
                     <th>Driver Whatsapp Number</th>
                     <th>Pickup Date</th>
+                    <th>Pickup Time</th>
                     <th>Status</th>
                     <th>Payment</th>
                 </tr>
@@ -100,7 +101,8 @@
                     <td>{!!$order_item->transport_type->name!!}</td>
                     <td>{!!$order_item->driver_user?->name??''!!}</td>
                     <td>{!!$order_item->driver_user?->whatsapp_number??''!!}</td>
-                    <td>{!!date('Y-m-d H:i:s', $order_item->pick_up_date_time)!!}</td>
+                    <td>{!!date('Y-m-d', $order_item->pick_up_date_time)!!}</td>
+                    <td>{!!date('H:i:s', $order_item->pick_up_date_time)!!}</td>
                     <td>{!!$order_item->status!!}</td>
                     <td>{!!$order_item->user_payment_status!!}</td>
                 </tr>

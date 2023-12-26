@@ -155,12 +155,21 @@ class OrderController extends Controller
         
         return $this->sendResponse(200, $order_detail);
     }
-    public function send_invoice($order_id)
-    {
+    public function send_invoice($order_id){
         $order = Order::with('order_details', 'user_obj')->find($order_id);
         $order_handler = new OrderHandler();
+
         $pdf = $order_handler->gernerate_pdf_order($order_id);
+
         $receipt_url = $pdf['path'];
+
+
+        $whast_app_url = $receipt_url;
+        // dd($receipt_url);
+
+        // $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
+       $this->send_url_file_whatsapp('+923343722073',$whast_app_url);
+       $this->send_url_file_whatsapp($order->customer_whatsapp_number,$whast_app_url);
 
         $email_handler = new EmailHandler();
         $email_details = [];
@@ -182,6 +191,7 @@ class OrderController extends Controller
         $email_details['data'] = $user;
         $email_details['view'] = 'pdf.invoice';
         $email_handler->sendEmail($email_details);
+        // dd('asdas');
         return redirect()->back()->with('success', 'Invoice sent');
     }
 }

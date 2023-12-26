@@ -25,7 +25,15 @@ class ReportDetails
 
     public function admin_report_detail(Request $request)
     {
-        $order_details = Order_Detail::with('order', 'driver', 'driver_user', 'travel_agent_user', 'sale_agent_user', 'transport.transport_type')
+        $order_details = Order_Detail::with(
+            'order',
+            'driver',
+            'driver_user',
+            'travel_agent_user',
+            'sale_agent_user',
+            'journey',
+            'transport.transport_type'
+                 )
             ->latest()->get();
 
         $report_data = [];
@@ -176,7 +184,7 @@ class ReportDetails
     {
         $table_info['admin_margin'] = [
             'heading' => 'Margin',
-            'color' => 'hsl(208.16deg 59.04% 83.73%)',
+            'color' => '#ffff1f',
             'columns' => [
                 [
                     'heading' => 'Booking Rate',
@@ -198,9 +206,9 @@ class ReportDetails
 
     public function admin_sales_agent_travel_agent_report_detail($order_detail, $row)
     {
-        $row['admin_sales_agent_travel_agent'] = $order_detail->travel_agent_commission; //not match with db
-        $row['admin_sales_agent_sales_agentt'] = $order_detail->sale_agent_commission; //not match with db
-        $row['admin_sales_agent_service_type'] = $order_detail->sale_agent_commission; //not match with db
+        $row['admin_sales_agent_travel_agent'] = $order_detail->travel_agent_user->name ?? ''; //not match with db
+        $row['admin_sales_agent_sales_agentt'] = $order_detail->sale_agent_user->name ?? ''; //not match with db
+        $row['admin_sales_agent_service_type'] = $order_detail->journey->name ?? ''; //not match with db
         return $row;
     }
 
@@ -243,7 +251,7 @@ class ReportDetails
 
     public function admin_travel_agent_travel_agent_service_report_detail($order_detail, $row)
     {
-        $row['admin_travel_agent_travel_agent'] = $order_detail->customer_collection_price; // match with db //not match 
+        $row['admin_travel_agent_travel_agent'] = $order_detail->travel_agent_user->name ?? ''; // match with db //not match 
         $row['admin_travel_agent_serivce_type'] = $order_detail->journey->name ?? '';
 
         return $row;
@@ -503,7 +511,7 @@ class ReportDetails
     {
         $table_info['admin_agent_details'] = [
             'heading' => 'Agent Details',
-            'color' => 'rgb(248 203 173)',
+            'color' => '#ffc9ab',
             'columns' => [
                 [
                     'heading' => 'Direct Customer',
@@ -531,7 +539,7 @@ class ReportDetails
     {
         $table_info['admin_payment_section'] = [
             'heading' => 'Payment Section',
-            'color' => 'rgb(189 215 238)',
+            'color' => '#b5d8ee',
             'columns' => [
 
                 [
@@ -581,7 +589,7 @@ class ReportDetails
         $table_info = [
             'booking_details' => [
                 'heading' => 'Booking Detail',
-                'color' => 'rgb(255 230 153)',
+                'color' => '#ffe599',
                 'columns' => [
                     [
                         'heading' => 'Booking ID',
@@ -596,7 +604,7 @@ class ReportDetails
             ],
             'driver_details' => [
                 'heading' => 'Driver Details',
-                'color' => 'rgb(248 203 173)',
+                'color' => '#ffc9ab',
                 'columns' => [
                     [
                         'heading' => 'Driver Name',
@@ -611,7 +619,7 @@ class ReportDetails
             ],
             'vehicle_details' => [
                 'heading' => 'Vehicle Details',
-                'color' => 'rgb(255 230 153)',
+                'color' => '#ffe599',
                 'columns' => [
                     [
                         'heading' => 'Number Plate',

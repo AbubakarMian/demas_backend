@@ -69,9 +69,24 @@ class OrderController extends Controller
         $order->order_created_by_role_id = $user->role_id;
         $order->order_id = $order_id_uniq;
         $order->discount = 0;
-        $order->customer_name = $booking['customer_name'];
-        $order->customer_number = $booking['customer_phone_number'];
-        $order->customer_whatsapp_number = $booking['customer_whatsapp_number'];
+        if(isset($booking['customer_name'])){
+            $order->customer_name = $booking['customer_name'];
+        }
+        else{
+            $order->customer_name = $user->name;
+        }
+        if(isset($booking['customer_phone_number'])){
+            $order->customer_number = $booking['customer_phone_number'];
+        }
+        else{
+            $order->customer_number = $user->phone_no;
+        }
+        if(isset($booking['customer_whatsapp_number'])){
+            $order->customer_whatsapp_number = $booking['customer_whatsapp_number'];
+        }
+        else{
+            $order->customer_whatsapp_number = $user->whatsapp_number;
+        }
         $order->travel_agent_user_id = $booking['travel_agent_user_id'] ?? 0;
         $order->customer_collection_price = 0;
         $order->discounted_price = 0;

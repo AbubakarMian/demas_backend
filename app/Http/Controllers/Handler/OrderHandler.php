@@ -149,6 +149,9 @@ class OrderHandler
         $report_details = new ReportDetails();
         if($user->role_id == 1){
             $order_details_arr = $report_details->admin_report_detail($request);
+            // $order_details_arr = $report_details->sale_agent_report_detail($request);
+            // $order_details_arr = $report_details->travel_agent_report_detail($request);
+            
         }
         if($user->role_id == 3){
             $order_details_arr = $report_details->sale_agent_report_detail($request);

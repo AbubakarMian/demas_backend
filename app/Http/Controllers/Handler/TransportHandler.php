@@ -88,14 +88,14 @@ class TransportHandler
     public function get_cars(Request $request, $journey, $slot, $car_id = 0)
     {
         $user = $request->attributes->get('user');
-
+// dd($journey->id,$slot->id);
         $with = [
             'transport_type',
             'transport_price' => function ($q_transport_price) use ($journey, $slot,$user) {
                 if ($journey) {
                     $q_transport_price = $q_transport_price->where('journey_id', $journey->id);
                 }
-                $q_transport_price->where('slot_id', $slot->id)->first();
+                $q_transport_price->where('slot_id', $slot->id);
             },
             'transport_price.sale_agent_trip_price'=>function($sale_agent_trip_price) use ($journey, $slot,$user){
                 $sale_agent_trip_price->where('user_sale_agent_id', $user->id);
@@ -109,8 +109,17 @@ class TransportHandler
         if ($car_id) {
             $cars = $cars->where('id', $car_id);
         }
+        // if ($journey) {
+        //     $cars = $cars->whereHas('transport_price', function ($q_transport_price) use ($journey, $slot,$user) {
+        //         // if ($journey) {
+        //         //     $q_transport_price = $q_transport_price->where('journey_id', $journey->id);
+        //         // }
+        //         // $q_transport_price->where('slot_id', $slot->id)->first();
+        //     });
+        // }
         $cars = $this->apply_filters_car_list($request, $cars);
         $cars = $cars->orderByDesc('created_at')->paginate(1000);
+        // dd($cars[0]);
         return $cars;
     }
 
@@ -154,7 +163,7 @@ class TransportHandler
             $item->booking_price = '0';
             $item->discounted_price = '0';
             $item->apply_discount = $apply_discount;
-            $transport_price = $car_item;
+            $transport_price = null;
             
             if(isset($car_item->transport_price[0])){
                 $transport_price = $car_item->transport_price[0];
@@ -168,7 +177,11 @@ class TransportHandler
                 $transport_price = $transport_price->travel_agent_trip_price;
             }
             else{ //user
-                $transport_price = $car_item;
+                // $transport_price = $car_item->transport_price[0];
+                // dd($transport_price);
+                if(isset($car_item->transport_price[0])){
+                    $transport_price = $car_item->transport_price[0];
+                }
                 $item->transport_price_id = $transport_price->id;
             }
             if(isset($transport_price)){
@@ -177,10 +190,11 @@ class TransportHandler
                 $item->discounted_price = $transport_price->price - ($transport_price->price * $discount_percent * 0.01);
             }
             $item->transport_price = $transport_price;
-            if(!isset($item->transport_type)){
-                $item->transport_type = $transport_price->transport_type;
+            $item->transport_type = $car_item->transport_type;
+            // if(!isset($item->transport_type)){
+            //     $item->transport_type = $transport_price->transport_type;
 
-            }
+            // }
             $item->images = $car_item->images;
             return $item;
         });

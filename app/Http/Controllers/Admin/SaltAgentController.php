@@ -111,10 +111,10 @@ class SaltAgentController extends Controller
         $sale_agent->commision = $request->commision;
         $sale_agent->save();
 
-        if($request->commision_type == Config::get('constants.sales_agent.commission_types.agreed_trip_rate')){
+        // if($request->commision_type == Config::get('constants.sales_agent.commission_types.agreed_trip_rate')){
             $trip_commission_handler = new TripCommissionHandler();
             $trip_commission_handler->create_sale_agent_trip_prices([],[$sale_agent]);
-        }
+        // }
 
         return redirect('admin/sale_agent');
     }

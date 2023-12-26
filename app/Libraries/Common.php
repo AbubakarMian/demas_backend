@@ -16,8 +16,8 @@ trait Common
 
     public function send_whatsapp_sms($whats_app_number, $text)
     {
-        $id_instance = Config::get('whatsapp.');
-        $apiTokenInstance = Config::get('whatsapp.');
+        $id_instance = Config::get('whatsapp.WHATSAPP_ID');
+        $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
         $url = 'https://api.green-api.com/waInstance' . $id_instance . '//sendMessage/' . $apiTokenInstance;
         // $url = 'https://api.green-api.com/waInstance{{idInstance}}/sendMessage/{{apiTokenInstance}}';
 
@@ -54,9 +54,10 @@ trait Common
     // $whats_app_number="=9233437222073";
     public function send_url_file_whatsapp($whats_app_number,$file_url){
         
-        $id_instance = Config::get('whatsapp.');
-        $apiTokenInstance = Config::get('whatsapp.');
-        $url = "https://api.green-api.com/waInstance".$id_instance."//sendFileByUrl/".$apiTokenInstance;
+        $id_instance = Config::get('whatsapp.WHATSAPP_ID');
+        $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
+        // $url = "https://api.green-api.com/waInstance".$id_instance."/sendFileByUrl/".$apiTokenInstance;
+        $url = "https://api.green-api.com/waInstance{$id_instance}/sendFileByUrl/{$apiTokenInstance}";
         $payload = json_encode([
             'chatId' => 'mailto:'.$whats_app_number.'@c.us',
             'urlFile' => $file_url,
@@ -71,11 +72,13 @@ trait Common
         ];
         
 
-        Log::info('-----------start whats app ----------','---');
+        Log::info('-----------start whats app ----------');
 
-        Log::info('-----------url ----------',[$url]);
-        Log::info('-----------payload ----------',[$payload]);
-
+        Log::info('-----------url ----------');
+        Log::info($url);
+        Log::info('-----------payload ----------');
+        Log::info($payload);
+// dd('www');
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);

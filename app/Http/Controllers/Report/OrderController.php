@@ -218,6 +218,6 @@ class OrderController extends Controller
         $email_details['view'] = 'pdf.order_update_email';
         $email_handler->sendEmail($email_details);
         // dd('asdas');
-        return redirect()->back()->with('success', 'Invoice sent');
+        return redirect('admin/order')->with('success', 'Invoice sent');
     }
 }

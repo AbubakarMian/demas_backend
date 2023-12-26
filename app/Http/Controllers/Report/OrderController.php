@@ -175,11 +175,11 @@ class OrderController extends Controller
 
         // $whast_app_urls = $receipt_url;
 
-        $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
-    
+    //     $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
+    //     // dd($whast_app_urls , $whast_app_url);
 
-       $this->send_url_file_whatsapp('+923343722073',$whast_app_url);
-       $this->send_url_file_whatsapp($order->customer_whatsapp_number,$whast_app_url);
+    //    $this->send_url_file_whatsapp('+923343722073',$whast_app_url);
+    //    $this->send_url_file_whatsapp($order->customer_whatsapp_number,$whast_app_url);
 
         $email_handler = new EmailHandler();
         $email_details = [];
@@ -190,10 +190,10 @@ class OrderController extends Controller
         // ];
 
         $user = $order->user_obj;
-        $email_details['bcc'][] = [
-            'from_email' => 'abubakarhere90@gmailcom',
-            'from_name' => 'Abubakar here bcc',
-        ];
+        // $email_details['bcc'][] = [
+        //     'from_email' => 'abubakarhere90@gmailcom',
+        //     'from_name' => 'Abubakar here bcc',
+        // ];
         $email_details['subject'] = 'Demas Invoice';
         $email_details['attachments'][] = $receipt_url;
         $email_details['to_email'] = $user->email;

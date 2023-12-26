@@ -154,7 +154,8 @@ class TransportHandler
             $item->booking_price = '0';
             $item->discounted_price = '0';
             $item->apply_discount = $apply_discount;
-            $transport_price = null;
+            $transport_price = $car_item;
+            
             if(isset($car_item->transport_price[0])){
                 $transport_price = $car_item->transport_price[0];
             }
@@ -167,7 +168,7 @@ class TransportHandler
                 $transport_price = $transport_price->travel_agent_trip_price;
             }
             else{ //user
-                $transport_price = $transport_price;
+                $transport_price = $car_item;
                 $item->transport_price_id = $transport_price->id;
             }
             if(isset($transport_price)){
@@ -176,6 +177,10 @@ class TransportHandler
                 $item->discounted_price = $transport_price->price - ($transport_price->price * $discount_percent * 0.01);
             }
             $item->transport_price = $transport_price;
+            if(!isset($item->transport_type)){
+                $item->transport_type = $transport_price->transport_type;
+
+            }
             $item->images = $car_item->images;
             return $item;
         });

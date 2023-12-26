@@ -53,13 +53,13 @@ trait Common
     }
     // $whats_app_number="=9233437222073";
     public function send_url_file_whatsapp($whats_app_number,$file_url){
-        
+        // 923343722073
         $id_instance = Config::get('whatsapp.WHATSAPP_ID');
         $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
         // $url = "https://api.green-api.com/waInstance".$id_instance."/sendFileByUrl/".$apiTokenInstance;
         $url = "https://api.green-api.com/waInstance{$id_instance}/sendFileByUrl/{$apiTokenInstance}";
         $payload = json_encode([
-            'chatId' => 'mailto:'.$whats_app_number.'@c.us',
+            'chatId' => $whats_app_number.'@c.us',
             'urlFile' => $file_url,
             // 'urlFile' => 'https://avatars.mds.yandex.net/get-pdb/477388/77f64197-87d2-42cf-9305-14f49c65f1da/s375',
             'fileName' => 'invoice.pdf',

@@ -41,6 +41,7 @@ class UserController extends Controller
 
                 $user_whatsapp_no = User::where('whatsapp_number', $request->whatsapp_no)
                     ->first();
+                    // dd($user_whatsapp_no);
 
                 $user_email = User::where('email', $request->email)
                     ->first();
@@ -88,7 +89,6 @@ class UserController extends Controller
                 $user->save();
 
                 if ($request->email) {
-
                     $email_handler = new EmailHandler();
                     $email_details = [];
 

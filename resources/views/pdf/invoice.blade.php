@@ -1,3 +1,10 @@
+<?php 
+
+dd($data);
+    $order = $data['data'];
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>

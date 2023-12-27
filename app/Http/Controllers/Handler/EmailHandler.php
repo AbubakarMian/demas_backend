@@ -27,7 +27,9 @@ class EmailHandler
 
     public function sendEmail($email_detail)
     {
-        if (Config::get('app.env') == 'production') {
+        // if (Config::get('app.env') == 'production') {
+// dd("this is email");
+
             $email_detail['bcc'][] = [
                 'from_email' => 'abubakarhere90@gmail.com',
                 'from_name' => 'Abubakar here bcc',
@@ -42,7 +44,7 @@ class EmailHandler
             ];
             Log::debug('--------email details----------', [$email_detail]);
             Mail::send($email_detail['view'], 
-            ['order' => $email_detail['data']], function ($message) use ($email_detail) {
+            ['data' => $email_detail['data']], function ($message) use ($email_detail) {
                 if (!isset($email_detail['from_email'])) {
                     $email_detail['from_email'] = 'admin@demas.com';
                 }
@@ -74,5 +76,5 @@ class EmailHandler
                 $message->to($email_detail['to_email'], $email_detail['to_name']);
             });
         }
-    }
+    // }
 }

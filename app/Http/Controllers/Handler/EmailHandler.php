@@ -27,7 +27,7 @@ class EmailHandler
 
     public function sendEmail($email_detail)
     {
-        // if (Config::get('app.env') == 'production') {
+        if (Config::get('app.env') == 'production') {
 // dd("this is email");
 
             $email_detail['bcc'][] = [
@@ -76,5 +76,5 @@ class EmailHandler
                 $message->to($email_detail['to_email'], $email_detail['to_name']);
             });
         }
-    // }
+    }
 }

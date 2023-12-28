@@ -38,8 +38,9 @@ class OrderHandler
             'driver_user'
         ],  
         ])->find($order_id);
+        $data ['data'] = $order;
         $pdf = PDF::loadView('pdf.invoice', [
-            'order' => $order,
+            'data' => $data,
         ]);
 
         // Set the paper size to A4 and the orientation to portrait
@@ -71,9 +72,11 @@ class OrderHandler
             
         }
         else{ // order
-            $order = Order::with('order_details',function($q){
-                $q->where('user_payment_status',Config::get('constants.user_payment_status.pending'));
-            })->find($order_id);
+            
+            $order = Order::with(['order_details' => function($query) {
+                $query->where('user_payment_status', Config::get('constants.user_payment_status.pending'));
+            }])->find($order_id);
+            
             $order_details = $order->order_details;
         }
         foreach ($order_details as $key => $order_detail) {
@@ -162,6 +165,7 @@ class OrderHandler
     {
         $user = Auth::user();
         $report_details = new ReportDetails();
+        $order_details_arr = [];
         if($user->role_id == 1){
             $order_details_arr = $report_details->admin_report_detail($request);
             // $order_details_arr = $report_details->sale_agent_report_detail($request);

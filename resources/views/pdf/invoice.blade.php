@@ -1,6 +1,5 @@
 <?php 
 
-dd($data);
     $order = $data['data'];
 
 ?>

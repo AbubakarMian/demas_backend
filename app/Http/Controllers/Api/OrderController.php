@@ -87,6 +87,13 @@ class OrderController extends Controller
         else{
             $order->customer_whatsapp_number = $user->whatsapp_number;
         }
+        
+        if(isset($booking['show_price_in_user_invoice'])){
+            $order->show_price_in_user_invoice = $booking['show_price_in_user_invoice'];
+        }
+        else{
+            $order->customer_whatsapp_number = $user->whatsapp_number;
+        }
         $order->travel_agent_user_id = $booking['travel_agent_user_id'] ?? 0;
         $order->customer_collection_price = 0;
         $order->discounted_price = 0;

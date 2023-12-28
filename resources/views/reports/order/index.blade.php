@@ -84,6 +84,9 @@
         display: flex;
         justify-content: center;
     }
+    .cell_spc {
+    width: 150px;
+}
 </style>
 @section('table')
 
@@ -180,6 +183,7 @@
                                             <th>Transport</th>
                                             <th></th>
                                             <th>Status</th>
+                                            <th>E-Voucher</th>
                                         </tr>
                                     </thead>
                                     <tbody class="orderdetails_list">
@@ -259,7 +263,7 @@
         function get_divers_transport_select(order_detail_item) {
             var order_detail_id = order_detail_item.id;
             var selected = '';
-            var drivers = `<select class="select_driver_`+order_detail_item.id+`">
+            var drivers = `<select class="cell_spc select_driver_`+order_detail_item.id+`">
                                 <option value="0">Select Driver</option>`;
             $.each(drivers_list, function(driver_index, driver_item) {
                 selected = order_detail_item.driver_user_id == driver_item.driver_user_id ?
@@ -270,7 +274,7 @@
                     `) ` + `</option>`;
             })
             drivers += '</select>';
-            var transport = `<select class="select_transport_`+order_detail_id+`">
+            var transport = `<select class="cell_spc select_transport_`+order_detail_id+`">
                                 <option value="0">Select Transport</option>`;
             $.each(transport_list, function(transport_index, transport_item) {
                 var selected_transport_id = order_detail_item.transport_id;
@@ -286,9 +290,14 @@
                 <button 
                 onclick="update_order_transport_driver(` + order_detail_id + `,'.select_driver_` + order_detail_id + `','.select_transport_` + order_detail_id + `')">
                     Update</button>`;
+            var voucher_btn = `
+                <button class="btn btn-success"
+                >
+                    Send</button>`;
             return {
                 drivers,
                 transport,
+                voucher_btn,
                 update_btn
             };
         }
@@ -361,6 +370,7 @@
                                 <td>` + divers_transport_select.transport + `</td>
                                 <td>` + divers_transport_select.update_btn + `</td>
                                 <td id="order_detail_`+item.id+`">` + status + `</td>
+                                <td>` + divers_transport_select.voucher_btn + `</td>
                                 </tr>`;
                         })
                         $('.orderdetails_list').html(details_list);

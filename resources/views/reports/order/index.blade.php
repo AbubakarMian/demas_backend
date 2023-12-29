@@ -183,7 +183,7 @@
                                             <th>Transport</th>
                                             <th></th>
                                             <th>Status</th>
-                                            <th>E-Voucher</th>
+                                            <th>E-PASS</th>
                                         </tr>
                                     </thead>
                                     <tbody class="orderdetails_list">
@@ -287,13 +287,15 @@
             })
             transport += '</select>';
             var update_btn = `
-                <button 
+                <button class="btn btn-success"
                 onclick="update_order_transport_driver(` + order_detail_id + `,'.select_driver_` + order_detail_id + `','.select_transport_` + order_detail_id + `')">
                     Update</button>`;
-            var voucher_btn = `
-                <button class="btn btn-success"
-                >
-                    Send</button>`;
+            var voucher_btn = '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' + order_detail_id +
+                            '">Send</a>';
+                // <button class="btn btn-success"  href="' + '{!! asset('reports/order/send_voucher') !!}/' + id +
+                //             '"
+                // >
+                //     Send</button>`;
             return {
                 drivers,
                 transport,

@@ -59,6 +59,39 @@ class OrderHandler
         ];
         // return $pdf->stream('admin_invoice.pdf');
     }
+    public function gernerate_pdf_voucher($order_id)
+    {
+
+        $order = Order::with(['user_obj',
+        'order_details'=>[
+            'journey',
+            'transport_type',
+            'pickup_location',
+            'dropoff_location',
+            'driver_user'
+        ],  
+        ])->find($order_id);
+        $pdf = PDF::loadView('pdf.voucher', [
+            'order' => $order,
+        ]);
+
+        // Set the paper size to A4 and the orientation to portrait
+        $pdf->setPaper('a3', 'landscape');
+
+        $path = 'voucher/' . $order->order_id . '.pdf';
+        $pdfPath = public_path($path);
+
+        // Save the PDF to the public/invoice directory
+        $pdf->save($pdfPath);
+        $absolute_path = asset($path);
+
+        // Return a response with a link to the saved PDF
+        return [
+            'stream' => $pdf->stream($pdfPath),
+            'path' => $absolute_path
+        ];
+        // return $pdf->stream('admin_invoice.pdf');
+    }
 
     public function order_collect_payment($user_id,$order_obj_type,$order_id)
     {

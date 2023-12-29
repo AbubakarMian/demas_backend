@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('amount',300)->nullable()->default(0);
             $table->string('payment_type', 100)->nullable()->default(null); //recieved / paid
             $table->string('detail', 500)->nullable()->default(null);
-            $table->json('receipt_url')->nullable()->default(null);
+            $table->string('receipt_url')->nullable()->default(null);
             $table->string('verification_status',300)->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();

@@ -290,7 +290,7 @@
                 <button class="btn btn-success"
                 onclick="update_order_transport_driver(` + order_detail_id + `,'.select_driver_` + order_detail_id + `','.select_transport_` + order_detail_id + `')">
                     Update</button>`;
-            var voucher_btn = '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' + order_detail_id +
+            var voucher_btn = '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_voucher') !!}/' + order_detail_id +
                             '">Send</a>';
                 // <button class="btn btn-success"  href="' + '{!! asset('reports/order/send_voucher') !!}/' + id +
                 //             '"

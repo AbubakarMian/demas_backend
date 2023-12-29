@@ -110,16 +110,14 @@ class CommissionHandler
     {
         $sale_agent = $order->sale_agent;
 
+
         if ($sale_agent) {
 
             $sale_agent_commission_types = Config::get('constants.sales_agent.commission_types');
             foreach ($order_details_arr as $key => $order_details) {
-                // $sale_trip_price = SalesAgentTripPrice::where([
-                //     'user_sale_agent_id'=>$order_details->sale_agent_user_id,
-                //     'journey_id'=>$order_details->journey_id,
-                //     'slot_id'=>$order_details->slot_id,
-                //     'transport_type_id'=>$order_details->transport_type_id,
-                // ])->first();
+                $order->sale_agent_commission_total = $order->sale_agent_commission_total - $order_details->sale_agent_commission;
+                $order_details->sale_agent_commission = 0;
+
                 $commission = 0;
                 $extra_commission = 0;
                 if ($sale_agent->commision_type == $sale_agent_commission_types['fix_amount']) {
@@ -173,11 +171,12 @@ class CommissionHandler
                     $order->discounted_price += $order_details->discounted_price;
                     $order->final_price += $order->discounted_price;
                     $order_details->customer_collection_price = $order_details->final_price;
-                }
-                else{
+                } else {
                     $order_details->customer_collection_price = $order_details->actual_price;
+                    $order_details->final_price += $actual_price;
                 }
                 $order->customer_collection_price += $order_details->customer_collection_price;
+                $order->final_price += $order_details->final_price;
             } else {
                 $order_details->final_price += $actual_price;
                 $order->final_price += $order_details->final_price;
@@ -252,10 +251,9 @@ class CommissionHandler
             $where['transport_type_id'] = $transport_type_id;
         }
         if ($user->sale_agent || ($user->travel_agent && $user->travel_agent->sale_agent)) {
-            if($user->sale_agent ){
+            if ($user->sale_agent) {
                 $where['user_sale_agent_id'] = $user->sale_agent->user_id;
-            }
-            else{
+            } else {
                 $where['user_sale_agent_id'] = $user->travel_agent->sale_agent->user_id;
             }
             $journey_price = SalesAgentTripPrice::where($where);

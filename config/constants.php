@@ -72,13 +72,13 @@ return [
             'fix_amount' => 'fix_amount',
             'profit_percent' => 'profit_percent',
             'sales_percent' => 'sales_percent',
-            'agreed_trip_rate' => 'agreed_trip_rate',
+            // 'agreed_trip_rate' => 'agreed_trip_rate',
         ],
         'commission_lables' => [
             'fix_amount' => 'Fix Amount',
             'profit_percent' => 'Profit Percent',
             'sales_percent' => 'Sales Percent',
-            'agreed_trip_rate' => 'Agreed Trip Price',
+            // 'agreed_trip_rate' => 'Agreed Trip Price',
         ],
         'payment_status' => [
             'pending' => "pending",

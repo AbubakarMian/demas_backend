@@ -1,5 +1,4 @@
-<?php
-// dd($order, $order->order_details ,$order->order_details[0]->transport_type->name ,$order->order_details[0]);
+
 
 // $order = $data['data'];
 ?>

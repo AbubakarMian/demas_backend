@@ -100,20 +100,18 @@
 
 
 <input type="file" accept="image/*" class="form-control prof_box crop_upload_image" image_width="500" image_height="225"
-    aspect_ratio_width="0" aspect_ratio_height="0" multiple upload_input_by_name="car_images[]"
+    aspect_ratio_width="0" aspect_ratio_height="0" multiple upload_input_by_name="recipt_url"
     onsuccess_function="show_image">
 <div class="row">
     <div class="upload_images">
 
-        @if (isset($car->images))
-            @foreach ($car->images as $image_key => $image)
+        @if (isset($staff_payments->receipt_url))
                 <div class="car_images col-md-2">
                     <div class="remove_btn" onclick="remove_image(this)">X</div>
 
                     <img src="{!! $image !!}">
-                    <input type="hidden" name="recipt_url[]" value="{!! $image !!}">
+                    <input type="hidden" name="recipt_url" value="{!! $image !!}">
                 </div>
-            @endforeach
         @endif
 
     </div>
@@ -141,7 +139,7 @@
             <div class="car_images col-md-2">
                 <div class="remove_btn" onclick="remove_image(this)">X</div>
                 <img src="` + image + `">
-                <input type="hidden" name="recipt_url[]" value="` + image + `">
+                <input type="hidden" name="recipt_url" value="` + image + `">
             </div>
             `;
             $('.upload_images').append(img);

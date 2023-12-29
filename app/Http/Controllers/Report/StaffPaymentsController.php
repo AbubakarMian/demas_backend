@@ -32,9 +32,12 @@ class StaffPaymentsController extends Controller
     {
         $control = 'create';
         $user = User::pluck('name','id');
+        $payment_type = Config::get('constants.staff_payment_type');
         // $transport_type = Transport_Type::pluck('name', 'id');
-        return view('reports.staff_payments.create', compact('control', 
-        'user'
+        return view('reports.staff_payments.create', compact(
+        'control', 
+        'user',
+        'payment_type',
     ));
     }
 
@@ -49,6 +52,7 @@ class StaffPaymentsController extends Controller
     {
         $control = 'edit';
         $user = User::pluck('name','id');
+        $payment_type = Config::get('constants.staff_payment_type');
         $staff_payments = StaffPayments::find($id);
         // dd($staff_payments->images);
         // $transport_type = Transport_Type::pluck('name', 'id');
@@ -56,6 +60,7 @@ class StaffPaymentsController extends Controller
             'control',
             'staff_payments',
             'user',
+            'payment_type',
 
         )
         );
@@ -76,6 +81,9 @@ class StaffPaymentsController extends Controller
        
         $staff_payments->user_id = $request->user_id;
         $staff_payments->amount = $request->amount;
+        $staff_payments->payment_type = $request->payment_type;
+        $staff_payments->detail = $request->detail;
+        $staff_payments->receipt_url = $request->recipt_url;
         $staff_payments->save();
         return Redirect('reports/staff_payments');
     }

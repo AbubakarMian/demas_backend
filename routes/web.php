@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\SaleAgentCommissionController;
 use App\Http\Controllers\Report\AgentsController;
 use App\Http\Controllers\Report\StaffPaymentsController;
+use App\Http\Controllers\Report\StaffPaymentsIncomingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
@@ -298,8 +299,17 @@ Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.p
     Route::get('edit/{id}', [StaffPaymentsController::class, 'edit'])->name('staff_payments.edit');
     Route::post('update/{id}', [StaffPaymentsController::class, 'update'])->name('staff_payments.update');
     Route::post('delete/{id}', [StaffPaymentsController::class, 'destroy_undestroy'])->name('staff_payments.delete');
-   
-
 });
 
-Route::get('reports/order/send_invoice/{order_id}', [OrderController::class, 'send_invoice'])->name('staff_payments.send_invoice'); //add
+    Route::group(['prefix' => 'reports/staff_payments_incoming'], function () {
+        Route::get('/', [StaffPaymentsIncomingController::class, 'index'])->name('staff_payments_incoming.index');
+        Route::get('get_staff_payments_incoming', [StaffPaymentsIncomingController::class, 'get_staff_payments_incoming'])->name('staff_payments_incoming.index');
+        Route::get('create', [StaffPaymentsIncomingController::class, 'create'])->name('staff_payments_incoming.create'); //add
+        Route::post('save', [StaffPaymentsIncomingController::class, 'save'])->name('staff_payments_incoming.save');
+        Route::get('edit/{id}', [StaffPaymentsIncomingController::class, 'edit'])->name('staff_payments_incoming.edit');
+        Route::post('update/{id}', [StaffPaymentsIncomingController::class, 'update'])->name('staff_payments_incoming.update');
+        Route::post('delete/{id}', [StaffPaymentsIncomingController::class, 'destroy_undestroy'])->name('staff_payments_incoming.delete');
+    });
+
+Route::get('reports/order/send_invoice/{order_id}', [OrderController::class, 'send_invoice'])->name('order.send_invoice'); //add
+Route::get('reports/order/send_voucher/{order_id}', [OrderController::class, 'send_voucher'])->name('order.send_voucher'); //add

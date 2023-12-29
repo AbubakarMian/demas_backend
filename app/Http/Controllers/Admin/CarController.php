@@ -97,7 +97,6 @@ class CarController extends Controller
         $car->doors = $request->doors;
         $car->booking = $request->booking;
         $car->dontforget = $request->dontforget;
-        $car->images = $request->car_images_upload;
         $car->save();
         return Redirect('admin/car');
     }

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('staff_payments', function (Blueprint $table) {
-                $table->string('receipt_url')->nullable()->default(null);
+                $table->string('receipt_url',300)->nullable()->default(null);
                 $table->bigInteger('staf_payment_incomming_id')->nullable()->default(0);
             });        
     }

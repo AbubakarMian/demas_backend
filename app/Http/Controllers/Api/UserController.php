@@ -93,12 +93,12 @@ class UserController extends Controller
                     $email_details = [];
 
                     $email_details['subject'] = 'Demas OTP';
-                    // $email_details['to_email'] = 'abubakrmianmamoon@gmail.com';
+                    // $email_details['to_email'] = 'ameer.maavia@gmail.com';
                     $email_details['to_email'] = $user->email;
                     $email_details['to_name'] = 'Abubakar';
                     $email_details['data'] = $user;
                     $email_details['view'] = 'email_template.otp';
-                    // $email_handler->sendEmail($email_details);
+                    $email_handler->sendEmail($email_details);
                 }
 
                 return $this->sendResponse(200, $user);

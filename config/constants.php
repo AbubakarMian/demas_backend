@@ -121,6 +121,11 @@ return [
         'card' => 'card',
         'advance_collection' => 'advance_collection',
     ],
+    'staff_payment_type' => [
+        'pending' => 'pending',
+        'paid' => 'paid',
+        'recieved' => 'recieved',
+    ],
     'payment_status' => [
         'pending' => 'pending',
         'paid' => 'paid',

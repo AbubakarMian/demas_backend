@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\CommissionHandler;
 use App\Models\StaffPayments;
-use App\Models\User;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
@@ -31,7 +32,7 @@ class StaffPaymentsController extends Controller
     public function create()
     {
         $control = 'create';
-        $user = User::pluck('name','id');
+        $user = Users::pluck('name','id');
         // $transport_type = Transport_Type::pluck('name', 'id');
         return view('reports.staff_payments.create', compact('control', 
         'user'
@@ -48,7 +49,7 @@ class StaffPaymentsController extends Controller
     public function edit($id)
     {
         $control = 'edit';
-        $user = User::pluck('name','id');
+        $user = Users::pluck('name','id');
         $staff_payments = StaffPayments::find($id);
         // dd($staff_payments->images);
         // $transport_type = Transport_Type::pluck('name', 'id');
@@ -96,5 +97,12 @@ class StaffPaymentsController extends Controller
             'new_value' => $new_value
         ]);
         return $response;
+    }
+
+    public function pay_team(Request $request,$user_id){
+
+        $commision_handler = new CommissionHandler();
+        $commision_handler->add_amount_to_wallet($user_id,$request->amount);
+
     }
 }

@@ -1,4 +1,3 @@
-{{-- {!!dd($slot)!!} --}}
 
 <style>
     select#gender {
@@ -28,15 +27,22 @@ $start_date = ''; // Initialize to an empty string
 $end_date = ''; // Initialize to an empty string
 
 if (isset($slot)) {
+    // dd('a');
     // Assuming $slot->start_date and $slot->end_date are the correct properties
-    $start_date = Carbon::createFromTimestamp($slot->start_date);
-    $start_date = $start_date->format('Y-m-d');
-    $end_date = Carbon::createFromTimestamp($slot->end_date);
-    $end_date = $end_date->format('Y-m-d');
+    // $start_date = Carbon::createFromTimestamp($slot->start_date);
+    // $start_date = $start_date->format('Y-m-d');
+    $start_date = date('Y-m-d', $slot->start_date);
+    // $end_date = Carbon::createFromTimestamp($slot->end_date);
+    // $end_date = $end_date->format('Y-m-d');
+    $end_date = date('Y-m-d', $slot->end_date);
+
 }
 else{
-    $start_date = Carbon::now()->format('Y-m-d');
-    $end_date = Carbon::now()->format('Y-m-d');
+    $start_date = date('Y-m-d');
+    $end_date = date('Y-m-d');
+
+    // $start_date = Carbon::now()->format('Y-m-d');
+    // $end_date = Carbon::now()->format('Y-m-d');
 }
 
 
@@ -45,7 +51,7 @@ else{
 <div class="form-group">
     {!! Form::label('name', 'Name') !!}
     <div>
-        {!! Form::date('name', [
+        {!! Form::text('name', null,[
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
@@ -58,7 +64,7 @@ else{
 <div class="form-group">
     {!! Form::label('from_date', 'Start Date') !!}
     <div>
-        {!! Form::date('from_date', [
+        {!! Form::date('from_date', $start_date,[
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
@@ -72,7 +78,7 @@ else{
 <div class="form-group">
     {!! Form::label('to_date', 'End Date') !!}
     <div>
-        {!! Form::date('to_date', [
+        {!! Form::date('to_date', $end_date,[
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
@@ -82,25 +88,6 @@ else{
         ]) !!}
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <span id="err" class="error-product"></span>

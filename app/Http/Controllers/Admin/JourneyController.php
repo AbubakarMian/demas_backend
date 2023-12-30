@@ -92,7 +92,7 @@ class JourneyController extends Controller
         // if ($add_journey_slot) {
             $this->add_journey_slot($request, $journey);
         // }
-
+        return Redirect('admin/journey');
         return redirect()->back();
     }
 

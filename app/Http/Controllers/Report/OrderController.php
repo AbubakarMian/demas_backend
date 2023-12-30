@@ -31,7 +31,9 @@ class OrderController extends Controller
         $slot_list = Slot::pluck('name', 'id');
         $transport_type_list = Transport_Type::pluck('name', 'id');
         $travel_agent_list = Users::where('role_id', Config::get('constants.role.sale_agent'))->pluck('name', 'id');
-        $drivers_list = Driver::with('user_obj')->get();
+        $drivers_list = Driver::with('user_obj')->whereHas('user_obj', function ($q) {
+            $q->where('role_id', 5);
+        })->orderBy('created_at', 'DESC')->get();
         $transport_list = Transport::with('transport_type:id,name')->get();
 
         $drivers_list->transform(function ($driver) {

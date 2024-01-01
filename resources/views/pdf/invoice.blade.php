@@ -34,7 +34,7 @@ $order = $data['data'];
             text-align: end;
             position: absolute;
             top: 100px;
-            left: 0;
+            left: 150px;
         }
 
         .total_txt span {

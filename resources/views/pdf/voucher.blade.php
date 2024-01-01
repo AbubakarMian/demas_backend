@@ -1,3 +1,6 @@
+<?php
+$order = $data['data'];
+?>
 <html>
 
 <head>

@@ -34,7 +34,7 @@ $order = $data['data'];
             text-align: end;
             position: absolute;
             top: 100px;
-            left: 150px;
+            left: 430px;
         }
 
         .total_txt span {
@@ -79,7 +79,7 @@ $order = $data['data'];
         .onLine_txt {
             width: 100%;
             /* margin-top: -20px; */
-            text-align: end;
+            text-align: right;
         }
 
         th.detail-col {
@@ -180,6 +180,16 @@ $order = $data['data'];
         .top-off {
             margin-top: -40px;
         }
+        .sadasdsa h3{
+            float: right;   
+        }
+        .dsdds{
+            position: relative;
+           
+        }
+        .dsdds h3{
+            right: 0px;
+        }
     </style>
 </head>
 
@@ -192,11 +202,24 @@ $order = $data['data'];
                     <img src="{{ asset('images/Screenshot32_cleanup.png') }}">
                 </div>
             </div>
-            <div class="onLine_img">
-                <img src="{{ asset('images/demas-logo.png') }}" class="logo-img">
-            </div>
-            <div class="onLine_text  hed_clr fgegh">
-                <h3>BKN NO ::<br>BKN-{!! $order->order_id !!}</h3>
+            <div class="sdadsa">
+                <div class="onLine_img">
+                    <img src="{{ asset('images/demas-logo.png') }}" class="logo-img">
+                </div>
+                <div class="onLine_text sadasdsa  hed_clr fgegh">
+                    <h3>BKN NO ::<br>BKN-{!! $order->order_id !!}</h3>
+                    <br>
+                    <br>
+                    <br>
+                    
+                    {{-- <h3>
+                        From:<br />
+                        <span class="textColor">UMRAH TRANSPORT</span><br />
+                        <span class="textColor">DEMAS</span><br>
+                        <span class="textColor">{!! $order->order_details[0]->transport_type->name !!}({!! $order->order_details[0]->transport_type->seats !!} PAX)</span>
+    
+                    </h3> --}}
+                </div>
             </div>
         </div>
 
@@ -204,25 +227,22 @@ $order = $data['data'];
             <div class="ontext">
                 <h3>To:<br><span class="ontext-2">{!! $order->customer_name !!}</span></h3>
             </div>
-            <div class="onLine_text hed_clr">
+            <div class="onLine_text sadasdsa hed_clr  dsdds">
                 <h3>
-                    From:<br />
+                    From:
+                    <br />
                     <span class="textColor">UMRAH TRANSPORT</span><br />
-                    <span class="textColor">DEMAS</span>
-                </h3>
-            </div>
-        </div>
-
-        <div class="onLine">
-            <div class="onLine_txt hed_clr">
-                <h3>
+                    <span class="textColor">DEMAS</span><br>
                     <span class="textColor">{!! $order->order_details[0]->transport_type->name !!}({!! $order->order_details[0]->transport_type->seats !!} PAX)</span>
 
                 </h3>
             </div>
         </div>
+
         <div class="bookingHeading">
-            <h1>BOOKING {!! $order->status !!}</h1>
+            <center>
+                <h1>BOOKING {!! strtoupper($order->status) !!}</h1>    </center>
+
             <div class="bookingDate">
                 <p class="bookingDate">DATE : {!! $order->created_at !!}</p>
             </div>

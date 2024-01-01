@@ -6,9 +6,11 @@ $order = $data['data'];
 <head>
     <style>
         .mainTicketBox {
-            width: 90%;
+            width: 74%;
             /* display: flex; */
             margin-top: 25px;
+            box-shadow: 0px 0px 20px 4px;
+            border: solid 1px gray;
         }
 
         h3.padding-top {
@@ -16,14 +18,20 @@ $order = $data['data'];
         }
 
         .main_rotate_box {
-            rotate: -90deg;
-            margin-right: -85px;
-            margin-left: -87px;
+            transform: rotate(-90deg);
+            transform-origin: left bottom;
+            margin-right: -150px;
+            margin-left: 87px; 
+            margin-top: 200px;
         }
 
         .main_rotate_bo {
-            rotate: -90deg;
-        }
+    transform: rotate(-90deg);
+    transform-origin: left bottom;
+    margin-right: -150px;
+    margin-top: 40px;
+
+}
 
         .barcode {
             text-align: center;
@@ -184,7 +192,7 @@ $order = $data['data'];
 
 <body>
 
-    <center>
+    {{-- <center> --}}
         <div class="mainTicketBox">
             <table>
                 <thead>
@@ -290,7 +298,8 @@ $order = $data['data'];
                             <div class="last_box">
                                 <div class="right-side-box">
                                     <div class="">
-                                        <img src="{{ asset('images/Screenshot 2023-12-28 183500.png') }}" class="">
+                                        <img src="{{ asset('images/Screenshot 2023-12-28 183500.png') }}"
+                                            class="">
                                     </div>
                                     <div class="passengerName">
                                         <p>Passenger</p>
@@ -335,7 +344,7 @@ $order = $data['data'];
                 </thead>
             </table>
         </div>
-    </center>
+    {{-- </center> --}}
 
 </body>
 

@@ -215,7 +215,7 @@ class OrderController extends Controller
                 // 'driver.user_obj:name,role_id',
                 'transport_type', 'journey' => ['pickup', 'dropoff']
             ],
-        ])->find($order_id);
+        ])->find($order_detail_id);
         
         $order_handler = new OrderHandler();
 

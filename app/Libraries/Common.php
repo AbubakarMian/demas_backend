@@ -78,7 +78,6 @@ trait Common
         Log::info($url);
         Log::info('-----------payload ----------');
         Log::info($payload);
-// dd('www');
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);

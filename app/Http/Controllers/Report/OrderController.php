@@ -68,14 +68,12 @@ class OrderController extends Controller
 
     public function get_order(Request $request)
     {
-        // $order = Order::with('order_details')->first();
-        // dd($order->orderdetailsstatus);
         $order = Order::with([
-            'user_obj:name,role_id',
-            'sale_agent.user_obj:name,role_id',
-            'travel_agent.user_obj:name,role_id',
+            'user_obj',
+            'sale_agent_user',
+            'travel_agent_user',
             'order_details' => [
-                'driver.user_obj:name,role_id',
+                'driver.user_obj',
                 'transport_type', 'journey' => ['pickup', 'dropoff']
             ],
         ]);
@@ -163,17 +161,8 @@ class OrderController extends Controller
             'user_obj',
             'sale_agent',
             'travel_agent',
-            // 'sale_agent'=>['user_obj'=>'name,role_id'],
-            // 'sale_agent'=>['user_obj'=>'name','role_id'],
-            // 'sale_agent.user_obj:name,role_id',
-            // 'travel_agent.user_obj:name,role_id',
-            // 'travel_agent'=>['user_obj:name,role_id'],
-            // 'travel_agent'=>['user_obj'=>'name','role_id'],
-
             'order_details' => [
                 'driver'=>['user_obj'],
-                // 'driver'=>['user_obj'=>'name','role_id'],
-                // 'driver.user_obj:name,role_id',
                 'transport_type', 'journey' => ['pickup', 'dropoff']
             ],
         ])->find($order_id);
@@ -195,18 +184,7 @@ class OrderController extends Controller
 
         $email_handler = new EmailHandler();
         $email_details = [];
-        // $email_details['cc'] = [];
-        // $email_details['cc'][] = [
-        //     'from_email' => 'saadyasirthegreat@gmailcom',
-        //     'from_name' => 'Saad cc',
-        // ];
-
         $user = $order->user_obj;
-        // dd($user);
-        // $email_details['bcc'][] = [
-        //     'from_email' => 'abubakarhere90@gmailcom',
-        //     'from_name' => 'Abubakar here bcc',
-        // ];
         $email_details['subject'] = 'Demas Invoice';
         $email_details['attachments'][] = $receipt_url;
         $email_details['to_email'] = $user->email;
@@ -228,13 +206,6 @@ class OrderController extends Controller
             'user_obj',
             'sale_agent',
             'travel_agent',
-            // 'sale_agent'=>['user_obj'=>'name,role_id'],
-            // 'sale_agent'=>['user_obj'=>'name','role_id'],
-            // 'sale_agent.user_obj:name,role_id',
-            // 'travel_agent.user_obj:name,role_id',
-            // 'travel_agent'=>['user_obj:name,role_id'],
-            // 'travel_agent'=>['user_obj'=>'name','role_id'],
-
             'order_details' => [
                 'driver'=>['user_obj'],
                 // 'driver'=>['user_obj'=>'name','role_id'],

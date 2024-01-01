@@ -32,12 +32,13 @@ class SaleAgentCommissionController extends Controller
     public function get_commision_prices(Request $request)
     {
         $sale_agent_commission = SalesAgentTripPrice::with([
-            'journey', 'slot', 'transport_type', 'user_obj','transport_price_obj'
+            'journey', 'slot', 'transport_type', 'user_obj','transport_price_obj','sale_agent'
         ])
         ->wherehas('journey')
         ->wherehas('slot')
         ->wherehas('transport_type')
         ->wherehas('transport_price_obj')
+        ->wherehas('sale_agent')
         // ->wherehas('slot',function($q){
         //     $q->where('end_date','<' ,time());
         // })

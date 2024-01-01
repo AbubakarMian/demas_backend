@@ -26,75 +26,24 @@ class TransportPricesController extends Controller
 
     public function get_car_prices(Request $request)
     {
-        // $data = [];
-        // $transport_type_arr = Transport_Type::get()->toArray();
-        // // $journies = Journey::get();
-        // // $slots = Slot::get();
-        // $journey_slot_arr = Journey_Slot::with('journey','slot')->get();
-        // // foreach ($slots as $slot_key => $slot) {
-        //     foreach ($journey_slot_arr as $journey_key => $journey_slot) {
-        //         foreach ($transport_type_arr as $transport_type_key => $transport_type) {
-        //             $transport_type_id = $transport_type['id'];
-        //             // $transport_journey_slot_id = $slot['id'];
-        //             $transport_prices_obj = TransportPrices::where('transport_type_id', $transport_type_id)
-        //                 ->where('slot_id', $journey_slot->slot->id)
-        //                 ->where('journey_id', $journey_slot->journey->id)
-        //                 ->first(); // Use 'first' to retrieve a single record
-
-        //             if (!$transport_prices_obj) {
-        //                 $transport_prices_obj = new TransportPrices();
-        //                 $transport_prices_obj->transport_type_id = $transport_type_id;
-        //                 $transport_prices_obj->journey_id = $journey_slot->journey_id;
-        //                 $transport_prices_obj->slot_id = $journey_slot->slot_id;
-        //                 $transport_prices_obj->is_default = $journey_slot->slot->is_default;
-        //                 $transport_prices_obj->price = 0;
-        //                 $transport_prices_obj->save();
-        //             } else {
-        //                 // dd($data, $transport_prices_obj);
-        //             }
-        //         }
-        //     // }
-        // }
-        $priceData['data'] = TransportPrices::with([
+        $transportPrices = TransportPrices::with([
             'journey','slot','transport_type'
-        ])->get();
-        echo json_encode($priceData);
-    }
-
-    public function get_car_prices_del(Request $request)
-    {
-        $data = [];
-        $transport_type_arr = Transport_Type::get()->toArray();
-        $journies = Journey::get();
-        $slots = Slot::get();
-        // $slot_arr = Journey_Slot::get();
-        foreach ($slots as $slot_key => $slot) {
-            foreach ($journies as $journey_key => $journey) {
-                foreach ($transport_type_arr as $transport_type_key => $transport_type) {
-                    $transport_type_id = $transport_type['id'];
-                    // $transport_journey_slot_id = $slot['id'];
-                    $transport_prices_obj = TransportPrices::where('transport_type_id', $transport_type_id)
-                        ->where('slot_id', $slot->id)
-                        ->where('journey_id', $journey->id)
-                        ->first(); // Use 'first' to retrieve a single record
-
-                    if (!$transport_prices_obj) {
-                        $transport_prices_obj = new TransportPrices();
-                        $transport_prices_obj->transport_type_id = $transport_type_id;
-                        $transport_prices_obj->journey_id = $journey->id;
-                        $transport_prices_obj->slot_id = $slot->id;
-                        $transport_prices_obj->is_default = $slot->is_default;
-                        $transport_prices_obj->price = 0;
-                        $transport_prices_obj->save();
-                    } else {
-                        // dd($data, $transport_prices_obj);
-                    }
-                }
-            }
+        ])
+        ->wherehas('journey')
+        ->wherehas('slot')
+        ->wherehas('transport_type')
+        ;
+        if($request->journey_id){
+            $transportPrices = $transportPrices->where('journey_id',$request->journey_id);
         }
-        $priceData['data'] = TransportPrices::with([
-            'journey','slot','transport_type'
-        ])->get();
+        if($request->slot_id){
+            $transportPrices = $transportPrices->where('slot_id',$request->slot_id);
+        }
+        if($request->transport_type_id){
+            $transportPrices = $transportPrices->where('transport_type_id',$request->transport_type_id);
+        }
+        $priceData['data'] = $transportPrices->get();
+
         echo json_encode($priceData);
     }
 

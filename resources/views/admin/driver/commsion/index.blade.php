@@ -4,7 +4,7 @@
 @stop
 
 @section('add_btn')
-<div class="row">
+<div class="row search-form">
     <div class="col-md-3">
         {!! Form::select('journey_id', $journey_list, null, [
             'class' => 'form-control',
@@ -39,20 +39,13 @@
     </div>
 </div>
     <div class="search">
-       
-      
-     
-    
         {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
-
     </div>
 
 @stop
 @section('table-properties')
     width="400px" style="table-layout:fixed;"
 @endsection
-
-
 
 <style>
     td {
@@ -76,7 +69,12 @@
     }
 </style>
 @section('table')
-
+<div class="toggle-edit-datatable">
+    <input id="open-edit" checked value="Edit" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
+    <label for="open-edit">Edit</label>
+    <input id="open-search" value="Export" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
+    <label for="open-search">Export</label>
+</div>
     <table class="fhgyt" id="carTableAppend" style="opacity: 0">
         <thead>
             <tr>
@@ -96,18 +94,16 @@
 
     <script>
         $(document).ready(function() {
-
             fetchRecords();
-
-
         });
 
         function fetchRecords() {
             $("#carTableAppend tbody").html('');
             $('#carTableAppend').DataTable().destroy();
+            var open_edit = $("#open-edit").is(":checked");
             var search_param = '';
             var search_concat = '?';
-            $('.search select').each(function(item, index) {
+            $('.search-form select').each(function(item, index) {
                 console.log('name', $(this).attr('name'));
                 console.log('value', $(this).val());
                 if ($(this).val() != '') {
@@ -137,30 +133,42 @@
                         var agent = response['data'][i].user_obj.name;
                         var commission = response['data'][i].commission;
                         var transport_prices_id = response['data'][i].id;
+                        var price_td = commission;
+                        if (open_edit) {
+                            price_td = `<input onchange=update_user_price(` + transport_prices_id +
+                                `,this) type='text' value='` + commission + `'>
+                            `;
+                        }
 
                          tr_str += "<tr id='row_" + response['data'][i].id + "'>" +
                             "<td>" + journey + "</td>" +
                             "<td>" + slot + "</td>" +
                             "<td>" + agent + "</td>" +
                             "<td>" + transport_type_name + "</td>" +
-                            "<td><input onchange=update_user_price(" + transport_prices_id +
-                            ",this) type='text' value='" + commission + "'></td>" +
-
+                            "<td>" + price_td + "</td>" +
                             "</tr>";
-
-                        
                     }
                     $("#carTableAppend tbody").html(tr_str);
-                    // $("#carTableAppend").css('display','block');
+                    if (open_edit) {
+                        var dt = {
+                        dom: '<"top_datatable">lftipr',
+                        buttons: [
+                            'copy', 'csv', 'excel', 'pdf', 'print'
+                        ],
+                    };
+                    }
+                    else{
+                        var dt = {
+                        dom: '<"top_datatable"B>lftipr',
+                        buttons: [
+                            'copy', 'csv', 'excel', 'pdf', 'print'
+                        ],
+                    };
+                    }
 
-                    $(document).ready(function() {
-                        $('#carTableAppend').DataTable({
-                            dom: '<"top_datatable"B>lftipr',
-                            buttons: [
-                                'copy', 'csv', 'excel', 'pdf', 'print'
-                            ],
-                        });
-                    });
+                    // $(document).ready(function() {
+                    $('#carTableAppend').DataTable(dt);
+                    // });
                 }
             });
         }

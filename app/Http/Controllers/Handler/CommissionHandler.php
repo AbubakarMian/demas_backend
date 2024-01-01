@@ -378,4 +378,47 @@ class CommissionHandler
         }
         return $res;
     }
+    public function add_amount_to_wallet($user_id,$amount){
+        $user = Users::with(['sale_agent','travel_agent','driver'])->find($user_id);
+        $user->wallet .= $amount;
+        $user->save();
+        
+    }
+
+    public function pay_commission_team($user_id){
+        $user = Users::with(['sale_agent','travel_agent','driver'])->find($user_id);
+        $wallet_amount = 0;
+        
+        if($user->sale_agent){
+            $order_details = Order_Detail::where('sale_agent_payment_status',Config::get('constants.sales_agent.payment_status.pending'))
+            ->where('admin_payment_status',Config::get('constants.admin_payment_status.paid'))
+            ->get();
+            // sale_agent_commission
+            foreach ($order_details as $key => $order_detail) {
+                $wallet_amount .= $order_detail->sale_agent_commission;
+            }
+        }
+        else if($user->travel_agent){
+            $order_details = Order_Detail::where('travel_agent_payment_status',Config::get('constants.travel_agent.payment_status.pending'))
+            ->where('admin_payment_status',Config::get('constants.admin_payment_status.paid'))
+            ->get();
+            foreach ($order_details as $key => $order_detail) {
+                $wallet_amount .= $order_detail->travel_agent_commission;
+            }
+        }
+        else if($user->driver){
+            $order_details = Order_Detail::where('driver_payment_status',Config::get('constants.driver.payment_status.pending'))
+            ->where('admin_payment_status',Config::get('constants.admin_payment_status.paid'))
+            ->get();
+            foreach ($order_details as $key => $order_detail) {
+                $wallet_amount .= $order_detail->driver_commission;
+            }
+        }
+        else{
+            return false; // not a team member
+        }
+        $user->wallet .= $wallet_amount;
+        $user->save();
+        
+    }
 }

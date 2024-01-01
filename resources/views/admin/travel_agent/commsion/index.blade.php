@@ -5,7 +5,7 @@
 
 @section('add_btn')
     {{-- <div class="container"> --}}
-    <div class="row">
+    <div class="row search-form">
         <div class="col-md-3">
             {!! Form::select('journey_id', $journey_list, null, [
                 'class' => 'form-control',
@@ -38,19 +38,15 @@
         </div>
     </div>
     {{-- </div> --}}
+
     <div class="search">
-
-
         {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
-
     </div>
 
 @stop
 @section('table-properties')
     width="400px" style="table-layout:fixed;"
 @endsection
-
-
 
 <style>
     td {
@@ -73,15 +69,23 @@
     .search {
         margin: 10px;
     }
+    .toggle-edit-datatable {
+        
+    }
 </style>
 @section('table')
-
+<div class="toggle-edit-datatable">
+    <input id="open-edit" checked value="Edit" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
+    <label for="open-edit">Edit</label>
+    <input id="open-search" value="Export" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
+    <label for="open-search">Export</label>
+</div>
     <table class="fhgyt" id="carTableAppend" style="opacity: 0">
         <thead>
             <tr>
                 <th> Journey</th>
                 <th> Slots</th>
-                @if($user->role_id != 4)
+                @if ($user->role_id != 4)
                     <th> Sale Agent Price</th>
                 @endif
                 <th> Agent</th>
@@ -108,9 +112,10 @@
             // $("#carTableAppend").css('display','none');
             $("#carTableAppend tbody").html('');
             $('#carTableAppend').DataTable().destroy();
+            var open_edit = $("#open-edit").is(":checked");
             var search_param = '';
             var search_concat = '?';
-            $('.search select').each(function(item, index) {
+            $('.search-form select').each(function(item, index) {
                 console.log('name', $(this).attr('name'));
                 console.log('value', $(this).val());
                 if ($(this).val() != '') {
@@ -119,7 +124,6 @@
                 }
             });
             search_url = '{!! asset('admin/travel_agent_commission/get_travel_agent_commission') !!}' + search_param;
-            console.log('search_url', search_url);
             $.ajax({
                 url: search_url,
                 type: 'get',
@@ -127,7 +131,7 @@
                 success: function(response) {
                     var user = response['user'];
                     console.log('response');
-                    console.log('responseuser',user.role_id);
+                    console.log('responseuser', user.role_id);
                     $("#carTableAppend").css("opacity", 1);
                     var len = response['data'].length;
                     console.log('response2');
@@ -141,37 +145,50 @@
                         var slot = response['data'][i].slot.name;
                         var agent = response['data'][i].user_obj.name;
                         var sale_agent_price = '';
-                        if( user.role_id != 4 ){
-                             sale_agent_price = `<td>` +  response['data'][i].sale_agent_commission_obj.price+ `</td>`; 
-                            console.log('show price',sale_agent_price);
-
+                        if (user.role_id != 4) {
+                            sale_agent_price = `<td>` + response['data'][i].sale_agent_commission_obj.price +
+                                `</td>`;
                         }
-                        // var sale_agent_price = response['data'][i].sale_agent_commission_obj.price;
                         var price = response['data'][i].price;
                         var transport_prices_id = response['data'][i].id;
+                        var price_td = price;
+                        if (open_edit) {
+                            price_td = `<input onchange=update_user_price(` + transport_prices_id +
+                                `,this) type='text' value='` + price + `'>
+                            `;
+                        }
                         tr_str += "<tr id='row_" + response['data'][i].id + "'>" +
                             "<td>" + journey + "</td>" +
-                            "<td>" + slot + "</td>" +sale_agent_price+
+                            "<td>" + slot + "</td>" + sale_agent_price +
                             "<td>" + agent + "</td>" +
                             "<td>" + transport_type_name + "</td>" +
-                            "<td><input onchange=update_user_price(" + transport_prices_id +
-                            ",this) type='text' value='" + price + "'></td>" +
-
+                            "<td>" + price_td + "</td>" +
                             "</tr>";
-
-
                     }
                     $("#carTableAppend tbody").html(tr_str);
-                    // $("#carTableAppend").css('display','block');
+                    if (open_edit) {
+                        console.log('edit ',true);
+                        var dt = {
+                        dom: '<"top_datatable">lftipr',
+                        buttons: [
+                            'copy', 'csv', 'excel', 'pdf', 'print'
+                        ],
+                    };
+                    }
+                    else{
+                        console.log('edit ',false);
 
-                    $(document).ready(function() {
-                        $('#carTableAppend').DataTable({
-                            dom: '<"top_datatable"B>lftipr',
-                            buttons: [
-                                'copy', 'csv', 'excel', 'pdf', 'print'
-                            ],
-                        });
-                    });
+                        var dt = {
+                        dom: '<"top_datatable"B>lftipr',
+                        buttons: [
+                            'copy', 'csv', 'excel', 'pdf', 'print'
+                        ],
+                    };
+                    }
+
+                    // $(document).ready(function() {
+                    $('#carTableAppend').DataTable(dt);
+                    // });
                 }
             });
         }

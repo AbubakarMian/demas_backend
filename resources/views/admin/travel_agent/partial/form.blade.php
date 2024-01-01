@@ -113,7 +113,7 @@
         }
     ?>
     <div class="form-group">
-        {!! Form::label('whatsapp_number','Phone Number') !!}
+        {!! Form::label('whatsapp_number','Whatsapp Number') !!}
         <div>
             {!! Form::number('whatsapp_number',  $whatsapp_number, ['class' => 'form-control',
             'data-parsley-required'=>'true',

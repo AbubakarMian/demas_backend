@@ -145,8 +145,8 @@
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
                         var name = response['data'][i].user_obj?.name ?? '';
-                        var user_sale_agent_name = response['data'][i].sale_agent?.user_obj?.name ?? '';
-                        var user_travel_agent_name = response['data'][i].travel_agent?.user_obj?.name ?? '';
+                        var user_sale_agent_name = response['data'][i].sale_agent_user?.name ?? '';
+                        var user_travel_agent_name = response['data'][i].travel_agent_user?.name ?? '';
                         var cash_collected_by = response['data'][i].cash_collected_by;
                         var cash_collected_by_user_id = response['data'][i].cash_collected_by_user_id;
                         var final_price = response['data'][i].final_price;

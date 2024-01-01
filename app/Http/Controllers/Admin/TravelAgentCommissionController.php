@@ -44,6 +44,7 @@ class TravelAgentCommissionController extends Controller
     public function get_travel_agent_commission(Request $request)
     {
 
+        // dd($request->all());
         $user = Auth::user();
         $user_obj = Users::with('sale_agent', 'travel_agent')->find($user->id);
         $travel_agent_commission = TravelAgentCommission::with([
@@ -62,7 +63,15 @@ class TravelAgentCommissionController extends Controller
             // ->where('sale_agent.user_id', '=', 'sales_agent_trip_price.user_sale_agent_id');
             // $q->join('sale_agent', 'sale_agent.user_id', '=', 'sales_agent_trip_price.user_sale_agent_id');
             // }
-        ]);
+        ])
+        ->wherehas('journey')
+        ->wherehas('slot')
+        ->wherehas('transport_type')
+        ->wherehas('travel_agent')
+        ->wherehas('slot',function($q){
+            $q->where('end_date','<' ,time());
+        })
+        ;
 
         if ($user_obj->sale_agent) {
             $travel_agent_commission = $travel_agent_commission->wherehas('travel_agent', function ($q) use ($user_obj) {

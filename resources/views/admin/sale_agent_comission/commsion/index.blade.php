@@ -39,19 +39,13 @@
     </div>
     {{-- </div> --}}
     <div class="search">
-
-
         {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
-
     </div>
 
 @stop
 @section('table-properties')
     width="400px" style="table-layout:fixed;"
 @endsection
-
-
-
 <style>
     td {
         white-space: nowrap;
@@ -75,7 +69,6 @@
     }
 </style>
 @section('table')
-
 <div class="toggle-edit-datatable">
     <input id="open-edit" checked value="Edit" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
     <label for="open-edit">Edit</label>
@@ -109,15 +102,12 @@
         });
 
         function fetchRecords() {
-            // $("#carTableAppend").css('display','none');
             $("#carTableAppend tbody").html('');
             $('#carTableAppend').DataTable().destroy();
             var open_edit = $("#open-edit").is(":checked");
             var search_param = '';
             var search_concat = '?';
             $('.search-form select').each(function(item, index) {
-                console.log('name', $(this).attr('name'));
-                console.log('value', $(this).val());
                 if ($(this).val() != '') {
                     search_param += search_concat + $(this).attr('name') + "=" + $(this).val();
                     search_concat = '&';
@@ -138,8 +128,6 @@
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
                         var transport_type_name = response['data'][i].transport_type.name;
-
-                        console.log('aaa', response['data'][i]);
                         var journey = response['data'][i].journey.name;
                         var slot = response['data'][i].slot.name;
                         var agent = response['data'][i].user_obj.name;

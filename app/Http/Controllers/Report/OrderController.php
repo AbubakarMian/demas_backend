@@ -173,6 +173,9 @@ class OrderController extends Controller
 
         $receipt_url = $pdf['path'];
 
+        // return redirect($receipt_url);
+        // dd($receipt_url);
+
 
         // $whast_app_urls = $receipt_url;
 
@@ -200,7 +203,7 @@ class OrderController extends Controller
         // dd('asdas');
         return redirect('admin/order')->with('success', 'Invoice sent');
     }
-    public function send_voucher($order_id){
+    public function send_voucher($order_detail_id){
         // $order = Order::with('order_details', 'user_obj')->find($order_id);
         $order = Order::with([
             'user_obj',
@@ -216,10 +219,10 @@ class OrderController extends Controller
         
         $order_handler = new OrderHandler();
 
-        $pdf = $order_handler->gernerate_pdf_voucher($order_id);
-
+        $pdf = $order_handler->gernerate_pdf_voucher($order_detail_id);
+// dd('asd');
         $receipt_url = $pdf['path'];
-
+// dd($receipt_url);
 
         // $whast_app_urls = $receipt_url;
 

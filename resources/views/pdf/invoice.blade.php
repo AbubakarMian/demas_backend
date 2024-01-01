@@ -51,7 +51,7 @@ $order = $data['data'];
             width: 100%;
             text-align: end;
             /* display: flex; */
-
+            float: right;
         }
 
         .leftFtrImg img {

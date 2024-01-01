@@ -38,12 +38,7 @@
         </div>
     </div>
     {{-- </div> --}}
-    <div class="search">
-        <input id="open-edit" checked value="Edit" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
-        <label for="open-edit">Edit</label><br>
-        <input id="open-search" value="Export" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
-        <label for="open-search">Export</label><br>
-    </div>
+
     <div class="search">
         {!! Form::button('Search', ['class' => 'btn btn-success pull-right', 'onclick' => 'fetchRecords()']) !!}
     </div>
@@ -52,8 +47,6 @@
 @section('table-properties')
     width="400px" style="table-layout:fixed;"
 @endsection
-
-
 
 <style>
     td {
@@ -76,9 +69,17 @@
     .search {
         margin: 10px;
     }
+    .toggle-edit-datatable {
+        
+    }
 </style>
 @section('table')
-
+<div class="toggle-edit-datatable">
+    <input id="open-edit" checked value="Edit" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
+    <label for="open-edit">Edit</label>
+    <input id="open-search" value="Export" type="radio" name="toggle-edit-export" onchange="fetchRecords();">
+    <label for="open-search">Export</label>
+</div>
     <table class="fhgyt" id="carTableAppend" style="opacity: 0">
         <thead>
             <tr>
@@ -111,9 +112,9 @@
             // $("#carTableAppend").css('display','none');
             $("#carTableAppend tbody").html('');
             $('#carTableAppend').DataTable().destroy();
+            var open_edit = $("#open-edit").is(":checked");
             var search_param = '';
             var search_concat = '?';
-            var open_edit = $("#open-edit").is(":checked");
             $('.search-form select').each(function(item, index) {
                 console.log('name', $(this).attr('name'));
                 console.log('value', $(this).val());

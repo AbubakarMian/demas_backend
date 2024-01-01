@@ -33,64 +33,15 @@ class SaleAgentCommissionController extends Controller
     {
         $sale_agent_commission = SalesAgentTripPrice::with([
             'journey', 'slot', 'transport_type', 'user_obj','transport_price_obj'
-        ]);
-
-        if ($request->journey_id) {
-            $sale_agent_commission = $sale_agent_commission->where('journey_id', $request->journey_id);
-        }
-        if ($request->slot_id) {
-            $sale_agent_commission = $sale_agent_commission->where('slot_id', $request->slot_id);
-        }
-        if ($request->transport_type_id) {
-            $sale_agent_commission = $sale_agent_commission->where('transport_type_id', $request->transport_type_id);
-        }
-        if ($request->user_sale_agent_id) {
-            $sale_agent_commission = $sale_agent_commission->where('user_sale_agent_id', $request->user_sale_agent_id);
-        }
-
-        $priceData['data'] = $sale_agent_commission->get();
-        echo json_encode($priceData);
-    }
-    public function get_commision_prices_del(Request $request)
-    {
-        $data = [];
-        $transport_types = Transport_Type::get();
-        $journies = Journey::get();
-        $slots = Slot::get();
-        $sale_agents = SaleAgent::where('commision_type', Config::get('constants.commission_types.agreed_trip_rate'))->get();
-        // 
-        // $slot_arr = Journey_Slot::get();
-        foreach ($slots as $slot_key => $slot) {
-            foreach ($sale_agents as $sale_agent_key => $sale_agent) {
-                foreach ($journies as $journey_key => $journey) {
-                    foreach ($transport_types as $transport_type_key => $transport_type) {
-                        $transport_type_id = $transport_type->id;
-                        $transport_prices_obj = SalesAgentTripPrice::where('transport_type_id', $transport_type_id)
-                            ->where('slot_id', $slot->id)
-                            ->where('journey_id', $journey->id)
-                            ->where('user_sale_agent_id', $sale_agent->user_id)
-                            ->first(); // Use 'first' to retrieve a single record
-
-                        if (!$transport_prices_obj) {
-                            $transport_prices_obj = new SalesAgentTripPrice();
-                            $transport_prices_obj->user_sale_agent_id = $sale_agent->user_id;
-                            $transport_prices_obj->journey_id = $journey->id;
-                            $transport_prices_obj->slot_id = $slot->id;
-                            $transport_prices_obj->transport_type_id = $transport_type_id;
-                            $transport_prices_obj->is_default = $slot->is_default;
-                            $transport_prices_obj->commission = 0;
-                            $transport_prices_obj->price = 0;
-                            $transport_prices_obj->save();
-                        } else {
-                            // dd($data, $transport_prices_obj);
-                        }
-                    }
-                }
-            }
-        }
-        $sale_agent_commission = SalesAgentTripPrice::with([
-            'journey', 'slot', 'transport_type', 'user_obj'
-        ]);
+        ])
+        ->wherehas('journey')
+        ->wherehas('slot')
+        ->wherehas('transport_type')
+        ->wherehas('transport_price_obj')
+        // ->wherehas('slot',function($q){
+        //     $q->where('end_date','<' ,time());
+        // })
+        ;
 
         if ($request->journey_id) {
             $sale_agent_commission = $sale_agent_commission->where('journey_id', $request->journey_id);

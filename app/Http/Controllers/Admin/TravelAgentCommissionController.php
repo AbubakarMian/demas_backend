@@ -53,24 +53,14 @@ class TravelAgentCommissionController extends Controller
             'transport_type',
             'user_obj',
             'travel_agent.sale_agent',
-            // 'sale_agent_commission'=>function($q)use($user_obj){//sales_agent_trip_price
-
-            // $q->join('sale_agent','sales_agent_trip_price.user_sale_agent_id','sale_agent.user_id')
-            // ->join('travel_agent','travel_agent.user_sale_agent_id','sale_agent.user_id');
-
-            // $q->join('travel_agent','travel_agent.user_id','travel_agent_commission.user_travel_agent_id')
-            //     ->join('sale_agent', 'sale_agent.user_id', '=', 'travel_agent.user_sale_agent_id')
-            // ->where('sale_agent.user_id', '=', 'sales_agent_trip_price.user_sale_agent_id');
-            // $q->join('sale_agent', 'sale_agent.user_id', '=', 'sales_agent_trip_price.user_sale_agent_id');
-            // }
         ])
         ->wherehas('journey')
         ->wherehas('slot')
         ->wherehas('transport_type')
         ->wherehas('travel_agent')
-        ->wherehas('slot',function($q){
-            $q->where('end_date','<' ,time());
-        })
+        // ->wherehas('slot',function($q){
+        //     $q->where('end_date','<' ,time());
+        // })
         ;
 
         if ($user_obj->sale_agent) {

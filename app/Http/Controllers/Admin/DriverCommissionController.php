@@ -54,7 +54,6 @@ class DriverCommissionController extends Controller
         if($request->user_driver_id){
             $driver_commission = $driver_commission->where('user_driver_id',$request->user_driver_id);
         }
-
         $priceData['data'] = $driver_commission->get();
         echo json_encode($priceData);
     }

@@ -16,6 +16,7 @@ trait Common
 
     public function send_whatsapp_sms($whats_app_number, $text)
     {
+        $whats_app_number = str_replace("+","",$whats_app_number);
         $id_instance = Config::get('whatsapp.WHATSAPP_ID');
         $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
         $url = 'https://api.green-api.com/waInstance' . $id_instance . '//sendMessage/' . $apiTokenInstance;
@@ -23,7 +24,7 @@ trait Common
 
         //chatId is the number to send the message to (@c.us for private chats, @g.us for group chats)
         $data = array(
-            'chatId' => '71234567890@c.us',
+            'chatId' => $whats_app_number.'@c.us',
             'message' => 'Hello World'
         );
 
@@ -54,6 +55,7 @@ trait Common
     // $whats_app_number="=9233437222073";
     public function send_url_file_whatsapp($whats_app_number,$file_url){
         // 923343722073
+        $whats_app_number = str_replace("+","",$whats_app_number);
         $id_instance = Config::get('whatsapp.WHATSAPP_ID');
         $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
         // $url = "https://api.green-api.com/waInstance".$id_instance."/sendFileByUrl/".$apiTokenInstance;

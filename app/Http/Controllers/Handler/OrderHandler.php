@@ -48,7 +48,7 @@ class OrderHandler
 
         $path = 'invoice/' . $order->order_id . '.pdf';
         $pdfPath = public_path($path);
-
+// dd($pdfPath );
         // Save the PDF to the public/invoice directory
         $pdf->save($pdfPath);
         $absolute_path = asset($path);
@@ -60,20 +60,22 @@ class OrderHandler
         ];
         // return $pdf->stream('admin_invoice.pdf');
     }
-    public function gernerate_pdf_voucher($order_id)
+    public function gernerate_pdf_voucher($order_detail_id)
     {
 
-        $order = Order::with(['user_obj',
-        'order_details'=>[
+        $order = Order_Detail::with([
             'journey',
             'transport_type',
             'pickup_location',
             'dropoff_location',
-            'driver_user'
+            'driver_user',
+        'order'=>[
+            'user_obj',
         ],  
-        ])->find($order_id);
+        ])->find($order_detail_id);
+        $data ['data'] = $order;
         $pdf = PDF::loadView('pdf.voucher', [
-            'order' => $order,
+            'data' => $data,
         ]);
 
         // Set the paper size to A4 and the orientation to portrait
@@ -81,7 +83,7 @@ class OrderHandler
 
         $path = 'voucher/' . $order->order_id . '.pdf';
         $pdfPath = public_path($path);
-
+// dd($pdfPath);
         // Save the PDF to the public/invoice directory
         $pdf->save($pdfPath);
         $absolute_path = asset($path);

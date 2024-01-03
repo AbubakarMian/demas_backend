@@ -27,19 +27,16 @@ class StaffPaymentsController extends Controller
         echo json_encode($staff_paymentsData);
     }
 
-
-   
     public function create()
     {
         $control = 'create';
-        $user = Users::pluck('name','id');
+        $user = Users::pluck('name', 'id');
         $payment_type = Config::get('constants.staff_payment_type');
-        // $transport_type = Transport_Type::pluck('name', 'id');
         return view('reports.staff_payments.create', compact(
-        'control', 
-        'user',
-        'payment_type',
-    ));
+            'control',
+            'user',
+            'payment_type',
+        ));
     }
 
     public function save(Request $request)
@@ -52,25 +49,23 @@ class StaffPaymentsController extends Controller
     public function edit($id)
     {
         $control = 'edit';
-        $user = Users::pluck('name','id');
+        $user = Users::pluck('name', 'id');
         $payment_type = Config::get('constants.staff_payment_type');
         $staff_payments = StaffPayments::find($id);
-        // dd($staff_payments->images);
-        // $transport_type = Transport_Type::pluck('name', 'id');
-        return view('reports.staff_payments.create', compact(
-            'control',
-            'staff_payments',
-            'user',
-            'payment_type',
-
-        )
+        return view(
+            'reports.staff_payments.create',
+            compact(
+                'control',
+                'staff_payments',
+                'user',
+                'payment_type',
+            )
         );
     }
 
     public function update(Request $request, $id)
     {
         $staff_payments = StaffPayments::find($id);
-        // StaffPayments::delete()
         return $this->add_or_update($request, $staff_payments);
         return Redirect('reports/staff_payments');
     }
@@ -78,8 +73,6 @@ class StaffPaymentsController extends Controller
 
     public function add_or_update(Request $request, $staff_payments)
     {
-        // dd(json_encode($request->staff_payments_images_upload));
-       
         $staff_payments->user_id = $request->user_id;
         $staff_payments->amount = $request->amount;
         $staff_payments->payment_type = $request->payment_type;
@@ -107,10 +100,9 @@ class StaffPaymentsController extends Controller
         return $response;
     }
 
-    public function pay_team(Request $request,$user_id){
-
+    public function pay_team(Request $request, $user_id)
+    {
         $commision_handler = new CommissionHandler();
-        $commision_handler->add_amount_to_wallet($user_id,$request->amount);
-
+        $commision_handler->add_amount_to_wallet($user_id, $request->amount);
     }
 }

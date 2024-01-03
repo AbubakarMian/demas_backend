@@ -140,7 +140,6 @@
                                 `,this) type='text' value='` + price + `'>
                             `;
                         }
-
                         tr_str += "<tr id='row_" + response['data'][i].id + "'>" +
                             "<td>" + journey + "</td>" +
                             "<td>" + slot + "</td>" +
@@ -149,12 +148,8 @@
                             "<td>" + user_trip_price + "</td>" +
                             "<td>" + price_td + "</td>" +
                             "</tr>";
-
-
                     }
                     $("#carTableAppend tbody").html(tr_str);
-                    // $("#carTableAppend").css('display','block');
-
                     if (open_edit) {
                         console.log('edit ',true);
                         var dt = {

@@ -181,14 +181,17 @@ $order = $data['data'];
         .top-off {
             margin-top: -40px;
         }
-        .sadasdsa h3{
-            float: right;   
+
+        .sadasdsa h3 {
+            float: right;
         }
-        .dsdds{
+
+        .dsdds {
             position: relative;
-           
+
         }
-        .dsdds h3{
+
+        .dsdds h3 {
             right: 0px;
         }
     </style>
@@ -212,7 +215,7 @@ $order = $data['data'];
                     <br>
                     <br>
                     <br>
-                    
+
                     {{-- <h3>
                         From:<br />
                         <span class="textColor">UMRAH TRANSPORT</span><br />
@@ -242,7 +245,8 @@ $order = $data['data'];
 
         <div class="bookingHeading">
             <center>
-                <h1>BOOKING {!! strtoupper($order->status) !!}</h1>    </center>
+                <h1>BOOKING {!! strtoupper($order->status) !!}</h1>
+            </center>
 
             <div class="bookingDate">
                 <p class="bookingDate">DATE : {!! $order->created_at !!}</p>
@@ -261,7 +265,9 @@ $order = $data['data'];
                         <th>Pickup Date</th>
                         <th>Pickup Time</th>
                         <th>Status</th>
-                        <th>Payment</th>
+                        @if ($order->show_price_in_user_invoice)
+                            <th>Payment</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -278,21 +284,24 @@ $order = $data['data'];
                             <td>{!! date('Y-m-d', $order_item->pick_up_date_time) !!}</td>
                             <td>{!! date('H:i:s', $order_item->pick_up_date_time) !!}</td>
                             <td>{!! $order_item->status !!}</td>
-                            <td>{!! $order_item->user_payment_status !!}</td>
+                            @if ($order->show_price_in_user_invoice)
+                                <td>{!! $order_item->user_payment_status !!}</td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
-        <div class="total_area">
-            <div class="total_txt">
-                <p>SUB TOTAL = <span class="">{!! $order_item->final_price !!}/=</span></p>
-            </div>
-            <!-- <div class="total_price">
+        @if ($order->show_price_in_user_invoice)
+            <div class="total_area">
+                <div class="total_txt">
+                    <p>SUB TOTAL = <span class="">{!! $order_item->final_price !!}/=</span></p>
+                </div>
+                <!-- <div class="total_price">
           <p></p>
         </div> -->
-        </div>
+            </div>
+        @endif
 
         <div class="note_area">
             <h3>Note:</h3>

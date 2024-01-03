@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
+use App\Models\StaffPayments;
 use App\Models\StaffPaymentsIncoming;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,7 +26,27 @@ class StaffPaymentsVerificationController extends Controller
     }
 
 
-   
+   public function verify_status(Request $request,$staff_payments_incomming_id){
+    $staff_payments_incomming = StaffPaymentsIncoming::find($staff_payments_incomming_id);
+    $staff_payments_incomming->verification_status = $request->status;
+    $staff_payments_incomming->save();
+    if($request->status == Config::get('constants.staff_payments_incomming.accepted')){
+        $staff_payments = new StaffPayments();
+        $staff_payments->staf_payment_incomming_id = $staff_payments_incomming->id;
+        $staff_payments->receipt_url = $staff_payments_incomming->receipt_url;
+        $staff_payments->detail = $staff_payments_incomming->detail;
+        $staff_payments->payment_type = $staff_payments_incomming->payment_type;
+        $staff_payments->amount = $staff_payments_incomming->amount;
+        $staff_payments->staff_type = $staff_payments_incomming->staff_type;
+        $staff_payments->user_id = $staff_payments_incomming->user_id;
+        $staff_payments->save();
+    }
+    return $this->sendResponse(200,$staff_payments_incomming);
+
+   }
+
+
+
     public function create()
     {
         $control = 'create';

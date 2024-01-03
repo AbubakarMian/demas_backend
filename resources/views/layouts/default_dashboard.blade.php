@@ -39,6 +39,11 @@ $reports = $admin_common->reports;
             padding: 10px 61px;
             margin-bottom: 0px;
         }
+
+        section.dash-tile.bg-warning.modules:hover {
+            background-color: #ffe5c1;
+            color: #996418;
+        }
     </style>
     <div class="row">
 
@@ -48,14 +53,14 @@ $reports = $admin_common->reports;
         </div>
         <div class="col-md-12 col-sm-12 col-xs-12">
 
-            @if(count($modules))
-            <div>
-                <section class="abc">
-                    <h1 class="mt0">
-                        <button type="button" class="btn btn-success ccc mod_btn_hed">Modules</button>
-                    </h1>
-                </section>
-            </div>
+            @if (count($modules))
+                <div>
+                    <section class="abc">
+                        <h1 class="mt0">
+                            <button type="button" class="btn btn-success ccc mod_btn_hed">Modules</button>
+                        </h1>
+                    </section>
+                </div>
             @endif
             @if ($message = Session::get('error'))
                 <div class="alert alert-danger alert-block">
@@ -90,20 +95,20 @@ $reports = $admin_common->reports;
         }
 
         /* .reprt_btn{
-            display: none;
-        } */
+                    display: none;
+                } */
     </style>
     <!-- reports start -->
     <div class="row">
 
 
         <div class="col-md-12 col-sm-12 col-xs-12">
-            @if(count($reports))
-            <section class="abc">
-                <h1 class="mt0">
-                    <button type="button" class="btn btn-success ccc mod_btn_hed reprt_btn">Reports</button>
-                </h1>
-            </section>
+            @if (count($reports))
+                <section class="abc">
+                    <h1 class="mt0">
+                        <button type="button" class="btn btn-success ccc mod_btn_hed reprt_btn ffffss">Reports</button>
+                    </h1>
+                </section>
             @endif
         </div>
         @foreach ($reports as $key => $report)

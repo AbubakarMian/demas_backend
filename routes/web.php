@@ -319,6 +319,7 @@ Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.p
         Route::get('edit/{id}', [StaffPaymentsVerificationController::class, 'edit'])->name('staff_payments_verification.edit');
         Route::post('update/{id}', [StaffPaymentsVerificationController::class, 'update'])->name('staff_payments_verification.update');
         Route::post('delete/{id}', [StaffPaymentsVerificationController::class, 'destroy_undestroy'])->name('staff_payments_verification.delete');
+        Route::post('verify_status/{id}', [StaffPaymentsVerificationController::class, 'verify_status'])->name('staff_payments_verification.verify_status');
     });
 
 

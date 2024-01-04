@@ -83,6 +83,7 @@ class StaffPaymentsIncomingController extends Controller
         $staff_payments_incoming->amount = $request->amount;
         $staff_payments_incoming->payment_type = $request->payment_type;
         $staff_payments_incoming->detail = $request->detail;
+        $staff_payments_incoming->verification_status = 'pending';
         $staff_payments_incoming->save();
         return Redirect('reports/staff_payments_incoming');
     }
@@ -103,4 +104,5 @@ class StaffPaymentsIncomingController extends Controller
             'new_value' => $new_value
         ]);
         return $response;
-    }}
+    }
+}

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\SaleAgentCommissionController;
 use App\Http\Controllers\Report\AgentsController;
 use App\Http\Controllers\Report\StaffPaymentsController;
+use App\Http\Controllers\Report\StaffPaymentsVerificationController;
 use App\Http\Controllers\Report\StaffPaymentsIncomingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
@@ -310,6 +311,17 @@ Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.p
         Route::post('update/{id}', [StaffPaymentsIncomingController::class, 'update'])->name('staff_payments_incoming.update');
         Route::post('delete/{id}', [StaffPaymentsIncomingController::class, 'destroy_undestroy'])->name('staff_payments_incoming.delete');
     });
+    Route::group(['prefix' => 'reports/staff_payments_verification'], function () {
+        Route::get('/', [StaffPaymentsVerificationController::class, 'index'])->name('staff_payments_verification.index');
+        Route::get('get_staff_payments_verification', [StaffPaymentsVerificationController::class, 'get_staff_payments_verification'])->name('staff_payments_verification.index');
+        Route::get('create', [StaffPaymentsVerificationController::class, 'create'])->name('staff_payments_verification.create'); //add
+        Route::post('save', [StaffPaymentsVerificationController::class, 'save'])->name('staff_payments_verification.save');
+        Route::get('edit/{id}', [StaffPaymentsVerificationController::class, 'edit'])->name('staff_payments_verification.edit');
+        Route::post('update/{id}', [StaffPaymentsVerificationController::class, 'update'])->name('staff_payments_verification.update');
+        Route::post('delete/{id}', [StaffPaymentsVerificationController::class, 'destroy_undestroy'])->name('staff_payments_verification.delete');
+        Route::post('verify_status/{id}', [StaffPaymentsVerificationController::class, 'verify_status'])->name('staff_payments_verification.verify_status');
+    });
+
 
 Route::get('reports/order/send_invoice/{order_id}', [OrderController::class, 'send_invoice'])->name('order.send_invoice'); //add
 Route::get('reports/order/send_voucher/{order_id}', [OrderController::class, 'send_voucher'])->name('order.send_voucher'); //add

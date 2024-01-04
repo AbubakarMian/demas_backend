@@ -12,6 +12,11 @@ return [
     'settings' => [
         'discount' => "discount",
     ],
+    'staff_payments_incomming' => [
+        'pending' => "pending",
+        'accepted' => "paid",
+        'rejected' => "rejected",
+    ],
     'user_payment_status' => [
         'pending' => "pending",
         'paid' => "paid",

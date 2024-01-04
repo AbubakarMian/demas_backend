@@ -48,7 +48,7 @@ class OrderHandler
 
         $path = 'invoice/' . $order->order_id . '.pdf';
         $pdfPath = public_path($path);
-// dd($pdfPath );
+        // dd($pdfPath );
         // Save the PDF to the public/invoice directory
         $pdf->save($pdfPath);
         $absolute_path = asset($path);

@@ -201,8 +201,6 @@ class OrderController extends Controller
             'travel_agent',
             'order_details' => [
                 'driver'=>['user_obj'],
-                // 'driver'=>['user_obj'=>'name','role_id'],
-                // 'driver.user_obj:name,role_id',
                 'transport_type', 'journey' => ['pickup', 'dropoff']
             ],
         ])->find($order_detail_id);
@@ -210,32 +208,15 @@ class OrderController extends Controller
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_voucher($order_detail_id);
-// dd('asd');
         $receipt_url = $pdf['path'];
-// dd($receipt_url);
-
-        // $whast_app_urls = $receipt_url;
-
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
-        // dd($whast_app_urls , $whast_app_url);
-
        $this->send_url_file_whatsapp('923343722073',$whast_app_url);
        $this->send_url_file_whatsapp($order->customer_whatsapp_number,$whast_app_url);
 
         $email_handler = new EmailHandler();
         $email_details = [];
-        // $email_details['cc'] = [];
-        // $email_details['cc'][] = [
-        //     'from_email' => 'saadyasirthegreat@gmailcom',
-        //     'from_name' => 'Saad cc',
-        // ];
 
         $user = $order->user_obj;
-        // dd($user);
-        // $email_details['bcc'][] = [
-        //     'from_email' => 'abubakarhere90@gmailcom',
-        //     'from_name' => 'Abubakar here bcc',
-        // ];
         $email_details['subject'] = 'Demas Voucher';
         $email_details['attachments'][] = $receipt_url;
         $email_details['to_email'] = $user->email;
@@ -244,11 +225,8 @@ class OrderController extends Controller
             'user'=>$user,
             'order'=>$order,
         ];
-        // $email_details['order'] = $order;
-        // $email_details['view'] = 'pdf.invoice';
         $email_details['view'] = 'pdf.order_update_email';
         $email_handler->sendEmail($email_details);
-        // dd('asdas');
         return redirect('admin/order')->with('success', 'Invoice sent');
     }
 }

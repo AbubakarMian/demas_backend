@@ -172,15 +172,7 @@ class OrderController extends Controller
         $pdf = $order_handler->gernerate_pdf_order($order_id);
 
         $receipt_url = $pdf['path'];
-
-        // return redirect($receipt_url);
-        // dd($receipt_url);
-
-
-        // $whast_app_urls = $receipt_url;
-
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
-        // dd($whast_app_urls , $whast_app_url);
 
        $this->send_url_file_whatsapp('923343722073',$whast_app_url);
        $this->send_url_file_whatsapp($order->customer_whatsapp_number,$whast_app_url);
@@ -196,11 +188,9 @@ class OrderController extends Controller
             'user'=>$user,
             'order'=>$order,
         ];
-        // $email_details['order'] = $order;
-        // $email_details['view'] = 'pdf.invoice';
+        
         $email_details['view'] = 'pdf.order_update_email';
         $email_handler->sendEmail($email_details);
-        // dd('asdas');
         return redirect('admin/order')->with('success', 'Invoice sent');
     }
     public function send_voucher($order_detail_id){

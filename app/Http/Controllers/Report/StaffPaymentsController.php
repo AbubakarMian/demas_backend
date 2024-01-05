@@ -103,6 +103,6 @@ class StaffPaymentsController extends Controller
     public function pay_team(Request $request, $user_id)
     {
         $commision_handler = new CommissionHandler();
-        $commision_handler->add_amount_to_wallet($user_id, $request->amount);
+        $commision_handler->pay_commission_team($user_id, $request->amount);
     }
 }

@@ -11,12 +11,12 @@ $order = $data['data'];
 <head>
     <style>
         .mainTicketBox {
-            /* width: 74%; */
+            width: 70%;
             /* display: flex; */
             margin-top: 25px;
             box-shadow: 0px 0px 20px 4px;
             border: solid 1px gray;
-            padding:5px; 
+            /* padding:5px;  */
         }
 
         h3.padding-top {

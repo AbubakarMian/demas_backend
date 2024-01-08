@@ -378,47 +378,85 @@ class CommissionHandler
         }
         return $res;
     }
-    public function add_amount_to_wallet($user_id,$amount){
-        $user = Users::with(['sale_agent','travel_agent','driver'])->find($user_id);
-        $user->wallet .= $amount;
-        $user->save();
-        
-    }
 
-    public function pay_commission_team($user_id){
+    public function pay_commission_team($user_id,$total_amount_paid_by_admin){
         $user = Users::with(['sale_agent','travel_agent','driver'])->find($user_id);
-        $wallet_amount = 0;
-        
+        $user->wallet = $user->wallet + $total_amount_paid_by_admin;
+        $user->save();
+        $amount_paid_by_admin = $total_amount_paid_by_admin;
+
         if($user->sale_agent){
-            $order_details = Order_Detail::where('sale_agent_payment_status',Config::get('constants.sales_agent.payment_status.pending'))
+            $order_details = Order_Detail::
+            where('sale_agent_payment_status',Config::get('constants.sales_agent.payment_status.pending'))
             ->where('admin_payment_status',Config::get('constants.admin_payment_status.paid'))
             ->get();
-            // sale_agent_commission
             foreach ($order_details as $key => $order_detail) {
-                $wallet_amount .= $order_detail->sale_agent_commission;
+                if($amount_paid_by_admin < $order_detail->sale_agent_commission){
+                    continue;
+                }
+                $amount_paid_by_admin = $amount_paid_by_admin - $order_detail->sale_agent_commission;
+                $order_detail->sale_agent_payment_status = Config::get('constants.sales_agent.payment_status.paid');
+                $order_detail->save();
             }
         }
         else if($user->travel_agent){
-            $order_details = Order_Detail::where('travel_agent_payment_status',Config::get('constants.travel_agent.payment_status.pending'))
+            $order_details = Order_Detail::
+            where('travel_agent_payment_status',Config::get('constants.travel_agent.payment_status.pending'))
             ->where('admin_payment_status',Config::get('constants.admin_payment_status.paid'))
             ->get();
             foreach ($order_details as $key => $order_detail) {
-                $wallet_amount .= $order_detail->travel_agent_commission;
+                if($amount_paid_by_admin < $order_detail->travel_agent_commission){
+                    continue;
+                }
+                $amount_paid_by_admin = $amount_paid_by_admin - $order_detail->travel_agent_commission;
+                $order_detail->travel_agent_payment_status = Config::get('constants.travel_agent.payment_status.paid');
+                $order_detail->save();
             }
         }
         else if($user->driver){
-            $order_details = Order_Detail::where('driver_payment_status',Config::get('constants.driver.payment_status.pending'))
+            $order_details = Order_Detail::
+            where('driver_payment_status',Config::get('constants.driver.payment_status.pending'))
             ->where('admin_payment_status',Config::get('constants.admin_payment_status.paid'))
             ->get();
             foreach ($order_details as $key => $order_detail) {
-                $wallet_amount .= $order_detail->driver_commission;
+                if($amount_paid_by_admin < $order_detail->driver_commission){
+                    continue;
+                }
+                $amount_paid_by_admin = $amount_paid_by_admin - $order_detail->driver_commission;
+                $order_detail->driver_payment_status = Config::get('constants.driver.payment_status.paid');
+                $order_detail->save();
             }
         }
         else{
             return false; // not a team member
         }
-        $user->wallet .= $wallet_amount;
+        return $user;
+    }
+
+    
+    public function add_agent_payment_to_wallet($user_id,$payment_collected){
+        $user = Users::with(['sale_agent','travel_agent','driver'])->find($user_id);
+        $user->wallet = $user->wallet + $payment_collected;
         $user->save();
+    }
+    public function charge_order_payments_from_agents($user_id){
+        $user = Users::with(['sale_agent','travel_agent','driver'])->find($user_id);
+        $total_amount_in_wallet = $user->wallet;
         
+        $order_details = Order_Detail::
+        where('cash_collected_by_user_id',$user_id)
+        ->where('admin_payment_status',Config::get('constants.admin_payment_status.pending'))
+        ->get();
+
+        foreach ($order_details as $key => $order_detail) {
+            if($total_amount_in_wallet < $order_detail->payable_to_admin){
+                continue;
+            }
+            $total_amount_in_wallet = $total_amount_in_wallet - $order_detail->payable_to_admin;
+            $order_detail->admin_payment_status = Config::get('constants.sales_agent.payment_status.paid');
+            $order_detail->save();
+        }
+        $user->wallet = $total_amount_in_wallet;
+        return $user;
     }
 }

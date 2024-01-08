@@ -271,7 +271,7 @@ $order = $data['data'];
                                 <div class="last_row">
                                     <table>
                                         <tr>
-                                            <td class="withaf">Vehicle</td>
+                                            <td class="withaf" style="margin-right: 2px">Vehicle</td>
                                             <td class="display_ecd">
                                                 <div class="last_row_text">Passenger Capacity</div>
                                             </td>
@@ -333,7 +333,7 @@ $order = $data['data'];
                                             <td>To</td>
                                         </tr>
                                         <tr class="barcode_box_last_txt">
-                                            <td class="lastes">{!!$order->pickup_location->name!!}</td>
+                                            <td class="lastes" style="margin-right: 2px;">{!!$order->pickup_location->name!!}</td>
                                             <td>{!!$order->dropoff_location->name!!}</td>
                                         </tr>
 

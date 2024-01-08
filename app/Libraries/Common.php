@@ -96,6 +96,49 @@ trait Common
         
         echo $response;
     }
+    public function send_url_voucher_whatsapp($whats_app_number,$file_url){
+        // 923343722073
+        $whats_app_number = str_replace("+","",$whats_app_number);
+        $id_instance = Config::get('whatsapp.WHATSAPP_ID');
+        $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
+        // $url = "https://api.green-api.com/waInstance".$id_instance."/sendFileByUrl/".$apiTokenInstance;
+        $url = "https://api.green-api.com/waInstance{$id_instance}/sendFileByUrl/{$apiTokenInstance}";
+        $payload = json_encode([
+            'chatId' => $whats_app_number.'@c.us',
+            'urlFile' => $file_url,
+            // 'urlFile' => 'https://avatars.mds.yandex.net/get-pdb/477388/77f64197-87d2-42cf-9305-14f49c65f1da/s375',
+            'fileName' => 'voucher.pdf',
+            'caption' => 'Ticket'
+            // 'caption' => 'лошадка'
+        ]);
+        
+        $headers = [
+            'Content-Type: application/json'
+        ];
+        
+
+        Log::info('-----------start whats app ----------');
+
+        Log::info('-----------url ----------');
+        Log::info($url);
+        Log::info('-----------payload ----------');
+        Log::info($payload);
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        $response = curl_exec($ch);
+        
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
+        }
+        
+        curl_close($ch);
+        
+        echo $response;
+    }
 
     public function sendFile_whatsapp()
     {

@@ -1,7 +1,7 @@
 <?php
 $order = $data['data'];
 // dd(
-//     $order->pick_up_date_time  ,
+//     $order->pick_extrainfo  ,
 //     $order->transport_type->name  ,
 //     $order->transport_type->seats  ,
 //     $order);
@@ -233,13 +233,15 @@ $order = $data['data'];
                                 <table class="time-box-center">
                                     <tr>
                                         <td>Time</td>
-                                        <td>Total passenger</td>
-                                        <td>Flight</td>
+                                        {{-- <td>Total passenger</td> --}}
+                                        <td></td>
+                                        <td>Info</td>
                                     </tr>
                                     <tr>
                                         <th>{!! date('H:i:s', $order->pick_up_date_time) !!}</th>
-                                        <th>{!!$order->transport_type->seats!!}</th>
-                                        <th>SAUDI AIRLINE
+                                        {{-- <th>{!!$order->transport_type->seats!!}</th> --}}
+                                        <th></th>
+                                        <th>{!!$order->pick_extrainfo!!}
                                         </th>
                                     </tr>
                                 </table>
@@ -270,12 +272,14 @@ $order = $data['data'];
                                     <table>
                                         <tr>
                                             <td class="withaf">Vehicle</td>
+                                            <td class="withaf"></td>
                                             <td class="display_ecd">
                                                 <div class="last_row_text">Passenger Capacity</div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th class="withaf"> {!!$order->transport_type->name !!}</th>
+                                            <th class="withaf"></th>
                                             <th class="display_ecd">
                                                 <div class="last_row_text">{!!$order->transport_type->seats!!}</div>
                                             </th>
@@ -314,12 +318,12 @@ $order = $data['data'];
                                         <tr class="color_w">
                                             <td class="">Boarding Time</td>
                                             <td>Terminal</td>
-                                            <td>Flight</td>
+                                            <td>Info</td>
                                         </tr>
                                         <tr class="color_w">
                                             <td>-</td>
                                             <td>-</td>
-                                            <td> SV-705</td>
+                                            <td>{!!$order->pick_extrainfo!!}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -328,10 +332,14 @@ $order = $data['data'];
                                     <table>
                                         <tr class="barcode_box_last_txt">
                                             <td>From </td>
+                                            <td></td>
+                                            <td></td>
                                             <td>To</td>
                                         </tr>
                                         <tr class="barcode_box_last_txt">
                                             <td class="lastes">{!!$order->pickup_location->name!!}</td>
+                                            <td class="lastes"></td>
+                                            <td class="lastes"></td>
                                             <td>{!!$order->dropoff_location->name!!}</td>
                                         </tr>
 

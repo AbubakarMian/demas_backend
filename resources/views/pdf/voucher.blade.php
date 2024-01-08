@@ -1,5 +1,10 @@
 <?php
 $order = $data['data'];
+dd(
+    $order->pick_up_date_time  ,
+    $order->transport_type->name  ,
+    $order->transport_type->seats  ,
+    $order);
 ?>
 <html>
 
@@ -221,7 +226,7 @@ $order = $data['data'];
                             <div class="Passenger_name">
                                 <span class="pass">Passenger</span>
                                 <br>
-                                <span class="pass_detail"><b>{!! $order->customer_name !!}</b></span>
+                                <span class="pass_detail"><b>{!! $order->order->customer_name !!}</b></span>
 
                             </div>
                             <div class="Passenger_name">
@@ -232,8 +237,8 @@ $order = $data['data'];
                                         <td>Flight</td>
                                     </tr>
                                     <tr>
-                                        <th>{!! date('H:i:s', $order_item->pick_up_date_time) !!}</th>
-                                        <th>11</th>
+                                        <th>{!! date('H:i:s', $order->pick_up_date_time) !!}</th>
+                                        <th>{!!$order->transport_type->seats!!}</th>
                                         <th>SAUDI AIRLINE
                                         </th>
                                     </tr>
@@ -247,8 +252,8 @@ $order = $data['data'];
                                         <td>From</td>
                                     </tr>
                                     <tr class="text_center">
-                                        <th>03.11.2023</th>
-                                        <th>KARACHI, AIRPORT</th>
+                                        <th>{!! date('Y-m-d', $order->pick_up_date_time) !!}</th>
+                                        <th>{!!$order->pickup_location->name!!}</th>
                                     </tr>
                                 </table>
 
@@ -256,7 +261,7 @@ $order = $data['data'];
                             <div class="Passenger_name">
                                 <span class="text_center">To</span>
                                 <br>
-                                <span class="text_center"><b>JEDDAH, AIRPORT</b></span>
+                                <span class="text_center"><b>{!!$order->dropoff_location->name!!}</b></span>
 
                             </div>
                             <div class="Passenger_na">
@@ -270,9 +275,9 @@ $order = $data['data'];
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th class="withaf">HIACE</th>
+                                            <th class="withaf"> {!!$order->transport_type->name !!}</th>
                                             <th class="display_ecd">
-                                                <div class="last_row_text">11</div>
+                                                <div class="last_row_text">{!!$order->transport_type->seats!!}</div>
                                             </th>
                                         </tr>
                                     </table>
@@ -302,7 +307,7 @@ $order = $data['data'];
                                 </div>
                                 <div class="passengerName">
                                     <p>Passenger</p>
-                                    <h5>MR. ATIF BAQA</h5>
+                                    <h5>{!! $order->order->customer_name !!}</h5>
                                 </div>
                                 <div class="passengerName">
                                     <table>
@@ -326,10 +331,8 @@ $order = $data['data'];
                                             <td>To</td>
                                         </tr>
                                         <tr class="barcode_box_last_txt">
-                                            <td class="lastes">KARACHI,<br>
-                                                AIRPORT</td>
-                                            <td>JEDDAH,<br>
-                                                AIRPORT</td>
+                                            <td class="lastes">{!!$order->pickup_location->name!!}</td>
+                                            <td>{!!$order->dropoff_location->name!!}</td>
                                         </tr>
 
                                     </table>

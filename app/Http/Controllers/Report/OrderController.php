@@ -229,8 +229,8 @@ class OrderController extends Controller
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
         // dd($whast_app_urls , $whast_app_url);
 
-       $this->send_url_file_whatsapp('923343722073',$whast_app_url);
-       $this->send_url_file_whatsapp($order->customer_whatsapp_number,$whast_app_url);
+       $this->send_url_voucher_whatsapp('923343722073',$whast_app_url);
+       $this->send_url_voucher_whatsapp($order->customer_whatsapp_number,$whast_app_url);
 
         $email_handler = new EmailHandler();
         $email_details = [];

@@ -39,12 +39,13 @@ class StaffPaymentsController extends Controller
         ));
     }
 
-    public function save(Request $request)
+    public function save(Request $request )
     {
         $staff_payments = new StaffPayments();
-        return $this->add_or_update($request, $staff_payments);
-
-        return redirect('reports/staff_payments');
+        $staff_payment = $this->add_or_update($request, $staff_payments );
+        $this->pay_team($request,$request->user_id);
+        return $staff_payment;
+        // return redirect('reports/staff_payments');
     }
     public function edit($id)
     {

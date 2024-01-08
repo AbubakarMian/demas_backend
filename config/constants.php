@@ -127,9 +127,8 @@ return [
         'advance_collection' => 'advance_collection',
     ],
     'staff_payment_type' => [
-        'pending' => 'pending',
-        'paid' => 'paid',
-        'recieved' => 'recieved',
+        'paid_by_admin' => 'Paid By Admin',
+        'recieved_by_admin' => 'Recieved By Admin',
     ],
     'payment_status' => [
         'pending' => 'pending',

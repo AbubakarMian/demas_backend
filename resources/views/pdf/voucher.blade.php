@@ -1,10 +1,10 @@
 <?php
 $order = $data['data'];
-dd(
-    $order->pick_up_date_time  ,
-    $order->transport_type->name  ,
-    $order->transport_type->seats  ,
-    $order);
+// dd(
+//     $order->pick_up_date_time  ,
+//     $order->transport_type->name  ,
+//     $order->transport_type->seats  ,
+//     $order);
 ?>
 <html>
 

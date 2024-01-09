@@ -296,6 +296,7 @@ Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.p
     Route::get('/', [StaffPaymentsController::class, 'index'])->name('staff_payments.index');
     Route::get('get_staff_payments', [StaffPaymentsController::class, 'get_staff_payments'])->name('staff_payments.index');
     Route::get('create', [StaffPaymentsController::class, 'create'])->name('staff_payments.create'); //add
+    Route::get('pay_team/{id}', [StaffPaymentsController::class, 'pay_team'])->name('staff_payments.pay_team'); //add
     Route::post('save', [StaffPaymentsController::class, 'save'])->name('staff_payments.save');
     Route::get('edit/{id}', [StaffPaymentsController::class, 'edit'])->name('staff_payments.edit');
     Route::post('update/{id}', [StaffPaymentsController::class, 'update'])->name('staff_payments.update');

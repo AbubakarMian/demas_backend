@@ -41,7 +41,23 @@ class StaffPaymentsController extends Controller
 
     public function save(Request $request)
     {
+        $user_id =$request->user_id;
+        $commision_handler = new CommissionHandler();
         $staff_payments = new StaffPayments();
+        if($request->payment_type == 'agent_cash_withdrawal'){ //cash widdrawl
+            $commision_handler->withdrawal_agent_payment_from_wallet($user_id, $request->amount);
+
+            // $user = User::finf($user_id);
+            // $user->wallet = $user->wallet - $aamount;
+            // $user->save();
+        }
+        else{//agent_cash_deposit
+            // $this->add_amount_to_agent_wallet( $request, $staff_payments->user_id);
+            $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
+            $user = $commision_handler->charge_order_payments_from_agents($user_id);
+            // return $this->sendResponse(200,$user);
+
+        }
         $staff_payment = $this->add_or_update($request, $staff_payments);
         $this->pay_team($request, $request->user_id);
         return $staff_payment;
@@ -101,15 +117,32 @@ class StaffPaymentsController extends Controller
         return $response;
     }
 
+    public function confirm_reject_payment_collection(Request $request, $staff_payment_verification_id)
+    {
+        $staff_payment = StaffPaymentsIncoming::find($staff_payment_verification_id);
+        $user_id = $staff_payment->user_id;
+        if($request->status == 'accepted'){
+
+            $commision_handler = new CommissionHandler();
+            $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
+            $user = $commision_handler->charge_order_payments_from_agents($user_id);
+        }
+        dd($user);
+        return $this->sendResponse(200,$user);
+    }
+
     public function pay_team(Request $request, $user_id)
     {
         $commision_handler = new CommissionHandler();
-        $commision_handler->pay_commission_team($user_id, $request->amount);
+        $user = $commision_handler->pay_commission_team($user_id, $request->amount);
+        // dd($user);
+        return $this->sendResponse(200,$user);
     }
-    public function add_amount_to_agent_wallet(Request $request, $user_id)
-    {
-        $commision_handler = new CommissionHandler();
-        $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
-        $commision_handler->charge_order_payments_from_agents($user_id);
-    }
+    // public function add_amount_to_agent_wallet(Request $request, $user_id)
+    // {
+    //     $commision_handler = new CommissionHandler();
+    //     $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
+    //     $user = $commision_handler->charge_order_payments_from_agents($user_id);
+    //     return $this->sendResponse(200,$user);
+    // }
 }

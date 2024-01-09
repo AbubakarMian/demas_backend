@@ -38,6 +38,7 @@ width="400px" style="table-layout:fixed;"
         <th> Name</th>
         <th> Staff Type</th>
         <th> Amount</th>
+        <th> Payment Type</th>
 	  
 	</tr>
 </thead>
@@ -72,6 +73,7 @@ $(document).ready(function(){
                   var user_id =  response['data'][i].user_obj.name;
                   var staff_type =  response['data'][i].user_obj.role.name;
                   var amount =  response['data'][i].amount;
+                  var payment_type =  response['data'][i].payment_type;
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);
@@ -99,6 +101,7 @@ $(document).ready(function(){
                     "<td>" +user_id+ "</td>" +
                     "<td>" +staff_type+ "</td>" +
                     "<td>" +amount+ "</td>" +
+                    "<td>" +format_value_for_display(payment_type)+ "</td>" +
                     
        
 

@@ -37,6 +37,33 @@
     position: relative;
     display: inline-block;
 }
+.btn_gp {
+    border: solid 2px #a4610d;
+    border-radius: 20px;
+    padding: 1px;
+}
+label.btn.btn-secondary.paid_admin.active {
+    background-color: #a4610d;
+    color: white;
+    font-weight: bold;
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+}
+label.btn.btn-secondary.recieved_admin.active {
+    background-color: #a4610d;
+    color: white;
+    font-weight: bold;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+}
+label.btn.btn-secondary.paid_admin {
+    color: #a4610d;
+    font-weight: bold;
+}
+label.btn.btn-secondary.recieved_admin {
+    color: #a4610d;
+    font-weight: bold;
+}
 </style>
 
 @if ($message = Session::get('error'))
@@ -72,7 +99,7 @@
         ]) !!}
     </div>
 </div>
-<div class="form-group">
+{{-- <div class="form-group">
     <label for="user_id">Select Payment Type </label>
     {!! Form::select('payment_type ', $payment_type , null, [
         'class' => 'form-control pickup_location',
@@ -82,7 +109,8 @@
         'required',
         'maxlength' => '100',
     ]) !!}
-</div>
+</div> --}}
+
 <div class="form-group">
     {!! Form::label('details ', 'details ') !!}
     <div>
@@ -95,6 +123,7 @@
         ]) !!}
     </div>
 </div>
+
 
 <label for="transport_type_id">Upload Recipt Image</label>
 
@@ -116,6 +145,17 @@
 
     </div>
 </div>
+
+<br>
+<div class="btn-group btn-group-toggle btn_gp" data-toggle="buttons">
+    <label class="btn btn-secondary paid_admin active">
+      <input type="radio"  name="payment_type" value="withdrawal" id="option1" checked>Agent Cash Widdrwawl
+    </label>
+    <label class="btn btn-secondary recieved_admin">
+      <input type="radio"  name="payment_type" value="deposit" id="option2"> Agent Cash Deposit
+    </label>
+  
+  </div>
 
 <span id="err" class="error-product"></span>
 <div class="form-group col-md-12">

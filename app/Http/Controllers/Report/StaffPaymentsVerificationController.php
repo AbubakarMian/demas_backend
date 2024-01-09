@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\CommissionHandler;
 use App\Models\StaffPayments;
 use App\Models\StaffPaymentsIncoming;
 use App\Models\User;
@@ -29,6 +30,7 @@ class StaffPaymentsVerificationController extends Controller
    public function verify_status(Request $request,$staff_payments_incomming_id){
     $staff_payments_incomming = StaffPaymentsIncoming::find($staff_payments_incomming_id);
     $staff_payments_incomming->verification_status = $request->status;
+    $staff_payments_incomming->reason = $request->reason;
     $staff_payments_incomming->save();
     if($request->status == Config::get('constants.staff_payments_incomming.accepted')){
         $staff_payments = new StaffPayments();
@@ -40,7 +42,16 @@ class StaffPaymentsVerificationController extends Controller
         $staff_payments->staff_type = $staff_payments_incomming->staff_type;
         $staff_payments->user_id = $staff_payments_incomming->user_id;
         $staff_payments->save();
+        $user_id =  $staff_payments->user_id;
+
+        $commision_handler = new CommissionHandler();
+        $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
+        $user = $commision_handler->charge_order_payments_from_agents($user_id);
+
+
+        
     }
+   
     return $this->sendResponse(200,$staff_payments_incomming);
 
    }
@@ -124,3 +135,4 @@ class StaffPaymentsVerificationController extends Controller
         ]);
         return $response;
     }}
+    

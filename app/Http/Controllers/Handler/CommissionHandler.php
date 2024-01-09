@@ -430,8 +430,14 @@ class CommissionHandler
 
     public function add_agent_payment_to_wallet($user_id, $payment_collected)
     {
-        $user = Users::with(['sale_agent', 'travel_agent', 'driver'])->find($user_id);
+        $user = Users::find($user_id);
         $user->wallet = $user->wallet + $payment_collected;
+        $user->save();
+    }
+    public function withdrawal_agent_payment_from_wallet($user_id, $amount)
+    {
+        $user = Users::find($user_id);
+        $user->wallet = $user->wallet - $amount;
         $user->save();
     }
 

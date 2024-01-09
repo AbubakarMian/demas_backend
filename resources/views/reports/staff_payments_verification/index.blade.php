@@ -117,7 +117,7 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                 `,
                                 });
-                            }else{
+                            } else {
                                 var action = '';
                             }
 
@@ -158,31 +158,44 @@
         }
 
         function update_request_payment_status(id, status) {
-    var my_url = "{!! asset('reports/staff_payments_verification/verify_status') !!}/" + id;
-   // url: "{!! asset('admin/staff_payments_verification/delete') !!}/" + id+'?status'+status,
-    $.ajax({
-        url: my_url,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            _token: '{!! @csrf_token() !!}',
-            status: status
-        },
-        success: function(response) {
-            console.log(response.response.verification_status, 'sada');
-            if (response) {
-                var myTable = $('#staff_payments_verificationTableAppend').DataTable();
+            var my_url = "{!! asset('reports/staff_payments_verification/verify_status') !!}/" + id;
+            // url: "{!! asset('admin/staff_payments_verification/delete') !!}/" + id+'?status'+status,
+            $.ajax({
+                url: my_url,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{!! @csrf_token() !!}',
+                    status: status
+                },
+                success: function(response) {
+                    console.log(response.response.verification_status, 'sada');
+                    if (response) {
+                        var acceptedUrl = "{!! asset('reports/staff_payments/pay_team') !!}/"+ id;;
+                        var myTable = $('#staff_payments_verificationTableAppend').DataTable();
 
-                // Update the content of the verification status cell in the table
-                myTable.cell('#row_' + id, 4).data(response.response.verification_status).draw();
-                myTable.cell('#row_' + id, 5).data('').draw();
-
-                // Display the verification status elsewhere on the page if needed
-                // $('#verificationStatusDisplay').text(response.response.verification_status);
-            }
+                        // Update the content of the verification status cell in the table
+                        myTable.cell('#row_' + id, 4).data(response.response.verification_status).draw();
+                        myTable.cell('#row_' + id, 5).data('').draw();
+                        if (response.response.verification_status == 'accepted') {
+                            $.ajax({
+                                url: acceptedUrl,
+                                type: 'GET', // or 'POST' based on your requirement
+                                dataType: 'json',
+                                success: function(acceptedResponse) {
+                                    // Handle the response from the accepted URL
+                                    console.log('Additional request successful:', acceptedResponse);
+                                },
+                                error: function(acceptedError) {
+                                    console.error('Error in additional request:', acceptedError);
+                                }
+                            });
+                        }
+                        // Display the verification status elsewhere on the page if needed
+                        // $('#verificationStatusDisplay').text(response.response.verification_status);
+                    }
+                }
+            });
         }
-    });
-}
-
     </script>
 @endsection

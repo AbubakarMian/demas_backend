@@ -75,6 +75,7 @@
                             var amount = response['data'][i].amount;
                             var detail = response['data'][i].detail;
                             var verification_status = response['data'][i].verification_status;
+                            var reason = response['data'][i].reason;
 
                             console.log('aaa', response['data'][i]);
 
@@ -85,7 +86,7 @@
                                 header: '<h4>Confirm</h4>',
                                 body: 'Do you want to continue ?',
                                 footer: `
-                                <button class="btn btn-danger" onclick="update_request_payment_status(` + response[
+                                <button class="btn btn-success" onclick="update_request_payment_status(` + response[
                                     'data'][i].id + `,'accepted')"
                                 data-dismiss="modal">
                                     Confirm
@@ -96,7 +97,7 @@
                             // var action = response['data'][i].verification_status;
                             if (response['data'][i].verification_status == 'pending') {
                                 var action =
-                                    `<a class="btn btn-warning" data-toggle="modal" data-target="#` +
+                                    `<a class="btn btn-success" data-toggle="modal" data-target="#` +
                                     'staff_payments_verification_confirm_' + response['data'][i].id +
                                     `">Confirm</a> 
                                 <a class="btn btn-warning" data-toggle="modal" data-target="#` +
@@ -107,7 +108,17 @@
                                         [i]
                                         .id,
                                     header: '<h4>Reject</h4>',
-                                    body: 'Do you want to continue ?',
+                                    body: `Do you want to continue ?
+                                    <br>
+                                    <label class="form-label" for="reasonTextarea">Reason</label>
+                                    <textarea
+                                        maxlength="300"
+                                        id="reasonTextarea"
+                                        class="txtarea_css form-control" 
+                                        name="reason"
+                                        placeholder="Kindly specify a reason for rejecting this payment." rows="4">
+                                    </textarea>
+                                    `,
                                     footer: `
                                 <button class="btn btn-danger" onclick="update_request_payment_status(` + response[
                                         'data'][i].id + `,'rejected')"
@@ -118,8 +129,20 @@
                                 `,
                                 });
                             } else {
-                                var action = '';
+                                var action = ` <a class="btn btn-info" data-toggle="modal" data-target="#` +
+                                    'reason_view_' + response['data'][i].id +
+                                    `">Reason</a>`;
+                                    createModal({
+                                id: 'reason_view_' + response['data'][i]
+                                    .id,
+                                header: '<h4>Reason</h4>',
+                                body: reason,
+                                footer: `
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                `,
+                            });
                             }
+                           
 
                             // var recipt_img = `<img width="42" class="imgshow show-product-img" src="` +
                             // receipt_url + `">`;
@@ -157,8 +180,10 @@
             $('.set_msg_modal').html(msg);
         }
 
+
         function update_request_payment_status(id, status) {
             var my_url = "{!! asset('reports/staff_payments_verification/verify_status') !!}/" + id;
+            var reason = $("#reasonTextarea").val();
             // url: "{!! asset('admin/staff_payments_verification/delete') !!}/" + id+'?status'+status,
             $.ajax({
                 url: my_url,
@@ -166,31 +191,19 @@
                 dataType: 'json',
                 data: {
                     _token: '{!! @csrf_token() !!}',
-                    status: status
+                    status: status,
+                    reason: reason,
                 },
                 success: function(response) {
                     console.log(response.response.verification_status, 'sada');
                     if (response) {
-                        var acceptedUrl = "{!! asset('reports/staff_payments/pay_team') !!}/"+ id;;
+                        // var acceptedUrl = "{!! asset('reports/staff_payments/pay_team') !!}/" + id;;
                         var myTable = $('#staff_payments_verificationTableAppend').DataTable();
 
                         // Update the content of the verification status cell in the table
                         myTable.cell('#row_' + id, 4).data(response.response.verification_status).draw();
-                        myTable.cell('#row_' + id, 5).data('').draw();
-                        if (response.response.verification_status == 'accepted') {
-                            $.ajax({
-                                url: acceptedUrl,
-                                type: 'GET', // or 'POST' based on your requirement
-                                dataType: 'json',
-                                success: function(acceptedResponse) {
-                                    // Handle the response from the accepted URL
-                                    console.log('Additional request successful:', acceptedResponse);
-                                },
-                                error: function(acceptedError) {
-                                    console.error('Error in additional request:', acceptedError);
-                                }
-                            });
-                        }
+                        myTable.cell('#row_' + id, 5).data(response.response.verification_status).draw();
+                        
                         // Display the verification status elsewhere on the page if needed
                         // $('#verificationStatusDisplay').text(response.response.verification_status);
                     }

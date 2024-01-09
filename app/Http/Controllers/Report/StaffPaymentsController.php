@@ -39,11 +39,11 @@ class StaffPaymentsController extends Controller
         ));
     }
 
-    public function save(Request $request )
+    public function save(Request $request)
     {
         $staff_payments = new StaffPayments();
-        $staff_payment = $this->add_or_update($request, $staff_payments );
-        $this->pay_team($request,$request->user_id);
+        $staff_payment = $this->add_or_update($request, $staff_payments);
+        $this->pay_team($request, $request->user_id);
         return $staff_payment;
         // return redirect('reports/staff_payments');
     }
@@ -105,5 +105,11 @@ class StaffPaymentsController extends Controller
     {
         $commision_handler = new CommissionHandler();
         $commision_handler->pay_commission_team($user_id, $request->amount);
+    }
+    public function add_amount_to_agent_wallet(Request $request, $user_id)
+    {
+        $commision_handler = new CommissionHandler();
+        $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
+        $commision_handler->charge_order_payments_from_agents($user_id);
     }
 }

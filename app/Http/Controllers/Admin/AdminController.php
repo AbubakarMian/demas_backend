@@ -263,19 +263,19 @@ class AdminController extends Controller
         $reports[] = [
 
             'url' => 'admin/order',
-            'title' => 'Order ',
+            'title' => 'Order',
 
         ];        
         $reports[] = [
 
-            'url' => 'reports/staff_payments ',
-            'title' => 'Staff Payments  ',
+            'url' => 'reports/staff_payments',
+            'title' => 'Staff Payments',
 
         ];        
         $reports[] = [
 
-            'url' => 'admin/reports/agent ',
-            'title' => 'Agents  ',
+            'url' => 'admin/reports/agent',
+            'title' => 'Agents',
 
         ];        
         // $reports[] = [
@@ -286,8 +286,14 @@ class AdminController extends Controller
         // ];      
         $reports[] = [
 
-            'url' => 'reports/staff_payments_verification  ',
-            'title' => 'Staff Payment Verification   ',
+            'url' => 'reports/staff_payments_verification',
+            'title' => 'Staff Payment Verification',
+
+        ];      
+        $reports[] = [
+
+            'url' => 'reports/wallet  ',
+            'title' => 'Wallet',
 
         ];      
         // $reports[] = [

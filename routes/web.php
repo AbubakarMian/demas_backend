@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\SaleAgentCommissionController;
+use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Report\AgentsController;
 use App\Http\Controllers\Report\StaffPaymentsController;
 use App\Http\Controllers\Report\StaffPaymentsVerificationController;
@@ -87,6 +88,7 @@ Route::group(['prefix' => 'admin/', 'middleware' => 'admin_auth'], function () {
         Route::post('update/{id}', [UserController::class, 'update'])->name('user.update');
         Route::post('delete/{id}', [UserController::class, 'destroy_undestroy'])->name('user.delete');
     });
+   
         //  =================================  new_agent ==========================
         Route::group(['prefix' => 'new_agent'], function () {
             Route::get('/', [NewAgentController::class, 'index'])->name('new_agent.index');
@@ -321,6 +323,16 @@ Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.p
         Route::post('update/{id}', [StaffPaymentsVerificationController::class, 'update'])->name('staff_payments_verification.update');
         Route::post('delete/{id}', [StaffPaymentsVerificationController::class, 'destroy_undestroy'])->name('staff_payments_verification.delete');
         Route::post('verify_status/{id}', [StaffPaymentsVerificationController::class, 'verify_status'])->name('staff_payments_verification.verify_status');
+    });
+       //  =================================  wallet ==========================
+       Route::group(['prefix' => 'reports/wallet'], function () {
+        Route::get('/', [WalletController::class, 'index'])->name('wallet.index');
+        Route::get('get_wallet', [WalletController::class, 'get_wallet'])->name('wallet.index');
+        Route::get('create', [WalletController::class, 'create'])->name('wallet.create'); //add
+        Route::post('save', [WalletController::class, 'save'])->name('wallet.save');
+        Route::get('edit/{id}', [WalletController::class, 'edit'])->name('wallet.edit');
+        Route::post('update/{id}', [WalletController::class, 'update'])->name('wallet.update');
+        Route::post('delete/{id}', [WalletController::class, 'destroy_undestroy'])->name('wallet.delete');
     });
 
 

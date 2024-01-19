@@ -39,7 +39,7 @@ class TransportHandler
         $travel_agent = Travel_Agent::where('user_id', $user->id)->first();
         $request_params = $request->all();
         $booking = $request_params['booking_details'];
-        $apply_discount = (count($booking['details']) + 1) % 3 == 0 && $user->role_id == 2;
+        $apply_discount = (count($booking['details']) ) % 3 == 0 && $user->role_id == 2;
         $cars = $this->transform_cars($user,$cars, $apply_discount);
         return $cars;
     }

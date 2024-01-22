@@ -341,8 +341,9 @@ class ReportDetails
 
     public function admin_agent_report_detail($order_detail, $row)
     {
-        $row['admin_agent_direct_customer'] = $order_detail->order->user_obj->role_id == 2 ?
-            $order_detail->order->user_obj->name : '';
+        // $row['admin_agent_direct_customer'] = $order_detail->order->user_obj->role_id == 2 ?
+        //     $order_detail->order->user_obj->name : '';
+        $row['admin_agent_direct_customer'] = $order_detail->order->customer_name;
         $row['admin_agent_travel_agent'] = $order_detail->travel_agent_user->name ?? '';
         $row['admin_agent_sales_agent'] = $order_detail->sale_agent_user->name ?? '';
         $row['admin_agent_service_type'] = $order_detail->journey->name ?? '';

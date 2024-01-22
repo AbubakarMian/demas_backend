@@ -132,6 +132,22 @@ class CommissionHandler
                 if ($order->user_obj->sale_agent) {
                     $extra_commission = ($order_details['customer_collection_price'] -  $order_details->final_price);
                 }
+                else{
+                    if($order->travel_agent){
+                        $travel_agent_trip_commision = TravelAgentCommission::
+                        where('user_sale_agent_id',$order_details->sale_agent_user_id)
+                        ->where([
+                            'journey_id',$order_details->journey_id,
+                            'slot_id',$order_details->slot_id,
+                            'transport_type_id',$order_details->transport_type_id,
+                        ])->first();
+                        $sale_agent_trip_price = SalesAgentTripPrice::
+                        where('transport_price_id',$travel_agent_trip_commision->transport_price_id)
+                        ->first();
+                        $extra_commission += $travel_agent_trip_commision->price - $sale_agent_trip_price->price;
+                        // ->where('transport_price_id',$order_details->trip_id);
+                    }
+                }
                 $order_details->sale_agent_commission += $commission + $extra_commission;
                 $order->sale_agent_commission_total += $order_details->sale_agent_commission;
                 $order_details->sale_agent_commission_type = $sale_agent->commision_type;

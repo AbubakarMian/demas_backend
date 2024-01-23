@@ -46,20 +46,17 @@ class StaffPaymentsController extends Controller
         $staff_payments = new StaffPayments();
         if($request->payment_type == 'agent_cash_withdrawal'){ //cash widdrawl
             $commision_handler->withdrawal_agent_payment_from_wallet($user_id, $request->amount);
-
-            // $user = User::finf($user_id);
-            // $user->wallet = $user->wallet - $aamount;
-            // $user->save();
         }
         else{//agent_cash_deposit
             // $this->add_amount_to_agent_wallet( $request, $staff_payments->user_id);
             $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
             $user = $commision_handler->charge_order_payments_from_agents($user_id);
             // return $this->sendResponse(200,$user);
+            $user = $commision_handler->pay_commission_team($user_id, $request->amount);
 
         }
         $staff_payment = $this->add_or_update($request, $staff_payments);
-        $this->pay_team($request, $request->user_id);
+        // $this->pay_team($request, $request->user_id);
         return $staff_payment;
         // return redirect('reports/staff_payments');
     }
@@ -127,14 +124,15 @@ class StaffPaymentsController extends Controller
             $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
             $user = $commision_handler->charge_order_payments_from_agents($user_id);
         }
-        dd($user);
+        // dd($user);
         return $this->sendResponse(200,$user);
     }
 
     public function pay_team(Request $request, $user_id)
     {
         $commision_handler = new CommissionHandler();
-        $user = $commision_handler->pay_commission_team($user_id, $request->amount);
+        // $user = $commision_handler->pay_commission_team($user_id, $request->amount);
+        $user = $commision_handler->pay_commission_team($user_id);
         // dd($user);
         return $this->sendResponse(200,$user);
     }

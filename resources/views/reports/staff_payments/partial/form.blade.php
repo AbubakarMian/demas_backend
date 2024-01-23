@@ -119,7 +119,6 @@ label.btn.btn-secondary.recieved_admin {
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',
             'placeholder' => 'Enter details ',
-            'required',
         ]) !!}
     </div>
 </div>

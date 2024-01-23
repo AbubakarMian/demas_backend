@@ -22,6 +22,7 @@ width="400px" style="table-layout:fixed;"
 		height: 30px;
 		text-overflow: ellipsis;
 	}
+    
     .fhgyt th {
     border: 1px solid #e3e6f3 !important;
 }
@@ -29,6 +30,11 @@ width="400px" style="table-layout:fixed;"
     border: 1px solid #e3e6f3 !important;
     background: #f9f9f9
 }
+.img_modal_cs {
+    border: solid 1px #996418;
+    border-radius: 10px;
+}
+
 </style>
 @section('table')
 
@@ -39,6 +45,8 @@ width="400px" style="table-layout:fixed;"
         <th> Staff Type</th>
         <th> Amount</th>
         <th> Payment Type</th>
+        <th> Image</th>
+        <th> Detail</th>
 	  
 	</tr>
 </thead>
@@ -74,13 +82,14 @@ $(document).ready(function(){
                   var staff_type =  response['data'][i].user_obj.role.name;
                   var amount =  response['data'][i].amount;
                   var payment_type =  response['data'][i].payment_type;
+                  var receipt_url =  response['data'][i].receipt_url??'https://demastransport.com/images/12.png';
 
                 console.log('aaa',response['data'][i]);
                 // console.log('ccaaa',response['data'][i].transport_type);
 
 
                 //   var user_owner_id =  response['data'][i].driver.user.name;
-                  var details =  response['data'][i].details;
+                  var details =  response['data'][i].detail;
                   
 				  var edit = `<a class="btn btn-info" href="{!!asset('reports/staff_payments/edit/` + id + `')!!}">Edit</a>`;
                        createModal({
@@ -95,13 +104,25 @@ $(document).ready(function(){
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                 `,
                         });
+                      createModal({
+                                id: 'bigImg_' + response['data'][i].id,
+                                header: '<center><h4>Image</h4></center>',
+                                body: '<center><img class="img_modal_cs" src="' + receipt_url + '"></center>',
+                                footer: '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>',
+                            });
                         var delete_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#` + 'staff_payments_' + response['data'][i].id + `">Delete</a>`;
-                        // var img = `<img width="42" src="`+image+`">`;
-                        var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
+                       
+                       var receipt_img = `<img width="42" src="`+receipt_url+`" data-toggle="modal" data-target="#` + 'bigImg_' + response['data'][i].id + `">`;
+                       
+                       
+                       
+                       var tr_str = "<tr id='row_"+response['data'][i].id+"'>" +
                     "<td>" +user_id+ "</td>" +
                     "<td>" +staff_type+ "</td>" +
                     "<td>" +amount+ "</td>" +
                     "<td>" +format_value_for_display(payment_type)+ "</td>" +
+                    "<td>" +receipt_img+ "</td>" +
+                    "<td>" +details+ "</td>" +
                     
        
 

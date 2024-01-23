@@ -133,17 +133,22 @@ class CommissionHandler
                     $extra_commission = ($order_details['customer_collection_price'] -  $order_details->final_price);
                 }
                 else{
-                    if($order->travel_agent){
+
+                    // $travel_agent_commission = $travel_agent_commission->wherehas('travel_agent', function ($q) use ($user_obj) {
+                    //     $q->where('travel_agent.user_sale_agent_id', $user_obj->id);
+                    // });
+                    
+                    if($order?->travel_agent?->sale_agent){
                         $travel_agent_trip_commision = TravelAgentCommission::
-                        where('user_sale_agent_id',$order_details->sale_agent_user_id)
-                        ->where([
-                            'journey_id',$order_details->journey_id,
-                            'slot_id',$order_details->slot_id,
-                            'transport_type_id',$order_details->transport_type_id,
-                        ])->first();
+                            where('user_travel_agent_id', $order_details->travel_agent_user_id)
+                            ->where([
+                                ['journey_id', $order_details->journey_id],
+                                ['slot_id', $order_details->slot_id],
+                                ['transport_type_id', $order_details->transport_type_id],
+                            ])->first(); //650
                         $sale_agent_trip_price = SalesAgentTripPrice::
                         where('transport_price_id',$travel_agent_trip_commision->transport_price_id)
-                        ->first();
+                        ->first(); // 600
                         $extra_commission += $travel_agent_trip_commision->price - $sale_agent_trip_price->price;
                         // ->where('transport_price_id',$order_details->trip_id);
                     }
@@ -204,10 +209,6 @@ class CommissionHandler
 
     public function set_order_ref_agents($order_id)
     {
-        // $user = Users::with([
-        //     'travel_agent',
-        //     'sale_agent',
-        // ])->find($careated_by_user_id);
         $order = Order::with([
             'order_details',
             'user_obj' => [
@@ -221,6 +222,7 @@ class CommissionHandler
             ->find($order_id);
 
         foreach ($order->order_details as $key => $order_details) {
+            $order_details->admin_payment_status = Config::get('constants.payment_status.pending');
             $order_details->driver_payment_status = Config::get('constants.payment_status.pending');
             if ($order->user_obj->travel_agent) { //travel agent
                 $order_details->travel_agent_user_id = $order->user_obj->id;
@@ -401,6 +403,7 @@ class CommissionHandler
         $user->wallet = $user->wallet + $total_amount_paid_by_admin;
         $user->save();
         $amount_paid_by_admin = $total_amount_paid_by_admin;
+        $amount_paid_by_admin = $user->wallet;
 
         if ($user->sale_agent) {
             $order_details = Order_Detail::where('sale_agent_payment_status', Config::get('constants.sales_agent.payment_status.pending'))
@@ -443,6 +446,38 @@ class CommissionHandler
         }
         return $user;
     }
+    public function update_order_detail_status_paid($user_id, $order_detail)
+    {
+        $user = Users::with(['sale_agent', 'travel_agent', 'driver'])->find($user_id);
+        $user->wallet = $user->wallet + $total_amount_paid_by_admin;
+        $amount_paid_by_admin = $user->wallet;
+
+        if ($user->sale_agent) {            
+                if ($amount_paid_by_admin < $order_detail->sale_agent_commission) {
+                    return $user;
+                }
+                $amount_paid_by_admin = $amount_paid_by_admin - $order_detail->sale_agent_commission;
+                $order_detail->sale_agent_payment_status = Config::get('constants.sales_agent.payment_status.paid');
+                $order_detail->save();
+        } else if ($user->travel_agent) {
+                if ($amount_paid_by_admin < $order_detail->travel_agent_commission) {
+                    return $user;
+                }
+                $amount_paid_by_admin = $amount_paid_by_admin - $order_detail->travel_agent_commission;
+                $order_detail->travel_agent_payment_status = Config::get('constants.travel_agent.payment_status.paid');
+                $order_detail->save();
+        } else if ($user->driver) {
+                if ($amount_paid_by_admin < $order_detail->driver_commission) {
+                    return $user;
+                }
+                $amount_paid_by_admin = $amount_paid_by_admin - $order_detail->driver_commission;
+                $order_detail->driver_payment_status = Config::get('constants.driver.payment_status.paid');
+                $order_detail->save();
+        } else {
+            return false; // not a team member
+        }
+        return $user;
+    }
 
     public function add_agent_payment_to_wallet($user_id, $payment_collected)
     {
@@ -463,16 +498,15 @@ class CommissionHandler
         $total_amount_in_wallet = $user->wallet;
 
         $order_details = Order_Detail::where('cash_collected_by_user_id', $user_id)
-            ->where('admin_payment_status', Config::get('constants.admin_payment_status.pending'))
+            // ->where('admin_payment_status', Config::get('constants.admin_payment_status.pending'))
             ->get();
-
+            
         foreach ($order_details as $key => $order_detail) {
             if ($total_amount_in_wallet < $order_detail->payable_to_admin) {
                 continue;
             }
             $total_amount_in_wallet = $total_amount_in_wallet - $order_detail->payable_to_admin;
             $order_detail->admin_payment_status = Config::get('constants.admin_payment_status.paid');
-            // $order_detail->admin_payment_status = Config::get('constants.sales_agent.payment_status.paid');
             $order_detail->save();
         }
         $user->wallet = $total_amount_in_wallet;

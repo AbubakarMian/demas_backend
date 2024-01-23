@@ -4,9 +4,9 @@
 @stop
 
 @section('add_btn')
-    {!! Form::open(['method' => 'get', 'url' => ['admin/user/create'], 'files' => true]) !!}
-    <span>{!! Form::submit('Add User', ['class' => 'btn btn-success pull-right']) !!}</span>
-    {!! Form::close() !!}
+{!! Form::open(['method' => 'get', 'url' => ['reports/staff_payments/create'], 'files' => true]) !!}
+<span>{!! Form::submit('Add Staff Payments ', ['class' => 'btn btn-success pull-right']) !!}</span>
+{!! Form::close() !!}
 @stop
 @section('table-properties')
     width="400px" style="table-layout:fixed;"

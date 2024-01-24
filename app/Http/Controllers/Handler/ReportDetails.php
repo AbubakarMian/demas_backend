@@ -277,6 +277,7 @@ class ReportDetails
         $row['admin_cash_received_status_admin'] = $order_detail->admin_payment_status;
         $row['admin_cash_received_status_sale_agent'] = $order_detail->sale_agent_payment_status;
         $row['admin_cash_received_status_travel_agent'] = $order_detail->travel_agent_payment_status;
+        $row['admin_cash_received_status_driver'] = $order_detail->driver_payment_status;
         return $row;
     }
     public function cash_recieved_in_pakistan($order_detail)
@@ -483,6 +484,10 @@ class ReportDetails
                 [
                     'heading' => 'Travel agent payment status',
                     'data_column' =>  'admin_cash_received_status_travel_agent',
+                ],
+                [
+                    'heading' => 'Driver payment status',
+                    'data_column' =>  'admin_cash_received_status_driver',
                 ],
             ],
         ];

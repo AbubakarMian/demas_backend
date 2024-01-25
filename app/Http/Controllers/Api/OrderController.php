@@ -181,4 +181,12 @@ class OrderController extends Controller
             'request',$request->all()
         ]);
     }
+
+    public function cancel_request($order_id){
+        $order = Order_Detail::find($order_id);
+        $order->status = Config::get('constants.order_status.cancelled');
+        // $order->cancelled = Config::get('constants.user_payment_status.cancelled');
+        $order->save();
+        return $this->sendResponse(200,$order );
+    }
 }

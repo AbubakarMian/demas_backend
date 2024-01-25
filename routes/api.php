@@ -64,5 +64,6 @@ Route::group(['middleware' => 'auth.user_loggedin'], function () {
     Route::get('order', [OrderController::class, 'index']);
     Route::get('order/{order_id}', [OrderController::class, 'detail']);
     Route::post('order/collect_payment/{order_id}', [OrderController::class, 'order_collect_payment']);
+    Route::post('order/cancel_booking/{order_id}', [OrderController::class, 'cancel_request']);
     // Route::post('login',[UserController::class, 'login']);
 });

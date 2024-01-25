@@ -107,11 +107,13 @@ class OrderHandler
             
         }
         else{ // order
-            
             $order = Order::with(['order_details' => function($query) {
-                $query->where('user_payment_status', Config::get('constants.user_payment_status.pending'));
+                $query->where('user_payment_status', Config::get('constants.user_payment_status.pending'))
+                ->whereNotin('status',[
+                    Config::get('constants.order_status.cancelled'),
+                    Config::get('constants.order_status.rejected'),
+                    ]);
             }])->find($order_id);
-            
             $order_details = $order->order_details;
         }
         foreach ($order_details as $key => $order_detail) {

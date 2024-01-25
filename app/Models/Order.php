@@ -69,13 +69,19 @@ class Order extends Model
 
     public function getIsPayableAttribute() // is_payable
     {
-        $order_details = $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')->get();
-        foreach ($order_details as $key => $order_detail) {
-            if($order_detail->user_payment_status == Config::get('constants.user_payment_status.pending')){
-                return true;
-            }
-        }
-        return false;
+        return $this->getOrderPayableAttribute() ? true : false;
+        // $order_details = $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')->get();
+        // foreach ($order_details as $key => $order_detail) {
+        //     if($order_detail->user_payment_status == Config::get('constants.user_payment_status.pending')
+        //         && !in_array($order_detail->status , [
+        //     Config::get('constants.order_status.cancelled'),
+        //     Config::get('constants.order_status.rejected'),
+        //     ])
+        //     ){
+        //         return true;
+        //     }
+        // }
+        // return false;
     }
 
     public function getOrderPayableAttribute() // is_payable
@@ -83,7 +89,12 @@ class Order extends Model
         $payable = 0;
         $order_details = $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')->get();
         foreach ($order_details as $key => $order_detail) {
-            if($order_detail->user_payment_status == Config::get('constants.user_payment_status.pending')){
+            if($order_detail->user_payment_status == Config::get('constants.user_payment_status.pending')
+                && !in_array($order_detail->status , [
+            Config::get('constants.order_status.cancelled'),
+            Config::get('constants.order_status.rejected'),
+            ])
+            ){
                 $payable = $payable+$order_detail->customer_collection_price;
             }
         }

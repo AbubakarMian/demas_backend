@@ -163,14 +163,14 @@ class OrderController extends Controller
             'travel_agent',
             'order_details' => [
                 'driver'=>['user_obj'],
-                'transport_type', 'journey' => ['pickup', 'dropoff']
+                'transport_type','transport', 'journey' => ['pickup', 'dropoff']
             ],
         ])->find($order_id);
         
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_order($order_id);
-
+        dd($pdf );
         $receipt_url = $pdf['path'];
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
 

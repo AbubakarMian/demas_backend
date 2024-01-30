@@ -1,8 +1,12 @@
 <?php
 $order = $data['data'];
+$pax_vale = '';
 
-// dd($order, $order->order_details ,$order->order_details[0]->transport_type->name ,$order->order_details[0]);
+if (isset($order->order_details[0])) {
+    $pax_value = '<span class="textColor">' . $order->order_details[0]->transport_type->name . ' ' . $order->order_details[0]->total_passengers . '  PAX</span>';
+}
 
+// dd($order, $order->order_details, 'nam', $order?->order_details[0]?->transport?->name, $order->order_details[0]);
 ?>
 
 <!DOCTYPE html>
@@ -237,7 +241,10 @@ $order = $data['data'];
                     <br />
                     <span class="textColor">UMRAH TRANSPORT</span><br />
                     <span class="textColor">DEMAS</span><br>
-                    <span class="textColor">{!! $order->order_details[0]->transport_type->name !!}({!! $order->order_details[0]->transport_type->seats !!} PAX)</span>
+                    <?php
+                     ?>
+                    
+                    <span class="textColor">{!! $pax_vale  !!}</span>
 
                 </h3>
             </div>
@@ -260,10 +267,14 @@ $order = $data['data'];
                         <th>Pickup</th>
                         <th>Dropoff</th>
                         <th>Vehicle</th>
-                        <th>Driver Name</th>
-                        <th>Driver Whatsapp Number</th>
+                        {{-- <th>Driver Name</th>
+                        <th>Driver Whatsapp Number</th> --}}
                         <th>Pickup Date</th>
                         <th>Pickup Time</th>
+                        <th>Adult PAX</th>
+                        <th>Infant PAX</th>
+                        <th>Total PAX</th>
+                        <th>Unit Price</th>
                         <th>Status</th>
                         @if ($order->show_price_in_user_invoice)
                             <th>Payment</th>
@@ -271,24 +282,35 @@ $order = $data['data'];
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($order->order_details as $key => $order_item)
-                        <tr>
+                    <@php
+                        $total_price = 0;
+
+                    @endphp @foreach ($order->order_details as $key => $order_item)
+                        <@php
+
+                        @endphp <tr>
                             <td>{!! $order_item->order_id !!}</td>
                             <td>{!! $order_item->pickup_location->name .
                                 ($order_item->pick_extrainfo ? '(' . $order_item->pick_extrainfo . ')' : '') !!}</td>
                             <td>{!! $order_item->dropoff_location->name .
                                 ($order_item->dropoff_extrainfo ? '(' . $order_item->dropoff_extrainfo . ')' : '') !!}</td>
-                            <td>{!! $order_item->transport_type->name !!}</td>
-                            <td>{!! $order_item->driver_user?->name ?? '' !!}</td>
-                            <td>{!! $order_item->driver_user?->whatsapp_number ?? '' !!}</td>
-                            <td>{!! date('Y-m-d', $order_item->pick_up_date_time) !!}</td>
+                            <td>{!! $order_item?->order_details?->transport?->name !!}</td>
+                            {{-- <td>{!! $order_item->driver_user?->name ?? '' !!}</td>
+                            <td>{!! $order_item->driver_user?->whatsapp_number ?? '' !!}</td> --}}
+                            <td>{!! date('d-m-Y', $order_item->pick_up_date_time) !!}</td>
                             <td>{!! date('H:i:s', $order_item->pick_up_date_time) !!}</td>
+                            <td>{!! $order_item->adult_passengers !!}</td>
+                            <td>{!! $order_item->infant_passengers !!}</td>
+                            <td>{!! $order_item->total_passengers !!}</td>
+                            <td>{!! $order_item->final_price !!}</td>
                             <td>{!! $order_item->status !!}</td>
-                            @if ($order->show_price_in_user_invoice)
+                            <@php
+                                $total_price += $order_item->final_price;
+                            @endphp @if ($order->show_price_in_user_invoice)
                                 <td>{!! $order_item->user_payment_status !!}</td>
-                            @endif
-                        </tr>
-                    @endforeach
+                                @endif
+                                </tr>
+                                @endforeach
                 </tbody>
             </table>
         </div>
@@ -302,6 +324,14 @@ $order = $data['data'];
         </div> -->
             </div>
         @endif
+        <div class="total_area">
+            <div class="total_txt">
+                <p>GRAND TOTAL = <span class="">{!! $total_price !!}/=</span></p>
+            </div>
+            <!-- <div class="total_price">
+      <p></p>
+    </div> -->
+        </div>
 
         <div class="note_area">
             <h3>Note:</h3>

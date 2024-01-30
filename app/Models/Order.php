@@ -37,6 +37,7 @@ class Order extends Model
     {
         return $this->hasOne('App\Models\Users', 'id', 'travel_agent_user_id')->withTrashed();
     }
+   
     // public function driver()
     // {
     //     return $this->hasOne('App\Models\Driver', 'user_id', 'driver_user_id')->withTrashed();

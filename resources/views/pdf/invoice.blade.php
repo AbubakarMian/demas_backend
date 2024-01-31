@@ -252,7 +252,8 @@ if (isset($order->order_details[0])) {
 
         <div class="bookingHeading">
             <center>
-                <h1>BOOKING {!! strtoupper($order->status) !!}</h1>
+                {{-- <h1>BOOKING {!! strtoupper($order->status) !!}</h1> --}}
+                <h1>BOOKING</h1>
             </center>
 
             <div class="bookingDate">

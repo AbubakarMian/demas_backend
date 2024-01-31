@@ -19,6 +19,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use PDF;
+use Twilio\Rest\Client;
+
 
 
 class OrderController extends Controller
@@ -170,7 +172,7 @@ class OrderController extends Controller
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_order($order_id);
-        dd($pdf );
+        // dd($pdf );
         $receipt_url = $pdf['path'];
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
 
@@ -208,6 +210,8 @@ class OrderController extends Controller
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_voucher($order_detail_id);
+                // dd($pdf );
+
         $receipt_url = $pdf['path'];
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
         // dd($whast_app_urls , $whast_app_url);
@@ -231,5 +235,39 @@ class OrderController extends Controller
         $email_details['view'] = 'pdf.order_update_email';
         $email_handler->sendEmail($email_details);
         return redirect('admin/order')->with('success', 'Invoice sent');
+    }public function send_message($order_id)
+    {
+        // Fetch order and related details
+        $order = Order::with([
+            'user_obj',
+            'sale_agent',
+            'travel_agent',
+            'order_details' => [
+                'driver' => ['user_obj'],
+                'transport_type', 'transport', 'journey' => ['pickup', 'dropoff']
+            ],
+        ])->find($order_id);
+    
+        // Create a message for WhatsApp
+        $message = "Dear {$order->user_obj->name}, your invoice details are as follows:\n" .
+            "https://wa.me/{$order->user_obj->phone_no}\n" .
+            "10:30 AM  – time will be added manually\n" .
+            "PAX:{$order->total_passengers}\n" .
+            "Cash From Customer: {$order->final_price} SAR\n" .
+            "Vehicle: (Hyundai H-1)\n" .
+            "Extra Information:{$order->pick_extrainfo}\n";
+    
+        // Add more details to the message as needed
+        $message .= "Order ID: {$order->id}\n";
+        // ...
+    
+        try {
+            $this->send_whatsapp_sms('923343722073', $message);
+            // Handle success or redirect as needed
+        } catch (Exception $e) {
+            // Handle the exception (log, display an error message, etc.)
+            echo "Error: " . $e->getMessage();
+        }
     }
+    
 }

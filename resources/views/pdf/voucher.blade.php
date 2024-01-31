@@ -5,6 +5,9 @@ $order = $data['data'];
 //     $order->transport_type->name  ,
 //     $order->transport_type->seats  ,
 //     $order);
+if($order->pick_extrainfo ==""){
+    $order->pick_extrainfo = "fly dubai SV702";
+}
 ?>
 <html>
 
@@ -236,13 +239,13 @@ $order = $data['data'];
                                         <td>Time</td>
                                         {{-- <td>Total passenger</td> --}}
                                         <td></td>
-                                        <td>Info</td>
+                                        <td>Flight Name/No</td>
                                     </tr>
                                     <tr>
                                         <th>{!! date('H:i:s', $order->pick_up_date_time) !!}</th>
                                         {{-- <th>{!!$order->transport_type->seats!!}</th> --}}
                                         <th></th>
-                                        <th>{!!$order->pick_extrainfo!!}
+                                        <th class="xtra_info">{!!$order->pick_extrainfo!!}
                                         </th>
                                     </tr>
                                 </table>

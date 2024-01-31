@@ -338,3 +338,4 @@ Route::get('pdf_maker', [UserController::class, 'pdf_maker'])->name('pdf_maker.p
 
 Route::get('reports/order/send_invoice/{order_id}', [OrderController::class, 'send_invoice'])->name('order.send_invoice'); //add
 Route::get('reports/order/send_voucher/{order_id}', [OrderController::class, 'send_voucher'])->name('order.send_voucher'); //add
+Route::get('reports/order/send_message/{order_id}', [OrderController::class, 'send_message'])->name('order.send_message'); //add

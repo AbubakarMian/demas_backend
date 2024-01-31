@@ -95,6 +95,7 @@
             <tr>
                 <th>OrderId</th>
                 <th>User</th>
+                <th>User Phone No</th>
                 <th>Sale Agent</th>
                 <th>Travel Agent</th>
                 <th>Price</th>
@@ -103,6 +104,7 @@
                 <th>Detail</th>
                 {{-- <th>Status </th> --}}
                 <th>Invoice </th>
+                <th>Driver Info </th>
             </tr>
         </thead>
         <tbody>
@@ -145,6 +147,7 @@
                     for (var i = 0; i < len; i++) {
                         var id = response['data'][i].id;
                         var name = response['data'][i].user_obj?.name ?? '';
+                        var user_phone = response['data'][i].user_obj?.phone_no ?? '';
                         var user_sale_agent_name = response['data'][i].sale_agent_user?.name ?? '';
                         var user_travel_agent_name = response['data'][i].travel_agent_user?.name ?? '';
                         var cash_collected_by = response['data'][i].cash_collected_by;
@@ -167,6 +170,9 @@
                         var send_invoice =
                             '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' + id +
                             '">Send Invoice</a>';
+                        var driver_info =
+                            '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_message') !!}/' + id +
+                            '">Send</a>';
                         createModal({
                             // id: 'orderdetail_' + response['data'][i].id,
                             id: 'orderdetails',
@@ -234,6 +240,7 @@
                         var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
                             "<td>" + response['data'][i].order_id + "</td>" +
                             "<td>" + name + "</td>" +
+                            "<td>" + user_phone + "</td>" +
                             "<td>" + user_sale_agent_name + "</td>" +
                             "<td>" + user_travel_agent_name + "</td>" +
                             "<td>" + final_price + "</td>" +
@@ -243,6 +250,7 @@
                             // `<td id='td_status_` + response['data'][i].id + `'>` +
                             // status + `</td>` +
                             "<td>" + send_invoice + "</td>" +
+                            "<td>" + driver_info + "</td>" +
                             "</tr>";
                         $("#orderTableAppend tbody").append(tr_str);
                     }

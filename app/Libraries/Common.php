@@ -13,21 +13,19 @@ use Illuminate\Support\Facades\Log;
 
 trait Common
 {
-
     public function send_whatsapp_sms($whats_app_number, $text)
     {
-        $whats_app_number = str_replace("+","",$whats_app_number);
+        $whats_app_number = str_replace("+", "", $whats_app_number);
         $id_instance = Config::get('whatsapp.WHATSAPP_ID');
         $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
-        $url = 'https://api.green-api.com/waInstance' . $id_instance . '//sendMessage/' . $apiTokenInstance;
-        // $url = 'https://api.green-api.com/waInstance{{idInstance}}/sendMessage/{{apiTokenInstance}}';
-
-        //chatId is the number to send the message to (@c.us for private chats, @g.us for group chats)
+    
+        $url = 'https://api.green-api.com/waInstance/' . $id_instance . '/sendMessage/' . $apiTokenInstance;
+    
         $data = array(
-            'chatId' => $whats_app_number.'@c.us',
-            'message' => 'Hello World'
+            'chatId' => $whats_app_number . '@c.us',
+            'message' => $text
         );
-
+    
         $options = array(
             'http' => array(
                 'header' => "Content-Type: application/json\r\n",
@@ -35,17 +33,20 @@ trait Common
                 'content' => json_encode($data)
             )
         );
-
+    
         $context = stream_context_create($options);
-
-        $response = file_get_contents($url, false, $context);
-
-        echo $response;
+    
+        try {
+            $response = file_get_contents($url, false, $context);
+            // Log or handle the response as needed
+        } catch (Exception $e) {
+            // Handle the exception (log, display an error message, etc.)
+            throw new Exception("WhatsApp API request failed: " . $e->getMessage());
+        }
     }
+    
 
     public function get_absolute_server_url_path($path){
-        // https://demastransport.com/demas_backend/public/invoice/3pdf
-        // /home/demastransport/public_html/demas_backend/public/invoice/3pdf
         $str = str_replace('/home/demastransport/public_html/demas_backend/public','',
             $path
         );

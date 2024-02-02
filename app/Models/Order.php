@@ -12,7 +12,17 @@ class Order extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'order';
-    protected $appends = ['orderdetailsstatus','ispayable','orderpayable'];
+    protected $appends = ['orderdetailsstatus','ispayable','orderpayable',
+    // 'activeorderdetails'
+];
+    public $in_active_orders_status = [
+            'cancelled',
+            'rejected',
+            ];
+            public $active_orders_status = [
+                'pending',
+                'accepted',
+                ];
     public function user_obj()
     {
         return $this->hasOne('App\Models\Users', 'id', 'user_id')->withTrashed();
@@ -42,6 +52,13 @@ class Order extends Model
     // {
     //     return $this->hasOne('App\Models\Driver', 'user_id', 'driver_user_id')->withTrashed();
     // }
+    // public function getActiveOrderDetailsAttribute()
+    public function active_order_details()
+    {
+        return $this->hasMany('App\Models\Order_Detail', 'order_id', 'id')
+            ->whereIn('status',$this->active_orders_status);
+        // ->get();
+    }
     public function order_details()
     {
         return $this->hasMany('App\Models\Order_Detail', 'order_id', 'id');

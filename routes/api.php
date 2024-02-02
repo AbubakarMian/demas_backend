@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ContactUsController;
 use App\Http\Controllers\Api\JourneyController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\NewAgentController;
+use App\Http\Controllers\User\CommonServicesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,8 @@ Route::group(['middleware' => 'auth.client_token'], function () {
     Route::get('get_transport_types', [CarController::class, 'get_transport_types']);
     Route::get('car/details/{car_id}', [CarController::class, 'car_details']);
     Route::get('locations/get_all', [LocationController::class, 'get_all']);
+    Route::post('upload_image', [CommonServicesController::class, 'upload_image']);
+
 });
 
 Route::group(['middleware' => 'auth.user_loggedin'], function () {

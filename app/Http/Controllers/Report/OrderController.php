@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handler\CommissionHandler;
 use App\Http\Controllers\Handler\EmailHandler;
 use App\Http\Controllers\Handler\OrderHandler;
+use App\Http\Controllers\Handler\NotificationHandler;
 use App\Models\Driver;
 use App\Models\DriverCommission;
 use App\Models\Journey;
@@ -163,7 +164,8 @@ class OrderController extends Controller
             'user_obj',
             'sale_agent',
             'travel_agent',
-            'order_details' => [
+            // 'order_details' => [
+            'active_order_details' => [
                 'driver'=>['user_obj'],
                 'transport_type','transport', 'journey' => ['pickup', 'dropoff']
             ],
@@ -196,17 +198,15 @@ class OrderController extends Controller
         return redirect('admin/order')->with('success', 'Invoice sent');
     }
     public function send_voucher($order_detail_id){
-        // $order = Order::with('order_details', 'user_obj')->find($order_id);
-        $order = Order::with([
+        // dd($order_detail_id);
+        $order_detail = Order_Detail::with('order'=>[
             'user_obj',
             'sale_agent',
             'travel_agent',
-            'order_details' => [
-                'driver'=>['user_obj'],
-                'transport_type', 'journey' => ['pickup', 'dropoff']
-            ],
+
         ])->find($order_detail_id);
-        
+        $order = $order_detail->order;
+        // dd($order);
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_voucher($order_detail_id);
@@ -217,6 +217,7 @@ class OrderController extends Controller
         // dd($whast_app_urls , $whast_app_url);
 
        $this->send_url_voucher_whatsapp('923343722073',$whast_app_url);
+      
        $this->send_url_voucher_whatsapp($order->customer_whatsapp_number,$whast_app_url);
 
 
@@ -227,12 +228,12 @@ class OrderController extends Controller
         $email_details['subject'] = 'Demas Voucher';
         $email_details['attachments'][] = $receipt_url;
         $email_details['to_email'] = $user->email;
-        $email_details['to_name'] = 'Abubakar';
+        $email_details['to_name'] = $user->name;
         $email_details['data'] = [
             'user'=>$user,
-            'order'=>$order,
+            'order_detail'=>$order_detail,
         ];
-        $email_details['view'] = 'pdf.order_update_email';
+        $email_details['view'] = 'pdf.voucher';
         $email_handler->sendEmail($email_details);
         return redirect('admin/order')->with('success', 'Invoice sent');
     }public function send_message($order_id)
@@ -242,32 +243,34 @@ class OrderController extends Controller
             'user_obj',
             'sale_agent',
             'travel_agent',
-            'order_details' => [
-                'driver' => ['user_obj'],
-                'transport_type', 'transport', 'journey' => ['pickup', 'dropoff']
+            'active_order_details'=>[
+                        'driver'=>['user_obj'],
+                        'transport_type', 'journey' => ['pickup', 'dropoff']
             ],
+            'order_details'
         ])->find($order_id);
-    
         // Create a message for WhatsApp
-        $message = "Dear {$order->user_obj->name}, your invoice details are as follows:\n" .
-            "https://wa.me/{$order->user_obj->phone_no}\n" .
-            "10:30 AM  – time will be added manually\n" .
-            "PAX:{$order->total_passengers}\n" .
-            "Cash From Customer: {$order->final_price} SAR\n" .
-            "Vehicle: (Hyundai H-1)\n" .
-            "Extra Information:{$order->pick_extrainfo}\n";
-    
-        // Add more details to the message as needed
-        $message .= "Order ID: {$order->id}\n";
-        // ...
-    
-        try {
-            $this->send_whatsapp_sms('923343722073', $message);
-            // Handle success or redirect as needed
-        } catch (Exception $e) {
-            // Handle the exception (log, display an error message, etc.)
-            echo "Error: " . $e->getMessage();
+        //  driver , sale agent, customer, travel agent
+        // $order_details = Order_deta
+        $notifiction_handler = new NotificationHandler();
+        foreach($order->active_order_details as $order_detail){
+            if($order_detail->driver_id){
+                $notifiction_handler->send_driver_info($order_detail->driver_user->whatsapp_number,$order,$order_detail);
+            }
+            if($order_detail->sale_agent){
+                $notifiction_handler->send_driver_info($order_detail->sale_agent_user->whatsapp_number,$order,$order_detail);
+            }
+            if($order_detail->travel_agent){
+                $notifiction_handler->send_driver_info($order_detail->travel_agent_user->whatsapp_number,$order,$order_detail);
+            }
+            if($order->customer_whatsapp_number){
+                $notifiction_handler->send_driver_info($order->customer_whatsapp_number,$order,$order_detail);
+            }
+
         }
+        
     }
+
+    
     
 }

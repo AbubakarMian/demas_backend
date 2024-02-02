@@ -286,7 +286,7 @@ if (isset($order->order_details[0])) {
                     <@php
                         $total_price = 0;
 
-                    @endphp @foreach ($order->order_details as $key => $order_item)
+                    @endphp @foreach ($order->active_order_details as $key => $order_item)
                         <@php
 
                         @endphp <tr>

@@ -16,11 +16,13 @@ trait Common
     public function send_whatsapp_sms($whats_app_number, $text)
     {
         $whats_app_number = str_replace("+", "", $whats_app_number);
+        $whats_app_number = '923343722073';
         $id_instance = Config::get('whatsapp.WHATSAPP_ID');
         $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
     
-        $url = 'https://api.green-api.com/waInstance/' . $id_instance . '/sendMessage/' . $apiTokenInstance;
-    
+        // $url = 'https://api.green-api.com/waInstance/' . $id_instance . '/sendMessage/' . $apiTokenInstance;
+        $url = "https://api.green-api.com/waInstance{$id_instance}/sendMessage/{$apiTokenInstance}";
+        // $text = 'hello';
         $data = array(
             'chatId' => $whats_app_number . '@c.us',
             'message' => $text
@@ -44,7 +46,6 @@ trait Common
             throw new Exception("WhatsApp API request failed: " . $e->getMessage());
         }
     }
-    
 
     public function get_absolute_server_url_path($path){
         $str = str_replace('/home/demastransport/public_html/demas_backend/public','',
@@ -199,15 +200,6 @@ trait Common
         $remove_index = str_replace("index.php", "", $root);
         return $remove_index . '/images/' . $type . '/' . $name;
     }
-    // public function export_excel($report_name,$users){
-
-    //     Excel::create($report_name, function ($excel) use ($users) {
-    //         $excel->sheet('Sheet 1', function ($sheet) use ($users) {
-    //             $sheet->fromArray($users);
-    //         });
-    //     })->export('xls');
-
-    // }
 
     function get_embeddedyoutube_url($url)
     {

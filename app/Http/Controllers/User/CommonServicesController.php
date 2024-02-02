@@ -27,4 +27,44 @@ class CommonServicesController extends Controller
         $image_path = asset('/images/' . $imageName);
         return response()->json(['status'=>true,'success' => 'Crop Image Uploaded Successfully', 'image' => $image_path]);
     }
+
+    public function upload_image(Request $request)
+    {
+
+        try {
+        $validator = Validator::make($request->all(),[
+            'image' => 'required|image', // Adjust file formats and size  |mimes:jpeg,png,jpg,gif|max:2048
+        ],
+        [
+            'image'=>'Please upload a valid image'
+        ],
+    );
+    
+    if($validator->fails()){
+        return $this->sendResponse(500, null,$validator->messages()->all());
+
+    }
+
+        if(isset($request->pre_image)){
+            File::delete($request->pre_image);
+        }
+    
+        if ($request->hasFile('image')) {
+            $avatar = $request->image;
+            $root = $request->root();
+            $image_url = $this->move_img_get_path($avatar, $root, 'image');           
+        }
+        $std_res = new \stdClass();
+        $std_res->image_url = $image_url;
+        return $this->sendResponse(200, $std_res);
+        }
+        catch (\Exception $e) {
+            return $this->sendResponse(
+                500,
+                null,
+                [$e->getMessage()]
+            );
+        }
+
+    }
 }

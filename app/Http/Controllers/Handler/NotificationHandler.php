@@ -43,4 +43,27 @@ class NotificationHandler
         return $message;
     }
 
+    public function send_driver_info($number,$order,$order_detail){
+
+      $message = "Dear {$order->user_obj->name}, your invoice details are as follows:\n" .
+      "https://wa.me/{$order->user_obj->phone_no}\n" .
+      "10:30 AM  – time will be added manually\n" .
+      "PAX:{$order->total_passengers}\n" .
+      "Cash From Customer: {$order_detail->final_price} SAR\n" .
+      "Vehicle: (Hyundai H-1)\n" .
+      "Extra Information:{$order_detail->pick_extrainfo}\n";
+
+  // Add more details to the message as needed
+  $message .= "Order ID: {$order->id}\n";
+  // ...
+
+  try {
+      $this->send_whatsapp_sms($number, $message);
+      // Handle success or redirect as needed
+  } catch (Exception $e) {
+      // Handle the exception (log, display an error message, etc.)
+      echo "Error: " . $e->getMessage();
+  }
+    }
+
 }

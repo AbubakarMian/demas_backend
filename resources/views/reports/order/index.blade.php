@@ -176,6 +176,18 @@
                         //     '">Send</a>';
                         var time_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#driver_info_time_${response['data'][i].id}">Send</a>`;
                                     createModal({
+                                        id: 'success_mdl',
+                                        header: '<h4>SUCCESS</h4>',
+                                        body: `
+                                        <b>Action Executed Successfully</b>
+                                        `,
+                                        footer: `
+                                        <center>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </center>
+                                        `,
+                                    });
+                                    createModal({
                                         id: 'driver_info_time_' + response['data'][i].id,
                                         header: '<h4>Select PickUp Time</h4>',
                                         body: `
@@ -443,6 +455,8 @@ function sendMessage(orderId) {
         success: function(response) {
             console.log('Message sent successfully:', response);
             // Handle success response as needed
+            alert("Message Sent Successfully");
+
         },
         error: function(xhr, status, error) {
             console.error('Error sending message:', error);
@@ -458,6 +472,7 @@ function sendInvoice(id) {
         dataType: 'json',
         success: function(response) {
             console.log('Invoice sent successfully:', response);
+            alert("Invoice Sent Successfully");
             // Handle success response as needed
         },
         error: function(xhr, status, error) {

@@ -43,27 +43,44 @@ class NotificationHandler
         return $message;
     }
 
-    public function send_driver_info($number,$order,$order_detail){
-
-      $message = "Dear {$order->user_obj->name}, your invoice details are as follows:\n" .
-      "https://wa.me/{$order->user_obj->phone_no}\n" .
-      "10:30 AM  – time will be added manually\n" .
-      "PAX:{$order->total_passengers}\n" .
-      "Cash From Customer: {$order_detail->final_price} SAR\n" .
-      "Vehicle: (Hyundai H-1)\n" .
-      "Extra Information:{$order_detail->pick_extrainfo}\n";
-
-  // Add more details to the message as needed
-  $message .= "Order ID: {$order->id}\n";
-  // ...
-
-  try {
-      $this->send_whatsapp_sms($number, $message);
-      // Handle success or redirect as needed
-  } catch (Exception $e) {
-      // Handle the exception (log, display an error message, etc.)
-      echo "Error: " . $e->getMessage();
+    public function send_driver_info($number, $order, $order_detail) {
+      // Extract date and time
+      $date = isset($order->active_order_details[0]->pick_up_date_time) ? date('d-m-Y', $order->active_order_details[0]->pick_up_date_time) : '';
+      $time = isset($order->active_order_details[0]->manual_time_set) ? date('H:i:s', $order->active_order_details[0]->manual_time_set) : '';
+  
+      // Extract other details
+      $user_name = isset($order->user_obj->name) ? $order->user_obj->name : '';
+      $customer_whatsapp_number = isset($order->customer_whatsapp_number) ? $order->customer_whatsapp_number : '';
+      $pickup_name = isset($order->active_order_details[0]->journey->pickup->name) ? $order->active_order_details[0]->journey->pickup->name : '';
+      $dropoff_name = isset($order->active_order_details[0]->journey->dropoff->name) ? $order->active_order_details[0]->journey->dropoff->name : '';
+      $total_passengers = isset($order->active_order_details[0]->total_passengers) ? $order->active_order_details[0]->total_passengers : '';
+      $final_price = isset($order->final_price) ? $order->final_price : '';
+      $transport_name = isset($order->active_order_details[0]->transport->name) ? $order->active_order_details[0]->transport->name : '';
+      $extra_info = isset($order->active_order_details[0]->pick_extrainfo) ? $order->active_order_details[0]->pick_extrainfo : '';
+  
+      // Construct the message
+      $message = "Dear {$user_name}, your invoice details are as follows:\n" .
+          "https://wa.me/{$customer_whatsapp_number}\n" .
+          "Date:\t {$date}\n" .
+          "Time:\t {$time}\n" .
+          "PickUp:\t{$pickup_name}\n" .
+          "DropOff:\t{$dropoff_name}\n" .
+          "PAX:\t{$total_passengers}\n" .
+          "Cash From Customer:\t {$final_price} SAR\n" .
+          "Vehicle:\t ({$transport_name})\n" .
+          "Extra Information:\t{$extra_info}\n";
+  
+      $message .= "Order ID: {$order->id}\n";
+      // ...
+  
+      try {
+          $this->send_whatsapp_sms($number, $message);
+          // Handle success or redirect as needed
+      } catch (Exception $e) {
+          // Handle the exception (log, display an error message, etc.)
+          echo "Error: " . $e->getMessage();
+      }
   }
-    }
+  
 
 }

@@ -158,6 +158,26 @@ class OrderController extends Controller
         
         return $this->sendResponse(200, $order_detail);
     }
+    public function set_manual_time(Request $request, $order_detail_id)
+    {
+        $order_detail = Order_Detail::find($order_detail_id);
+        
+        // Extract time component from the received string
+        $time = date('H:i:s', strtotime($request->time));
+    
+        // Assuming you want to store the Unix timestamp of the extracted time
+        list($hours, $minutes, $seconds) = explode(':', $time);
+        $unixTime = $hours * 3600 + $minutes * 60 + $seconds;
+    
+        // Store the Unix timestamp
+        $order_detail->manual_time_set = $unixTime;
+        $order_detail->save();
+        
+        return $this->sendResponse(200, $order_detail);
+    }
+    
+
+    
     public function send_invoice($order_id){
         // $order = Order::with('order_details', 'user_obj')->find($order_id);
         $order = Order::with([
@@ -199,12 +219,12 @@ class OrderController extends Controller
     }
     public function send_voucher($order_detail_id){
         // dd($order_detail_id);
-        $order_detail = Order_Detail::with('order'=>[
+        $order_detail = Order_Detail::with(['order'=>[
             'user_obj',
             'sale_agent',
             'travel_agent',
 
-        ])->find($order_detail_id);
+            ]])->find($order_detail_id);
         $order = $order_detail->order;
         // dd($order);
         $order_handler = new OrderHandler();
@@ -236,7 +256,9 @@ class OrderController extends Controller
         $email_details['view'] = 'pdf.voucher';
         $email_handler->sendEmail($email_details);
         return redirect('admin/order')->with('success', 'Invoice sent');
-    }public function send_message($order_id)
+    }
+    
+    public function send_message($order_id)
     {
         // Fetch order and related details
         $order = Order::with([
@@ -245,7 +267,9 @@ class OrderController extends Controller
             'travel_agent',
             'active_order_details'=>[
                         'driver'=>['user_obj'],
-                        'transport_type', 'journey' => ['pickup', 'dropoff']
+                        'transport_type',
+                        'transport',
+                         'journey' => ['pickup', 'dropoff']
             ],
             'order_details'
         ])->find($order_id);

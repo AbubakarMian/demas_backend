@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('order_details', function (Blueprint $table) {
-            //
+        Schema::table('order_detail', function (Blueprint $table) {
+            $table->tinyInteger('is_pickup_time_set')->nullable()->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('order_details', function (Blueprint $table) {
-            $table->tinyInteger('is_pickup_time_set')->nullable()->default(0);
+        Schema::table('order_detail', function (Blueprint $table) {
+            //
         });
     }
 };

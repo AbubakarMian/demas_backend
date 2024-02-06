@@ -115,6 +115,7 @@ class OrderController extends Controller
             $order_details->transport_type_id = $detail['transport_type_id'];
             $order_details->pick_up_date_time = $detail['pickupdate_time'];
             $order_details->customer_collection_price = $detail['customer_collection_price'];
+            $order_details->is_pickup_time_set = $detail['is_pickup_time_set'];
             // $order_details->travel_agent_user_id = $order->travel_agent_user_id; // if sale agent is select a travel agent from its drop down
             $order->customer_collection_price += $order_details->customer_collection_price;
             $order_details->journey_id = $commission_handler->get_journey($detail['pickup_id'], $detail['dropoff_id'])->id;

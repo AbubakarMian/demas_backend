@@ -105,6 +105,7 @@
                 {{-- <th>Status </th> --}}
                 <th>Invoice </th>
                 <th>Driver Info </th>
+                {{-- <th>Time </th> --}}
             </tr>
         </thead>
         <tbody>
@@ -167,64 +168,79 @@
                         var order_detail =
                             `<a class="btn btn-success" data-toggle="modal" data-target="#orderdetails"
                                 onclick="get_details(` + id + `)">View</a>`;
-                        var send_invoice =
-                            '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_invoice') !!}/' + id +
-                            '">Send Invoice</a>';
-                        var driver_info =
-                            '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_message') !!}/' + id +
-                            '">Send</a>';
-                        createModal({
-                            // id: 'orderdetail_' + response['data'][i].id,
-                            id: 'orderdetails',
-                            header: '<h4>Order details</h4>',
-                            body: `
-                                <table class="modal_table fhgyt";>
-                                    <thead>
-                                        <tr>
-                                            <th>Journey</th>
-                                            <th>PickUp</th>
-                                            <th>Price</th>
-                                            <th>Transport Type</th>
-                                            <th>Driver</th>
-                                            <th>Transport</th>
-                                            <th></th>
-                                            <th>Status</th>
-                                            <th>E-PASS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="orderdetails_list">
-                                    </tbody>
-                                </table>`,
-                            footer: `
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                `,
-                        });
-                        createModal({
-                            id: 'order_' + response['data'][i].id,
-                            header: '<h4>Confirm</h4>',
-                            body: 'Do you want to continue ?',
-                            footer: `
-                                <button class="btn btn-success" 
-                                onclick="change_status(` + response['data'][i].id + `,'confirm')"
-                                data-dismiss="modal">
-                                    Confirm
-                                </button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                `,
-                        });
-                        createModal({
-                            id: 'reject_order_' + response['data'][i].id,
-                            header: '<h4>Reject</h4>',
-                            body: 'Do you want to continue ?',
-                            footer: `
-                                <button class="btn btn-danger" 
-                                onclick="change_status(` + response['data'][i].id + `,'reject')"
-                                data-dismiss="modal">
-                                    Reject
-                                </button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                `,
-                        });
+                                var send_invoice =
+                                   '<a class="btn btn-info" onclick="sendInvoice(' + id + ');">Send Invoice</a>';
+
+                        // var driver_info =
+                        //     '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_message') !!}/' + id +
+                        //     '">Send</a>';
+                        var time_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#driver_info_time_${response['data'][i].id}">Send</a>`;
+                                    createModal({
+                                        id: 'driver_info_time_' + response['data'][i].id,
+                                        header: '<h4>Select PickUp Time</h4>',
+                                        body: `
+                                            <input type="time" class="form-control" id="manual_time_${response['data'][i].id}" name="manual_time">
+                                        `,
+                                        footer: `
+                                        <center>
+                                            <button type="button" class="btn btn-success" onclick="saveTime(${response['data'][i].id})">Save</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </center>
+                                        `,
+                                    });
+
+                                    createModal({
+                                        // id: 'orderdetail_' + response['data'][i].id,
+                                        id: 'orderdetails',
+                                        header: '<h4>Order details</h4>',
+                                        body: `
+                                            <table class="modal_table fhgyt";>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Journey</th>
+                                                        <th>PickUp</th>
+                                                        <th>Price</th>
+                                                        <th>Transport Type</th>
+                                                        <th>Driver</th>
+                                                        <th>Transport</th>
+                                                        <th></th>
+                                                        <th>Status</th>
+                                                        <th>E-PASS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="orderdetails_list">
+                                                </tbody>
+                                            </table>`,
+                                        footer: `
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            `,
+                                    });
+                                    createModal({
+                                        id: 'order_' + response['data'][i].id,
+                                        header: '<h4>Confirm</h4>',
+                                        body: 'Do you want to continue ?',
+                                        footer: `
+                                            <button class="btn btn-success" 
+                                            onclick="change_status(` + response['data'][i].id + `,'confirm')"
+                                            data-dismiss="modal">
+                                                Confirm
+                                            </button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            `,
+                                    });
+                                    createModal({
+                                        id: 'reject_order_' + response['data'][i].id,
+                                        header: '<h4>Reject</h4>',
+                                        body: 'Do you want to continue ?',
+                                        footer: `
+                                            <button class="btn btn-danger" 
+                                            onclick="change_status(` + response['data'][i].id + `,'reject')"
+                                            data-dismiss="modal">
+                                                Reject
+                                            </button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            `,
+                                    });
                         var status = response['data'][i].status;
                         if (status == 'pending') {
                             var confirm_btn =
@@ -250,7 +266,8 @@
                             // `<td id='td_status_` + response['data'][i].id + `'>` +
                             // status + `</td>` +
                             "<td>" + send_invoice + "</td>" +
-                            "<td>" + driver_info + "</td>" +
+                            // "<td>" + driver_info + "</td>" +
+                            "<td>" + time_btn + "</td>" +
                             "</tr>";
                         $("#orderTableAppend tbody").append(tr_str);
                     }
@@ -394,6 +411,62 @@
             });
 
         }
+        
+function saveTime(orderId) {
+    // Retrieve the value of the input field for the corresponding modal
+    var selectedTime = $('#manual_time_' + orderId).val();
+    console.log('Selected time:', selectedTime); // Check the value in the console
+    $.ajax({
+        url: "{!! asset('reports/order/set_manual_time/') !!}/" + orderId,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            time: selectedTime // Include the selectedTime in the data payload
+        },
+        success: function(response) {
+            console.log('Time saved successfully:', response);
+            sendMessage(orderId);
+            $('#driver_info_time_' + orderId).modal('hide');
+        },
+        error: function(xhr, status, error) {
+            console.error('Error saving time:', error);
+        }
+    });
+}
+
+
+function sendMessage(orderId) {
+    $.ajax({
+        url: "{!! asset('reports/order/send_message') !!}/" + orderId,
+        type: 'GET', // or POST depending on your route definition
+        dataType: 'json',
+        success: function(response) {
+            console.log('Message sent successfully:', response);
+            // Handle success response as needed
+        },
+        error: function(xhr, status, error) {
+            console.error('Error sending message:', error);
+            // Handle error response as needed
+        }
+    });
+}
+
+function sendInvoice(id) {
+    $.ajax({
+        url: "{!! asset('reports/order/send_invoice') !!}/" + id,
+        type: 'GET', // or 'POST' depending on your route
+        dataType: 'json',
+        success: function(response) {
+            console.log('Invoice sent successfully:', response);
+            // Handle success response as needed
+        },
+        error: function(xhr, status, error) {
+            console.error('Error sending invoice:', error);
+            // Handle error response as needed
+        }
+    });
+}
+
 
         function update_order_transport_driver(order_detail_id, driver_select,transport_select) {
             console.log('get_details order_detail_id', order_detail_id);

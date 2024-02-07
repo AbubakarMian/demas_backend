@@ -217,6 +217,8 @@ class OrderController extends Controller
         $email_handler->sendEmail($email_details);
         return redirect('admin/order')->with('success', 'Invoice sent');
     }
+
+
     public function send_voucher($order_detail_id){
         // dd($order_detail_id);
         $order_detail = Order_Detail::with(['order'=>[
@@ -230,7 +232,7 @@ class OrderController extends Controller
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_voucher($order_detail_id);
-                // dd($pdf );
+                dd($pdf );
 
         $receipt_url = $pdf['path'];
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);
@@ -278,7 +280,7 @@ class OrderController extends Controller
         // $order_details = Order_deta
         $notifiction_handler = new NotificationHandler();
         foreach($order->active_order_details as $order_detail){
-            if($order_detail->driver_id){
+            if($order_detail->driver_user){
                 $notifiction_handler->send_driver_info($order_detail->driver_user->whatsapp_number,$order,$order_detail);
             }
             if($order_detail->sale_agent){
@@ -292,6 +294,7 @@ class OrderController extends Controller
             }
 
         }
+        return $this->sendResponse(200);
         
     }
 

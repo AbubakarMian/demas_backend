@@ -86,7 +86,24 @@
     }
     .cell_spc {
     width: 150px;
-}
+    }
+    .icn_ar {
+        color: #6ddf6d;
+        font-size: 148px;
+        width: 359px;
+    }
+    .top_cross{
+        text
+    }
+    .top_cross {
+        text-align: right;
+    }
+    button.btn.btn-default.tp_crs {
+        background: transparent;
+        border: transparent;
+        font-size: 18px;
+        color: red;
+    }
 </style>
 @section('table')
 
@@ -127,6 +144,30 @@
                 ],
             });
             fetchRecords();
+
+            createModal({
+                id: 'success_mdl',
+                header: `<div class="top_cross">
+                                <button type="button" class="btn btn-default tp_crs" data-dismiss="modal">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                        </div>`,
+                body: `
+                <center>
+                <div class="icn_ar">
+                    <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+
+                    </div>
+                <div class="icn_ar_text">
+                    <b>Success</b>
+
+                    </div>
+                    </center>
+                `,
+                footer: `
+                
+                `,
+            });
         });
 
         function fetchRecords() {
@@ -175,18 +216,7 @@
                         //     '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_message') !!}/' + id +
                         //     '">Send</a>';
                         var time_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#driver_info_time_${response['data'][i].id}">Send</a>`;
-                                    createModal({
-                                        id: 'success_mdl',
-                                        header: '<h4>SUCCESS</h4>',
-                                        body: `
-                                        <b>Action Executed Successfully</b>
-                                        `,
-                                        footer: `
-                                        <center>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        </center>
-                                        `,
-                                    });
+
                                     createModal({
                                         id: 'driver_info_time_' + response['data'][i].id,
                                         header: '<h4>Select PickUp Time</h4>',
@@ -195,7 +225,7 @@
                                         `,
                                         footer: `
                                         <center>
-                                            <button type="button" class="btn btn-success" onclick="saveTime(${response['data'][i].id})">Save</button>
+                                            <button type="button" class="btn btn-success" onclick="saveTime(${response['data'][i].id})">Save & Send</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                         </center>
                                         `,
@@ -455,7 +485,9 @@ function sendMessage(orderId) {
         success: function(response) {
             console.log('Message sent successfully:', response);
             // Handle success response as needed
-            alert("Message Sent Successfully");
+
+
+            $('#success_mdl').modal('show');
 
         },
         error: function(xhr, status, error) {
@@ -472,7 +504,8 @@ function sendInvoice(id) {
         dataType: 'json',
         success: function(response) {
             console.log('Invoice sent successfully:', response);
-            alert("Invoice Sent Successfully");
+            $('#success_mdl').modal('show');
+            
             // Handle success response as needed
         },
         error: function(xhr, status, error) {
@@ -501,6 +534,7 @@ function sendInvoice(id) {
                     console.log('response', response.status);
                     if (response.status) {
                         console.log('updated row ', order_detail_id);
+                        
                     } else {
                         alert('Someting went wrong');
                     }

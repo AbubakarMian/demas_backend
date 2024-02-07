@@ -1,14 +1,29 @@
 <?php
 $order = $data['data'];
 // dd(
-//     $order->pick_extrainfo  ,
-//     $order->transport_type->name  ,
-//     $order->transport_type->seats  ,
-//     $order);
+    // $order->pick_extrainfo  ,
+    // $order->transport_type->name  ,
+    // $order->transport_type->seats  ,
+    // $order->total_passengers);
 if($order->pick_extrainfo ==""){
     $order->pick_extrainfo = "fly dubai SV702";
 }
+if($order->total_passengers ==0){
+    $order->total_passengers = "7";
+}
+function capitalizeString($string) {
+    if ($string !== null) {
+        $lowercaseString = strtolower($string);
+        $capitalizedString = ucwords($lowercaseString);
+        return $capitalizedString;
+    } else {
+        return ""; // or any other default value or action you desire
+    }
+}
+
 ?>
+
+
 <html>
 
 <head>
@@ -19,7 +34,7 @@ if($order->pick_extrainfo ==""){
             margin-top: 25px;
             box-shadow: 0px 0px 20px 4px;
             border: solid 1px gray;
-            /* padding:5px;  */
+            padding:5px; 
         }
 
         h3.padding-top {
@@ -30,8 +45,8 @@ if($order->pick_extrainfo ==""){
             transform: rotate(-90deg);
             transform-origin: left bottom;
             margin-right: -150px;
-            margin-left: 87px;
-            margin-top: 200px;
+            margin-left: 77px;
+            margin-top: 210px;
         }
 
         .main_rotate_bo {
@@ -141,7 +156,9 @@ if($order->pick_extrainfo ==""){
         }
 
         .booking-area {
-            margin-left: 10px;
+            /* margin-left: 10px; */
+            text-align: center;
+
         }
 
         .last_box {
@@ -170,8 +187,8 @@ if($order->pick_extrainfo ==""){
             border-bottom-style: dotted;
             margin-bottom: 10px;
             letter-spacing: 1px;
-            width: 85%;
-            margin-right: 61px;
+            width: 100%;
+            /* margin-right: 61px; */
         }
 
         .passengerName h5 {
@@ -196,6 +213,19 @@ if($order->pick_extrainfo ==""){
         tr.fnin {
             box-shadow: 0px 0px 20px -4px;
         }
+        .xtra_info{
+            width:150px;
+        }
+        .sadsa{
+            text-align: right;
+                }
+        .wiasdthaf{
+            text-align: left;
+                }
+        .img_area img{
+            width: 100%;
+            height:60px
+        }       
     </style>
 </head>
 
@@ -203,7 +233,7 @@ if($order->pick_extrainfo ==""){
 
     {{-- <center> --}}
     <div class="mainTicketBox">
-        <table>
+        <table width="100%">
             <thead>
                 <tr class="fnin">
                     <td>
@@ -230,36 +260,36 @@ if($order->pick_extrainfo ==""){
                             <div class="Passenger_name">
                                 <span class="pass">Passenger</span>
                                 <br>
-                                <span class="pass_detail"><b>{!! $order->order->customer_name !!}</b></span>
+                                <span class="pass_detail"><b>{!! capitalizeString($order->order->customer_name) !!}</b></span>
 
                             </div>
                             <div class="Passenger_name">
-                                <table class="time-box-center">
+                                <table class="time-boxsda-center">
                                     <tr>
                                         <td>Time</td>
                                         {{-- <td>Total passenger</td> --}}
                                         <td></td>
-                                        <td>Flight Name/No</td>
+                                        <td class="sadsa">Flight Name/No</td>
                                     </tr>
                                     <tr>
-                                        <th>{!! date('H:i:s', $order->pick_up_date_time) !!}</th>
+                                        <th>{!! date('H:i:s', capitalizeString($order->pick_up_date_time)) !!}</th>
                                         {{-- <th>{!!$order->transport_type->seats!!}</th> --}}
                                         <th></th>
-                                        <th class="xtra_info">{!!$order->pick_extrainfo!!}
+                                        <th class="xtra_info sadsa">{!! capitalizeString($order->pick_extrainfo)!!}
                                         </th>
                                     </tr>
                                 </table>
 
                             </div>
                             <div class="Passenger_name">
-                                <table>
-                                    <tr class="text_center">
-                                        <td class="center_on">Date</td>
-                                        <td>From</td>
+                                <table width="100%">
+                                    <tr class="text_censadter">
+                                        <td class="centerdf_on">Date</td>
+                                        <td class="sadsa">From</td>
                                     </tr>
-                                    <tr class="text_center">
-                                        <th>{!! date('Y-m-d', $order->pick_up_date_time) !!}</th>
-                                        <th>{!!$order->pickup_location->name!!}</th>
+                                    <tr class="text_cesdasnter">
+                                        <th>{!! date('Y-m-d',  capitalizeString($order->pick_up_date_time)) !!}</th>
+                                        <th class="sadsa">{!!capitalizeString($order->pickup_location->name)!!}</th>
                                     </tr>
                                 </table>
 
@@ -267,23 +297,23 @@ if($order->pick_extrainfo ==""){
                             <div class="Passenger_name">
                                 <span class="text_center">To</span>
                                 <br>
-                                <span class="text_center"><b>{!!$order->dropoff_location->name!!}</b></span>
+                                <span class="text_center"><b>{!!capitalizeString($order->dropoff_location->name)!!}</b></span>
 
                             </div>
                             <div class="Passenger_na">
 
                                 <div class="last_row">
-                                    <table>
+                                    <table width="100%">
                                         <tr>
-                                            <td class="withaf" style="margin-right: 2px">Vehicle</td>
+                                            <td class="wisadthaf" style="">Vehicle</td>
                                             <td class="display_ecd">
-                                                <div class="last_row_text">Passenger Capacity</div>
+                                                <div class="last_row_text sadsa">Passenger Capacity</div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th class="withaf"> {!!$order->transport_type->name !!}</th>
+                                            <th class="wiasdthaf"> {!!capitalizeString($order->transport_type->name) !!}</th>
                                             <th class="display_ecd">
-                                                <div class="last_row_text">{!!$order->transport_type->seats!!}</div>
+                                                <div class="last_row_text sadsa">{!!capitalizeString($order->total_passengers)!!}</div>
                                             </th>
                                         </tr>
                                     </table>
@@ -306,39 +336,40 @@ if($order->pick_extrainfo ==""){
                         </div>
                     </td>
                     <td>
+                        
                         <div class="last_box">
                             <div class="right-side-box">
-                                <div class="">
+                                <div class="img_area">
                                     <img src="{{ asset('images/Screenshot 2023-12-28 183500.png') }}" class="">
                                 </div>
                                 <div class="passengerName">
                                     <p>Passenger</p>
-                                    <h5>{!! $order->order->customer_name !!}</h5>
+                                    <h5>{!! capitalizeString($order->order->customer_name) !!}</h5>
                                 </div>
                                 <div class="passengerName">
-                                    <table>
+                                    <table width="100%">
                                         <tr class="color_w">
-                                            <td class="">Boarding Time</td>
+                                            <td class="wiasdthaf">Boarding Time</td>
                                             <td>Terminal</td>
                                             <td>Info</td>
                                         </tr>
                                         <tr class="color_w">
                                             <td>-</td>
                                             <td>-</td>
-                                            <td>{!!$order->pick_extrainfo!!}</td>
+                                            <td>{!!capitalizeString($order->pick_extrainfo)!!}</td>
                                         </tr>
                                     </table>
                                 </div>
                                 <div class="barcode_box_last">
 
-                                    <table>
+                                    <table width="100%">
                                         <tr class="barcode_box_last_txt">
                                             <td>From </td>
                                             <td>To</td>
                                         </tr>
                                         <tr class="barcode_box_last_txt">
-                                            <td class="lastes" style="margin-right: 2px;">{!!$order->pickup_location->name!!}</td>
-                                            <td>{!!$order->dropoff_location->name!!}</td>
+                                            <td class="lastes" style="margin-right: 2px;">{!!capitalizeString($order->pickup_location->name)!!}</td>
+                                            <td>{!!capitalizeString($order->dropoff_location->name)!!}</td>
                                         </tr>
 
                                     </table>

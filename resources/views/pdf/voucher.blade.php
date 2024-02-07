@@ -5,12 +5,12 @@ $order = $data['data'];
     // $order->transport_type->name  ,
     // $order->transport_type->seats  ,
     // $order->total_passengers);
-if($order->pick_extrainfo ==""){
-    $order->pick_extrainfo = "fly dubai SV702";
-}
-if($order->total_passengers ==0){
-    $order->total_passengers = "7";
-}
+// if($order->pick_extrainfo ==""){
+//     $order->pick_extrainfo = "fly dubai SV702";
+// }
+// if($order->total_passengers ==0){
+//     $order->total_passengers = "7";
+// }
 function capitalizeString($string) {
     if ($string !== null) {
         $lowercaseString = strtolower($string);

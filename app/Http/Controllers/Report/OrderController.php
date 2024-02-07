@@ -232,7 +232,7 @@ class OrderController extends Controller
         $order_handler = new OrderHandler();
 
         $pdf = $order_handler->gernerate_pdf_voucher($order_detail_id);
-                dd($pdf );
+                // dd($pdf );
 
         $receipt_url = $pdf['path'];
         $whast_app_url = $this->get_absolute_server_url_path($receipt_url);

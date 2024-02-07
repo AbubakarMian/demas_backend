@@ -13,10 +13,16 @@ use Illuminate\Support\Facades\Log;
 
 trait Common
 {
+
+    private $admin_whats_app_number = '923343722073';
     public function send_whatsapp_sms($whats_app_number, $text)
     {
         $whats_app_number = str_replace("+", "", $whats_app_number);
-        $whats_app_number = '923343722073';
+        // $this->send_whatsapp_sms_curl($whats_app_number, $text);
+        $this->send_whatsapp_sms_curl($this->admin_whats_app_number, $text);
+    }
+
+    public function send_whatsapp_sms_curl($whats_app_number, $text){
         $id_instance = Config::get('whatsapp.WHATSAPP_ID');
         $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
     

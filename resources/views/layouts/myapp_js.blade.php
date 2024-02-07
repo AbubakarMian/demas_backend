@@ -257,7 +257,7 @@
         var modal = `
     <div class="modal fade " id="` + modal_param.id + `" role="dialog">
     <div class="modal-dialog">
-      <div class="modal-content custom_mdl_class">
+      <div class="modal-content custom_mdl_class success_mdl">
         <div class="modal-header">
             ` + modal_param.header + `
         </div>

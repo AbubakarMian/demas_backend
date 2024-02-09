@@ -272,7 +272,7 @@ function capitalizeString($string) {
                                         <td class="sadsa">Flight Name/No</td>
                                     </tr>
                                     <tr>
-                                        <th>{!! date('H:i:s', capitalizeString($order->pick_up_date_time)) !!}</th>
+                                        <th>{!! date('H:i:s', $order->pick_up_date_time) !!}</th>
                                         {{-- <th>{!!$order->transport_type->seats!!}</th> --}}
                                         <th></th>
                                         <th class="xtra_info sadsa">{!! capitalizeString($order->pick_extrainfo)!!}
@@ -288,7 +288,7 @@ function capitalizeString($string) {
                                         <td class="sadsa">From</td>
                                     </tr>
                                     <tr class="text_cesdasnter">
-                                        <th>{!! date('Y-m-d',  capitalizeString($order->pick_up_date_time)) !!}</th>
+                                        <th>{!! date('Y-m-d',  $order->pick_up_date_time) !!}</th>
                                         <th class="sadsa">{!!capitalizeString($order->pickup_location->name)!!}</th>
                                     </tr>
                                 </table>

@@ -486,9 +486,6 @@ function sendMessage(orderId) {
         dataType: 'json',
         success: function(response) {
             console.log('Message sent successfully:', response);
-            // Handle success response as needed
-
-
             $('#success_mdl').modal('show');
 
         },
@@ -506,15 +503,11 @@ function sendVoucher(order_detail_id) {
         dataType: 'json',
         success: function(response) {
             console.log('Voucher sent successfully:', response);
-            // Handle success response as needed
-
-
-            $('#success_mdl').modal('show');
+            // $('#success_mdl').modal('show');
 
         },
         error: function(xhr, status, error) {
             console.error('Error sending message:', error);
-            // Handle error response as needed
         }
     });
 }
@@ -527,12 +520,9 @@ function sendInvoice(id) {
         success: function(response) {
             console.log('Invoice sent successfully:', response);
             $('#success_mdl').modal('show');
-            
-            // Handle success response as needed
         },
         error: function(xhr, status, error) {
             console.error('Error sending invoice:', error);
-            // Handle error response as needed
         }
     });
 }

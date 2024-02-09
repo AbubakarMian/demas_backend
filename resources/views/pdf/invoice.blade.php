@@ -5,6 +5,16 @@ $pax_vale = '';
 if (isset($order->order_details[0])) {
     $pax_value = '<span class="textColor">' . $order->order_details[0]->transport_type->name . ' ' . $order->order_details[0]->total_passengers . '  PAX</span>';
 }
+if ($order_item->adult_passengers == 0) {
+    $order_item->adult_passengers = 4;
+}
+
+if ($order_item->infant_passengers == 0) {
+    $order_item->infant_passengers = 2;
+}
+if ($order_item->total_passengers == 0) {
+    $order_item->total_passengers = 6;
+}
 
 // dd($order, $order->order_details, 'nam', $order?->order_details[0]?->transport?->name, $order->order_details[0]);
 ?>

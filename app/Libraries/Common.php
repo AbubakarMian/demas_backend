@@ -61,8 +61,19 @@ trait Common
         return $str;
     }
     // $whats_app_number="=9233437222073";
-    public function send_url_file_whatsapp($whats_app_number,$file_url){
+    public function send_url_file_whatsapp($whats_app_numbers,$file_url){
+
+        if(is_array($whats_app_numbers)){
+            foreach($whats_app_numbers as $whats_app_number){
+                // $this->send_attachment_whats_app($whats_app_number,$file_url);
+            }
+        }
+        $this->send_attachment_whats_app('923343722073',$file_url);
+
         // 923343722073
+        // $this->send_attachment_whats_app($whats_app_number,$file_url);
+    }
+    public function send_attachment_whats_app($whats_app_number,$file_url){
         $whats_app_number = str_replace("+","",$whats_app_number);
         $id_instance = Config::get('whatsapp.WHATSAPP_ID');
         $apiTokenInstance = Config::get('whatsapp.WHATSAPP_TOKEN');
@@ -97,12 +108,12 @@ trait Common
         $response = curl_exec($ch);
         
         if (curl_errno($ch)) {
-            echo 'Curl error: ' . curl_error($ch);
+            return 'Curl error: ' . curl_error($ch);
         }
         
         curl_close($ch);
         
-        echo $response;
+        return $response;
     }
     public function send_url_voucher_whatsapp($whats_app_number,$file_url){
         // 923343722073
@@ -140,12 +151,12 @@ trait Common
         $response = curl_exec($ch);
         
         if (curl_errno($ch)) {
-            echo 'Curl error: ' . curl_error($ch);
+            return 'Curl error: ' . curl_error($ch);
         }
         
         curl_close($ch);
         
-        echo $response;
+        return $response;
     }
 
     public function sendFile_whatsapp()
@@ -176,12 +187,12 @@ trait Common
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            echo 'Curl error: ' . curl_error($ch);
+            return 'Curl error: ' . curl_error($ch);
         }
 
         curl_close($ch);
 
-        echo $response;
+        return $response;
     }
     public function prepare_excel($data, $field_not_required = [])
     {

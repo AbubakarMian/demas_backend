@@ -121,7 +121,6 @@
                 <th>Detail</th>
                 {{-- <th>Status </th> --}}
                 <th>Invoice </th>
-                <th>Driver Info </th>
                 {{-- <th>Time </th> --}}
             </tr>
         </thead>
@@ -215,22 +214,7 @@
                         // var driver_info =
                         //     '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_message') !!}/' + id +
                         //     '">Send</a>';
-                        var time_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#driver_info_time_${response['data'][i].id}">Send</a>`;
-
-                                    createModal({
-                                        id: 'driver_info_time_' + response['data'][i].id,
-                                        header: '<h4>Select PickUp Time</h4>',
-                                        body: `
-                                            <input type="time" class="form-control" id="manual_time_${response['data'][i].id}" name="manual_time">
-                                        `,
-                                        footer: `
-                                        <center>
-                                            <button type="button" class="btn btn-success" onclick="saveTime(${response['data'][i].id})">Save & Send</button>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        </center>
-                                        `,
-                                    });
-
+                        
                                     createModal({
                                         // id: 'orderdetail_' + response['data'][i].id,
                                         id: 'orderdetails',
@@ -248,6 +232,7 @@
                                                         <th></th>
                                                         <th>Status</th>
                                                         <th>E-PASS</th>
+                                                        <th>Driver Info </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="orderdetails_list">
@@ -309,7 +294,6 @@
                             // status + `</td>` +
                             "<td>" + send_invoice + "</td>" +
                             // "<td>" + driver_info + "</td>" +
-                            "<td>" + time_btn + "</td>" +
                             "</tr>";
                         $("#orderTableAppend tbody").append(tr_str);
                     }
@@ -388,7 +372,25 @@
                     if (response.status) {
                         var details_list = '';
                         $.each(response.response['order_details'], function(index, item) {
-                            
+                            console.log('my time',format_date_time_from_timestamp(item.pick_up_date_time)['time']);
+                            console.log('mitem.is_pickup_time_set',item.is_pickup_time_set);
+                            var time_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#driver_info_time_${item.id}">Send</a>`;
+                            // var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(item.pick_up_date_time)['time'] :""; 
+                            var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(item.pick_up_date_time)['time'] :""; 
+                                    createModal({
+                                        id: 'driver_info_time_' + item.id,
+                                        header: '<h4>Select PickUp Time</h4>',
+                                        body: `
+                                            <input type="time" class="form-control" id="manual_time_${item.id}" value="`+time_value+`" name="manual_time">
+                                        `,
+                                        footer: `
+                                        <center>
+                                            <button type="button" class="btn btn-success" onclick="saveTime(${item.id})">Save & Send</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </center>
+                                        `,
+                                    });
+
                         createModal({
                             id: 'confirm_order_detail_' + item.id,
                             header: '<h4>Confirm</h4>',
@@ -442,6 +444,7 @@
                                 <td>` + divers_transport_select.update_btn + `</td>
                                 <td id="order_detail_`+item.id+`">` + status + `</td>
                                 <td>` + divers_transport_select.voucher_btn + `</td>
+                                <td>` + time_btn + `</td>
                                 </tr>`;
                         })
                         $('.orderdetails_list').html(details_list);
@@ -456,12 +459,12 @@
 
         }
         
-function saveTime(orderId) {
+function saveTime(order_detail_id) {
     // Retrieve the value of the input field for the corresponding modal
-    var selectedTime = $('#manual_time_' + orderId).val();
+    var selectedTime = $('#manual_time_' + order_detail_id).val();
     console.log('Selected time:', selectedTime); // Check the value in the console
     $.ajax({
-        url: "{!! asset('reports/order/set_manual_time/') !!}/" + orderId,
+        url: "{!! asset('reports/order/set_manual_time/') !!}/" + order_detail_id,
         type: 'POST',
         dataType: 'json',
         data: {
@@ -469,8 +472,8 @@ function saveTime(orderId) {
         },
         success: function(response) {
             console.log('Time saved successfully:', response);
-            sendMessage(orderId);
-            $('#driver_info_time_' + orderId).modal('hide');
+            sendMessage(order_detail_id);
+            $('#driver_info_time_' + order_detail_id).modal('hide');
         },
         error: function(xhr, status, error) {
             console.error('Error saving time:', error);
@@ -479,9 +482,9 @@ function saveTime(orderId) {
 }
 
 
-function sendMessage(orderId) {
+function sendMessage(order_detail_id) {
     $.ajax({
-        url: "{!! asset('reports/order/send_message') !!}/" + orderId,
+        url: "{!! asset('reports/order/send_message') !!}/" + order_detail_id,
         type: 'GET', // or POST depending on your route definition
         dataType: 'json',
         success: function(response) {

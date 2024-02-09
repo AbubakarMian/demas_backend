@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('order_detail', function (Blueprint $table) {
-            $table->bigInteger('manual_time_set')->nullable()->default(0);
+            $table->string('ticket_image',300)->nullable()->default(null);
         });
     }
 
@@ -25,8 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('order_detail', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

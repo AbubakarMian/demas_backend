@@ -8,6 +8,7 @@ use App\Http\Controllers\Handler\OrderHandler;
 use App\Models\Order;
 use App\Models\Order_Detail;
 use App\Models\Settings;
+use App\Http\Controllers\Handler\EmailHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -116,6 +117,12 @@ class OrderController extends Controller
             $order_details->pick_up_date_time = $detail['pickupdate_time'];
             $order_details->customer_collection_price = $detail['customer_collection_price'];
             $order_details->is_pickup_time_set = $detail['is_pickup_time_set'];
+
+            $order_details->adult_passengers = $detail['adult_passengers'];
+            $order_details->infant_passengers = $detail['infant_passengers'];
+            $order_details->total_passengers = $detail['total_passengers'];
+            $order_details->ticket_image = $detail['customer_ticket_image'];
+
             // $order_details->travel_agent_user_id = $order->travel_agent_user_id; // if sale agent is select a travel agent from its drop down
             $order->customer_collection_price += $order_details->customer_collection_price;
             $order_details->journey_id = $commission_handler->get_journey($detail['pickup_id'], $detail['dropoff_id'])->id;
@@ -128,6 +135,7 @@ class OrderController extends Controller
             $order_details->save();
         }
         $order->save();
+
         // $order = Order::with(['order_details','user_obj',
         // 'travel_agent',
         // 'sale_agent',
@@ -145,6 +153,8 @@ class OrderController extends Controller
         $order->receipt_url = $pdf['path'];
         $order->save();
 
+        $email_handler = new EmailHandler();
+        $email_handler->send_invoice($order->id);
         // return $pdf['stream'];
 
         // $user->email send email with attachment

@@ -6,8 +6,8 @@ if (isset($order->order_details[0])) {
     $pax_value = '<span class="textColor">' . $order->order_details[0]->transport_type->name . ' ' . $order->order_details[0]->total_passengers . '  PAX</span>';
 }
 
-
 // dd($order, $order->order_details, 'nam', $order?->order_details[0]?->transport?->name, $order->order_details[0]);
+
 ?>
 
 <!DOCTYPE html>
@@ -243,9 +243,9 @@ if (isset($order->order_details[0])) {
                     <span class="textColor">UMRAH TRANSPORT</span><br />
                     <span class="textColor">DEMAS</span><br>
                     <?php
-                     ?>
-                    
-                    <span class="textColor">{!! $pax_vale  !!}</span>
+                    ?>
+
+                    <span class="textColor">{!! $pax_vale !!}</span>
 
                 </h3>
             </div>
@@ -289,16 +289,16 @@ if (isset($order->order_details[0])) {
 
                     @endphp @foreach ($order->active_order_details as $key => $order_item)
                         <@php
-if ($order_item->adult_passengers == 0) {
-    $order_item->adult_passengers = 4;
-}
+                            // if ($order_item->adult_passengers == 0) {
+                            //     $order_item->adult_passengers = 4;
+                            // }
 
-if ($order_item->infant_passengers == 0) {
-    $order_item->infant_passengers = 2;
-}
-if ($order_item->total_passengers == 0) {
-    $order_item->total_passengers = 6;
-}
+                            // if ($order_item->infant_passengers == 0) {
+                            //     $order_item->infant_passengers = 2;
+                            // }
+                            // if ($order_item->total_passengers == 0) {
+                            //     $order_item->total_passengers = 6;
+                            // }
                         @endphp <tr>
                             <td>{!! $order_item->order_id !!}</td>
                             <td>{!! $order_item->pickup_location->name .

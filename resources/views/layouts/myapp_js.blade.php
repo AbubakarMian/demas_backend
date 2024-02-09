@@ -361,8 +361,35 @@
             $('#long').val());
     }
 
+
     function format_date_time_from_timestamp(timestamp) {
+    // Create a Date object using the timestamp (multiply by 1000 to convert to milliseconds)
+    var date = new Date(timestamp * 1000);
+
+    // Format the date as a string in your desired format (e.g., 'MM/DD/YYYY HH:mm:ss')
+    var formattedDate = (
+        ('0' + (date.getUTCMonth() + 1)).slice(-2) + '/' +
+        ('0' + date.getUTCDate()).slice(-2) + '/' +
+        date.getUTCFullYear()
+    );
+    var formattedTime = (
+        ('0' + date.getUTCHours()).slice(-2) + ':' +
+        ('0' + date.getUTCMinutes()).slice(-2) + ':' +
+        ('0' + date.getUTCSeconds()).slice(-2)
+    );
+    var res_arr = [];
+    res_arr['date'] = formattedDate;
+    res_arr['time'] = formattedTime;
+    res_arr['date_time'] = formattedDate + ' ' + formattedTime;
+    res_arr['date_obj'] = date;
+    console.log('Timestamp:', timestamp);
+    console.log('GMT:', res_arr); // Output GMT time
+    return res_arr; // Output: "09/18/2021 15:50:00"
+}
+
+    function format_date_time_from_timestamp_dell(timestamp) {
         // Create a Date object using the timestamp (multiply by 1000 to convert to milliseconds)
+        console.log('my time stamp',timestamp);
         var date = new Date(timestamp * 1000);
 
         // Format the date as a string in your desired format (e.g., 'MM/DD/YYYY HH:mm:ss')

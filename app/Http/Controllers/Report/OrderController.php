@@ -171,6 +171,11 @@ class OrderController extends Controller
     
         // Store the Unix timestamp
         $order_detail->manual_time_set = $unixTime;
+
+        $date = date('d:m:y', $order_detail->pick_up_date_time);
+        $date_str = strtotime($date);
+        $date_str = $date_str + $unixTime;
+        $order_detail->pick_up_date_time = $date_str+$unixTime;
         $order_detail->save();
         
         return $this->sendResponse(200, $order_detail);
@@ -202,19 +207,20 @@ class OrderController extends Controller
     //    $this->send_url_file_whatsapp($order->customer_whatsapp_number,$whast_app_url);
 
         $email_handler = new EmailHandler();
-        $email_details = [];
-        $user = $order->user_obj;
-        $email_details['subject'] = 'Demas Invoice';
-        $email_details['attachments'][] = $receipt_url;
-        $email_details['to_email'] = $user->email;
-        $email_details['to_name'] = 'Abubakar';
-        $email_details['data'] = [
-            'user'=>$user,
-            'order'=>$order,
-        ];
+        $email_handler->send_invoice($order_id);
+        // $email_details = [];
+        // $user = $order->user_obj;
+        // $email_details['subject'] = 'Demas Invoice';
+        // $email_details['attachments'][] = $receipt_url;
+        // $email_details['to_email'] = $user->email;
+        // $email_details['to_name'] =  $user->name;
+        // $email_details['data'] = [
+        //     'user'=>$user,
+        //     'order'=>$order,
+        // ];
         
-        $email_details['view'] = 'pdf.order_update_email';
-        $email_handler->sendEmail($email_details);
+        // $email_details['view'] = 'pdf.order_update_email';
+        // $email_handler->sendEmail($email_details);
         return $this->sendResponse(200);
 
         // return redirect('admin/order')->with('success', 'Invoice sent');
@@ -264,40 +270,55 @@ class OrderController extends Controller
         // return redirect('admin/order')->with('success', 'Invoice sent');
     }
     
-    public function send_message($order_id)
+    public function send_message($order_detail_id)
     {
-        // Fetch order and related details
-        $order = Order::with([
-            'user_obj',
-            'sale_agent',
-            'travel_agent',
-            'active_order_details'=>[
-                        'driver'=>['user_obj'],
+        // $order = Order::with([
+        //     'user_obj',
+        //     'sale_agent',
+        //     'travel_agent',
+        //     'active_order_details'=>[
+        //                 'driver'=>['user_obj'],
+        //                 'transport_type',
+        //                 'transport',
+        //                  'journey' => ['pickup', 'dropoff']
+        //     ],
+        //     'order_details'
+        // ])->find($order_id);
+
+        $order_detail = Order_Detail::with([
+            
+            // 'sale_agent',
+            // 'travel_agent',
+            'driver_user',
+            'sale_agent_user',
+            'travel_agent_user',
+            'driver'=>['user_obj'],
                         'transport_type',
                         'transport',
-                         'journey' => ['pickup', 'dropoff']
-            ],
-            'order_details'
-        ])->find($order_id);
+                         'journey' => ['pickup', 'dropoff'],
+                         'order'=>['user_obj']
+
+            ])->find($order_detail_id);
+            // dd($order_detail);
         // Create a message for WhatsApp
         //  driver , sale agent, customer, travel agent
         // $order_details = Order_deta
         $notifiction_handler = new NotificationHandler();
-        foreach($order->active_order_details as $order_detail){
+        // foreach($order_detail as $order_detail){
             if($order_detail->driver_user){
-                $notifiction_handler->send_driver_info($order_detail->driver_user->whatsapp_number,$order,$order_detail);
+                $notifiction_handler->send_driver_info($order_detail->driver_user->whatsapp_number,$order_detail);
             }
             if($order_detail->sale_agent){
-                $notifiction_handler->send_driver_info($order_detail->sale_agent_user->whatsapp_number,$order,$order_detail);
+                $notifiction_handler->send_driver_info($order_detail->sale_agent_user->whatsapp_number,$order_detail);
             }
             if($order_detail->travel_agent){
-                $notifiction_handler->send_driver_info($order_detail->travel_agent_user->whatsapp_number,$order,$order_detail);
+                $notifiction_handler->send_driver_info($order_detail->travel_agent_user->whatsapp_number,$order_detail);
             }
-            if($order->customer_whatsapp_number){
-                $notifiction_handler->send_driver_info($order->customer_whatsapp_number,$order,$order_detail);
+            if($order_detail->order->customer_whatsapp_number){
+                $notifiction_handler->send_driver_info($order_detail->order->customer_whatsapp_number,$order_detail);
             }
 
-        }
+        // }
         return $this->sendResponse(200);
         
     }

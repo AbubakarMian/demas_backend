@@ -289,15 +289,15 @@ if (isset($order->order_details[0])) {
 
                     @endphp @foreach ($order->active_order_details as $key => $order_item)
                         <@php
-if ($order->order_item->adult_passengers == 0) {
-    $order->order_item->adult_passengers = 4;
+if ($order_item->adult_passengers == 0) {
+    $order_item->adult_passengers = 4;
 }
 
-if ($order->order_item->infant_passengers == 0) {
-    $order->order_item->infant_passengers = 2;
+if ($order_item->infant_passengers == 0) {
+    $order_item->infant_passengers = 2;
 }
-if ($order->order_item->total_passengers == 0) {
-    $order->order_item->total_passengers = 6;
+if ($order_item->total_passengers == 0) {
+    $order_item->total_passengers = 6;
 }
                         @endphp <tr>
                             <td>{!! $order_item->order_id !!}</td>

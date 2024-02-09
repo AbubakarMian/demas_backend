@@ -357,8 +357,10 @@
                 <button class="btn btn-success"
                 onclick="update_order_transport_driver(` + order_detail_id + `,'.select_driver_` + order_detail_id + `','.select_transport_` + order_detail_id + `')">
                     Update</button>`;
-            var voucher_btn = '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_voucher') !!}/' + order_detail_id +
-                            '">Send</a>';
+
+            var voucher_btn = '<a class="btn btn-info" onclick="sendVoucher(' + order_detail_id + ');">Send</a>';
+            // var voucher_btn = '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_voucher') !!}/' + order_detail_id +
+            //                 '">Send</a>';
                 // <button class="btn btn-success"  href="' + '{!! asset('reports/order/send_voucher') !!}/' + id +
                 //             '"
                 // >
@@ -484,6 +486,26 @@ function sendMessage(orderId) {
         dataType: 'json',
         success: function(response) {
             console.log('Message sent successfully:', response);
+            // Handle success response as needed
+
+
+            $('#success_mdl').modal('show');
+
+        },
+        error: function(xhr, status, error) {
+            console.error('Error sending message:', error);
+            // Handle error response as needed
+        }
+    });
+}
+
+function sendVoucher(order_detail_id) {
+    $.ajax({
+        url: "{!! asset('reports/order/send_voucher') !!}/" + order_detail_id,
+        type: 'GET', // or POST depending on your route definition
+        dataType: 'json',
+        success: function(response) {
+            console.log('Voucher sent successfully:', response);
             // Handle success response as needed
 
 

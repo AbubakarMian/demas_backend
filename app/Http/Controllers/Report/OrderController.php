@@ -215,7 +215,9 @@ class OrderController extends Controller
         
         $email_details['view'] = 'pdf.order_update_email';
         $email_handler->sendEmail($email_details);
-        return redirect('admin/order')->with('success', 'Invoice sent');
+        return $this->sendResponse(200);
+
+        // return redirect('admin/order')->with('success', 'Invoice sent');
     }
 
 
@@ -257,7 +259,9 @@ class OrderController extends Controller
         ];
         $email_details['view'] = 'pdf.voucher';
         $email_handler->sendEmail($email_details);
-        return redirect('admin/order')->with('success', 'Invoice sent');
+        return $this->sendResponse(200);
+
+        // return redirect('admin/order')->with('success', 'Invoice sent');
     }
     
     public function send_message($order_id)

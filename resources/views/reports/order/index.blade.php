@@ -77,32 +77,80 @@
         padding: 10px;
     }
 
+    .btun {
+        display: grid;
+    }
+
     .modal-dialog {
         width: auto !important;
         padding: 10px !important;
-        margin: 30px auto !important;
+        /* margin: 30px auto !important; */
         display: flex;
         justify-content: center;
     }
-    .cell_spc {
-    width: 150px;
+    .responsive-modal-dialog {
+        max-width: 90%; /* Adjust the maximum width as needed */
     }
+
+    /* Adjust the modal content for smaller screens */
+    .modal-content {
+        width: 100%;
+    }
+
+    /* Add any additional styling as needed */
+    .modal-body {
+        overflow-x: auto; /* Enable horizontal scrolling for small screens */
+    }
+    .cell_spc {
+        width: 150px;
+    }
+
     .icn_ar {
         color: #6ddf6d;
         font-size: 148px;
         width: 359px;
     }
-    .top_cross{
+
+    .top_cross {
         text
     }
+
     .top_cross {
         text-align: right;
     }
+
     button.btn.btn-default.tp_crs {
         background: transparent;
         border: transparent;
         font-size: 18px;
         color: red;
+    }
+    .modal-dialog {
+    /* width: 100%; */
+    /* overflow: scroll; */
+}
+
+    .cus_btnsucc {
+        background-color: #00afdd !important;
+        color: white !important;
+        padding: 2px !important;
+        margin-bottom: 1px !important;
+        border-radius: 5px !important;
+    }
+
+    .cus_btndang {
+        background-color: red !important;
+        color: white !important;
+        padding: 2px !important;
+        margin-bottom: 1px !important;
+        border-radius: 5px !important;
+    }
+    .cus_btnprm {
+        background-color: #00de89 !important;
+        color: white !important;
+        padding: 2px !important;
+        margin-bottom: 1px !important;
+        border-radius: 5px !important;
     }
 </style>
 @section('table')
@@ -197,7 +245,9 @@
                         var type = response['data'][i].type;
                         var trip_type = response['data'][i].trip_type;
                         // var ispaid = response['data'][i].is_paid ? 'True' : 'False';
-                        var ispaid = response['data'][i].is_paid ? '<i class="fa fa-check" style="color:#38da38;" aria-hidden="true"></i>' : '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
+                        var ispaid = response['data'][i].is_paid ?
+                            '<i class="fa fa-check" style="color:#38da38;" aria-hidden="true"></i>' :
+                            '<i class="fa fa-times" style="color:red;" aria-hidden="true"></i>';
                         var status = response['data'][i].status;
                         var orderdetailsstatus = response['data'][i].orderdetailsstatus;
                         var payment_collected_type = response['data'][i].payment_collected_type;
@@ -208,18 +258,19 @@
                         var order_detail =
                             `<a class="btn btn-success" data-toggle="modal" data-target="#orderdetails"
                                 onclick="get_details(` + id + `)">View</a>`;
-                                var send_invoice =
-                                   '<a class="btn btn-info" onclick="sendInvoice(' + id + ');">Send Invoice</a>';
+                        var send_invoice =
+                            '<a class="btn btn-info" onclick="sendInvoice(' + id + ');">Send Invoice</a>';
 
                         // var driver_info =
                         //     '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_message') !!}/' + id +
                         //     '">Send</a>';
-                        
-                                    createModal({
-                                        // id: 'orderdetail_' + response['data'][i].id,
-                                        id: 'orderdetails',
-                                        header: '<h4>Order details</h4>',
-                                        body: `
+
+                        createModal({
+                            // id: 'orderdetail_' + response['data'][i].id,
+                            id: 'orderdetails',
+                            class: 'responsive-modal-dialog',
+                            header: '<h4>Order details</h4>',
+                            body: `
                                             <table class="modal_table fhgyt";>
                                                 <thead>
                                                     <tr>
@@ -227,6 +278,9 @@
                                                         <th>PickUp</th>
                                                         <th>Price</th>
                                                         <th>Transport Type</th>
+                                                        <th>Adult PAX</th>
+                                                        <th>Infant PAX</th>
+                                                        <th>Total PAX</th>
                                                         <th>Driver</th>
                                                         <th>Transport</th>
                                                         <th></th>
@@ -238,15 +292,15 @@
                                                 <tbody class="orderdetails_list">
                                                 </tbody>
                                             </table>`,
-                                        footer: `
+                            footer: `
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                             `,
-                                    });
-                                    createModal({
-                                        id: 'order_' + response['data'][i].id,
-                                        header: '<h4>Confirm</h4>',
-                                        body: 'Do you want to continue ?',
-                                        footer: `
+                        });
+                        createModal({
+                            id: 'order_' + response['data'][i].id,
+                            header: '<h4>Confirm</h4>',
+                            body: 'Do you want to continue ?',
+                            footer: `
                                             <button class="btn btn-success" 
                                             onclick="change_status(` + response['data'][i].id + `,'confirm')"
                                             data-dismiss="modal">
@@ -254,12 +308,12 @@
                                             </button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                             `,
-                                    });
-                                    createModal({
-                                        id: 'reject_order_' + response['data'][i].id,
-                                        header: '<h4>Reject</h4>',
-                                        body: 'Do you want to continue ?',
-                                        footer: `
+                        });
+                        createModal({
+                            id: 'reject_order_' + response['data'][i].id,
+                            header: '<h4>Reject</h4>',
+                            body: 'Do you want to continue ?',
+                            footer: `
                                             <button class="btn btn-danger" 
                                             onclick="change_status(` + response['data'][i].id + `,'reject')"
                                             data-dismiss="modal">
@@ -267,7 +321,7 @@
                                             </button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                             `,
-                                    });
+                        });
                         var status = response['data'][i].status;
                         if (status == 'pending') {
                             var confirm_btn =
@@ -314,7 +368,7 @@
         function get_divers_transport_select(order_detail_item) {
             var order_detail_id = order_detail_item.id;
             var selected = '';
-            var drivers = `<select class="cell_spc select_driver_`+order_detail_item.id+`">
+            var drivers = `<select class="cell_spc select_driver_` + order_detail_item.id + `">
                                 <option value="0">Select Driver</option>`;
             $.each(drivers_list, function(driver_index, driver_item) {
                 selected = order_detail_item.driver_user_id == driver_item.driver_user_id ?
@@ -325,71 +379,76 @@
                     `) ` + `</option>`;
             })
             drivers += '</select>';
-            var transport = `<select class="cell_spc select_transport_`+order_detail_id+`">
+            var transport = `<select class="cell_spc select_transport_` + order_detail_id + `">
                                 <option value="0">Select Transport</option>`;
             $.each(transport_list, function(transport_index, transport_item) {
                 var selected_transport_id = order_detail_item.transport_id;
                 selected = selected_transport_id == transport_item.id ?
                     'selected' : '';
-                    transport += `<option value="` + transport_item.id + `" ` +
+                transport += `<option value="` + transport_item.id + `" ` +
                     selected + `>` +
                     transport_item.name + ` (` + transport_item.transport_type_name +
                     `) ` + `</option>`;
             })
             transport += '</select>';
             var update_btn = `
-                <button class="btn btn-success"
-                onclick="update_order_transport_driver(` + order_detail_id + `,'.select_driver_` + order_detail_id + `','.select_transport_` + order_detail_id + `')">
+                <button class="btn cus_btnprm"
+                onclick="update_order_transport_driver(` + order_detail_id + `,'.select_driver_` + order_detail_id +
+                `','.select_transport_` + order_detail_id + `')">
                     Update</button>`;
 
-            var voucher_btn = '<a class="btn btn-info" onclick="sendVoucher(' + order_detail_id + ');">Send</a>';
+            var voucher_btn = '<a class="btn cus_btnsucc" onclick="sendVoucher(' + order_detail_id + ');">Send</a>';
             // var voucher_btn = '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_voucher') !!}/' + order_detail_id +
             //                 '">Send</a>';
-                // <button class="btn btn-success"  href="' + '{!! asset('reports/order/send_voucher') !!}/' + id +
-                //             '"
-                // >
-                //     Send</button>`;
-            return {
-                drivers,
-                transport,
-                voucher_btn,
-                update_btn
-            };
-        }
+            // <button class="btn btn-success"  href="' + '{!! asset('reports/order/send_voucher') !!}/' + id +
+            //             '"
+            // >
+            //     Send</button>`;
+        return {
+            drivers,
+            transport,
+            voucher_btn,
+            update_btn
+        };
+    }
 
-        function get_details(order_id) {
-            console.log('get_details order_id', order_id);
-            $.ajax({
-                url: "{!! asset('admin/order/details_list') !!}/" + order_id,
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    _token: '{!! @csrf_token() !!}'
-                },
-                success: function(response) {
-                    $('.orderdetails_list').html('');
-                    console.log('response item get_details response ', response);
-                    if (response.status) {
-                        var details_list = '';
-                        $.each(response.response['order_details'], function(index, item) {
-                            console.log('my time',format_date_time_from_timestamp(item.pick_up_date_time)['time']);
-                            console.log('mitem.is_pickup_time_set',item.is_pickup_time_set);
-                            var time_btn = `<a class="btn btn-info" data-toggle="modal" data-target="#driver_info_time_${item.id}">Send</a>`;
-                            // var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(item.pick_up_date_time)['time'] :""; 
-                            var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(item.pick_up_date_time)['time'] :""; 
-                                    createModal({
-                                        id: 'driver_info_time_' + item.id,
-                                        header: '<h4>Select PickUp Time</h4>',
-                                        body: `
-                                            <input type="time" class="form-control" id="manual_time_${item.id}" value="`+time_value+`" name="manual_time">
-                                        `,
-                                        footer: `
-                                        <center>
-                                            <button type="button" class="btn btn-success" onclick="saveTime(${item.id})">Save & Send</button>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        </center>
-                                        `,
-                                    });
+    function get_details(order_id) {
+        console.log('get_details order_id', order_id);
+        $.ajax({
+            url: "{!! asset('admin/order/details_list') !!}/" + order_id,
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                _token: '{!! @csrf_token() !!}'
+            },
+            success: function(response) {
+                $('.orderdetails_list').html('');
+                console.log('response item get_details response ', response);
+                if (response.status) {
+                    var details_list = '';
+                    $.each(response.response['order_details'], function(index, item) {
+                        console.log('my time', format_date_time_from_timestamp(item
+                            .pick_up_date_time)['time']);
+                        console.log('mitem.is_pickup_time_set', item.is_pickup_time_set);
+                        var time_btn =
+                            `<a class="btn cus_btnsucc" data-toggle="modal" data-target="#driver_info_time_${item.id}">Send</a>`;
+                        // var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(item.pick_up_date_time)['time'] :""; 
+                        var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(
+                            item.pick_up_date_time)['time'] : "";
+                        createModal({
+                            id: 'driver_info_time_' + item.id,
+                            header: '<h4>Select PickUp Time</h4>',
+                            body: `
+                                                    <input type="time" class="form-control" id="manual_time_${item.id}" value="` +
+                                time_value + `" name="manual_time">
+                                                `,
+                            footer: `
+                                                <center>
+                                                    <button type="button" class="btn btn-success" onclick="saveTime(${item.id})">Save & Send</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </center>
+                                                `,
+                        });
 
                         createModal({
                             id: 'confirm_order_detail_' + item.id,
@@ -397,55 +456,58 @@
                             body: 'Do you want to continue ?',
                             class: 'mddd',
                             footer: `
-                                <button class="btn btn-success" 
-                                onclick="change_order_detail_status(` + item.id + `,'confirm')"
-                                data-dismiss="modal">
-                                    Confirm
-                                </button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                `,
+                                        <button class="btn btn-success" 
+                                        onclick="change_order_detail_status(` + item.id + `,'confirm')"
+                                        data-dismiss="modal">
+                                            Confirm
+                                        </button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        `,
                         });
-                            createModal({
+                        createModal({
                             id: 'cancel_order_detail_' + item.id,
                             header: '<h4>Cancel</h4>',
                             body: `<p>Do you want to cancel  ?</p> <p>
-                                    <input type="text" placeholder="reason" id="reason_`+item.id+`">
-                                </p>`,
+                                            <input type="text" placeholder="reason" id="reason_` + item.id + `">
+                                        </p>`,
                             footer: `
-                                <button class="btn btn-danger" 
-                                onclick="change_order_detail_status(` + item.id + `,'cancel')"
-                                data-dismiss="modal">
-                                    Confirm
-                                </button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                `,
+                                        <button class="btn btn-danger" 
+                                        onclick="change_order_detail_status(` + item.id + `,'cancel')"
+                                        data-dismiss="modal">
+                                            Confirm
+                                        </button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        `,
                         });
                         var status = item.status;
                         if (status == 'pending') {
                             var confirm_btn =
-                                `<a class="btn btn-info" data-toggle="modal" data-target="#` +
+                                `<a class="btn cus_btnsucc" data-toggle="modal" data-target="#` +
                                 'confirm_order_detail_' + item.id + `">Confirm</a>`;
                             var reject_btn =
-                                `<a class="btn btn-danger" data-toggle="modal" data-target="#` +
+                                `<a class="btn cus_btndang" data-toggle="modal" data-target="#` +
                                 'cancel_order_detail_' + item.id + `">Cancel</a>`;
                             status = confirm_btn + reject_btn;
                         } else {
                             var status = capitalize_first_letter(item.status);
                         }
 
-                            var divers_transport_select = get_divers_transport_select(item);
-                                details_list += `<tr>
-                                <td>` + item.journey.name + `</td>
-                                <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
-                                <td>` + item.final_price + `</td>
-                                <td>` + item.transport_type.name + `</td>
-                                <td>` + divers_transport_select.drivers + `</td>
-                                <td>` + divers_transport_select.transport + `</td>
-                                <td>` + divers_transport_select.update_btn + `</td>
-                                <td id="order_detail_`+item.id+`">` + status + `</td>
-                                <td>` + divers_transport_select.voucher_btn + `</td>
-                                <td>` + time_btn + `</td>
-                                </tr>`;
+                        var divers_transport_select = get_divers_transport_select(item);
+                        details_list += `<tr>
+                                        <td>` + item.journey.name + `</td>
+                                        <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
+                                        <td>` + item.final_price + `</td>
+                                        <td>` + item.transport_type.name + `</td>
+                                        <td>` + item.adult_passengers + `</td>
+                                        <td>` + item.infant_passengers + `</td>
+                                        <td>` + item.total_passengers + `</td>
+                                        <td>` + divers_transport_select.drivers + `</td>
+                                        <td>` + divers_transport_select.transport + `</td>
+                                        <td>` + divers_transport_select.update_btn + `</td>
+                                        <td id="order_detail_` + item.id + `"><div class="btun">` + status + `</div></td>
+                                        <td>` + divers_transport_select.voucher_btn + `</td>
+                                        <td>` + time_btn + `</td>
+                                        </tr>`;
                         })
                         $('.orderdetails_list').html(details_list);
                     } else {
@@ -458,80 +520,80 @@
             });
 
         }
-        
-function saveTime(order_detail_id) {
-    // Retrieve the value of the input field for the corresponding modal
-    var selectedTime = $('#manual_time_' + order_detail_id).val();
-    console.log('Selected time:', selectedTime); // Check the value in the console
-    $.ajax({
-        url: "{!! asset('reports/order/set_manual_time/') !!}/" + order_detail_id,
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            time: selectedTime // Include the selectedTime in the data payload
-        },
-        success: function(response) {
-            console.log('Time saved successfully:', response);
-            sendMessage(order_detail_id);
-            $('#driver_info_time_' + order_detail_id).modal('hide');
-        },
-        error: function(xhr, status, error) {
-            console.error('Error saving time:', error);
+
+        function saveTime(order_detail_id) {
+            // Retrieve the value of the input field for the corresponding modal
+            var selectedTime = $('#manual_time_' + order_detail_id).val();
+            console.log('Selected time:', selectedTime); // Check the value in the console
+            $.ajax({
+                url: "{!! asset('reports/order/set_manual_time/') !!}/" + order_detail_id,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    time: selectedTime // Include the selectedTime in the data payload
+                },
+                success: function(response) {
+                    console.log('Time saved successfully:', response);
+                    sendMessage(order_detail_id);
+                    $('#driver_info_time_' + order_detail_id).modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error saving time:', error);
+                }
+            });
         }
-    });
-}
 
 
-function sendMessage(order_detail_id) {
-    $.ajax({
-        url: "{!! asset('reports/order/send_message') !!}/" + order_detail_id,
-        type: 'GET', // or POST depending on your route definition
-        dataType: 'json',
-        success: function(response) {
-            console.log('Message sent successfully:', response);
-            $('#success_mdl').modal('show');
+        function sendMessage(order_detail_id) {
+            $.ajax({
+                url: "{!! asset('reports/order/send_message') !!}/" + order_detail_id,
+                type: 'GET', // or POST depending on your route definition
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Message sent successfully:', response);
+                    $('#success_mdl').modal('show');
 
-        },
-        error: function(xhr, status, error) {
-            console.error('Error sending message:', error);
-            // Handle error response as needed
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending message:', error);
+                    // Handle error response as needed
+                }
+            });
         }
-    });
-}
 
-function sendVoucher(order_detail_id) {
-    $.ajax({
-        url: "{!! asset('reports/order/send_voucher') !!}/" + order_detail_id,
-        type: 'GET', // or POST depending on your route definition
-        dataType: 'json',
-        success: function(response) {
-            console.log('Voucher sent successfully:', response);
-            // $('#success_mdl').modal('show');
+        function sendVoucher(order_detail_id) {
+            $.ajax({
+                url: "{!! asset('reports/order/send_voucher') !!}/" + order_detail_id,
+                type: 'GET', // or POST depending on your route definition
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Voucher sent successfully:', response);
+                    // $('#success_mdl').modal('show');
 
-        },
-        error: function(xhr, status, error) {
-            console.error('Error sending message:', error);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending message:', error);
+                }
+            });
         }
-    });
-}
 
-function sendInvoice(id) {
-    $.ajax({
-        url: "{!! asset('reports/order/send_invoice') !!}/" + id,
-        type: 'GET', // or 'POST' depending on your route
-        dataType: 'json',
-        success: function(response) {
-            console.log('Invoice sent successfully:', response);
-            $('#success_mdl').modal('show');
-        },
-        error: function(xhr, status, error) {
-            console.error('Error sending invoice:', error);
+        function sendInvoice(id) {
+            $.ajax({
+                url: "{!! asset('reports/order/send_invoice') !!}/" + id,
+                type: 'GET', // or 'POST' depending on your route
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Invoice sent successfully:', response);
+                    $('#success_mdl').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending invoice:', error);
+                }
+            });
         }
-    });
-}
 
 
-        function update_order_transport_driver(order_detail_id, driver_select,transport_select) {
+        function update_order_transport_driver(order_detail_id, driver_select, transport_select) {
             console.log('get_details order_detail_id', order_detail_id);
             var driver_user_id = $(driver_select).find(':selected').val();
             var transport_id = $(transport_select).find(':selected').val();
@@ -549,7 +611,7 @@ function sendInvoice(id) {
                     console.log('response', response.status);
                     if (response.status) {
                         console.log('updated row ', order_detail_id);
-                        
+
                     } else {
                         alert('Someting went wrong');
                     }
@@ -563,7 +625,7 @@ function sendInvoice(id) {
 
         function change_order_detail_status(order_detail_id, status) {
             console.log('get_details order_detail_id', order_detail_id);
-            var reason = $("#reason_"+ order_detail_id).val();
+            var reason = $("#reason_" + order_detail_id).val();
             $.ajax({
                 url: "{!! asset('admin/order/update_order_detail_status') !!}/" + order_detail_id,
                 type: 'post',
@@ -577,7 +639,7 @@ function sendInvoice(id) {
                     console.log(response.status);
                     console.log('response', response);
                     if (response.status) {
-                        $('#order_detail_'+order_detail_id).html(capitalize_first_letter(status));
+                        $('#order_detail_' + order_detail_id).html(capitalize_first_letter(status));
                         // var myTable = $('#orderTableAppend').DataTable();
                         // let rowIndex = myTable.row('#row_' + order_detail_id).index();
                         // myTable.cell(rowIndex, 7).data(capitalize_first_letter(status));

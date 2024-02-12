@@ -117,6 +117,8 @@ class OrderController extends Controller
             $order_details->pick_up_date_time = $detail['pickupdate_time'];
             $order_details->customer_collection_price = $detail['customer_collection_price'];
             $order_details->is_pickup_time_set = $detail['is_pickup_time_set'];
+            $order_details->pick_extrainfo = $detail['pick_extrainfo'];
+            $order_details->dropoff_extrainfo = $detail['dropoff_extrainfo'];
 
             $order_details->adult_passengers = $detail['adult_passengers'];
             $order_details->infant_passengers = $detail['infant_passengers'];

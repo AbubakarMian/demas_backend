@@ -246,7 +246,7 @@ if (isset($order->order_details[0])) {
                     ?>
 
                     {{-- <span class="textColor">{!! $pax_vale !!}</span> --}}
-                    <span class="textColor"> {!!$order->order_details[0]->transport_type->name . ' (' . $order->order_details[0]->total_passengers .'PAX)'!!} </span>
+                    <span class="textColor"> {!!$order->order_details[0]->transport_type->name . ' (' . $order->order_details[0]->total_passengers .' - '.'PAX)'!!} </span>
 
                 </h3>
             </div>

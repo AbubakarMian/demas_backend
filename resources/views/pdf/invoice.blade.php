@@ -245,7 +245,8 @@ if (isset($order->order_details[0])) {
                     <?php
                     ?>
 
-                    <span class="textColor">{!! $pax_vale !!}</span>
+                    {{-- <span class="textColor">{!! $pax_vale !!}</span> --}}
+                    <span class="textColor"> {!!$order->order_details[0]->transport_type->name . ' (' . $order->order_details[0]->total_passengers .'PAX)'!!} </span>
 
                 </h3>
             </div>
@@ -288,10 +289,7 @@ if (isset($order->order_details[0])) {
                         $total_price = 0;
 
                     @endphp @foreach ($order->active_order_details as $key => $order_item)
-                        <@php
-                        // dd($order_item->transport?->name );
-                            
-                        @endphp <tr>
+                       <tr>
                             <td>{!! $order_item->order_id !!}</td>
                             <td>{!! $order_item->pickup_location->name .
                                 ($order_item->pick_extrainfo ? '(' . $order_item->pick_extrainfo . ')' : '') !!}</td>

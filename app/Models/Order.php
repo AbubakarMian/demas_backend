@@ -22,6 +22,7 @@ class Order extends Model
             public $active_orders_status = [
                 'pending',
                 'accepted',
+                'confirm',
                 ];
     public function user_obj()
     {

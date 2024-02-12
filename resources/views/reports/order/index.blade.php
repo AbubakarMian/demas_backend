@@ -270,7 +270,7 @@
                             id: 'orderdetails',
                             class: 'responsive-modal-dialog',
                             header: '<h4>Order details</h4>',
-                            body: `
+                            body: `<center>
                                             <table class="modal_table fhgyt";>
                                                 <thead>
                                                     <tr>
@@ -291,7 +291,7 @@
                                                 </thead>
                                                 <tbody class="orderdetails_list">
                                                 </tbody>
-                                            </table>`,
+                                            </table></center>`,
                             footer: `
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                             `,

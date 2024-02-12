@@ -289,23 +289,15 @@ if (isset($order->order_details[0])) {
 
                     @endphp @foreach ($order->active_order_details as $key => $order_item)
                         <@php
-                            // if ($order_item->adult_passengers == 0) {
-                            //     $order_item->adult_passengers = 4;
-                            // }
-
-                            // if ($order_item->infant_passengers == 0) {
-                            //     $order_item->infant_passengers = 2;
-                            // }
-                            // if ($order_item->total_passengers == 0) {
-                            //     $order_item->total_passengers = 6;
-                            // }
+                        // dd($order_item->transport?->name );
+                            
                         @endphp <tr>
                             <td>{!! $order_item->order_id !!}</td>
                             <td>{!! $order_item->pickup_location->name .
                                 ($order_item->pick_extrainfo ? '(' . $order_item->pick_extrainfo . ')' : '') !!}</td>
                             <td>{!! $order_item->dropoff_location->name .
                                 ($order_item->dropoff_extrainfo ? '(' . $order_item->dropoff_extrainfo . ')' : '') !!}</td>
-                            <td>{!! $order_item?->order_details?->transport?->name !!}</td>
+                            <td>{!! $order_item->transport?->name !!}</td>
                             {{-- <td>{!! $order_item->driver_user?->name ?? '' !!}</td>
                             <td>{!! $order_item->driver_user?->whatsapp_number ?? '' !!}</td> --}}
                             <td>{!! date('d-m-Y', $order_item->pick_up_date_time) !!}</td>

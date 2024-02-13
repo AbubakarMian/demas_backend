@@ -290,7 +290,7 @@ if (isset($order->order_details[0])) {
 
                     @endphp @foreach ($order->active_order_details as $key => $order_item)
                        <tr>
-                            <td>{!! $order_item->order_id !!}</td>
+                            <td>{!! $order_item->sub_order_id !!}</td>
                             <td>{!! $order_item->pickup_location->name .
                                 ($order_item->pick_extrainfo ? '(' . $order_item->pick_extrainfo . ')' : '') !!}</td>
                             <td>{!! $order_item->dropoff_location->name .
@@ -308,7 +308,7 @@ if (isset($order->order_details[0])) {
                             <@php
                                 $total_price += $order_item->final_price;
                             @endphp @if ($order->show_price_in_user_invoice)
-                                <td>{!! $order_item->user_payment_status !!}</td>
+                                <td>{!! ucfirst($order_item->user_payment_status) !!}</td>
                                 @endif
                                 </tr>
                                 @endforeach

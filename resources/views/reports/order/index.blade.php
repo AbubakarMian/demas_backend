@@ -160,7 +160,7 @@
             <tr>
                 <th>OrderId</th>
                 <th>User</th>
-                <th>User Phone No</th>
+                <th>Phone No</th>
                 <th>Sale Agent</th>
                 <th>Travel Agent</th>
                 <th>Price</th>

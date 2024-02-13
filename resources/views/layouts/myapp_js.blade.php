@@ -368,8 +368,8 @@
 
     // Format the date as a string in your desired format (e.g., 'MM/DD/YYYY HH:mm:ss')
     var formattedDate = (
-        ('0' + (date.getUTCMonth() + 1)).slice(-2) + '/' +
         ('0' + date.getUTCDate()).slice(-2) + '/' +
+        ('0' + (date.getUTCMonth() + 1)).slice(-2) + '/' +
         date.getUTCFullYear()
     );
     var formattedTime = (

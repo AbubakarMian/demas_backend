@@ -83,8 +83,11 @@
                                     role_name = 'User';
                                 } else if (response['data'][i].role_id == 3) {
                                     role_name = 'Sales Agent';
-                                } else {
-                                    role_name = 'Travel Agents';
+                                } 
+                                 else if (response['data'][i].role_id == 4) {
+                                    role_name = 'Travel Agent';
+                                }else { // role 5
+                                    role_name = 'Driver';
                                 }
                                 var role = role_name;
 

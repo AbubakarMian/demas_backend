@@ -23,7 +23,7 @@ class UserController extends Controller
 
     public function get_user(Request $request)
     {
-        $user = User::orderBy('created_at', 'DESC')->select('*')->get();
+        $user = User::where('role_id','!=',1)->orderBy('created_at', 'DESC')->select('*')->get();
         $userData['data'] = $user;
         echo json_encode($userData);
     }

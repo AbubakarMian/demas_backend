@@ -12,8 +12,6 @@ Slots
     width="400px" style="table-layout:fixed;"
 @endsection
 
-
-
 <style>
     td {
         white-space: nowrap;
@@ -33,7 +31,6 @@ Slots
     }
 </style>
 @section('table')
-
     <table class="fhgyt" id="slotTableAppend" style="opacity: 0">
         <thead>
             <tr>
@@ -47,30 +44,23 @@ Slots
         <tbody>
         </tbody>
     </table>
-
 @stop
-@section('app_jquery')
 
+@section('app_jquery')
     <script>
         $(document).ready(function() {
 
             fetchRecords();
 
-            
-                function convertDate(date) {
-                var yyyy = date.getFullYear().toString();
-                var mm = (date.getMonth()+1).toString();
-                var dd  = date.getDate().toString();
-
-                var mmChars = mm.split('');
-                var ddChars = dd.split('');
-
-                return yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
-                }
-
+            function formatDate(timestamp) {
+                var date = new Date(timestamp * 1000);
+                var day = String(date.getDate()).padStart(2, '0');
+                var month = String(date.getMonth() + 1).padStart(2, '0'); // Month index starts from 0
+                var year = date.getFullYear();
+                return day + '/' + month + '/' + year;
+            }
 
             function fetchRecords() {
-
                 $.ajax({
                     url: '{!! asset('admin/slot/get_slot') !!}',
                     type: 'get',
@@ -81,37 +71,18 @@ Slots
                         var len = response['data'].length;
                         console.log('response2');
 
-                        console.log(response);
-
                         for (var i = 0; i < len; i++) {
-
                             var id = response['data'][i].id;
                             var name = response['data'][i].name;
-                            // var journey_id = response['data'][i].journey.name;
-                            var from_timestamp = response['data'][i]
-                            .start_date; // Unix timestamp from your database
-                            var to_timestamp = response['data'][i]
-                            .end_date; // Unix timestamp from your database
+                            var from_timestamp = response['data'][i].start_date;
+                            var to_timestamp = response['data'][i].end_date;
 
-                            // Convert Unix timestamps to date-time strings
-                            var from_date = new Date(from_timestamp *
-                            1000); // Multiply by 1000 to convert to milliseconds
-                            var to_date = new Date(to_timestamp * 1000);
+                            var from_date_formatted = formatDate(from_timestamp);
+                            var to_date_formatted = formatDate(to_timestamp);
 
-                            // Format the date-time strings as desired (e.g., "MM/DD/YYYY HH:mm:ss")
                            
-                           console.log('from_date',from_date);
-                           console.log('local string',from_date.toString());
-                           console.log('split',from_date.toString().split('GMT')[0]);
-                           
-                            var from_date_formatted = convertDate(from_date);
-                            var to_date_formatted = convertDate(to_date);
-
-                            // Now, you can use from_date_formatted and to_date_formatted in your frontend code
-
-
                             var edit =
-                                `<a class="btn btn-info" href="{!! asset('admin/slot/edit/` + id + `') !!}">Edit</a>`;
+                                `<a class="btn btn-info" href="{!! asset('admin/slot/edit/`  + response['data'][i].id +`') !!}">Edit</a>`;
                             createModal({
                                 id: 'slot_' + response['data'][i].id,
                                 header: '<h4>Delete</h4>',
@@ -128,31 +99,24 @@ Slots
                                 `<a class="btn btn-info" data-toggle="modal" data-target="#` +
                                 'slot_' + response['data'][i].id + `">Delete</a>`;
 
-                            var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                            var tr_str = "<tr id='row_" + id + "'>" +
                                 "<td>" + name + "</td>" +
                                 "<td>" + from_date_formatted + "</td>" +
                                 "<td>" + to_date_formatted + "</td>" +
                                 "<td>" + edit + "</td>" +
                                 "<td>" + delete_btn + "</td>" +
-
-
                                 "</tr>";
 
                             $("#slotTableAppend tbody").append(tr_str);
                         }
-                        $(document).ready(function() {
-                            console.log('sadasdasdad');
-                            $('#slotTableAppend').DataTable({
-                                dom: '<"top_datatable"B>lftipr',
-                                buttons: [
-                                    'copy', 'csv', 'excel', 'pdf', 'print'
-                                ],
-                            });
+
+                        $('#slotTableAppend').DataTable({
+                            dom: '<"top_datatable"B>lftipr',
+                            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                         });
                     }
                 });
             }
-
         });
 
         function set_msg_modal(msg) {
@@ -161,7 +125,6 @@ Slots
 
         function delete_request(id) {
             $.ajax({
-
                 url: "{!! asset('admin/slot/delete') !!}/" + id,
                 type: 'POST',
                 dataType: 'json',

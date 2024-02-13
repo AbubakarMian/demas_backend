@@ -98,11 +98,11 @@
                                     header: '<h4>Delete</h4>',
                                     body: 'Do you want to continue ?',
                                     footer: `
-                <button class="btn btn-danger" onclick="delete_request(` + response['data'][i].id + `)" data-dismiss="modal">
-                    Delete
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            `,
+                                    <button class="btn btn-danger" onclick="delete_request(` + response['data'][i].id + `)" data-dismiss="modal">
+                                        Delete
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                `,
                                 });
 
                                 var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +

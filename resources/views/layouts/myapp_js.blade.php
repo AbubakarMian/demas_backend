@@ -253,26 +253,25 @@
         }
     })
 
-    function createModal(modal_param) {
-        var modal = `
-    <div class="modal fade " id="` + modal_param.id + `" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content custom_mdl_class success_mdl">
-        <div class="modal-header">
-            ` + modal_param.header + `
+   function createModal(modal_param) {
+    var modal = `
+        <div class="modal fade ` + (modal_param.class ? modal_param.class : '') + `" id="` + modal_param.id + `" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content custom_mdl_class success_mdl">
+                    <div class="modal-header">
+                        ` + modal_param.header + `
+                    </div>
+                    <div class="modal-body">
+                        ` + modal_param.body + `
+                    </div>
+                    <div class="modal-footer">
+                        ` + modal_param.footer + `
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-            ` + modal_param.body + `
-        </div>
-        <div class="modal-footer">
-            ` + modal_param.footer + `
-        </div>
-      </div>
-
-    </div>
-  </div>
     `;
-        $('#add_custom_modals').append(modal);
+    $('#add_custom_modals').append(modal);
         //     <div class="modal fade" id="`+modal_param.id+`" role="dialog">
         //     <div class="modal-dialog">
         //       <div class="modal-content">

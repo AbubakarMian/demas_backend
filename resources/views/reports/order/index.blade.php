@@ -88,9 +88,7 @@
         display: flex;
         justify-content: center;
     }
-    .responsive-modal-dialog {
-        max-width: 90%; /* Adjust the maximum width as needed */
-    }
+   
 
     /* Adjust the modal content for smaller screens */
     .modal-content {
@@ -108,7 +106,7 @@
     .icn_ar {
         color: #6ddf6d;
         font-size: 148px;
-        width: 359px;
+        width: auto;
     }
 
     .top_cross {
@@ -152,6 +150,46 @@
         margin-bottom: 1px !important;
         border-radius: 5px !important;
     }
+#success_mdl2 {
+    width: 500px;
+    /* background-color: #fff; */
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden !important;
+}
+#success_mdl {
+    width: 500px;
+    /* background-color: #fff; */
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden !important;
+}
+.time_modal {
+    width: 30%;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(100%, 49px);
+    overflow: hidden !important;
+}
+@media only screen and (max-width: 480px) {
+    .time_modal {
+    width: 100%;
+        transform: translate(0, 187px);
+    
+}
+#success_mdl2 {
+    width: 100%;
+ }
+
+ }
 </style>
 @section('table')
 
@@ -281,6 +319,7 @@
                                                         <th>Adult PAX</th>
                                                         <th>Infant PAX</th>
                                                         <th>Total PAX</th>
+                                                        <th>Ticket</th>
                                                         <th>Driver</th>
                                                         <th>Transport</th>
                                                         <th></th>
@@ -367,6 +406,7 @@
 
         function get_divers_transport_select(order_detail_item) {
             var order_detail_id = order_detail_item.id;
+            console.log("hi i am her",order_detail_item)
             var selected = '';
             var drivers = `<select class="cell_spc select_driver_` + order_detail_item.id + `">
                                 <option value="0">Select Driver</option>`;
@@ -398,6 +438,7 @@
                     Update</button>`;
 
             var voucher_btn = '<a class="btn cus_btnsucc" onclick="sendVoucher(' + order_detail_id + ');">Send</a>';
+
             // var voucher_btn = '<a class="btn btn-info" href="' + '{!! asset('reports/order/send_voucher') !!}/' + order_detail_id +
             //                 '">Send</a>';
             // <button class="btn btn-success"  href="' + '{!! asset('reports/order/send_voucher') !!}/' + id +
@@ -430,13 +471,22 @@
                         console.log('my time', format_date_time_from_timestamp(item
                             .pick_up_date_time)['time']);
                         console.log('mitem.is_pickup_time_set', item.is_pickup_time_set);
+                        console.log('mitem.is_picsdad image kup_time_set', item.ticket_image);
+
+                        var order_detail_ticket = item.ticket_image;
+                                                console.log('mitem.is_picsdad image i am here',order_detail_ticket);
+
+
                         var time_btn =
                             `<a class="btn cus_btnsucc" data-toggle="modal" data-target="#driver_info_time_${item.id}">Send</a>`;
                         // var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(item.pick_up_date_time)['time'] :""; 
+                         var ticket_img = '<a class="btn cus_btnsucc" target="_blank" href="' + order_detail_ticket + '">View</a>';
+
                         var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(
                             item.pick_up_date_time)['time'] : "";
                         createModal({
                             id: 'driver_info_time_' + item.id,
+                                class: 'time_modal', // Add your custom class here
                             header: '<h4>Select PickUp Time</h4>',
                             body: `
                                                     <input type="time" class="form-control" id="manual_time_${item.id}" value="` +
@@ -479,6 +529,29 @@
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                         `,
                         });
+                        createModal({
+                id: 'success_mdl2',
+                header: `<div class="top_cross">
+                                <button type="button" class="btn btn-default tp_crs" data-dismiss="modal">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                        </div>`,
+                body: `
+                <center>
+                <div class="icn_ar">
+                    <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+
+                    </div>
+                <div class="icn_ar_text">
+                    <b>Success</b>
+
+                    </div>
+                    </center>
+                `,
+                footer: `
+                
+                `,
+            });
                         var status = item.status;
                         if (status == 'pending') {
                             var confirm_btn =
@@ -501,6 +574,7 @@
                                         <td>` + item.adult_passengers + `</td>
                                         <td>` + item.infant_passengers + `</td>
                                         <td>` + item.total_passengers + `</td>
+                                        <td>` + ticket_img  + `</td>
                                         <td>` + divers_transport_select.drivers + `</td>
                                         <td>` + divers_transport_select.transport + `</td>
                                         <td>` + divers_transport_select.update_btn + `</td>
@@ -551,7 +625,7 @@
                 dataType: 'json',
                 success: function(response) {
                     console.log('Message sent successfully:', response);
-                    $('#success_mdl').modal('show');
+                    $('#success_mdl2').modal('show');
 
                 },
                 error: function(xhr, status, error) {
@@ -611,6 +685,9 @@
                     console.log('response', response.status);
                     if (response.status) {
                         console.log('updated row ', order_detail_id);
+                    $('#success_mdl2').modal('show');
+
+                        
 
                     } else {
                         alert('Someting went wrong');

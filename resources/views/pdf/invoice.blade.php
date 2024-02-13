@@ -304,7 +304,7 @@ if (isset($order->order_details[0])) {
                             <td>{!! $order_item->infant_passengers !!}</td>
                             <td>{!! $order_item->total_passengers !!}</td>
                             <td>{!! $order_item->final_price !!}</td>
-                            <td>{!! $order_item->status !!}</td>
+                            <td>{!! ucfirst($order_item->status) !!}</td>
                             <@php
                                 $total_price += $order_item->final_price;
                             @endphp @if ($order->show_price_in_user_invoice)

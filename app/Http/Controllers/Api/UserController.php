@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use stdClass;
+use libphonenumber\PhoneNumberUtil;
+use libphonenumber\PhoneNumberFormat;
 
 
 class UserController extends Controller
@@ -35,18 +37,22 @@ class UserController extends Controller
             if ($validator->fails()) {
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
-
-                $user_phone = User::where('phone_no', $request->phone_no)
+                $phoneUtil = PhoneNumberUtil::getInstance();
+                $phone_no = $request->phone_no ? $phoneUtil->parse($request->phone_no, null):'';
+                $whatsapp_no = $phoneUtil->parse($request->whatsapp_no, null);
+                $whatsapp_no = $phoneUtil->format($whatsapp_no, PhoneNumberFormat::E164);
+// dd($phone_no,$whatsapp_no );
+                $user_phone = User::where('phone_no', $phone_no)
                     ->first();
 
-                $user_whatsapp_no = User::where('whatsapp_number', $request->whatsapp_no)
+                $user_whatsapp_no = User::where('whatsapp_number', $whatsapp_no)
                     ->first();
                     // dd($user_whatsapp_no);
 
                 $user_email = User::where('email', $request->email)
                     ->first();
 
-                $user = User::where('whatsapp_number', $request->whatsapp_no)
+                $user = User::where('whatsapp_number', $whatsapp_no)
                     ->where('email', $request->email)
                     ->first();
 

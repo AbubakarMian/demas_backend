@@ -98,10 +98,10 @@
     <div class="form-group">
         {!! Form::label('phone_no','Phone Number') !!}
         <div>
-            {!! Form::number('phone_no',  $number, ['class' => 'form-control',
+            {!! Form::text('phone_no',  $number, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter Phone Number','required',
+            'placeholder'=>'+966123456***','required',
             'maxlength'=>"100"]) !!}
         </div>
     </div>
@@ -115,10 +115,11 @@
     <div class="form-group">
         {!! Form::label('whatsapp_number','Whatsapp Number') !!}
         <div>
-            {!! Form::number('whatsapp_number',  $whatsapp_number, ['class' => 'form-control',
+            {!! Form::text('whatsapp_number',  $whatsapp_number, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter Whatsapp Number','required',
+            'placeholder'=>'+966123456***',
+            'required',
             'maxlength'=>"100"]) !!}
         </div>
     </div>
@@ -186,33 +187,11 @@
     </div>
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <span id="err" class="error-product"></span>
     
     
     <div class="form-group col-md-12">
     </div>
-    
-    
-    
     
     
     <div class="col-md-5 pull-left">

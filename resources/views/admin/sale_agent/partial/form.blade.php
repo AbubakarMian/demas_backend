@@ -101,7 +101,8 @@
             {!! Form::text('phone_no',  $number, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter Phone Number','required',
+            'placeholder'=>'+966123456***',
+            'required',
             'maxlength'=>"100"]) !!}
         </div>
     </div>
@@ -117,7 +118,7 @@
             {!! Form::text('whatsapp_number',  $whatsapp_number, ['class' => 'form-control',
             'data-parsley-required'=>'true',
             'data-parsley-trigger'=>'change',
-            'placeholder'=>'Enter Whatsapp Number','required',
+            'placeholder'=>'+966123456***','required',
             'maxlength'=>"100"]) !!}
         </div>
     </div>

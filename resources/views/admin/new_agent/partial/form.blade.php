@@ -112,10 +112,11 @@ $filteredRole = array_filter($filteredRole, function ($key) {
 <div class="form-group">
     {!! Form::label('phone_no','Phone Number') !!}
     <div>
-        {!! Form::number('phone_no',  $number, ['class' => 'form-control',
+        {!! Form::text('phone_no',  $number, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter Phone Number','required',
+        'placeholder'=>'+966123456***',
+        'required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>
@@ -128,10 +129,11 @@ $filteredRole = array_filter($filteredRole, function ($key) {
 <div class="form-group">
     {!! Form::label('whatsapp_number','WhatsappNumber') !!}
     <div>
-        {!! Form::number('phone_no',  $whatsapp_number, ['class' => 'form-control',
+        {!! Form::text('phone_no',  $whatsapp_number, ['class' => 'form-control',
         'data-parsley-required'=>'true',
         'data-parsley-trigger'=>'change',
-        'placeholder'=>'Enter Whatsapp Number','required',
+        'placeholder'=>'+966123456***',
+        'required',
         'maxlength'=>"100"]) !!}
     </div>
 </div>

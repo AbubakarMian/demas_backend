@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use stdClass;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
-use libphonenumber\NumberParseException;
+
 
 class UserController extends Controller
 {
@@ -25,7 +25,6 @@ class UserController extends Controller
         $m = $msg->send_notification();
         dd($m);
     }
-
     public function register_or_login(Request $request)
     {
         try {
@@ -39,16 +38,76 @@ class UserController extends Controller
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
                 $phoneUtil = PhoneNumberUtil::getInstance();
+                $phone_no = $request->phone_no ? $phoneUtil->parse($request->phone_no, null):'';
+                $whatsapp_no = $phoneUtil->parse($request->whatsapp_no, null);
+                $whatsapp_no = $phoneUtil->format($whatsapp_no, PhoneNumberFormat::E164);
+// dd($phone_no,$whatsapp_no );
+                $user_phone = User::where('phone_no', $phone_no)
+                    ->first();
 
-                try {
-                    $phone_no = $request->phone_no ? $phoneUtil->parse($request->phone_no, null) : '';
-                    $whatsapp_no = $phoneUtil->parse($request->whatsapp_no, null);
-                    $whatsapp_no = $phoneUtil->format($whatsapp_no, PhoneNumberFormat::E164);
-                } catch (NumberParseException $e) {
-                    return $this->sendResponse(500, null, ["Error parsing phone number: " . $e->getMessage()]);
+                $user_whatsapp_no = User::where('whatsapp_number', $whatsapp_no)
+                    ->first();
+                    // dd($user_whatsapp_no);
+
+                $user_email = User::where('email', $request->email)
+                    ->first();
+
+                $user = User::where('whatsapp_number', $whatsapp_no)
+                    ->where('email', $request->email)
+                    ->first();
+
+                if (($user_whatsapp_no || $user_email) && !$user) {
+                    $msg = '';
+                    $msg = $user_whatsapp_no ? 'Phone number already taken' : '';
+                    $msg .= $user_email ? ' Email already taken' : '';
+
+                    return $this->sendResponse(500, null, [$msg]);
+                }
+                // if( ($user_phone || $user_email) && !$user){
+                //     $msg = '';
+                //     $msg = $user_phone ? 'Phone number already taken':'';
+                //     $msg .= $user_email ? ' Email already taken':'';
+
+                //     return $this->sendResponse(500, null, [$msg]);
+                // }
+
+
+                $name = 'user';
+                if ($request->email) {
+                    $name = explode('@', $request->email)[0];
+                }
+                // $user = User::where('phone_no', $request->phone_no)->first();
+                if (!$user) {
+                    $user = new User();
+                    $user->role_id = 2;
+                    $user->name = $name;
+                    $user->last_name = '';
+                }
+                if ($request->email) {
+                    $user->email = $request->email;
+                }
+                // $user->phone_no = $request->phone_no;
+                $user->phone_no = $request->phone_no ?? $request->whatsapp_no;
+                $user->whatsapp_number = $request->whatsapp_no;
+                // $user->password = Hash::make($request->password);
+                $user->access_token = uniqid();
+                $user->otp = rand(10000, 99999);
+                $user->save();
+
+                if ($request->email) {
+                    $email_handler = new EmailHandler();
+                    $email_details = [];
+
+                    $email_details['subject'] = 'Demas OTP';
+                    // $email_details['to_email'] = 'ameer.maavia@gmail.com';
+                    $email_details['to_email'] = $user->email;
+                    $email_details['to_name'] = 'Abubakar';
+                    $email_details['data'] = $user;
+                    $email_details['view'] = 'email_template.otp';
+                    $email_handler->sendEmail($email_details);
                 }
 
-                // Rest of your code...
+                return $this->sendResponse(200, $user);
             }
         } catch (\Exception $e) {
             return $this->sendResponse(
@@ -58,7 +117,6 @@ class UserController extends Controller
             );
         }
     }
-
     public function validate_otp(Request $request)
     {
         try {
@@ -85,6 +143,7 @@ class UserController extends Controller
             );
         }
     }
+
 
     public function login(Request $request)
     {
@@ -141,6 +200,8 @@ class UserController extends Controller
                     ];
                 }
 
+                // end sad
+
                 //Set the JSON response
                 $status_code = $responseArray['status'];
                 $response = $responseArray['response'];
@@ -149,7 +210,7 @@ class UserController extends Controller
 
                 return $this->sendResponse($status_code, $response, $error, $custom_error_code);
             }
-        } catch (\Exception $e) {
+        }catch (\Exception $e) {
             return $this->sendResponse(
                 500,
                 null,
@@ -157,7 +218,6 @@ class UserController extends Controller
             );
         }
     }
-
     public function user_update_profile(Request $request)
     {
         try {

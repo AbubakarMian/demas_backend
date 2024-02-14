@@ -54,6 +54,8 @@ class OrderController extends Controller
 
     public function create(Request $request)
     {
+        try{
+            
         $user = $request->attributes->get('user');
 
         $request_params = $request->all();
@@ -158,11 +160,20 @@ class OrderController extends Controller
         $email_handler = new EmailHandler();
         $email_handler->send_invoice($order->id);
         // return $pdf['stream'];
-ss
+
         // $user->email send email with attachment
 
         return $this->sendResponse(200, $order);
     }
+        catch (\Exception $e) {
+            return $this->sendResponse(
+                500,
+                null,
+                [$e->getMessage()]
+            );
+        }
+    }
+    
 
     public function detail(Request $request, $order_id)
     {

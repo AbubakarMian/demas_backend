@@ -314,6 +314,7 @@
                                                     <tr>
                                                         <th>Journey</th>
                                                         <th>PickUp</th>
+                                                        <th>Customer Price</th>
                                                         <th>Price</th>
                                                         <th>Transport Type</th>
                                                         <th>Adult PAX</th>
@@ -480,7 +481,12 @@
                         var time_btn =
                             `<a class="btn cus_btnsucc" data-toggle="modal" data-target="#driver_info_time_${item.id}">Send</a>`;
                         // var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(item.pick_up_date_time)['time'] :""; 
-                         var ticket_img = '<a class="btn cus_btnsucc" target="_blank" href="' + order_detail_ticket + '">View</a>';
+                        if(item.ticket_image){
+                             var ticket_img = '<a class="btn cus_btnsucc" target="_blank" href="' + order_detail_ticket + '">View</a>';
+                        }else{
+                            var ticket_img = "";
+                        }
+                        
 
                         var time_value = item.is_pickup_time_set ? format_date_time_from_timestamp(
                             item.pick_up_date_time)['time'] : "";
@@ -569,6 +575,7 @@
                         details_list += `<tr>
                                         <td>` + item.journey.name + `</td>
                                         <td>` + format_date_time_from_timestamp(item.pick_up_date_time)['date_time'] + `</td>
+                                        <td>` + item.customer_collection_price + `</td>
                                         <td>` + item.final_price + `</td>
                                         <td>` + item.transport_type.name + `</td>
                                         <td>` + item.adult_passengers + `</td>

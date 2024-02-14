@@ -158,7 +158,7 @@ class OrderController extends Controller
         $email_handler = new EmailHandler();
         $email_handler->send_invoice($order->id);
         // return $pdf['stream'];
-
+ss
         // $user->email send email with attachment
 
         return $this->sendResponse(200, $order);

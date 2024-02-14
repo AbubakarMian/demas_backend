@@ -37,9 +37,10 @@ class UserController extends Controller
             if ($validator->fails()) {
                 return $this->sendResponse(500, null, $validator->messages()->all());
             } else {
+                $defaultRegion = 'SA'; 
                 $phoneUtil = PhoneNumberUtil::getInstance();
-                $phone_no = $request->phone_no ? $phoneUtil->parse($request->phone_no, null):'';
-                $whatsapp_no = $phoneUtil->parse($request->whatsapp_no, null);
+                $phone_no = $request->phone_no ? $phoneUtil->parse($request->phone_no, $defaultRegion):'';
+                $whatsapp_no = $phoneUtil->parse($request->whatsapp_no, $defaultRegion);
                 $whatsapp_no = $phoneUtil->format($whatsapp_no, PhoneNumberFormat::E164);
 // dd($phone_no,$whatsapp_no );
                 $user_phone = User::where('phone_no', $phone_no)

@@ -289,6 +289,7 @@ class OrderController extends Controller
             
             // 'sale_agent',
             // 'travel_agent',
+            'order',
             'driver_user',
             'sale_agent_user',
             'travel_agent_user',

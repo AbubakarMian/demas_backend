@@ -303,22 +303,22 @@ if (isset($order->order_details[0])) {
                             <td>{!! $order_item->adult_passengers !!}</td>
                             <td>{!! $order_item->infant_passengers !!}</td>
                             <td>{!! $order_item->total_passengers !!}</td>
-                            <td>{!! $order_item->final_price !!}</td>
+                            <td>{!! $order_item->show_price_in_user_invoice ? $order_item->customer_collection_price:'-' !!}</td>
                             <td>{!! ucfirst($order_item->status) !!}</td>
                             <@php
-                                $total_price += $order_item->final_price;
+                                // $total_price += $order_item->final_price;
                             @endphp @if ($order->show_price_in_user_invoice)
                                 <td>{!! ucfirst($order_item->user_payment_status) !!}</td>
                                 @endif
                                 </tr>
-                                @endforeach
+                        @endforeach
                 </tbody>
             </table>
         </div>
         @if ($order->show_price_in_user_invoice)
             <div class="total_area">
                 <div class="total_txt">
-                    <p>SUB TOTAL = <span class="">{!! $order_item->final_price !!}/=</span></p>
+                    <p>SUB TOTAL = <span class="">{!! $order_item->customer_collection_price !!}/=</span></p>
                 </div>
                 <!-- <div class="total_price">
           <p></p>
@@ -326,9 +326,11 @@ if (isset($order->order_details[0])) {
             </div>
         @endif
         <div class="total_area">
+            @if ($order->show_price_in_user_invoice)
             <div class="total_txt">
-                <p>GRAND TOTAL = <span class="">{!! $total_price !!}/=</span></p>
+                <p>GRAND TOTAL = <span class="">{!! $order->customer_collection_price !!}/=</span></p>
             </div>
+            @endif
             <!-- <div class="total_price">
       <p></p>
     </div> -->

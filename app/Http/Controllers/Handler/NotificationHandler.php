@@ -54,7 +54,7 @@ class NotificationHandler
       $pickup_name = isset($order_detail->journey->pickup->name) ? $order_detail->journey->pickup->name : '';
       $dropoff_name = isset($order_detail->journey->dropoff->name) ? $order_detail->journey->dropoff->name : '';
       $total_passengers = isset($order_detail->total_passengers) ? $order_detail->total_passengers : '';
-      $final_price = isset($order_detail->order->final_price) ? $order_detail->order->final_price : '';
+      $customer_collection_price = $order_detail->customer_collection_price;
       $transport_name = isset($order_detail->transport->name) ? $order_detail->transport->name : '';
       $extra_info = isset($order_detail->pick_extrainfo) ? $order_detail->pick_extrainfo : '';
 
@@ -62,7 +62,14 @@ class NotificationHandler
       if($order_detail->driver_user){
         $send_whats_app_num = $number == $customer_whatsapp_number ? $order_detail->driver_user->whatsapp_number :  $customer_whatsapp_number;
       }
+      $price_show ="";
       
+      if ($order_detail->order->show_price_in_user_invoice){ dd($order_detail->order->show_price_in_user_invoice);
+        $price_show = "Cash From Customer:\t {$customer_collection_price} SAR\n" ;
+      }
+
+     
+
   
       // Construct the message
       $message = "Dear {$user_name}, your invoice details are as follows:\n" .
@@ -72,7 +79,7 @@ class NotificationHandler
           "PickUp:\t{$pickup_name}\n" .
           "DropOff:\t{$dropoff_name}\n" .
           "PAX:\t{$total_passengers}\n" .
-          "Cash From Customer:\t {$final_price} SAR\n" .
+          $price_show .
           "Vehicle:\t ({$transport_name})\n" .
           "Extra Information:\t{$extra_info}\n";
   

@@ -64,7 +64,7 @@ class NotificationHandler
       }
       $price_show ="";
       
-      if ($order_detail->order->show_price_in_user_invoice){ dd($order_detail->order->show_price_in_user_invoice);
+      if ($order_detail->order->show_price_in_user_invoice){ ;
         $price_show = "Cash From Customer:\t {$customer_collection_price} SAR\n" ;
       }
 

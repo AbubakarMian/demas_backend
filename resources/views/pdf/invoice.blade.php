@@ -246,7 +246,11 @@ if (isset($order->order_details[0])) {
                     ?>
 
                     {{-- <span class="textColor">{!! $pax_vale !!}</span> --}}
-                    <span class="textColor"> {!!$order->order_details[0]->transport_type->name . ' (' . $order->order_details[0]->total_passengers .' - '.'PAX)'!!} </span>
+                    <span class="textColor"> {!! $order->order_details[0]->transport_type->name .
+                        ' (' .
+                        $order->order_details[0]->total_passengers .
+                        ' - ' .
+                        'PAX)' !!} </span>
 
                 </h3>
             </div>
@@ -289,47 +293,56 @@ if (isset($order->order_details[0])) {
                         $total_price = 0;
 
                     @endphp @foreach ($order->active_order_details as $key => $order_item)
-                       <tr>
+                        <@php
+                            // dd($order_item->order->show_price_in_user_invoice);
+                            $order_item->order->show_price_in_user_invoice == 1;
+                            if ($order_item->order->show_price_in_user_invoice) {
+                                $show_price = $order_item->customer_collection_price;
+                            } else {
+                                $show_price = '-';
+                            }
+
+                        @endphp <tr>
+
                             <td>{!! $order_item->sub_order_id !!}</td>
                             <td>{!! $order_item->pickup_location->name .
                                 ($order_item->pick_extrainfo ? '(' . $order_item->pick_extrainfo . ')' : '') !!}</td>
                             <td>{!! $order_item->dropoff_location->name .
                                 ($order_item->dropoff_extrainfo ? '(' . $order_item->dropoff_extrainfo . ')' : '') !!}</td>
                             <td>{!! $order_item->transport?->name !!}</td>
-                            {{-- <td>{!! $order_item->driver_user?->name ?? '' !!}</td>
-                            <td>{!! $order_item->driver_user?->whatsapp_number ?? '' !!}</td> --}}
                             <td>{!! date('d-m-Y', $order_item->pick_up_date_time) !!}</td>
                             <td>{!! date('H:i:s', $order_item->pick_up_date_time) !!}</td>
                             <td>{!! $order_item->adult_passengers !!}</td>
                             <td>{!! $order_item->infant_passengers !!}</td>
                             <td>{!! $order_item->total_passengers !!}</td>
-                            <td>{!! $order_item->show_price_in_user_invoice ? $order_item->customer_collection_price:'-' !!}</td>
+                            <td>{!! $show_price !!}</td>
                             <td>{!! ucfirst($order_item->status) !!}</td>
                             <@php
-                                // $total_price += $order_item->final_price;
+                                $total_price += $order_item->customer_collection_price;
                             @endphp @if ($order->show_price_in_user_invoice)
                                 <td>{!! ucfirst($order_item->user_payment_status) !!}</td>
                                 @endif
                                 </tr>
-                        @endforeach
+                                @endforeach
                 </tbody>
             </table>
         </div>
         @if ($order->show_price_in_user_invoice)
             <div class="total_area">
                 <div class="total_txt">
-                    <p>SUB TOTAL = <span class="">{!! $order_item->customer_collection_price !!}/=</span></p>
+                    <p>SUB TOTAL = <span class="">{!! $total_price !!}/=</span></p>
                 </div>
                 <!-- <div class="total_price">
           <p></p>
         </div> -->
             </div>
         @endif
+        <br></br>
         <div class="total_area">
             @if ($order->show_price_in_user_invoice)
-            <div class="total_txt">
-                <p>GRAND TOTAL = <span class="">{!! $order->customer_collection_price !!}/=</span></p>
-            </div>
+                <div class="total_txt">
+                    <p>GRAND TOTAL = <span class="">{!! $order->customer_collection_price !!}/=</span></p>
+                </div>
             @endif
             <!-- <div class="total_price">
       <p></p>

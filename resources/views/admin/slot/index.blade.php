@@ -82,13 +82,13 @@ Slots
 
                            
                             var edit =
-                                `<a class="btn btn-info" href="{!! asset('admin/slot/edit/`  + response['data'][i].id +`') !!}">Edit</a>`;
+                                `<a class="btn btn-info" href="{!! asset('admin/slot/edit/`  + response["data"][i].id +`') !!}">Edit</a>`;
                             createModal({
-                                id: 'slot_' + response['data'][i].id,
+                                id: 'slot_' + response["data"][i].id,
                                 header: '<h4>Delete</h4>',
                                 body: 'Do you want to continue ?',
                                 footer: `
-                                <button class="btn btn-danger" onclick="delete_request(` + response['data'][i].id + `)"
+                                <button class="btn btn-danger" onclick="delete_request(` + response["data"][i].id + `)"
                                 data-dismiss="modal">
                                     Delete
                                 </button>
@@ -97,7 +97,7 @@ Slots
                             });
                             var delete_btn =
                                 `<a class="btn btn-info" data-toggle="modal" data-target="#` +
-                                'slot_' + response['data'][i].id + `">Delete</a>`;
+                                'slot_' + response["data"][i].id + `">Delete</a>`;
 
                             var tr_str = "<tr id='row_" + id + "'>" +
                                 "<td>" + name + "</td>" +

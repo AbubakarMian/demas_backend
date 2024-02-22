@@ -112,9 +112,9 @@ label.btn.btn-secondary.recieved_admin {
 </div> --}}
 
 <div class="form-group">
-    {!! Form::label('details ', 'details ') !!}
+    {!! Form::label('details ', 'Details ') !!}
     <div>
-        {!! Form::textarea('detail ', null, [
+        {!! Form::textarea('detail', null, [
             'class' => 'form-control',
             'data-parsley-required' => 'true',
             'data-parsley-trigger' => 'change',

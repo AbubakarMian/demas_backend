@@ -400,7 +400,7 @@ class CommissionHandler
     public function pay_commission_team($user_id, $total_amount_paid_by_admin)
     {
         $user = Users::with(['sale_agent', 'travel_agent', 'driver'])->find($user_id);
-        $user->wallet = $user->wallet + $total_amount_paid_by_admin;
+        // $user->wallet = $user->wallet + $total_amount_paid_by_admin;
         $user->save();
         $amount_paid_by_admin = $total_amount_paid_by_admin;
         $amount_paid_by_admin = $user->wallet;
@@ -482,8 +482,9 @@ class CommissionHandler
     public function add_agent_payment_to_wallet($user_id, $payment_collected)
     {
         $user = Users::find($user_id);
-        $user->wallet = $user->wallet + $payment_collected;
+        $user->wallet += $payment_collected; 
         $user->save();
+
     }
     public function withdrawal_agent_payment_from_wallet($user_id, $amount)
     {
@@ -498,7 +499,7 @@ class CommissionHandler
         $total_amount_in_wallet = $user->wallet;
 
         $order_details = Order_Detail::where('cash_collected_by_user_id', $user_id)
-            // ->where('admin_payment_status', Config::get('constants.admin_payment_status.pending'))
+            ->where('admin_payment_status', Config::get('constants.admin_payment_status.pending'))
             ->get();
             
         foreach ($order_details as $key => $order_detail) {

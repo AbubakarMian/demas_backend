@@ -80,10 +80,15 @@
                                 var role_name = '';
                                 if (response['data'][i].role_id == 2) {
                                     role_name = 'User';
-                                } else if (response['data'][i].role_id == 3) {
+                                } 
+                                else if (response['data'][i].role_id == 3) {
                                     role_name = 'Sales Agent';
-                                } else {
-                                    role_name = 'Travel Agents';
+                                } 
+                                else if (response['data'][i].role_id == 4) {
+                                    role_name = 'Travel Agent';
+                                } 
+                                else {
+                                    role_name = 'Driver';
                                 }
                                 var role = role_name;
 

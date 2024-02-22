@@ -510,7 +510,7 @@
                             id: 'confirm_order_detail_' + item.id,
                             header: '<h4>Confirm</h4>',
                             body: 'Do you want to continue ?',
-                            class: 'mddd',
+                            class: 'time_modal',
                             footer: `
                                         <button class="btn btn-success" 
                                         onclick="change_order_detail_status(` + item.id + `,'confirm')"
@@ -526,6 +526,8 @@
                             body: `<p>Do you want to cancel  ?</p> <p>
                                             <input type="text" placeholder="reason" id="reason_` + item.id + `">
                                         </p>`,
+                                        class: 'time_modal',
+
                             footer: `
                                         <button class="btn btn-danger" 
                                         onclick="change_order_detail_status(` + item.id + `,'cancel')"

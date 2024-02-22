@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Report;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Handler\CommissionHandler;
 use App\Models\StaffPayments;
+use App\Models\StaffPaymentsIncoming;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -56,6 +57,7 @@ class StaffPaymentsController extends Controller
 
         }
         $staff_payment = $this->add_or_update($request, $staff_payments);
+
         // $this->pay_team($request, $request->user_id);
         return $staff_payment;
         // return redirect('reports/staff_payments');
@@ -92,7 +94,10 @@ class StaffPaymentsController extends Controller
         $staff_payments->payment_type = $request->payment_type;
         $staff_payments->detail = $request->detail;
         $staff_payments->receipt_url = $request->recipt_url;
+
         $staff_payments->save();
+        // dd($request->all());
+
         return Redirect('reports/staff_payments');
     }
 

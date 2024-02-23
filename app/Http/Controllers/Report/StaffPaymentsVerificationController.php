@@ -31,8 +31,10 @@ class StaffPaymentsVerificationController extends Controller
     $staff_payments_incomming = StaffPaymentsIncoming::find($staff_payments_incomming_id);
     $staff_payments_incomming->verification_status = $request->status;
     $staff_payments_incomming->reason = $request->reason;
+    // dd($staff_payments_incomming);
     $staff_payments_incomming->save();
-    if($request->status == Config::get('constants.staff_payments_incomming.accepted')){
+
+    if($request->status == "accepted"){
         $staff_payments = new StaffPayments();
         $staff_payments->staf_payment_incomming_id = $staff_payments_incomming->id;
         $staff_payments->receipt_url = $staff_payments_incomming->receipt_url;
@@ -43,10 +45,16 @@ class StaffPaymentsVerificationController extends Controller
         $staff_payments->user_id = $staff_payments_incomming->user_id;
         $staff_payments->save();
         $user_id =  $staff_payments->user_id;
-
+        ////////////////////////////
+        ///////deposit only/////////
+        ///////////////////////////
         $commision_handler = new CommissionHandler();
-        $commision_handler->add_agent_payment_to_wallet($user_id, $request->amount);
-        $user = $commision_handler->charge_order_payments_from_agents($user_id);
+            $commision_handler->add_agent_payment_to_wallet($user_id, $staff_payments_incomming->amount);
+            $user = $commision_handler->charge_order_payments_from_agents($user_id);
+            $user = $commision_handler->pay_commission_team($user_id, $staff_payments_incomming->amount);
+
+       
+       
 
 
         

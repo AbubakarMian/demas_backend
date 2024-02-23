@@ -45,7 +45,8 @@ class StaffPaymentsController extends Controller
         $user_id =$request->user_id;
         $commision_handler = new CommissionHandler();
         $staff_payments = new StaffPayments();
-        if($request->payment_type == 'agent_cash_withdrawal'){ //cash widdrawl
+        // dd($request->payment_type);
+        if($request->payment_type == 'withdrawal'){ //cash widdrawl
             $commision_handler->withdrawal_agent_payment_from_wallet($user_id, $request->amount);
         }
         else{//agent_cash_deposit

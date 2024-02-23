@@ -488,8 +488,9 @@ class CommissionHandler
     }
     public function withdrawal_agent_payment_from_wallet($user_id, $amount)
     {
+        // dd($amount);
         $user = Users::find($user_id);
-        $user->wallet = $user->wallet - $amount;
+        $user->wallet -= $amount;
         $user->save();
     }
 
@@ -511,6 +512,8 @@ class CommissionHandler
             $order_detail->save();
         }
         $user->wallet = $total_amount_in_wallet;
+        $user->save();
+
         return $user;
     }
 }

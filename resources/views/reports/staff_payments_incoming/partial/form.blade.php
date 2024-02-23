@@ -1,4 +1,4 @@
-{{-- {!!dd($teacher)!!} --}}
+{{-- {!!dd($payment_type);!!} --}}
 
 <style>
     select#gender {
@@ -72,9 +72,9 @@
         ]) !!}
     </div>
 </div>
-<div class="form-group">
+{{-- <div class="form-group">
     <label for="user_id">Select Payment Type </label>
-    {!! Form::select('payment_type ', $payment_type , null, [
+    {!! Form::select('payment_type', $payment_type , null, [
         'class' => 'form-control pickup_location',
         'data-parsley-required' => 'true',
         'data-parsley-trigger' => 'change',
@@ -82,7 +82,7 @@
         'required',
         'maxlength' => '100',
     ]) !!}
-</div>
+</div> --}}
 <div class="form-group">
     {!! Form::label('details ', 'details ') !!}
     <div>

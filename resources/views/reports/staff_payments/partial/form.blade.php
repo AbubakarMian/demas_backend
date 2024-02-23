@@ -148,7 +148,7 @@ label.btn.btn-secondary.recieved_admin {
 <br>
 <div class="btn-group btn-group-toggle btn_gp" data-toggle="buttons">
     <label class="btn btn-secondary paid_admin active">
-      <input type="radio"  name="payment_type" value="withdrawal" id="option1" checked>Agent Cash Widdrwawl
+      <input type="radio"  name="payment_type" value="withdrawal" id="option1" checked>Agent Cash withdrawal
     </label>
     <label class="btn btn-secondary recieved_admin">
       <input type="radio"  name="payment_type" value="deposit" id="option2"> Agent Cash Deposit

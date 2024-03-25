@@ -25,5 +25,9 @@ class Users extends Model
     public function driver(){
         return $this->hasOne('App\Models\Driver','user_id','id');
     }
+    public function un_paid_to_admin_order_details(){
+        return $this->hasMany('App\Models\Order_Detail','cash_collected_by_user_id','id')->where('admin_payment_status','pending');
+    }
+    
     
 }

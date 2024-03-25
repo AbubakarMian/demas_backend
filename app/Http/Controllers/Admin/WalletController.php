@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Handler\WalletHandler;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,11 +15,13 @@ class WalletController extends Controller
         return view('admin.wallet.index');
     }
 
-    public function get_user(Request $request)
+    public function get_wallet(Request $request)
     {
-        $user = User::orderBy('created_at', 'DESC')->select('*')->get();
-        $userData['data'] = $user;
-        echo json_encode($userData);
-    }
+        $walletHandler = new WalletHandler(); // Instantiate the WalletHandler class
 
+        $userData = $walletHandler->user_balance_information();// Call the user_balance_information() method
+        $response['data'] = $userData; 
+        // echo json_encode($response);
+        return $this->sendResponse(200,$response);
+    }
 }

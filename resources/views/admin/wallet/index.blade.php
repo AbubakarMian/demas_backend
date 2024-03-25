@@ -40,6 +40,7 @@
                 <th> Name</th>
                 <th> Role</th>
                 <th> wallet</th>
+                <th> unpaid_amount</th>
 
             </tr>
         </thead>
@@ -58,33 +59,41 @@
             function fetchRecords() {
 
                 $.ajax({
-                    url: '{!! asset('admin/user/get_user') !!}',
+                    url: '{!! asset('reports/wallet/get_wallet') !!}',
                     type: 'get',
                     dataType: 'json',
                     success: function(response) {
                         console.log('response');
                         $("#userTableAppend").css("opacity", 1);
-                        var len = response['data'].length;
+                        var len = response.response.data.length;
+                        var data = response.response.data;
                         console.log('response2');
+
+                        if(!response.status){
+                        //    alert("Empty");
+                        }
 
                         console.log(response);
 
                         for (var i = 0; i < len; i++) {
-                            var id = response['data'][i].id;
-                            var name = response['data'][i].name;
-                            var wallet = response['data'][i].wallet;
+                        console.log(data[i]);
+
+                            var id = data[i].id;
+                            var name = data[i].name;
+                            var wallet = data[i].wallet;
+                            var unpaid_amount = data[i].unpaid_amount;
 
                             // Check if the role_id is 1 (Admin)
-                            if (response['data'][i].role_id != 1) {
+                            if (data[i].role_id != 1) {
                                 // Exclude Admin users, only append rows for other roles
                                 var role_name = '';
-                                if (response['data'][i].role_id == 2) {
+                                if (data[i].role_id == 2) {
                                     role_name = 'User';
                                 } 
-                                else if (response['data'][i].role_id == 3) {
+                                else if (data[i].role_id == 3) {
                                     role_name = 'Sales Agent';
                                 } 
-                                else if (response['data'][i].role_id == 4) {
+                                else if (data[i].role_id == 4) {
                                     role_name = 'Travel Agent';
                                 } 
                                 else {
@@ -95,21 +104,22 @@
                                 var edit =
                                     `<a class="btn btn-info" href="{!! asset('admin/user/edit/` + id + `') !!}">Edit</a>`;
                                 createModal({
-                                    id: 'user_' + response['data'][i].id,
+                                    id: 'user_' + data[i].id,
                                     header: '<h4>Delete</h4>',
                                     body: 'Do you want to continue ?',
                                     footer: `
-                <button class="btn btn-danger" onclick="delete_request(` + response['data'][i].id + `)" data-dismiss="modal">
+                <button class="btn btn-danger" onclick="delete_request(` + data[i].id + `)" data-dismiss="modal">
                     Delete
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             `,
                                 });
 
-                                var tr_str = "<tr id='row_" + response['data'][i].id + "'>" +
+                                var tr_str = "<tr id='row_" + data[i].id + "'>" +
                                     "<td>" + name + "</td>" +
                                     "<td>" + role + "</td>" +
                                     "<td>" + wallet + "</td>" +
+                                    "<td>" + unpaid_amount + "</td>" +
                                     
                                     "</tr>";
 
